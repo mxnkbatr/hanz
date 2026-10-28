@@ -11,6 +11,7 @@ import { useI18n } from "../i18n/I18nContext";
 import { mergeEnrollWindows } from "../lib/cms";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { loc } from "../lib/i18nText";
+import { PhotoGlow } from "../components/PhotoGlow";
 
 export function UniversityDetail() {
   const { id = "" } = useParams();
@@ -43,6 +44,7 @@ export function UniversityDetail() {
           </Link>
         </Reveal>
 
+        <PhotoGlow src={track.image} />
         <article className="app-detail">
           <Reveal>
             <div className="app-detail-hero">
@@ -162,6 +164,7 @@ export function UniversityDetail() {
         </Link>
       </Reveal>
 
+      <PhotoGlow src={school!.image} />
       <article className="app-detail">
         <Reveal>
           <div className="app-detail-hero">

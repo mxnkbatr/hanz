@@ -1,4 +1,6 @@
 import { NavLink, Outlet, Navigate, Link, useLocation } from "react-router-dom";
+import { Suspense } from "react";
+import "../../admin.css";
 import { useAuth } from "../../lib/AuthContext";
 import { useI18n } from "../../i18n/I18nContext";
 import { Logo } from "../../components/Logo";
@@ -105,7 +107,9 @@ export function AdminLayout() {
       </header>
 
       <div className="admin-main">
-        <Outlet />
+        <Suspense fallback={null}>
+          <Outlet />
+        </Suspense>
       </div>
 
       <nav className="admin-tabbar" aria-label={t("admin_title")}>

@@ -35,6 +35,16 @@ const routeMetaKey: Record<string, string> = {
 
 const BRAND = "Ханз Академи";
 
+function setMeta(attr: "name" | "property", key: string, content: string) {
+  let el = document.head.querySelector(`meta[${attr}="${key}"]`);
+  if (!el) {
+    el = document.createElement("meta");
+    el.setAttribute(attr, key);
+    document.head.appendChild(el);
+  }
+  el.setAttribute("content", content);
+}
+
 export function useDocumentMeta() {
   const { pathname } = useLocation();
   const { t, lang } = useI18n();
@@ -48,6 +58,8 @@ export function useDocumentMeta() {
 
   useEffect(() => {
     const siteTitle = t("meta_title");
+    let description = t("meta_desc");
+    let image: string | undefined;
     const newsMatch = matchPath("/medee/:id", pathname);
     const shopMatch = matchPath("/shop/:id", pathname);
     const uniMatch = matchPath("/university/:id", pathname);
@@ -58,6 +70,10 @@ export function useDocumentMeta() {
       const id = courseMatch.params.id;
       const item = (coursesLive.find((c) => c.id === id) ??
         getCourseById(id)) as CourseLive | undefined;
+      if (item) {
+        description = t(item.descKey) || description;
+        image = item.image;
+      }
       document.title = item
         ? `${loc(lang, t, item.title, item.titleKey)} · ${BRAND}`
         : `${t("not_found_title")} · ${BRAND}`;
@@ -65,6 +81,10 @@ export function useDocumentMeta() {
       const id = newsMatch.params.id;
       const item = (newsLive.find((n) => n.id === id) ??
         getNewsById(id)) as NewsLive | undefined;
+      if (item) {
+        description = loc(lang, t, item.excerpt, item.excerptKey) || description;
+        image = item.image;
+      }
       document.title = item
         ? `${loc(lang, t, item.title, item.titleKey)} · ${BRAND}`
         : `${t("not_found_title")} · ${BRAND}`;
@@ -72,6 +92,10 @@ export function useDocumentMeta() {
       const id = shopMatch.params.id;
       const item = (productsLive.find((p) => p.id === id) ??
         getProductById(id)) as ProductLive | undefined;
+      if (item) {
+        if (item.descKey) description = t(item.descKey) || description;
+        image = item.image;
+      }
       document.title = item
         ? `${loc(lang, t, item.title, item.titleKey)} · ${BRAND}`
         : `${t("not_found_title")} · ${BRAND}`;
@@ -90,6 +114,10 @@ export function useDocumentMeta() {
       const id = travelMatch.params.id;
       const item = (travelLive.find((p) => p.id === id) ??
         getTravelById(id)) as TravelLive | undefined;
+      if (item) {
+        description = t(item.descKey) || description;
+        image = item.image;
+      }
       document.title = item
         ? `${loc(lang, t, item.title, item.titleKey)} · ${BRAND}`
         : `${t("not_found_title")} · ${BRAND}`;
@@ -104,15 +132,19 @@ export function useDocumentMeta() {
       }
     }
 
-    const desc =
-      document.querySelector('meta[name="description"]') ??
-      (() => {
-        const el = document.createElement("meta");
-        el.setAttribute("name", "description");
-        document.head.appendChild(el);
-        return el;
-      })();
-    desc.setAttribute("content", t("meta_desc"));
+    const url = window.location.origin + pathname;
+    const imageUrl = image
+      ? new URL(image, window.location.origin).href
+      : `${window.location.origin}/images/og-cover.jpg`;
+    setMeta("name", "description", description);
+    setMeta("property", "og:title", document.title);
+    setMeta("property", "og:description", description);
+    setMeta("property", "og:url", url);
+    setMeta("property", "og:image", imageUrl);
+    setMeta("name", "twitter:title", document.title);
+    setMeta("name", "twitter:description", description);
+    setMeta("name", "twitter:image", imageUrl);
+    document.querySelector('link[rel="canonical"]')?.setAttribute("href", url);
 
     document.documentElement.lang = lang === "zh" ? "zh-CN" : lang;
   }, [

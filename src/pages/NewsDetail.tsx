@@ -8,6 +8,7 @@ import { useSiteContent } from "../lib/SiteContentContext";
 import type { NewsLive } from "../lib/cms";
 import { loc } from "../lib/i18nText";
 import { toDateTime } from "../lib/date";
+import { PhotoGlow } from "../components/PhotoGlow";
 
 export function NewsDetail() {
   const { id = "" } = useParams();
@@ -36,6 +37,7 @@ export function NewsDetail() {
         </Link>
       </Reveal>
 
+      <PhotoGlow src={item.image} />
       <article className="desk-article">
         <Reveal>
           <div className="desk-article-hero">

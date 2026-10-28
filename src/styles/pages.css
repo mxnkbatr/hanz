@@ -1,0 +1,241 @@
+/*
+ * Inner pages in the mobile-home style (white · ink · logo red).
+ * Loaded last. Tokens: polish.css.
+ */
+
+/* ─── Image placeholders: light shimmer instead of black boxes ─── */
+.app-shell .ios-card-media,
+.app-shell .ios-app .ios-card-media,
+.app-shell .app-detail-hero,
+.app-shell .course-detail-hero-media,
+.app-shell .desk-detail-hero,
+.app-shell .course-product-media,
+.app-shell .shop-media,
+.app-shell .news-card-media,
+.app-shell .news-featured-media,
+.app-shell .app-row-thumb {
+  background-color: #e9e9eb;
+  background-image: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.7) 50%,
+    transparent 70%
+  );
+  background-size: 250% 100%;
+  animation: m-shimmer 1.6s linear infinite;
+}
+
+/* Missing-photo fallback: logo red tile with the 汉 mark. */
+.app-shell .img-fallback-han {
+  background: linear-gradient(150deg, #f04449 0%, var(--seal) 55%, var(--seal-deep) 100%);
+  color: #fff;
+}
+
+/* ─── Page heads (all list pages) ─── */
+.app-shell .page-head {
+  position: relative;
+}
+
+@media (max-width: 899px) {
+  .app-shell .page-head {
+    padding-top: 0.6rem;
+  }
+
+  .app-shell .page-head .h1,
+  .app-shell .app-head .h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.1rem, 9.6vw, 2.6rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.02;
+  }
+
+  .app-shell .page-head .h1::after {
+    content: "";
+    display: block;
+    width: 36px;
+    height: 3px;
+    margin-top: 0.7rem;
+    border-radius: 3px;
+    background: var(--seal);
+    transform-origin: 0 50%;
+    animation: line-draw 0.9s var(--ease-out-expo) 0.15s both;
+  }
+
+  .app-shell .page-head::before {
+    content: "汉";
+    position: absolute;
+    right: -0.2rem;
+    top: -0.6rem;
+    font-family: "Noto Serif SC", serif;
+    font-size: 6.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(227, 38, 43, 0.14);
+    pointer-events: none;
+    animation: glyph-in 1.4s var(--ease-out-expo) both;
+  }
+
+  .app-shell .enroll-ios-head::before,
+  .app-shell .quiz-game-head::before {
+    content: none;
+  }
+}
+
+/* ─── Icon tiles in grouped lists (About, Contact…) ─── */
+.app-shell .app-row-icon,
+.app-shell .why-icon,
+.app-shell .home-course-icon {
+  background: var(--seal-tint);
+  color: var(--seal);
+  font-family: "Noto Serif SC", serif;
+  box-shadow: none;
+  border: 0;
+}
+
+.app-shell .app-list,
+.app-shell .app-ios-group {
+  border-radius: 20px;
+  box-shadow: var(--shadow-soft);
+}
+
+.app-shell .app-row-chevron {
+  color: rgba(17, 17, 17, 0.28);
+}
+
+/* ─── Detail pages ─── */
+@media (max-width: 899px) {
+  .app-shell .app-detail-hero,
+  .app-shell .course-detail-hero-media,
+  .app-shell .desk-detail-hero {
+    border-radius: 26px;
+    box-shadow: 0 24px 48px -24px rgba(17, 17, 17, 0.4);
+  }
+
+  .app-shell .app-detail-body .h1,
+  .app-shell .course-detail-hero .h1,
+  .app-shell .product-detail-body .h1 {
+    font-size: clamp(1.9rem, 8.6vw, 2.4rem);
+    letter-spacing: -0.035em;
+  }
+
+  .app-shell .app-pill,
+  .app-shell .course-detail-pill {
+    border-color: rgba(227, 38, 43, 0.35);
+    background: var(--seal-tint);
+    color: var(--seal);
+  }
+
+  .app-shell .course-detail-points li,
+  .app-shell .app-ios-points li {
+    line-height: 1.6;
+  }
+}
+
+/* Sticky enroll docks: white glass, red action */
+.app-enroll-dock,
+.course-detail-sticky {
+  border-radius: 22px !important;
+}
+
+/* ─── Quiz: logo palette instead of orange / blue ─── */
+.app-shell .quiz-level-glyph {
+  background: linear-gradient(160deg, #f04449, var(--seal));
+  box-shadow: 0 8px 16px -8px var(--seal-glow);
+}
+
+.app-shell .quiz-level-hsk2 .quiz-level-glyph {
+  background: linear-gradient(160deg, #3a3a3c, var(--ink));
+  box-shadow: 0 8px 16px -8px rgba(17, 17, 17, 0.4);
+}
+
+.app-shell .quiz-level-hsk3 .quiz-level-glyph {
+  background: linear-gradient(160deg, var(--seal-deep), #7d1216);
+  box-shadow: 0 8px 16px -8px rgba(125, 18, 22, 0.5);
+}
+
+/* ─── Auth: drop the blue glow ─── */
+.app-shell .auth-glow-b {
+  background: radial-gradient(circle, rgba(227, 38, 43, 0.1), transparent 70%);
+}
+
+.app-shell .auth-card {
+  border: 1px solid var(--hair);
+  box-shadow: 0 30px 60px -30px rgba(17, 17, 17, 0.3);
+}
+
+/* ─── Forms (Enroll, consult, comments) ─── */
+@media (max-width: 899px) {
+  .app-shell .consult-form label,
+  .app-shell .kids-ios-field label {
+    font-family: var(--font-ui);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .app-shell .consult-form input,
+  .app-shell .consult-form select,
+  .app-shell .consult-form textarea {
+    min-height: 52px;
+    font-size: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-shell .ios-card-media,
+  .app-shell .app-detail-hero,
+  .app-shell .course-detail-hero-media,
+  .app-shell .desk-detail-hero,
+  .app-shell .course-product-media,
+  .app-shell .shop-media,
+  .app-shell .news-card-media,
+  .app-shell .app-row-thumb,
+  .app-shell .page-head::before,
+  .app-shell .page-head .h1::after {
+    animation: none;
+  }
+}
+
+/* ─── Detail pages: page takes the hero photo's color ─── */
+.app-shell .main {
+  overflow-x: clip;
+}
+
+.photo-glow {
+  position: absolute;
+  z-index: -1;
+  top: calc((var(--top) + 1rem) * -1);
+  left: calc(50% - 50vw);
+  width: 100vw;
+  height: min(78vh, 720px);
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.55) 55%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.55) 55%, transparent 100%);
+  animation: photo-glow-in 1.2s var(--ease-out-expo) both;
+}
+
+.photo-glow img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(48px) saturate(1.6);
+  transform: scale(1.4);
+  opacity: 0.55;
+}
+
+@keyframes photo-glow-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo-glow {
+    animation: none;
+  }
+}

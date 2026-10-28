@@ -16,6 +16,7 @@ import type { CourseLive } from "../lib/cms";
 import { loc } from "../lib/i18nText";
 import { supabase } from "../lib/supabase";
 import { hapticLight } from "../lib/native";
+import { PhotoGlow } from "../components/PhotoGlow";
 
 export function CourseDetail() {
   const { id = "" } = useParams();
@@ -164,6 +165,7 @@ export function CourseDetail() {
         </Link>
       </Reveal>
 
+      <PhotoGlow src={course.image} />
       <article className="course-detail">
         <Reveal>
           <div className="course-detail-hero-media">

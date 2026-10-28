@@ -787,6 +787,7 @@ export const featureKeys = {
     travel_page: "Travel",
     travel_lead: "Organized tour packages to China and Poland — visa, stay, and guide support.",
     travel_tag_asia: "Asia",
+    travel_tag_tour: "Asia",
     travel_tag_europe: "Europe",
     travel_china_t: "China tour",
     travel_china_d:
@@ -1431,6 +1432,7 @@ export const featureKeys = {
     travel_page: "旅行",
     travel_lead: "中国与波兰团游套餐 — 签证、住宿与导游支持。",
     travel_tag_asia: "亚洲",
+    travel_tag_tour: "亚洲",
     travel_tag_europe: "欧洲",
     travel_china_t: "中国旅行",
     travel_china_d:

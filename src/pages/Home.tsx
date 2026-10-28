@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { PageShell, Reveal, Stagger, StaggerItem } from "../components/PageShell";
-import { SealMark } from "../components/SealMark";
 import { Marquee } from "../components/Marquee";
 import { SafeImage } from "../components/SafeImage";
 import { TiltCard } from "../components/TiltCard";
 import { ProductCard } from "../components/ProductCard";
 import { HeroIntro, shouldPlayHeroIntro } from "../components/HeroIntro";
+import { MobileHome } from "../components/MobileHome";
+import { DesktopHero } from "../components/DesktopHero";
+import { useDesktop } from "../hooks/useDesktop";
 import { LearnScroll } from "../components/LearnScroll";
 import { StatsStrip } from "../components/StatsStrip";
 import { MagneticButton } from "../components/MagneticButton";
@@ -15,24 +16,25 @@ import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { loc } from "../lib/i18nText";
 import { toDateTime } from "../lib/date";
-import { ease } from "../lib/motion";
 
-const HERO_IMG = "/images/hero-wall.webp";
 
 export function Home() {
+  const desktop = useDesktop();
+  if (!desktop) {
+    return (
+      <PageShell className="page-home page-home-mobile">
+        <MobileHome />
+      </PageShell>
+    );
+  }
+  return <HomeDesktop />;
+}
+
+function HomeDesktop() {
   const { t, lang } = useI18n();
   const { academyLive: academy, newsLive, productsLive } = useSiteContent();
-  const heroRef = useRef<HTMLElement>(null);
   const [introDone, setIntroDone] = useState(() => !shouldPlayHeroIntro());
   const playIntro = !introDone;
-
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  });
-  const imgY = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);
-  const contentY = useTransform(scrollYProgress, [0, 0.55], [0, -28]);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.45], [1, 0]);
 
   const heroReady = introDone;
 
@@ -40,97 +42,7 @@ export function Home() {
     <PageShell className="page-home">
       {playIntro && <HeroIntro onComplete={() => setIntroDone(true)} />}
 
-      <section className="hero-cinema" ref={heroRef}>
-        <div
-          className="hero-cinema-media"
-          style={{ backgroundImage: `url(${HERO_IMG})` }}
-        >
-          <motion.img
-            src={HERO_IMG}
-            alt={t("hero_headline")}
-            width={1600}
-            height={900}
-            fetchPriority="high"
-            decoding="async"
-            loading="eager"
-            draggable={false}
-            style={{ y: imgY }}
-            initial={{ scale: 1.06 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 1.6, ease }}
-          />
-          <div className="hero-cinema-shade" />
-        </div>
-
-        <motion.div
-          className="hero-cinema-body"
-          style={{ y: contentY, opacity: contentOpacity }}
-        >
-          <motion.p
-            className="hero-eyebrow"
-            initial={{ opacity: 0, y: 16 }}
-            animate={heroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-            transition={{ delay: 0.05, duration: 0.65, ease }}
-          >
-            <span>{t("brand")}</span>
-            <em>{t("hero_eyebrow")}</em>
-          </motion.p>
-
-          <motion.div
-            className="hero-chip"
-            initial={{ opacity: 0, y: 16 }}
-            animate={heroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-            transition={{ delay: 0.12, duration: 0.65, ease }}
-          >
-            <strong>{t("hero_chip")}</strong>
-            <span>{t("hero_chip_meta")}</span>
-          </motion.div>
-
-          <motion.div
-            className="hero-title-row"
-            initial={{ opacity: 0, y: 40 }}
-            animate={heroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-            transition={{ delay: 0.18, duration: 0.85, ease }}
-          >
-            <h1 className="hero-cinema-title">
-              <span className="hero-title-text">{t("hero_headline")}</span>
-              <span className="hero-flag" aria-hidden>
-                🇨🇳
-              </span>
-            </h1>
-            <SealMark className="hero-seal-inline desk-only" />
-          </motion.div>
-
-          <motion.p
-            className="hero-cinema-sub"
-            initial={{ opacity: 0, y: 20 }}
-            animate={heroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ delay: 0.28, duration: 0.7, ease }}
-          >
-            {t("hero_kicker")}
-          </motion.p>
-
-          <motion.div
-            className="hero-cta-row"
-            initial={{ opacity: 0, y: 20 }}
-            animate={heroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ delay: 0.36, duration: 0.7, ease }}
-          >
-            <MagneticButton
-              href={academy.registerUrl}
-              className="btn btn-seal btn-hero-primary"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span>{t("register_cta")}</span>
-              <i aria-hidden>→</i>
-            </MagneticButton>
-            <Link to="/about" className="btn btn-glass btn-hero-secondary">
-              <span>{t("about_title")}</span>
-            </Link>
-          </motion.div>
-        </motion.div>
-      </section>
+      <DesktopHero ready={heroReady} />
 
       <div className="home-below">
         <Reveal>
@@ -147,7 +59,9 @@ export function Home() {
               <TiltCard>
                 <Link to="/about" className="promo-panel">
                   <img
-                    src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80"
+                    src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1000&q=72"
+                    loading="lazy"
+                    decoding="async"
                     alt={t("about_title")}
                   />
                   <div>
@@ -164,7 +78,9 @@ export function Home() {
               <TiltCard>
                 <Link to="/university" className="promo-panel">
                   <img
-                    src="https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?auto=format&fit=crop&w=1200&q=80"
+                    src="https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?auto=format&fit=crop&w=1000&q=72"
+                    loading="lazy"
+                    decoding="async"
                     alt={t("uni_title")}
                   />
                   <div>
@@ -238,6 +154,32 @@ export function Home() {
           </Stagger>
         </section>
       </div>
+
+      <section className="home-finale">
+        <span className="home-finale-mark" aria-hidden>
+          汉
+        </span>
+        <Reveal>
+          <p className="eyebrow">{t("hero_eyebrow")}</p>
+          <h2 className="home-finale-title">
+            {t("mh_cta_a")} <em>{t("mh_cta_em")}</em> {t("mh_cta_b")}
+          </h2>
+          <div className="home-finale-ctas">
+            <MagneticButton
+              href={academy.registerUrl}
+              className="btn btn-seal"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>{t("register_cta")}</span>
+              <i aria-hidden>→</i>
+            </MagneticButton>
+            <a className="btn hero-film-ghost" href={`tel:${academy.phoneRaw[0]}`}>
+              <span>{t("call")} · {academy.phone[0]}</span>
+            </a>
+          </div>
+        </Reveal>
+      </section>
     </PageShell>
   );
 }

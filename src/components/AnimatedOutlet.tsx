@@ -1,4 +1,9 @@
-import { cloneElement, isValidElement, type ReactElement } from "react";
+import {
+  cloneElement,
+  isValidElement,
+  Suspense,
+  type ReactElement,
+} from "react";
 import { AnimatePresence } from "framer-motion";
 import { useLocation, useOutlet } from "react-router-dom";
 
@@ -14,9 +19,15 @@ export function AnimatedOutlet() {
 
   return (
     <AnimatePresence mode="wait" initial={false}>
-      {outlet && isValidElement(outlet)
-        ? cloneElement(outlet as ReactElement, { key: location.pathname })
-        : null}
+      {outlet && isValidElement(outlet) ? (
+        // Pages are lazy chunks; keep the layout (header, tab bar) mounted while one loads.
+        <Suspense
+          key={location.pathname}
+          fallback={<div className="page-loading" />}
+        >
+          {cloneElement(outlet as ReactElement)}
+        </Suspense>
+      ) : null}
     </AnimatePresence>
   );
 }

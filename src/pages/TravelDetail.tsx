@@ -7,6 +7,7 @@ import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import type { TravelLive } from "../lib/cms";
 import { loc } from "../lib/i18nText";
+import { PhotoGlow } from "../components/PhotoGlow";
 
 export function TravelDetail() {
   const { id = "" } = useParams();
@@ -44,6 +45,7 @@ export function TravelDetail() {
         </Link>
       </Reveal>
 
+      <PhotoGlow src={pack.image} />
       <article className="app-detail">
         <Reveal>
           <div className="app-detail-hero">

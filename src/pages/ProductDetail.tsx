@@ -10,6 +10,7 @@ import { useSiteContent } from "../lib/SiteContentContext";
 import type { ProductLive } from "../lib/cms";
 import { loc } from "../lib/i18nText";
 import { ease } from "../lib/motion";
+import { PhotoGlow } from "../components/PhotoGlow";
 
 export function ProductDetail() {
   const { id = "" } = useParams();
@@ -45,6 +46,7 @@ export function ProductDetail() {
         </Link>
       </Reveal>
 
+      <PhotoGlow src={p.image} />
       <article className="product-detail desk-detail">
         <Reveal className="product-detail-media">
           <div className="desk-detail-hero app-detail-hero-square product-hero-anim">

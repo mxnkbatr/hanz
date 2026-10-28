@@ -1,7 +1,13 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import "./admin.css";
+import "./styles/polish.css";
+import "./styles/theme.css";
+import "./styles/mobile-home.css";
+import "./styles/pages.css";
+import "./styles/cinema.css";
+import "./styles/hero.css";
+import "./styles/desktop-detail.css";
 import App from "./App.tsx";
 import { AuthProvider } from "./lib/AuthContext.tsx";
 import { SiteContentProvider } from "./lib/SiteContentContext.tsx";

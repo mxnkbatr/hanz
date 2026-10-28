@@ -313,7 +313,7 @@ export const travelPackagesMeta = [
       "travel_china_h3",
     ] as const,
     image:
-      "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?auto=format&fit=crop&w=1000&q=72",
     enrollWindows: [
       {
         id: "now" as const,
@@ -353,7 +353,7 @@ export const travelPackagesMeta = [
       "travel_poland_h3",
     ] as const,
     image:
-      "https://images.unsplash.com/photo-1467269204594-59904b4cbaba?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1467269204594-59904b4cbaba?auto=format&fit=crop&w=1000&q=72",
     enrollWindows: [
       {
         id: "now" as const,
@@ -411,7 +411,7 @@ export const chinaProgramsMeta = [
     nameZhKey: "prog_bjfu_zh",
     cityKey: "map_beijing" as const,
     image:
-      "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?auto=format&fit=crop&w=1000&q=72",
   },
   {
     id: "cq",
@@ -421,7 +421,7 @@ export const chinaProgramsMeta = [
     nameZhKey: "prog_cq_zh",
     cityKey: "map_chongqing" as const,
     image:
-      "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?auto=format&fit=crop&w=1000&q=72",
   },
   {
     id: "nuaa",
@@ -431,7 +431,7 @@ export const chinaProgramsMeta = [
     nameZhKey: "prog_nuaa_zh",
     cityKey: "map_nanjing" as const,
     image:
-      "https://images.unsplash.com/photo-1474181487882-5abf3f0ba6c2?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1474181487882-5abf3f0ba6c2?auto=format&fit=crop&w=1000&q=72",
   },
   {
     id: "sc",
@@ -441,7 +441,7 @@ export const chinaProgramsMeta = [
     nameZhKey: "prog_sc_zh",
     cityKey: "map_chengdu" as const,
     image:
-      "https://images.unsplash.com/photo-1537531383496-f4749b8032eb?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1537531383496-f4749b8032eb?auto=format&fit=crop&w=1000&q=72",
   },
 ] as const;
 
@@ -495,7 +495,7 @@ export const newsIds = [
     excerptKey: "news1_e",
     bodyKey: "news1_b",
     image:
-      "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1000&q=72",
     href: "https://www.instagram.com/khanzacademy/",
   },
   {
@@ -506,7 +506,7 @@ export const newsIds = [
     excerptKey: "news2_e",
     bodyKey: "news2_b",
     image:
-      "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1000&q=72",
     href: "https://www.instagram.com/khanzacademy/",
   },
   {
@@ -517,7 +517,7 @@ export const newsIds = [
     excerptKey: "news3_e",
     bodyKey: "news3_b",
     image:
-      "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1000&q=72",
     href: "https://www.instagram.com/khanzacademy/",
   },
   {
@@ -528,7 +528,7 @@ export const newsIds = [
     excerptKey: "news4_e",
     bodyKey: "news4_b",
     image:
-      "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?auto=format&fit=crop&w=1000&q=72",
     href: "https://www.instagram.com/khanzacademy/",
   },
 ];
@@ -553,7 +553,7 @@ export const universitiesMeta = [
     bodyKey: "china_b",
     points: ["p1", "p2", "p3"] as const,
     image:
-      "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?auto=format&fit=crop&w=1000&q=72",
     enrollWindows: [
       {
         id: "now" as const,
@@ -589,7 +589,7 @@ export const universitiesMeta = [
     bodyKey: "poland_b",
     points: ["p4", "p5", "p6"] as const,
     image:
-      "https://images.unsplash.com/photo-1467269204594-59904b4cbaba?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1467269204594-59904b4cbaba?auto=format&fit=crop&w=1000&q=72",
     enrollWindows: [
       {
         id: "now" as const,
