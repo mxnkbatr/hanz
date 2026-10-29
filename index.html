@@ -11,7 +11,7 @@
       name="description"
       content="Ханз Академи — хятад хэл, HSK, CSCA, Хятадад тэтгэлгээр суралцах. Улаанбаатар. Hanz Academy Mongolia."
     />
-    <meta name="theme-color" content="#f6f2ea" />
+    <meta name="theme-color" content="#f5f5f7" />
     <link rel="canonical" href="%SITE_URL%/" />
 
     <!-- Social share preview (Facebook, Messenger, Telegram read only this static HTML) -->
@@ -58,10 +58,24 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Noto+Serif+SC:wght@700&family=Outfit:wght@500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Onest:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;700&family=Noto+Serif+SC:wght@700&display=swap"
       rel="stylesheet"
     />
     <title>Ханз Академи · Hanz Academy Mongolia</title>
+    <script>
+      // Apply the site theme before first paint, so the header never flashes the
+      // old white style before React mounts (lib/theme.ts keeps it in sync after).
+      (function () {
+        if (location.pathname.indexOf("/admin") === 0) return;
+        var root = document.documentElement;
+        var theme = "light";
+        try {
+          if (localStorage.getItem("hanz-theme") === "dark") theme = "dark";
+        } catch (e) {}
+        root.classList.add("site");
+        root.setAttribute("data-theme", theme);
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

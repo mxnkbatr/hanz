@@ -1,32 +1,29 @@
-import { LayoutGroup, motion } from "framer-motion";
-import { Link, Navigate } from "react-router-dom";
-import { AppLink } from "../components/AppLink";
+import { Navigate } from "react-router-dom";
 import { PageShell, Reveal } from "../components/PageShell";
-import { Logo } from "../components/Logo";
+import { AppLink } from "../components/AppLink";
+import { IconCourses, IconPhone, IconQuiz, NavIcon } from "../components/Icons";
+import { DarkModeRow, Group, LanguageRow, LinkRow, Row } from "../components/SettingsList";
 import { useAuth } from "../lib/AuthContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { useI18n } from "../i18n/I18nContext";
 import { hapticLight } from "../lib/native";
 
-const explore = [
-  { to: "/courses", titleKey: "nav_courses", icon: "汉" },
-  { to: "/enroll", titleKey: "register_cta", icon: "✓" },
-  { to: "/shop", titleKey: "nav_shop", icon: "店" },
-  { to: "/about", titleKey: "nav_about", icon: "院" },
-  { to: "/contact", titleKey: "nav_contact", icon: "☎" },
-] as const;
+const LOCALE = { mn: "mn-MN", en: "en-GB", zh: "zh-CN" } as const;
 
+/**
+ * Account page. Phone: iOS Settings — identity card, quick actions, grouped lists.
+ * Desktop: the identity card becomes a sticky left column, lists sit beside it.
+ * Only real data is shown (email, join date); there is no per-user progress yet.
+ */
 export function Profile() {
-  const { t, lang, setLang, langs } = useI18n();
+  const { t, lang } = useI18n();
   const { user, loading, signOut, isAdmin } = useAuth();
   const { academyLive: academy } = useSiteContent();
 
   if (loading) {
     return (
-      <PageShell className="page-profile is-app ios-app">
-        <header className="page-head app-head">
-          <h1 className="h1">{t("profile_title")}</h1>
-        </header>
+      <PageShell className="page-profile pf">
+        <h1 className="pf-title">{t("profile_title")}</h1>
       </PageShell>
     );
   }
@@ -35,172 +32,108 @@ export function Profile() {
     return <Navigate to="/auth?mode=login" replace />;
   }
 
+  const email = user.email ?? "";
+  const initial = (email.trim()[0] ?? "H").toUpperCase();
+  const joined = user.created_at ? new Date(user.created_at) : null;
+  // Browsers have no Mongolian month names (mn-MN falls back to English), so spell it out.
+  const since = !joined
+    ? null
+    : lang === "mn"
+      ? `${joined.getFullYear()} оны ${joined.getMonth() + 1}-р сар`
+      : joined.toLocaleDateString(LOCALE[lang as keyof typeof LOCALE] ?? "en-GB", {
+          year: "numeric",
+          month: "long",
+        });
+
   return (
-    <PageShell className="page-profile is-app ios-app">
-      <header className="page-head app-head">
-        <Reveal>
-          <h1 className="h1">{t("profile_title")}</h1>
-        </Reveal>
-      </header>
+    <PageShell className="page-profile pf">
+      <h1 className="pf-title">{t("profile_title")}</h1>
 
-      <Reveal>
-        <div className="ios-profile-hero">
-          <div className="ios-profile-avatar" aria-hidden>
-            <Logo size="sm" />
-          </div>
-          <div>
-            {user ? (
-              <>
-                <strong>{user.email}</strong>
-                <em>{t("auth_signed_in")}</em>
-              </>
-            ) : (
-              <>
-                <strong>{t("brand")}</strong>
-                <em>{t("auth_guest")}</em>
-              </>
-            )}
-          </div>
-        </div>
-      </Reveal>
-
-      <section className="section tight">
-        <h2 className="ios-label">{t("profile_account")}</h2>
-        {user ? (
-          <div className="ios-list">
+      <div className="pf-grid">
+        <Reveal className="pf-side">
+          <section className="pf-card">
+            <span className="pf-avatar" aria-hidden>
+              {initial}
+            </span>
+            <strong className="pf-email">{email}</strong>
+            <span className="pf-meta">
+              <i className="pf-dot" aria-hidden />
+              {t("auth_signed_in")}
+              {since && (
+                <>
+                  {" · "}
+                  {t("pf_since")} {since}
+                </>
+              )}
+            </span>
+            {isAdmin && <span className="pf-badge">{t("admin_title")}</span>}
             <button
               type="button"
-              className="ios-row auth-logout-row"
-              disabled={loading}
+              className="pf-signout"
               onClick={() => {
                 void hapticLight();
                 void signOut();
               }}
             >
-              <span className="ios-row-icon" aria-hidden>
-                ⎋
-              </span>
-              <span className="ios-row-body">
-                <strong>{t("auth_logout")}</strong>
-              </span>
-              <span className="ios-row-chevron" aria-hidden>
-                ›
-              </span>
+              {t("auth_logout")}
             </button>
-          </div>
-        ) : (
-          <div className="auth-cta-row">
-            <Link to="/auth?mode=login" className="auth-cta-btn is-primary">
-              {t("auth_login")}
-            </Link>
-            <Link to="/auth?mode=signup" className="auth-cta-btn">
-              {t("auth_signup")}
-            </Link>
-          </div>
-        )}
-      </section>
+          </section>
 
-      <section className="section tight">
-        <h2 className="ios-label">{t("profile_lang")}</h2>
-        <LayoutGroup id="lang-seg">
-          <div className="ios-seg ios-seg-lang" role="tablist">
-            {langs.map((l) => {
-              const active = lang === l.code;
-              return (
-                <button
-                  key={l.code}
-                  type="button"
-                  role="tab"
-                  aria-selected={active}
-                  className={`ios-seg-item${active ? " is-active" : ""}`}
-                  onClick={() => {
-                    setLang(l.code);
-                    void hapticLight();
-                  }}
-                >
-                  {active && (
-                    <motion.span
-                      className="ios-seg-pill"
-                      layoutId="lang-seg-pill"
-                      transition={{ type: "spring", stiffness: 420, damping: 34 }}
-                    />
-                  )}
-                  <span>{l.short}</span>
-                </button>
-              );
-            })}
-          </div>
-        </LayoutGroup>
-      </section>
-
-      {isAdmin && (
-        <section className="section tight">
-          <h2 className="ios-label">{t("admin_title")}</h2>
-          <div className="ios-list">
-            <AppLink to="/admin" className="ios-row">
-              <span className="ios-row-icon" aria-hidden>
-                ⌘
+          <div className="pf-quick">
+            <AppLink to="/courses" className="pf-quick-btn">
+              <IconCourses />
+              <span>{t("nav_courses")}</span>
+            </AppLink>
+            <AppLink to="/quiz" className="pf-quick-btn">
+              <IconQuiz />
+              <span>{t("pf_quiz")}</span>
+            </AppLink>
+            <AppLink to="/enroll" className="pf-quick-btn is-seal">
+              <span className="pf-quick-arrow" aria-hidden>
+                →
               </span>
-              <span className="ios-row-body">
-                <strong>{t("admin_open")}</strong>
-                <em>{t("admin_open_d")}</em>
-              </span>
-              <span className="ios-row-chevron" aria-hidden>
-                ›
-              </span>
+              <span>{t("register_cta")}</span>
             </AppLink>
           </div>
-        </section>
-      )}
+        </Reveal>
 
-      <section className="section tight">
-        <h2 className="ios-label">{t("profile_explore")}</h2>
-        <div className="ios-list">
-          {explore.map((item) => (
-            <AppLink key={item.to} to={item.to} className="ios-row">
-              <span className="ios-row-icon" aria-hidden>
-                {item.icon}
-              </span>
-              <span className="ios-row-body">
-                <strong>{t(item.titleKey)}</strong>
-              </span>
-              <span className="ios-row-chevron" aria-hidden>
-                ›
-              </span>
-            </AppLink>
-          ))}
-        </div>
-      </section>
+        <div className="pf-main">
+          <Group title={t("mm_settings")}>
+            <LanguageRow id="pf-lang" />
+            <DarkModeRow />
+          </Group>
 
-      <section className="section tight section-last">
-        <h2 className="ios-label">{t("footer_contact")}</h2>
-        <div className="ios-list">
-          <a href={`tel:${academy.phoneRaw[0]}`} className="ios-row">
-            <span className="ios-row-icon" aria-hidden>
-              ☎
-            </span>
-            <span className="ios-row-body">
-              <strong>{academy.phone[0]}</strong>
-              <em>{t("call")}</em>
-            </span>
-            <span className="ios-row-chevron" aria-hidden>
-              ›
-            </span>
-          </a>
-          <a href={`mailto:${academy.email}`} className="ios-row">
-            <span className="ios-row-icon" aria-hidden>
-              @
-            </span>
-            <span className="ios-row-body">
-              <strong>{academy.email}</strong>
-            </span>
-            <span className="ios-row-chevron" aria-hidden>
-              ›
-            </span>
-          </a>
+          {isAdmin && (
+            <Group title={t("admin_title")}>
+              <Row
+                to="/admin"
+               
+                icon={<span className="sl-glyph">⌘</span>}
+                label={t("admin_open")}
+                detail={t("admin_open_d")}
+              />
+            </Group>
+          )}
+
+          <Group title={t("profile_explore")}>
+            <Row to="/courses" icon={<NavIcon name="courses" />} label={t("nav_courses")} />
+            <Row to="/university" icon={<NavIcon name="uni" />} label={t("nav_uni")} />
+            <Row to="/shop" icon={<NavIcon name="bag" />} label={t("nav_shop")} />
+            <Row to="/translation" icon={<span className="sl-glyph">译</span>} label={t("nav_translation")} />
+            <Row to="/about" icon={<NavIcon name="about" />} label={t("nav_about")} />
+          </Group>
+
+          <Group title={t("footer_contact")}>
+            <LinkRow href={`tel:${academy.phoneRaw[0]}`} icon={<IconPhone />} label={academy.phone[0]} detail={t("call")} />
+            <LinkRow href={academy.messenger} external icon={<span className="sl-glyph">m</span>} label="Messenger" />
+            <LinkRow href={`mailto:${academy.email}`} icon={<span className="sl-glyph">@</span>} label={academy.email} />
+          </Group>
+
+          <p className="pf-version">
+            {t("brand")} · {t("profile_version")} 1.0
+          </p>
         </div>
-        <p className="ios-foot">{t("profile_version")} 1.0</p>
-      </section>
+      </div>
     </PageShell>
   );
 }

@@ -1,9 +1,8 @@
-import { motion, useReducedMotion } from "framer-motion";
 import { useI18n } from "../i18n/I18nContext";
 
+/** Endless word strip. The slide is a CSS animation (.marquee-track), off the main thread. */
 export function Marquee() {
   const { t } = useI18n();
-  const reduce = useReducedMotion();
   const items = [
     t("marquee_1"),
     t("marquee_2"),
@@ -16,22 +15,14 @@ export function Marquee() {
 
   return (
     <div className="marquee" aria-hidden>
-      <motion.div
-        className="marquee-track"
-        animate={reduce ? undefined : { x: ["0%", "-50%"] }}
-        transition={
-          reduce
-            ? undefined
-            : { duration: 40, ease: "linear", repeat: Infinity }
-        }
-      >
+      <div className="marquee-track">
         {row.map((item, i) => (
           <span key={`${item}-${i}`} className="marquee-item">
             {item}
             <em>·</em>
           </span>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 }

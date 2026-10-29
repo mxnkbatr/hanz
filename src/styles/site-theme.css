@@ -1,0 +1,2178 @@
+/*
+ * Site theme — "soft tropical editorial" in the logo colours: warm paper, ink black
+ * and the logo red lead; leaf green is the one secondary accent. Serif headlines with
+ * italic red accents; big rounded cards; frosted glass over soft mint/blush/peach light. Light by default with an optional dark mode. Loaded last. Layout puts .site and
+ * data-theme on <html>, so `html.site` outranks every earlier :root block and the
+ * admin keeps its own look.
+ *
+ * Every colour below comes from the tokens; light and dark only swap the tokens.
+ *   page     page background (warm paper)
+ *   surface  cards, lists, sheets
+ *   raised   cards on cards, inputs, chips
+ *   text     body + headings (ink)
+ *   ash      secondary text
+ *   chrome   frosted header / tab bar glass
+ *   seal     logo red — primary action and accents
+ *   leaf     secondary accent: section labels, "on" states
+ * Type
+ *   Display: Lora (serif, italic accents) · Body/UI: Onest — both draw Mongolian Ү/Ө
+ *   correctly · Chinese: Noto Serif SC / Noto Sans SC
+ */
+
+:root {
+  --font-d: "Onest", "Noto Sans SC", system-ui, sans-serif;
+  --font-b: "Onest", "Noto Sans SC", system-ui, sans-serif;
+  --font-ui: "Onest", "Noto Sans SC", system-ui, sans-serif;
+  --font-s: "Lora", "Noto Serif SC", Georgia, serif;
+  --serif: "Lora", "Noto Serif SC", Georgia, serif;
+  --display: "Lora", "Noto Serif SC", Georgia, serif;
+}
+
+/* ─── Light (default): sand + palm + coral ─── */
+html.site {
+  color-scheme: light;
+
+  --page: #f8f4ef;
+  --surface-1: #fffdfa;
+  --raised: #f3eee8;
+  --text: #161616;
+  --ash: #6b6764;
+  --placeholder: #a5a09c;
+  --edge: rgba(22, 22, 22, 0.08);
+  --edge-strong: rgba(22, 22, 22, 0.14);
+  --chrome: rgba(255, 252, 246, 0.6);
+  --chrome-strong: rgba(255, 252, 246, 0.84);
+  --glass-hi: rgba(255, 255, 255, 0.85);
+  --drop: rgba(80, 56, 30, 0.14);
+  --drop-deep: rgba(80, 56, 30, 0.2);
+  --ghost: rgba(255, 252, 246, 0.7);
+  --tab-ink: #7a7672;
+  --watermark: rgba(22, 22, 22, 0.04);
+  --hero-film: saturate(1.08) sepia(0.06);
+  --hero-veil: 0.9;
+  --glow-strength: 0.1;
+
+  --seal: #e3262b;
+  --seal-deep: #c41d22;
+  --seal-light: #ff6b6e;
+  --seal-glow: rgba(227, 38, 43, 0.28);
+  --seal-tint: rgba(227, 38, 43, 0.08);
+  --accent-end: #ff6b6e;
+
+  --leaf: #2f7a5b;
+  --leaf-tint: rgba(47, 122, 91, 0.1);
+  --mint: rgba(150, 214, 186, 0.5);
+  --blush: rgba(255, 186, 182, 0.42);
+  --peach: rgba(255, 214, 178, 0.45);
+  --cream: rgba(240, 222, 204, 0.5);
+}
+
+/* ─── Dark: tropical night ─── */
+html.site[data-theme="dark"] {
+  color-scheme: dark;
+
+  --page: #111011;
+  --surface-1: #19181a;
+  --raised: #222023;
+  --text: #f5f1ec;
+  --ash: #a29d98;
+  --placeholder: #706b67;
+  --edge: rgba(245, 241, 236, 0.08);
+  --edge-strong: rgba(245, 241, 236, 0.14);
+  --chrome: rgba(22, 21, 23, 0.6);
+  --chrome-strong: rgba(22, 21, 23, 0.84);
+  --glass-hi: rgba(255, 255, 255, 0.06);
+  --drop: rgba(0, 0, 0, 0.75);
+  --drop-deep: rgba(0, 0, 0, 0.9);
+  --ghost: rgba(243, 238, 229, 0.08);
+  --tab-ink: #8c8782;
+  --watermark: rgba(245, 241, 236, 0.03);
+  --hero-film: saturate(1) brightness(0.7);
+  --hero-veil: 0.94;
+  --glow-strength: 0.16;
+
+  --seal: #ff4b4f;
+  --seal-deep: #e3262b;
+  --seal-light: #ff8a8d;
+  --seal-glow: rgba(255, 75, 79, 0.4);
+  --seal-tint: rgba(255, 75, 79, 0.13);
+  --accent-end: #ff8a8d;
+
+  --leaf: #6cc79e;
+  --leaf-tint: rgba(108, 199, 158, 0.13);
+  --mint: rgba(60, 140, 110, 0.22);
+  --blush: rgba(227, 38, 43, 0.16);
+  --peach: rgba(180, 90, 60, 0.12);
+  --cream: rgba(120, 100, 90, 0.12);
+}
+
+/* Legacy tokens the older layers read, mapped onto the theme. */
+html.site {
+  --ivory: var(--page);
+  --paper: var(--surface-1);
+  --ink: var(--text);
+  --ink-2: var(--text);
+  --ink-soft: color-mix(in srgb, var(--text) 78%, var(--page));
+  --muted: var(--ash);
+  --hair: var(--edge);
+  --seal-soft: var(--seal-tint);
+  --pink: var(--seal-tint);
+  --brass: var(--seal);
+  --brass-soft: var(--seal-light);
+
+  --bg: var(--page);
+  --bg-elev: var(--surface-1);
+  --surface: var(--surface-1);
+  --line: var(--edge);
+
+  /* Airbnb-soft: a hairline plus one wide, warm, low-opacity shadow. */
+  --shadow: 0 1px 0 var(--glass-hi) inset, 0 1px 2px var(--edge), 0 18px 40px -22px var(--drop);
+  --shadow-soft: var(--shadow);
+  --shadow-hover: 0 1px 0 var(--glass-hi) inset, 0 28px 56px -22px var(--drop-deep);
+  --shadow-lift: var(--shadow-hover);
+  --shadow-lg: var(--shadow-hover);
+
+  --glass-bg: var(--chrome);
+  --glass-bg-strong: var(--chrome-strong);
+  --glass-border: var(--edge);
+  --glass-border-soft: var(--edge);
+  --glass-blur: blur(24px) saturate(1.6);
+  --glass-inset: inset 0 1px 0 var(--glass-hi);
+  --glass-glow: 0 20px 50px -24px var(--drop);
+
+  --ios-surface: var(--surface-1);
+  --ios-stroke: var(--edge);
+  --ios-ink: var(--text);
+  --ios-muted: var(--ash);
+  --ios-depth: var(--shadow);
+
+  --radius: 28px;
+  --radius-sm: 18px;
+
+  background: var(--page);
+  scrollbar-color: color-mix(in srgb, var(--text) 22%, transparent) transparent;
+}
+
+html.site body {
+  background: var(--page);
+  color: var(--text);
+  font-family: var(--font-b);
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+html.site ::selection {
+  background: var(--seal);
+  color: #fff;
+}
+
+/* ─── Atmosphere: soft mint, blush and peach light around warm paper ─── */
+html.site .app-shell .ambient {
+  opacity: 1;
+}
+
+html.site .app-shell .ambient-wash {
+  background:
+    radial-gradient(42% 34% at 96% 0%, var(--blush), transparent 70%),
+    radial-gradient(40% 32% at 6% 6%, var(--mint), transparent 70%),
+    radial-gradient(34% 26% at 40% -6%, var(--peach), transparent 70%),
+    radial-gradient(50% 40% at 70% 108%, var(--cream), transparent 70%),
+    var(--page);
+}
+
+html.site .fx-progress {
+  background: linear-gradient(90deg, var(--leaf), var(--seal));
+  box-shadow: none;
+}
+
+/* Desktop: the floating header is the one thing at the top edge; no progress line. */
+@media (min-width: 900px) {
+  html.site .fx-progress {
+    display: none;
+  }
+}
+
+html.site .fx-grain {
+  opacity: 0.035;
+}
+
+html.site[data-theme="dark"] .fx-grain {
+  mix-blend-mode: screen;
+}
+
+/* ─── Type: editorial serif headlines, italic red accents ─── */
+html.site .app-shell :is(h1, h2, .h1, .h2, .m-title) {
+  font-family: var(--display);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+  color: var(--text);
+}
+
+html.site .app-shell h3 {
+  font-family: var(--font-d);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--text);
+}
+
+html.site .app-shell em {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 500;
+  color: var(--seal);
+  background: none;
+  -webkit-text-fill-color: currentColor;
+}
+
+/* Eyebrows: a small leaf-green pill, like a magazine section tag. */
+html.site .app-shell .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  background: var(--leaf-tint);
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--leaf);
+}
+
+html.site .app-shell .eyebrow::before {
+  content: none;
+}
+
+html.site .app-shell :is(.lead, p) {
+  color: var(--ash);
+}
+
+/* ─── Surfaces: every card / list / sheet that used to be hard-coded white ─── */
+html.site .app-shell :is(
+  .course-card, .course-detail-slot, .course-comment-form, .course-comment-item,
+  .ios-card, .ios-list, .ios-empty, .ios-profile-hero, .ios-search,
+  .news-card, .shop-card, .uni-card, .news-featured,
+  .home-course-card, .home-prog-card, .home-branch-card, .home-service,
+  .step-card, .compare-table, .faq-item, .consult-form,
+  .app-list, .app-related, .app-chips li, .uni-enroll-list,
+  .learn-scroll-static-card, .stats-strip-inner,
+  .china-map-card, .china-prog-card, .why-card,
+  .quiz-level-card, .quiz-pick-meta span, .course-match-opt, .course-match-pick,
+  .course-detail-points, .course-detail-teachers li
+) {
+  background: var(--surface-1);
+  border-color: var(--edge);
+  color: var(--text);
+}
+
+html.site .app-shell :is(.page-shop .desk-detail-hero, .shop-banner-media, .shop-media) {
+  background: radial-gradient(circle at 30% 20%, var(--seal-tint), transparent 60%), var(--raised);
+}
+
+/* Selected pills, segment thumbs, small chips */
+html.site .app-shell :is(
+  .ios26-filter-pill, .ios-seg-pill, .news-chip-pill, .auth-tab-pill,
+  .ios-badge-soft, .badge-stock.is-in, .ios-profile-avatar
+) {
+  background: var(--surface-1);
+  color: var(--text);
+  box-shadow: inset 0 1px 0 var(--glass-hi), 0 2px 8px -2px var(--drop);
+}
+
+html.site[data-theme="dark"] .app-shell :is(
+  .ios26-filter-pill, .ios-seg-pill, .news-chip-pill, .auth-tab-pill,
+  .ios-badge-soft, .badge-stock.is-in, .ios-profile-avatar
+) {
+  background: var(--raised);
+}
+
+/* White chips sitting on photos stay white-on-photo in both modes. */
+html.site .app-shell .m-chip-light {
+  color: #0e0e11;
+}
+
+/* Inputs */
+html.site .app-shell :is(input, textarea, select) {
+  background: var(--raised);
+  color: var(--text);
+  border-color: var(--edge-strong);
+}
+
+html.site .app-shell :is(input, textarea)::placeholder {
+  color: var(--placeholder);
+}
+
+html.site .app-shell .kids-ios-field:focus-within {
+  background: var(--raised);
+}
+
+/* Text that was hard-coded near-black */
+html.site .app-shell :is(
+  .quiz-pick-group-head h2, .quiz-level-card strong,
+  .course-match-compact-copy strong, .course-match-head strong, .course-match-q,
+  .course-match-opt, .course-match-pick strong,
+  .course-card .ios-card-body h3, .course-product-tag, .course-product-body h3,
+  .course-detail-teachers li, .course-comment-meta strong,
+  .auth-card-head h1, .auth-tab.is-active, .auth-field input,
+  .ios-card-body h3, .app-head .h1, .uni-enroll-head h2, .uni-enroll-row-main strong,
+  .app-ios-points li, .app-enroll-dock-copy strong, .enroll-context strong,
+  .onboard-copy h1
+) {
+  color: var(--text);
+}
+
+/* ─── Chrome: header capsule, desktop nav, tab bar, sheets (liquid glass) ─── */
+html.site .app-shell :is(
+  .topbar-capsule,
+  .topbar.is-scrolled .topbar-capsule
+) {
+  background: var(--chrome) !important;
+  border: 1px solid var(--edge) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  backdrop-filter: blur(24px) saturate(1.8);
+  box-shadow: inset 0 1px 0 var(--glass-hi), 0 18px 40px -20px var(--drop) !important;
+}
+
+html.site .app-shell .topbar.is-scrolled .topbar-capsule {
+  background: var(--chrome-strong) !important;
+}
+
+html.site .app-shell .topnav-link {
+  color: var(--ash);
+}
+
+html.site .app-shell :is(.topnav-link.is-active, .topnav-link:hover) {
+  color: var(--text);
+}
+
+html.site .app-shell .topnav-pill {
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  box-shadow: inset 0 1px 0 var(--glass-hi);
+}
+
+html.site .app-shell .topbar-icon-btn {
+  background: color-mix(in srgb, var(--text) 5%, transparent);
+  border-color: var(--edge);
+  color: var(--text);
+}
+
+html.site .app-shell .topbar-icon-btn.is-active {
+  background: var(--text);
+  color: var(--page);
+}
+
+/* Hover only where there is a pointer, so a tapped button doesn't stay dark on phones. */
+@media (hover: hover) {
+  html.site .app-shell .topbar-icon-btn:hover {
+    background: var(--text);
+    color: var(--page);
+  }
+}
+
+html.site .app-shell .topbar-cta {
+  background: var(--seal);
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 10px 30px -10px var(--seal-glow);
+}
+
+/* The logo is black type on white: keep it on a white tile in both modes. */
+html.site .app-shell .brand-logo-img {
+  background: #fff;
+  border-radius: 10px;
+}
+
+html.site .app-shell :is(.tabbar, .glass-dock) {
+  background: var(--chrome) !important;
+  border: 1px solid var(--edge) !important;
+  -webkit-backdrop-filter: blur(26px) saturate(1.9);
+  backdrop-filter: blur(26px) saturate(1.9);
+  box-shadow: inset 0 1px 0 var(--glass-hi), 0 24px 48px -16px var(--drop-deep) !important;
+}
+
+/*
+ * Floating tab bar, iOS 26 style: a narrow glass pill (not edge to edge), the active
+ * tab gets a tinted glass "lens" and a red icon instead of a solid red block, and the
+ * whole bar shrinks to icons while reading down (.is-compact, set in Layout).
+ */
+@media (max-width: 899px) {
+  html.site .app-shell .tabbar {
+    left: 50%;
+    right: auto;
+    width: min(calc(100% - 2rem), 420px);
+    transform: translateX(-50%);
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 0;
+    padding: 0.32rem;
+    border-radius: 999px;
+    transition:
+      width 0.45s cubic-bezier(0.2, 0.9, 0.2, 1),
+      padding 0.45s cubic-bezier(0.2, 0.9, 0.2, 1),
+      bottom 0.45s cubic-bezier(0.2, 0.9, 0.2, 1);
+  }
+
+  html.site .app-shell .tabbar.is-compact {
+    width: min(calc(100% - 6rem), 290px);
+    padding: 0.22rem;
+    bottom: calc(0.45rem + env(safe-area-inset-bottom));
+  }
+
+  html.site .app-shell .tabbar-item {
+    padding: 0.42rem 0.1rem 0.36rem;
+    border-radius: 999px;
+    gap: 0.12rem;
+    color: var(--tab-ink);
+  }
+
+  html.site .app-shell .tabbar-item.is-active {
+    color: var(--seal);
+  }
+
+  html.site .app-shell .tabbar-item.is-active .tabbar-icon {
+    transform: scale(1.08);
+  }
+
+  html.site .app-shell .tabbar-label {
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    max-height: 1rem;
+    overflow: hidden;
+    transition: max-height 0.35s ease, opacity 0.25s ease;
+  }
+
+  html.site .app-shell .tabbar.is-compact .tabbar-label {
+    max-height: 0;
+    opacity: 0;
+  }
+
+  html.site .app-shell .tabbar.is-compact .tabbar-item {
+    padding: 0.5rem 0.1rem;
+    gap: 0;
+  }
+
+  /* The lens: tinted glass with a bright rim, like the iOS 26 selection bubble. */
+  html.site .app-shell .tabbar-pill {
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--seal) 12%, var(--chrome-strong));
+    border: 1px solid color-mix(in srgb, var(--seal) 22%, transparent);
+    box-shadow:
+      inset 0 1px 0 var(--glass-hi),
+      inset 0 -6px 14px -10px color-mix(in srgb, var(--seal) 40%, transparent),
+      0 6px 16px -8px var(--seal-glow);
+  }
+}
+
+html.site .bottom-sheet-panel {
+  background: var(--chrome-strong);
+  -webkit-backdrop-filter: blur(30px) saturate(1.8);
+  backdrop-filter: blur(30px) saturate(1.8);
+  color: var(--text);
+  border-top: 1px solid var(--edge);
+}
+
+html.site .course-detail-sticky {
+  background: var(--chrome-strong) !important;
+  border-color: var(--edge) !important;
+  color: var(--text);
+}
+
+/* ─── Buttons ─── */
+html.site .app-shell .btn {
+  border-color: var(--edge-strong);
+}
+
+html.site .app-shell :is(.btn-seal, .btn-primary, .ios-cta, .auth-cta-btn.is-primary) {
+  background: linear-gradient(180deg, var(--seal-light) -60%, var(--seal-deep) 100%);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 14px 34px -12px var(--seal-glow);
+}
+
+html.site .app-shell :is(.btn.dhero-ghost, .btn.hero-film-ghost) {
+  background: var(--ghost);
+  color: var(--text);
+  border: 1px solid var(--edge-strong);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+html.site .app-shell :is(.btn.dhero-ghost, .btn.hero-film-ghost):hover {
+  background: var(--text);
+  color: var(--page);
+}
+
+/* ─── Footer ─── */
+html.site .app-shell .site-footer {
+  background: linear-gradient(180deg, transparent, var(--seal-tint)), var(--page);
+  border-top: 1px solid var(--edge);
+  color: var(--ash);
+}
+
+html.site .app-shell .site-footer-mark {
+  color: var(--watermark);
+}
+
+html.site .app-shell .footer-social-btn {
+  background: color-mix(in srgb, var(--text) 5%, transparent);
+  border-color: var(--edge);
+  color: var(--text);
+}
+
+/* ─── Full-screen moments: onboarding, hero intro, auth, quiz ─── */
+html.site .app-shell .onboard {
+  background: radial-gradient(70% 45% at 50% 0%, var(--seal-tint), transparent 70%), var(--page);
+  color: var(--text);
+}
+
+html.site .app-shell :is(.onboard-hero-card, .hero-intro-skip) {
+  background: var(--surface-1);
+  color: var(--text);
+}
+
+html.site .app-shell .hero-intro {
+  background: radial-gradient(ellipse 60% 50% at 50% 45%, var(--seal-tint), transparent 70%), var(--page);
+}
+
+html.site .app-shell :is(.page-auth, .page-quiz.quiz-game:not(.is-playing)) {
+  background: radial-gradient(ellipse 90% 55% at 15% -10%, var(--seal-tint), transparent 60%), transparent;
+}
+
+html.site .app-shell .quiz-score-ring {
+  background: radial-gradient(circle at 50% 50%, var(--surface-1) 58%, transparent 59%);
+}
+
+html.site .app-shell .china-map-svg-wrap {
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, var(--seal-tint), transparent 70%);
+}
+
+/* ─── Desktop sections below the hero ─── */
+html.site .app-shell .marquee {
+  background: transparent;
+  border-color: var(--edge);
+}
+
+html.site .app-shell .home-finale {
+  background: radial-gradient(60% 80% at 50% 100%, rgb(255 59 63 / var(--glow-strength)), transparent 70%), var(--page);
+  color: var(--text);
+}
+
+html.site .app-shell .home-finale-mark {
+  color: var(--seal-tint);
+}
+
+/* Cards: hairline + lift + red glow on hover (desktop) */
+@media (hover: hover) and (min-width: 900px) {
+  html.site .app-shell :is(.news-card, .shop-card, .uni-card, .course-card, .home-course-card, .promo-panel) {
+    transition: transform 0.5s var(--ease-out-expo), border-color 0.4s ease, box-shadow 0.5s ease;
+  }
+
+  html.site .app-shell :is(.news-card, .shop-card, .uni-card, .course-card, .home-course-card, .promo-panel):hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in srgb, var(--seal) 35%, transparent);
+    box-shadow: 0 30px 60px -30px var(--drop-deep), 0 0 0 1px var(--seal-tint), 0 20px 60px -30px var(--seal-glow);
+  }
+}
+
+/* ─── Theme toggle (header) ─── */
+.theme-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ─── Phone route stack (AnimatedOutlet): pages slide over each other like iOS ─── */
+.route-stack {
+  display: grid;
+  overflow-x: clip;
+}
+
+.route-layer {
+  grid-area: 1 / 1;
+  min-width: 0;
+}
+
+/* While two pages overlap, each one needs an opaque sheet so they don't bleed through. */
+.route-layer:not(:only-child) {
+  min-height: 100lvh;
+  background: var(--bg);
+}
+
+/* ─── Rotating seal badge (RotatingSeal) ─── */
+.rseal {
+  position: relative;
+  width: 112px;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.rseal-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.rseal-ring text {
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  fill: var(--text, #111);
+}
+
+.rseal-core {
+  width: 46%;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--seal-light, #ff6b6e), var(--seal, #e3262b) 55%, var(--seal-deep, #c41d22));
+  color: #fff;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
+  font-size: 1.6rem;
+  line-height: 1;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 10px 26px -8px var(--seal-glow, rgba(227, 38, 43, 0.4));
+}
+
+/* Phone: small badge beside the large title. */
+.m-head {
+  position: relative;
+}
+
+.m-seal {
+  position: absolute;
+  top: -22px;
+  right: -4px;
+  width: 72px;
+}
+
+.m-seal .rseal-ring text {
+  font-size: 16px;
+}
+
+.m-seal .rseal-core {
+  font-size: 1.15rem;
+}
+
+/*
+ * Compositor-only loops (transform animations, no JS): the seal ring, the floating
+ * hanzi and the marquee. They keep moving without touching the main thread, so
+ * scrolling stays smooth.
+ */
+@keyframes rseal-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rseal-ring {
+  animation: rseal-spin 18s linear infinite;
+  will-change: transform;
+}
+
+@keyframes fglyph-float {
+  from {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  to {
+    transform: translate3d(var(--fx, 24px), var(--fy, -32px), 0) rotate(var(--fr, 14deg));
+  }
+}
+
+.fglyph-inner {
+  animation: fglyph-float var(--fd, 9s) ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.fglyph:nth-child(1) .fglyph-inner { --fx: 28px; --fy: -36px; --fr: 12deg; --fd: 10s; }
+.fglyph:nth-child(2) .fglyph-inner { --fx: -22px; --fy: 30px; --fr: -16deg; --fd: 8s; }
+.fglyph:nth-child(3) .fglyph-inner { --fx: 18px; --fy: 40px; --fr: 10deg; --fd: 11s; }
+.fglyph:nth-child(4) .fglyph-inner { --fx: -30px; --fy: -20px; --fr: -12deg; --fd: 9s; }
+.fglyph:nth-child(5) .fglyph-inner { --fx: 20px; --fy: 24px; --fr: 18deg; --fd: 7.5s; }
+.fglyph:nth-child(6) .fglyph-inner { --fx: -18px; --fy: -28px; --fr: -10deg; --fd: 12s; }
+
+@keyframes marquee-slide {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.marquee-track {
+  animation: marquee-slide 40s linear infinite;
+}
+
+/* Grain overlays were blended over the whole screen / the playing video every frame. */
+.fx-grain,
+.cine-grain {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rseal-ring,
+  .fglyph-inner,
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* ─── Floating hanzi behind everything (FloatingGlyphs) ─── */
+.fglyphs {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.fglyph {
+  position: absolute;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--watermark, rgba(0, 0, 0, 0.035));
+}
+
+.fglyph-inner {
+  display: block;
+}
+
+html.site .fglyph:nth-child(odd) {
+  color: color-mix(in srgb, var(--seal) 7%, transparent);
+}
+
+@media (max-width: 899px) {
+  .fglyph:nth-child(n + 4) {
+    display: none;
+  }
+}
+
+/* .main already stacks at z-index 2; lift the footer over the glyph layer too. */
+html.site .app-shell .site-footer {
+  position: relative;
+  z-index: 1;
+}
+
+/*
+ * Native-app feel on phones:
+ *  - no grey tap flash, no long-press "copy / open link" callout on app chrome
+ *  - sections far below the fold skip rendering until they come near the screen
+ *    (content-visibility), so the first screen paints and scrolls faster
+ */
+@media (max-width: 899px) {
+  html.site :is(a, button, label, [role="tab"]) {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html.site .app-shell :is(.tabbar, .topbar, .mm-sheet, .m-chips, .m-rail, .btn, .mm-tile, .mm-quick-btn, .pf-quick-btn, .sl-row) {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  html.site .app-shell :is(.m-section, .m-cta, .site-footer) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 420px;
+  }
+
+  html.site .app-shell :is(.m-rail, .m-chips) {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+  }
+
+  html.site .app-shell .m-rail > * {
+    scroll-snap-align: start;
+  }
+}
+
+/* ─── App feel on phones: press feedback like native buttons ─── */
+@media (max-width: 899px) {
+  html.site .app-shell :is(
+    .m-tall, .m-square, .m-row, .m-promo, .m-feature-link,
+    .news-card, .course-card, .uni-card, .shop-card, .ios-card, .btn
+  ) {
+    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html.site .app-shell :is(
+    .m-tall, .m-square, .m-row, .m-promo, .m-feature-link,
+    .news-card, .course-card, .uni-card, .shop-card, .ios-card, .btn
+  ):active {
+    transform: scale(0.97);
+    transition-duration: 0.08s;
+  }
+}
+
+/* ─── Phone clean-up: calmer surfaces, one red accent per screen ─── */
+@media (max-width: 899px) {
+  /* Background glyphs are a desktop flourish; on a phone they read as noise. */
+  .fglyphs {
+    display: none;
+  }
+
+  /* The scholarship promo was a full red slab; now a tinted card with a red action. */
+  html.site .app-shell .m-promo {
+    background:
+      radial-gradient(120% 140% at 100% 0%, color-mix(in srgb, var(--seal) 16%, transparent), transparent 60%),
+      var(--surface-1);
+    color: var(--text);
+    border: 1px solid var(--edge);
+    box-shadow: var(--shadow);
+  }
+
+  html.site .app-shell .m-promo::before {
+    color: color-mix(in srgb, var(--seal) 14%, transparent);
+  }
+
+  html.site .app-shell .m-promo em {
+    color: var(--seal);
+  }
+
+  html.site .app-shell .m-promo strong {
+    color: var(--text);
+  }
+
+  html.site .app-shell .m-promo i {
+    background: var(--seal);
+    color: #fff;
+  }
+
+  /* Section headings: app-style size, tighter rhythm. */
+  html.site .app-shell .m-section-head h2 {
+    font-size: 1.35rem;
+    letter-spacing: -0.03em;
+  }
+
+  html.site .app-shell .m-title {
+    letter-spacing: -0.04em;
+  }
+
+  html.site .app-shell .m-hello {
+    color: var(--ash);
+    font-weight: 500;
+  }
+
+  /* Filter chips: quiet outlines, solid only when picked. */
+  html.site .app-shell .m-chips button {
+    background: var(--surface-1);
+    border: 1px solid var(--edge);
+    box-shadow: none;
+  }
+}
+
+/*
+ * Desktop header motion (all transform/opacity/colour — nothing that re-lays out):
+ *   entrance  capsule drops in, links follow one by one
+ *   on-film   clear glass + white type while over the home film
+ *   tucked    slides up while reading down, returns on the way up
+ */
+@media (min-width: 900px) {
+  @keyframes topbar-drop {
+    from {
+      opacity: 0;
+      transform: translateY(-28px) scale(0.97);
+      filter: blur(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
+  }
+
+  @keyframes topnav-rise {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  html.site .app-shell .topbar-capsule {
+    animation: topbar-drop 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+  }
+
+  html.site .app-shell .topnav > * {
+    animation: topnav-rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  html.site .app-shell .topnav > :nth-child(1) { animation-delay: 0.45s; }
+  html.site .app-shell .topnav > :nth-child(2) { animation-delay: 0.51s; }
+  html.site .app-shell .topnav > :nth-child(3) { animation-delay: 0.57s; }
+  html.site .app-shell .topnav > :nth-child(4) { animation-delay: 0.63s; }
+  html.site .app-shell .topnav > :nth-child(5) { animation-delay: 0.69s; }
+  html.site .app-shell .topnav > :nth-child(6) { animation-delay: 0.75s; }
+
+  html.site .app-shell .topbar {
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  html.site .app-shell .topbar.is-tucked {
+    transform: translateY(-120%);
+  }
+
+  /* Over the film: clear glass — a whisper of white, white type, lit top edge. */
+  html.site .app-shell .topbar.is-on-film .topbar-capsule {
+    background: rgba(255, 255, 255, 0.07) !important;
+    border-color: rgba(255, 255, 255, 0.16) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+    /* Light blur: this glass sits on moving video, a heavy blur re-renders every frame. */
+    -webkit-backdrop-filter: blur(8px) saturate(1.2) !important;
+    backdrop-filter: blur(8px) saturate(1.2) !important;
+  }
+
+  /*
+   * Two states, same shape:
+   *   top of page  clear glass — white type over the home film, ink type on paper
+   *   scrolled     a white capsule with ink type (dark surface in dark mode)
+   * Over the film the header stays clear until the film is behind you.
+   */
+  html.site .app-shell .topbar:not(.is-on-film) .topbar-capsule {
+    background: color-mix(in srgb, var(--surface-1) 30%, transparent) !important;
+    border-color: color-mix(in srgb, var(--text) 8%, transparent) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(1.4);
+    backdrop-filter: blur(12px) saturate(1.4);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+  }
+
+  html.site .app-shell .topbar.is-scrolled:not(.is-on-film) .topbar-capsule {
+    background: color-mix(in srgb, var(--surface-1) 94%, transparent) !important;
+    border-color: color-mix(in srgb, var(--text) 7%, transparent) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(1.6);
+    backdrop-filter: blur(18px) saturate(1.6);
+    box-shadow:
+      inset 0 1px 0 var(--glass-hi),
+      0 1px 2px rgba(22, 22, 22, 0.06),
+      0 14px 34px -16px rgba(22, 22, 22, 0.22) !important;
+  }
+
+  html.site[data-theme="dark"] .app-shell .topbar:not(.is-on-film) .topbar-capsule {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+  }
+
+  html.site[data-theme="dark"] .app-shell .topbar.is-scrolled:not(.is-on-film) .topbar-capsule {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 14px 34px -14px rgba(0, 0, 0, 0.7) !important;
+  }
+
+  /* No decorative pseudo-elements on the capsule. */
+  html.site .app-shell :is(.topbar-capsule, .topbar-cta)::before,
+  html.site .app-shell .topbar-capsule::after {
+    content: none;
+  }
+
+  html.site .app-shell .topbar .topbar-cta i {
+    display: none;
+  }
+
+  /* Ink type on paper (default) ... */
+  html.site .app-shell .topbar .topnav-link {
+    color: color-mix(in srgb, var(--text) 66%, transparent);
+  }
+
+  html.site .app-shell .topbar :is(.topnav-link:hover, .topnav-link.is-open, .topnav-link.is-active) {
+    color: var(--text) !important;
+  }
+
+  html.site .app-shell .topbar .brand-logo-text small {
+    color: var(--seal);
+  }
+
+  /* ... white type while over the film. */
+  html.site .app-shell .topbar.is-on-film .topnav-link {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  html.site .app-shell .topbar.is-on-film :is(.topnav-link:hover, .topnav-link.is-open, .topnav-link.is-active),
+  html.site .app-shell .topbar.is-on-film .brand-logo-text strong {
+    color: #fff !important;
+  }
+
+  html.site .app-shell .topbar.is-on-film .brand-logo-text small {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  html.site .app-shell .topbar.is-on-film .topnav-hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  html.site .app-shell .topbar.is-on-film .topbar-tools {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+
+  html.site .app-shell .topbar.is-on-film :is(.topbar-tools .topbar-icon-btn, .topbar-lang button) {
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  html.site .app-shell .topbar.is-on-film .topbar-lang {
+    border-color: rgba(255, 255, 255, 0.16);
+  }
+
+  html.site .app-shell .topbar.is-on-film .topbar-lang button.is-active {
+    background: rgba(255, 255, 255, 0.92);
+    color: #161616;
+  }
+
+  html.site .app-shell .topbar :is(.topnav-link, .brand-logo-text strong, .brand-logo-text small, .topbar-tools, .topbar-icon-btn, .topbar-lang button) {
+    transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.site .app-shell :is(.topbar-capsule, .topnav > *) {
+      animation: none !important;
+    }
+  }
+}
+
+/* ─── Header actions: tools group, phone, register ─── */
+@media (max-width: 899px) {
+  .topbar-tools {
+    display: contents;
+  }
+
+  .topbar-phone {
+    display: none;
+  }
+}
+
+/*
+ * Desktop header: a centred glass capsule that tightens on scroll. Links get a
+ * sliding hover highlight and a red dot for the current page (DesktopNav);
+ * Courses opens a mega panel. Right side: one tool group, phone, Register.
+ */
+@media (min-width: 900px) {
+  /*
+   * Scrolling only changes paint (glass opacity, shadow) — never size. The older
+   * layers shrank padding, logo, links and buttons on .is-scrolled, which re-laid
+   * out the header mid-scroll over the playing hero video and made it stutter.
+   */
+  html.site .app-shell .topbar,
+  html.site .app-shell .topbar.is-scrolled {
+    padding: 0.9rem 0 0.3rem;
+    transition: none;
+  }
+
+  html.site .app-shell :is(.topbar-stack, .topbar.is-scrolled .topbar-stack) {
+    gap: 0.4rem;
+    transition: none;
+  }
+
+  html.site .app-shell .topbar-capsule,
+  html.site .app-shell .topbar.is-scrolled .topbar-capsule {
+    max-width: 1240px;
+    margin: 0 auto;
+    min-height: 60px;
+    padding: 0.4rem 0.45rem 0.4rem 0.85rem;
+    gap: 0.7rem;
+    border-radius: 999px;
+    overflow: visible;
+    -webkit-backdrop-filter: blur(16px) saturate(1.5);
+    backdrop-filter: blur(16px) saturate(1.5);
+    transform: translateZ(0);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  html.site .app-shell :is(.topbar .brand-logo, .topbar.is-scrolled .brand-logo) {
+    gap: 0.6rem;
+    transition: none;
+  }
+
+  html.site .app-shell :is(.topbar .brand-logo-img, .topbar.is-scrolled .brand-logo-img) {
+    width: 38px !important;
+    height: 38px !important;
+    transition: none;
+  }
+
+  html.site .app-shell :is(.topbar .brand-logo-text strong, .topbar.is-scrolled .brand-logo-text strong) {
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+    transition: none;
+  }
+
+  html.site .app-shell :is(.topbar .brand-logo-text small, .topbar.is-scrolled .brand-logo-text small) {
+    font-size: 0.56rem;
+    transition: none;
+  }
+
+  html.site .app-shell .topbar.is-scrolled .topnav-link {
+    padding: 0.6rem 0.95rem;
+    font-size: 0.92rem;
+  }
+
+  html.site .app-shell .topbar-icon-btn,
+  html.site .app-shell .topbar.is-scrolled .topbar-icon-btn {
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  html.site .app-shell .topbar-route-line {
+    display: none;
+  }
+
+  /* Links */
+  html.site .app-shell .topnav {
+    display: flex;
+    align-items: center;
+    gap: 0.1rem;
+    padding: 0;
+    background: none;
+    border: 0;
+    box-shadow: none;
+  }
+
+  html.site .app-shell .topnav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6rem 0.95rem;
+    border-radius: 999px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--ash);
+    transition: color 0.25s ease;
+  }
+
+  html.site .app-shell :is(.topnav-link:hover, .topnav-link.is-open) {
+    color: var(--text);
+  }
+
+  /* !important: hero.css forces white for the old solid-red active pill. */
+  html.site .app-shell .topnav-link.is-active {
+    font-weight: 600;
+    color: #fff !important;
+  }
+
+  html.site .app-shell .topnav-hover {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--text) 6%, transparent);
+  }
+
+  html.site .app-shell .topnav-text {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  html.site .app-shell .topnav-chevron {
+    width: 12px;
+    height: 12px;
+    opacity: 0.6;
+    transition: transform 0.3s var(--ease-out-expo);
+  }
+
+  html.site .app-shell .topnav-link.is-open .topnav-chevron {
+    transform: rotate(180deg);
+  }
+
+  html.site .app-shell .topnav-dot {
+    position: absolute;
+    left: 50%;
+    bottom: 0.2rem;
+    width: 5px;
+    height: 5px;
+    margin-left: -2.5px;
+    border-radius: 50%;
+    background: var(--seal);
+    box-shadow: 0 0 10px var(--seal-glow);
+  }
+
+  /* Tools: theme · account · menu share one quiet segment */
+  html.site .app-shell .topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  html.site .app-shell .topbar-tools {
+    display: flex;
+    align-items: center;
+    gap: 0.1rem;
+    padding: 0.2rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--text) 5%, transparent);
+    border: 1px solid var(--edge);
+  }
+
+  html.site .app-shell .topbar-tools .topbar-icon-btn {
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: 0;
+    color: var(--ash);
+  }
+
+  html.site .app-shell .topbar-tools .topbar-icon-btn:hover {
+    background: var(--surface-1);
+    color: var(--text);
+    box-shadow: 0 2px 8px -2px var(--drop);
+  }
+
+  html.site .app-shell .topbar-tools .topbar-icon-btn.is-active {
+    background: var(--text);
+    color: var(--page);
+  }
+
+  html.site .app-shell .topbar-tools svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  html.site .app-shell .topbar-phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+    transition: background 0.25s ease;
+  }
+
+  html.site .app-shell .topbar-phone svg {
+    width: 16px;
+    height: 16px;
+    color: var(--seal);
+  }
+
+  html.site .app-shell .topbar-phone:hover {
+    background: color-mix(in srgb, var(--text) 6%, transparent);
+  }
+
+  html.site .app-shell .topbar-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 44px;
+    padding: 0.55rem 1.05rem 0.55rem 1.2rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    background: linear-gradient(180deg, var(--seal-light) -60%, var(--seal-deep) 100%);
+    color: #fff;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 10px 26px -10px var(--seal-glow);
+    transition: transform 0.3s var(--ease-out-expo), box-shadow 0.3s ease;
+  }
+
+  html.site .app-shell .topbar-cta::after {
+    content: none;
+  }
+
+  html.site .app-shell .topbar-cta i {
+    font-style: normal;
+    transition: transform 0.3s var(--ease-out-expo);
+  }
+
+  html.site .app-shell .topbar-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 14px 30px -10px var(--seal-glow);
+  }
+
+  html.site .app-shell .topbar-cta:hover i {
+    transform: translateX(3px);
+  }
+
+  html.site .app-shell .topbar.is-scrolled .topbar-cta {
+    min-height: 44px;
+    padding: 0.55rem 1.05rem 0.55rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  /* ─── Courses mega panel ─── */
+  .topnav-mega-anchor {
+    position: relative;
+  }
+
+  .mega {
+    position: absolute;
+    top: calc(100% + 14px);
+    /* Courses is the first link, so open rightwards from it rather than centred. */
+    left: -1.5rem;
+    width: 760px;
+    display: grid;
+    grid-template-columns: 1.55fr 1fr;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 26px;
+    background: var(--chrome-strong);
+    border: 1px solid var(--edge);
+    -webkit-backdrop-filter: blur(28px) saturate(1.8);
+    backdrop-filter: blur(28px) saturate(1.8);
+    box-shadow: inset 0 1px 0 var(--glass-hi), 0 30px 70px -24px var(--drop-deep);
+    transform-origin: 50% 0;
+  }
+
+  /* Invisible bridge so the pointer can travel from the link into the panel. */
+  .mega::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -16px;
+    height: 16px;
+  }
+
+  .mega-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.25rem;
+  }
+
+  .mega-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.55rem;
+    border-radius: 16px;
+    color: var(--text);
+    transition: background 0.2s ease;
+  }
+
+  .mega-item:hover,
+  .mega-item:focus-visible {
+    background: color-mix(in srgb, var(--text) 6%, transparent);
+  }
+
+  .mega-thumb {
+    flex: none;
+    width: 48px;
+    height: 48px;
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--raised);
+  }
+
+  .mega-thumb img,
+  .mega-thumb .img-fallback {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .mega-copy {
+    display: grid;
+    gap: 0.1rem;
+    min-width: 0;
+  }
+
+  .mega-copy strong {
+    font-size: 0.92rem;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .mega-copy small {
+    font-size: 0.78rem;
+    color: var(--ash);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mega-feature {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    padding: 1.2rem;
+    overflow: hidden;
+    border-radius: 20px;
+    isolation: isolate;
+    color: var(--text);
+    background:
+      radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, var(--seal) 24%, transparent), transparent 65%),
+      var(--surface-1);
+    border: 1px solid var(--edge);
+  }
+
+  .mega-feature-glyph {
+    position: absolute;
+    top: -0.4rem;
+    right: 0.5rem;
+    z-index: -1;
+    font-family: "Noto Serif SC", serif;
+    font-size: 5.5rem;
+    line-height: 1;
+    color: color-mix(in srgb, var(--seal) 16%, transparent);
+  }
+
+  .mega-feature strong {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .mega-feature > span:not(.mega-feature-glyph) {
+    font-size: 0.85rem;
+    color: var(--ash);
+    line-height: 1.45;
+  }
+
+  .mega-feature em {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--seal);
+  }
+}
+
+/* ─── Phone menu: iOS-style bottom sheet (MobileMenuSheet) ─── */
+@media (max-width: 899px) {
+  /* Appearance moved into the menu; the header keeps just account + menu. */
+  html.site .app-shell .topbar .theme-toggle {
+    display: none;
+  }
+}
+
+.mm-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgba(0, 0, 0, 0.32);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+
+/* Sheet: warm paper with soft mint/blush light, frosted. */
+.mm-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 91;
+  display: flex;
+  flex-direction: column;
+  max-height: 90dvh;
+  overflow: hidden;
+  border-radius: 32px 32px 0 0;
+  background:
+    radial-gradient(70% 40% at 0% 0%, var(--mint), transparent 70%),
+    radial-gradient(60% 36% at 100% 0%, var(--blush), transparent 70%),
+    color-mix(in srgb, var(--page) 94%, transparent);
+  -webkit-backdrop-filter: blur(30px) saturate(1.6);
+  backdrop-filter: blur(30px) saturate(1.6);
+  border-top: 1px solid var(--edge);
+  box-shadow: 0 -24px 70px -24px var(--drop-deep);
+  color: var(--text);
+  font-family: var(--font-ui);
+}
+
+.mm-head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1.1rem 0.5rem 1.25rem;
+  touch-action: none;
+  cursor: grab;
+}
+
+.mm-grabber {
+  position: absolute;
+  top: 0.6rem;
+  left: 50%;
+  width: 38px;
+  height: 5px;
+  margin-left: -19px;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--text) 20%, transparent);
+}
+
+.mm-eyebrow {
+  display: inline-flex;
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  background: var(--leaf-tint);
+  color: var(--leaf);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.mm-close {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--edge);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--surface-1) 70%, transparent);
+  color: var(--ash);
+}
+
+.mm-close svg {
+  width: 16px;
+  height: 16px;
+}
+
+.mm-body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0.5rem 1rem calc(1.6rem + env(safe-area-inset-bottom));
+}
+
+/* Brand card: glass, serif headline with the red italic accent. */
+.mm-brand {
+  position: relative;
+  overflow: hidden;
+  padding: 1.2rem 1.2rem 1.1rem;
+  margin-bottom: 1.4rem;
+  border-radius: 26px;
+  border: 1px solid color-mix(in srgb, var(--surface-1) 80%, transparent);
+  background: color-mix(in srgb, var(--surface-1) 62%, transparent);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  box-shadow: inset 0 1px 0 var(--glass-hi), 0 18px 40px -24px var(--drop);
+}
+
+.mm-brand-mark {
+  position: absolute;
+  top: -1.4rem;
+  right: -0.4rem;
+  font-family: "Noto Serif SC", serif;
+  font-size: 7.5rem;
+  line-height: 1;
+  color: var(--seal-tint);
+  pointer-events: none;
+}
+
+html.site .mm-brand-title {
+  margin: 0.9rem 0 0.35rem;
+  font-family: var(--display);
+  font-size: 1.65rem;
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  color: var(--text);
+}
+
+html.site .mm-brand-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--seal);
+}
+
+html.site .mm-brand-tag {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--ash);
+}
+
+.mm-brand-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.mm-cta {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 46px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--seal-light) -60%, var(--seal-deep) 100%);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 12px 26px -12px var(--seal-glow);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mm-cta i {
+  font-style: normal;
+}
+
+.mm-round {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid var(--edge);
+  background: var(--surface-1);
+  color: var(--seal);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mm-round svg {
+  width: 20px;
+  height: 20px;
+}
+
+:is(.mm-cta, .mm-round, .mm-tile):active {
+  transform: scale(0.96);
+}
+
+.mm-section {
+  margin: 0 0 0.6rem 0.25rem;
+  font-family: var(--display) !important;
+  font-size: 1.15rem !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.02em !important;
+  color: var(--text) !important;
+}
+
+/* Photo tiles, Airbnb-style: rounded image, serif label on a soft shade. */
+.mm-tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.mm-tile {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 20px;
+  isolation: isolate;
+  background: var(--raised);
+  box-shadow: 0 12px 26px -18px var(--drop-deep);
+  transition: transform 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mm-tile img {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mm-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, transparent 35%, rgba(0, 0, 0, 0.62));
+}
+
+.mm-tile-label {
+  padding: 0.7rem 0.8rem;
+  font-family: var(--display);
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  color: #fff;
+}
+
+.mm-tile.is-active {
+  outline: 2px solid var(--seal);
+  outline-offset: 2px;
+}
+
+.sl-group {
+  margin-bottom: 1.3rem;
+}
+
+.sl-group-title {
+  margin: 0 0 0.45rem 0.9rem;
+  font-family: var(--font-ui) !important;
+  font-size: 0.74rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase;
+  color: var(--ash) !important;
+}
+
+.sl-list {
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--surface-1);
+  border: 1px solid var(--edge);
+}
+
+.sl-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  min-height: 52px;
+  padding: 0.55rem 0.9rem;
+  color: var(--text);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Inset hairline between rows, starting after the icon like iOS. */
+.sl-row + .sl-row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 3.6rem;
+  height: 1px;
+  background: var(--edge);
+}
+
+.sl-row-static + .sl-row-static::before {
+  left: 0.9rem;
+}
+
+.sl-row:not(.sl-row-static):active {
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+}
+
+.sl-tile {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  /* One brand look for every row: soft red tile, red icon. */
+  background: var(--seal-tint);
+  color: var(--seal);
+}
+
+.sl-tile svg {
+  width: 17px;
+  height: 17px;
+}
+
+.sl-glyph {
+  font-family: "Noto Sans SC", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.sl-label {
+  flex: 1;
+  font-size: 0.98rem;
+  font-weight: 500;
+}
+
+.sl-row.is-active .sl-label {
+  color: var(--seal);
+  font-weight: 600;
+}
+
+.sl-chevron {
+  width: 12px;
+  height: 12px;
+  color: color-mix(in srgb, var(--text) 30%, transparent);
+}
+
+/* Language: iOS segmented control */
+.sl-seg {
+  display: flex;
+  padding: 2px;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+}
+
+.sl-seg button {
+  position: relative;
+  min-width: 46px;
+  padding: 0.3rem 0.6rem;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ash);
+}
+
+.sl-seg button.is-active {
+  color: var(--text);
+}
+
+.sl-seg button span {
+  position: relative;
+}
+
+.sl-seg-pill {
+  position: absolute;
+  inset: 0;
+  border-radius: 7px;
+  background: var(--surface-1);
+  box-shadow: 0 2px 6px -1px var(--drop);
+}
+
+html.site[data-theme="dark"] .sl-seg-pill {
+  background: color-mix(in srgb, var(--text) 18%, transparent);
+}
+
+/* Appearance: iOS switch */
+.sl-switch {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  flex: none;
+  width: 51px;
+  height: 31px;
+  margin: 0;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--text) 16%, transparent);
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.sl-switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+  transition: transform 0.28s cubic-bezier(0.3, 1.3, 0.5, 1);
+}
+
+.sl-switch:checked {
+  background: var(--leaf);
+}
+
+.sl-switch:checked::after {
+  transform: translateX(20px);
+}
+
+.mm-social {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.45rem;
+  padding-top: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--ash);
+}
+
+.mm-social a {
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--edge);
+  background: color-mix(in srgb, var(--surface-1) 60%, transparent);
+}
+
+.sl-detail {
+  display: block;
+  margin-top: 0.05rem;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--ash);
+}
+
+@media (hover: hover) {
+  .sl-row:not(.sl-row-static):hover {
+    background: color-mix(in srgb, var(--text) 4%, transparent);
+  }
+}
+
+/*
+ * Desktop header layout: three zones — logo | links (truly centred) | actions.
+ * Plain flex centred the links between unequal sides, so they drifted left.
+ */
+@media (min-width: 900px) {
+  html.site .app-shell .topbar-capsule {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+  }
+
+  html.site .app-shell .topbar-brand {
+    justify-self: start;
+  }
+
+  html.site .app-shell .topnav {
+    justify-self: center;
+  }
+
+  html.site .app-shell .topbar-actions {
+    justify-self: end;
+    margin-left: 0;
+  }
+
+  html.site .app-shell .topnav-link {
+    letter-spacing: -0.005em;
+  }
+
+  /* Language: only the current one shows; the others slide out on hover/focus. */
+  html.site .app-shell .topbar-lang button:not(.is-active) {
+    max-width: 0;
+    min-width: 0;
+    padding: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1), padding 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+  }
+
+  html.site .app-shell .topbar-lang:is(:hover, :focus-within) button:not(.is-active) {
+    max-width: 48px;
+    min-width: 32px;
+    padding: 0 0.45rem;
+    opacity: 1;
+  }
+}
+
+/* ─── Desktop header language switch (replaces the old full-screen menu) ─── */
+.topbar-lang {
+  display: flex;
+  align-items: center;
+  margin-right: 0.15rem;
+  padding-right: 0.3rem;
+  border-right: 1px solid var(--edge);
+}
+
+.topbar-lang button {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 0.45rem;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--ash);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.topbar-lang button:hover {
+  color: var(--text);
+}
+
+.topbar-lang button.is-active {
+  background: var(--surface-1);
+  color: var(--text);
+  box-shadow: 0 2px 8px -2px var(--drop);
+}
+
+/* ─── Profile (pages/Profile.tsx) ─── */
+.pf {
+  width: var(--page-w);
+  margin: 0 auto;
+  padding-bottom: 2rem;
+}
+
+html.site .app-shell .pf-title {
+  margin: 0.4rem 0 1.1rem 0.2rem;
+  font-size: 2.1rem;
+  letter-spacing: -0.04em;
+}
+
+.pf-grid {
+  display: grid;
+  gap: 1.3rem;
+}
+
+.pf-card {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+  padding: 1.6rem 1.2rem 1.2rem;
+  overflow: hidden;
+  border-radius: 26px;
+  border: 1px solid var(--edge);
+  background:
+    radial-gradient(120% 80% at 50% -20%, color-mix(in srgb, var(--seal) 16%, transparent), transparent 65%),
+    var(--surface-1);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.pf-avatar {
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  margin-bottom: 0.5rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%, var(--seal-light), var(--seal) 55%, var(--seal-deep));
+  color: #fff;
+  font-size: 2.1rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 14px 30px -12px var(--seal-glow);
+}
+
+.pf-email {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.pf-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  color: var(--ash);
+}
+
+.pf-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--leaf);
+  box-shadow: 0 0 0 3px var(--leaf-tint);
+}
+
+.pf-badge {
+  margin-top: 0.25rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--page);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pf-signout {
+  margin-top: 0.9rem;
+  padding: 0.55rem 1.2rem;
+  border: 1px solid var(--edge-strong);
+  border-radius: 999px;
+  background: none;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--seal);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.pf-signout:hover {
+  background: var(--seal-tint);
+}
+
+.pf-quick {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.pf-quick-btn {
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+  padding: 0.9rem 0.4rem 0.8rem;
+  border-radius: 18px;
+  border: 1px solid var(--edge);
+  background: var(--surface-1);
+  color: var(--text);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.pf-quick-btn:active {
+  transform: scale(0.96);
+}
+
+.pf-quick-btn svg {
+  width: 22px;
+  height: 22px;
+  color: var(--seal);
+}
+
+.pf-quick-btn.is-seal {
+  border-color: transparent;
+  background: linear-gradient(180deg, var(--seal-light) -60%, var(--seal-deep) 100%);
+  color: #fff;
+  box-shadow: 0 10px 24px -12px var(--seal-glow);
+}
+
+.pf-quick-arrow {
+  font-size: 1.3rem;
+  line-height: 22px;
+}
+
+.pf-version {
+  margin-top: 0.4rem;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--ash);
+}
+
+/* Desktop: identity column on the left (sticky), lists in two columns on the right. */
+@media (min-width: 900px) {
+  .pf {
+    padding-top: 1.5rem;
+    padding-bottom: 5rem;
+  }
+
+  html.site .app-shell .pf-title {
+    margin: 0 0 1.8rem;
+    font-size: clamp(2.4rem, 4vw, 3.4rem);
+  }
+
+  .pf-grid {
+    grid-template-columns: 340px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .pf-side {
+    position: sticky;
+    top: calc(var(--top) + 1rem);
+  }
+
+  .pf-card {
+    padding: 2.2rem 1.5rem 1.5rem;
+  }
+
+  .pf-avatar {
+    width: 104px;
+    height: 104px;
+    font-size: 2.6rem;
+  }
+
+  .pf-quick-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .pf-main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 1.3rem;
+    align-items: start;
+  }
+
+  .pf-main > .sl-group:first-child,
+  .pf-version {
+    grid-column: 1 / -1;
+  }
+
+  .pf-version {
+    text-align: left;
+  }
+}

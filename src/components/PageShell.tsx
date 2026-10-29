@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
 import { pageTransition, ease } from "../lib/motion";
+import { useInRouteStack } from "../lib/routeStack";
 
 const pageReduce = {
   initial: { opacity: 0 },
@@ -22,7 +23,10 @@ export function PageShell({
   className?: string;
 }) {
   const reduce = useReducedMotion();
+  const inStack = useInRouteStack();
   const t = reduce ? pageReduce : pageTransition;
+  // Inside the phone route stack the layer itself slides; no second animation here.
+  if (inStack) return <div className={`page ${className}`}>{children}</div>;
   return (
     <motion.div
       className={`page ${className}`}
@@ -48,6 +52,8 @@ export function Reveal({
   y?: number;
 }) {
   const reduce = useReducedMotion();
+  // Phones (iOS-style route stack): content is just there, like a native list.
+  if (useInRouteStack()) return <div className={`reveal-block ${className}`}>{children}</div>;
   return (
     <motion.div
       className={`reveal-block ${className}`}
@@ -83,6 +89,7 @@ export function StaggerItem({
   className?: string;
 }) {
   const reduce = useReducedMotion();
+  if (useInRouteStack()) return <div className={`stagger-item ${className}`}>{children}</div>;
   return (
     <motion.div
       className={`stagger-item ${className}`}

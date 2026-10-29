@@ -1,0 +1,687 @@
+/*
+ * Desktop home sections (pages/Home.tsx → HomeDesktop). Colours come from the
+ * site-theme tokens, so light and dark both work without overrides here.
+ */
+
+@media (min-width: 900px) {
+  .page-home .hx-section {
+    padding-top: clamp(4rem, 8vw, 7rem);
+  }
+
+  .page-home .hx-lead {
+    max-width: 46ch;
+    margin-top: 0.75rem;
+  }
+
+  /* ─── Programs bento: lead course spans two rows, quiz card closes the grid ─── */
+  .hx-bento {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr 1fr;
+    grid-auto-rows: minmax(250px, auto);
+    gap: 1.1rem;
+    margin-top: 2.25rem;
+  }
+
+  .hx-bento > * {
+    display: flex;
+  }
+
+  .hx-bento > .hx-bento-lead {
+    grid-row: span 2;
+  }
+
+  .hx-course,
+  .hx-match {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 28px;
+    border: 1px solid var(--edge);
+    background: var(--surface-1);
+    color: var(--text);
+    box-shadow: var(--shadow);
+    isolation: isolate;
+    transition: transform 0.5s var(--ease-out-expo), box-shadow 0.5s ease, border-color 0.4s ease;
+  }
+
+  .hx-course:hover,
+  .hx-match:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in srgb, var(--seal) 30%, transparent);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .hx-course-media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .hx-course-media img,
+  .hx-course-media .img-fallback {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s var(--ease-out-expo);
+  }
+
+  .hx-course:hover .hx-course-media img {
+    transform: scale(1.06);
+  }
+
+  .hx-course-media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0.78) 100%);
+  }
+
+  .hx-course-body {
+    margin-top: auto;
+    display: grid;
+    gap: 0.45rem;
+    padding: 1.4rem 1.5rem 1.5rem;
+    color: #fff;
+  }
+
+  .hx-course-tag {
+    justify-self: start;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+
+  .hx-course strong {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.3rem;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    color: #fff;
+  }
+
+  .hx-course.is-large strong {
+    font-size: clamp(1.7rem, 2.6vw, 2.4rem);
+  }
+
+  .hx-course-desc {
+    max-width: 40ch;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.55;
+  }
+
+  .hx-course-meta {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .hx-course-meta i,
+  .hx-match-cta i {
+    font-style: normal;
+    display: inline-block;
+    transition: transform 0.3s ease;
+  }
+
+  .hx-course:hover .hx-course-meta i,
+  .hx-match:hover .hx-match-cta i {
+    transform: translateX(4px);
+  }
+
+  .hx-match {
+    justify-content: flex-end;
+    gap: 0.6rem;
+    padding: 1.6rem;
+    background:
+      radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, var(--seal) 22%, transparent), transparent 60%),
+      var(--surface-1);
+  }
+
+  .hx-match-glyph {
+    position: absolute;
+    top: -0.6rem;
+    right: 0.6rem;
+    z-index: -1;
+    font-family: "Noto Serif SC", serif;
+    font-size: 7rem;
+    line-height: 1;
+    color: color-mix(in srgb, var(--seal) 16%, transparent);
+  }
+
+  .hx-match strong {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+  }
+
+  .hx-match > span:not(.hx-match-glyph) {
+    color: var(--ash);
+    line-height: 1.5;
+  }
+
+  .hx-match-cta {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--seal);
+  }
+
+  /* ─── Why Hanz: 3×2 cards with a seal-tinted glyph ─── */
+  .hx-why {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.1rem;
+    margin-top: 2.25rem;
+  }
+
+  .hx-why-card {
+    height: 100%;
+    padding: 1.6rem;
+    border-radius: 24px;
+    border: 1px solid var(--edge);
+    background: var(--surface-1);
+    box-shadow: var(--shadow);
+  }
+
+  .hx-why-icon {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    margin-bottom: 1.1rem;
+    border-radius: 16px;
+    background: var(--seal-tint);
+    color: var(--seal);
+    font-family: "Noto Serif SC", serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+  }
+
+  .hx-why-card h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .hx-why-card p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  /* ─── Study in China: steps on the left, universities on the right ─── */
+  .hx-china {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: center;
+  }
+
+  .hx-steps {
+    list-style: none;
+    display: grid;
+    gap: 0.25rem;
+    margin: 2rem 0;
+  }
+
+  .hx-steps li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    align-items: start;
+    padding: 0.95rem 0;
+    border-bottom: 1px solid var(--edge);
+  }
+
+  .hx-step-num {
+    padding-top: 0.15rem;
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--seal);
+  }
+
+  .hx-steps strong {
+    display: block;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .hx-steps span:not(.hx-step-num) {
+    color: var(--ash);
+    font-size: 0.95rem;
+  }
+
+  .hx-china-cta {
+    display: inline-flex;
+  }
+
+  .hx-unis {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 1rem;
+    min-height: 520px;
+  }
+
+  .hx-unis > * {
+    display: flex;
+  }
+
+  .hx-unis > :first-child {
+    grid-row: span 2;
+  }
+
+  .hx-uni {
+    position: relative;
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 26px;
+    isolation: isolate;
+    color: #fff;
+  }
+
+  .hx-uni img,
+  .hx-uni .img-fallback {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s var(--ease-out-expo);
+  }
+
+  .hx-uni:hover img {
+    transform: scale(1.06);
+  }
+
+  .hx-uni::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, 0.75));
+  }
+
+  .hx-uni-body {
+    margin-top: auto;
+    display: grid;
+    gap: 0.2rem;
+    padding: 1.2rem 1.3rem;
+  }
+
+  .hx-uni-body small {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .hx-uni-body strong {
+    font-weight: 600;
+    font-size: 1.05rem;
+    line-height: 1.25;
+    color: #fff;
+  }
+
+  /* ─── FAQ: sticky intro on the left, accordion on the right ─── */
+  .hx-faq {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: start;
+  }
+
+  .hx-faq-head {
+    position: sticky;
+    top: calc(var(--top) + 1rem);
+    display: grid;
+    gap: 0.5rem;
+    justify-items: start;
+  }
+
+  .hx-faq-head .btn {
+    margin-top: 1rem;
+  }
+
+  .hx-faq-list {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .hx-faq-item {
+    overflow: hidden;
+    border-radius: 20px;
+    border: 1px solid var(--edge);
+    background: var(--surface-1);
+    box-shadow: var(--shadow);
+  }
+
+  .hx-faq-item summary {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.2rem 1.4rem;
+    font-weight: 600;
+    font-size: 1.02rem;
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  .hx-faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .hx-faq-item summary i {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--raised);
+    color: var(--seal);
+    font-style: normal;
+    font-size: 1.1rem;
+    transition: transform 0.35s var(--ease-out-expo), background 0.3s ease, color 0.3s ease;
+  }
+
+  .hx-faq-item[open] summary i {
+    transform: rotate(45deg);
+    background: var(--seal);
+    color: #fff;
+  }
+
+  .hx-faq-item p {
+    padding: 0 1.4rem 1.3rem;
+    line-height: 1.65;
+  }
+}
+
+/*
+ * Cinematic hero (components/DesktopHero.tsx). The section is 175vh with a sticky
+ * 100vh stage; GSAP scrubs the frame from full-bleed to a rounded card while the
+ * copy lifts away. The film is always graded dark with white type, in both themes —
+ * it is the one "night" moment on a light page.
+ */
+.cine {
+  position: relative;
+  height: 175vh;
+  /* full-bleed even though .page is width-limited */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
+
+.cine-stage {
+  /*
+   * Hero scale, bounded by width AND height so a wide-but-short screen (1920×900)
+   * doesn't get a three-line 118px headline. Gutter matches the header's inner edge.
+   */
+  --cine-gutter: max(3rem, calc((100vw - 1240px) / 2 + 1.25rem));
+  --cine-bottom: clamp(56px, 9vh, 112px);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  isolation: isolate;
+  color: #fff;
+}
+
+.cine-frame {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  /* Fixed radius: animating it re-clipped the playing video every frame (scroll stutter). */
+  border-radius: 32px;
+  background: #0b0b0c;
+  /* Shrink from the top edge so the film stays under the floating header. */
+  transform-origin: 50% 0;
+  will-change: transform;
+}
+
+.cine-video {
+  position: absolute;
+  inset: 0;
+  width: 140%;
+  max-width: none;
+  height: 100%;
+  object-fit: cover;
+  /* The footage has the logo seal baked into its right edge; keep it off-screen. */
+  object-position: 0% 50%;
+  /* No CSS filter here: filtering a playing video costs a full repaint per frame. */
+  animation: cine-drift 28s ease-in-out infinite alternate;
+}
+
+/* Slow Ken Burns drift so even a still moment feels alive. */
+@keyframes cine-drift {
+  from {
+    transform: scale(1.08) translateX(0);
+  }
+  to {
+    transform: scale(1) translateX(-2%);
+  }
+}
+
+.cine-grade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(8, 8, 9, 0.16), rgba(8, 8, 9, 0.16)),
+    linear-gradient(180deg, rgba(8, 8, 9, 0.55) 0%, rgba(8, 8, 9, 0) 26%),
+    linear-gradient(0deg, rgba(8, 8, 9, 0.88) 0%, rgba(8, 8, 9, 0.35) 42%, rgba(8, 8, 9, 0) 70%),
+    linear-gradient(90deg, rgba(8, 8, 9, 0.55) 0%, rgba(8, 8, 9, 0) 55%),
+    radial-gradient(60% 50% at 85% 10%, rgba(227, 38, 43, 0.18), transparent 70%);
+}
+
+.cine-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22160%22 height=%22160%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E");
+}
+
+.cine-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  height: 12vh;
+  background: #050505;
+  pointer-events: none;
+}
+
+.cine-bar.is-top {
+  top: 0;
+  transform-origin: 50% 0;
+}
+
+.cine-bar.is-bottom {
+  bottom: 0;
+  transform-origin: 50% 100%;
+}
+
+.cine-copy {
+  position: absolute;
+  left: var(--cine-gutter);
+  bottom: var(--cine-bottom);
+  z-index: 3;
+  max-width: 720px;
+  will-change: transform, opacity;
+}
+
+/* Prefixed: the theme colours every <p> grey, which vanished on the dark film. */
+html.site .app-shell .cine-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: clamp(0.9rem, 2.2vh, 1.4rem);
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
+}
+
+.cine-eyebrow i {
+  width: 36px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+html.site .app-shell .cine-title {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(2.75rem, min(5.4vw, 8.2vh), 5.75rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: #fff;
+  text-shadow: 0 2px 40px rgba(0, 0, 0, 0.25);
+}
+
+.cine-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.06em;
+}
+
+.cine-line > span {
+  display: inline-block;
+}
+
+html.site .app-shell .cine-accent {
+  font-style: italic;
+  font-weight: 500;
+  color: #ff6b6e;
+}
+
+html.site .app-shell .cine-lead {
+  max-width: 44ch;
+  margin-top: clamp(1rem, 2.4vh, 1.5rem);
+  font-size: clamp(0.98rem, 1.7vh, 1.08rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.cine-cta {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+  margin-top: clamp(1.25rem, 3.2vh, 2rem);
+}
+
+.cine-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.4rem 0;
+  font-weight: 600;
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  transition: border-color 0.3s ease, gap 0.3s ease;
+}
+
+.cine-ghost:hover {
+  gap: 0.8rem;
+  border-color: #fff;
+}
+
+.cine-ghost i {
+  font-style: normal;
+}
+
+.cine-meta {
+  position: absolute;
+  right: var(--cine-gutter);
+  bottom: var(--cine-bottom);
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  gap: 2rem;
+}
+
+.cine-meta dl {
+  display: flex;
+  gap: 1.75rem;
+  margin: 0;
+}
+
+.cine-meta dt {
+  font-family: var(--display);
+  font-size: clamp(1.6rem, min(2vw, 3.4vh), 2.1rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.cine-meta dd {
+  margin: 0.35rem 0 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.cine-seal {
+  width: clamp(76px, 9.5vh, 96px);
+}
+
+.cine-seal .rseal-ring text {
+  fill: rgba(255, 255, 255, 0.85);
+}
+
+.cine-scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 3.2vh;
+  z-index: 3;
+  width: 1px;
+  height: 56px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.cine-scroll i {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  animation: cine-scroll 2.2s cubic-bezier(0.76, 0, 0.24, 1) infinite;
+}
+
+@keyframes cine-scroll {
+  0% {
+    transform: translateY(-100%);
+  }
+  60%,
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cine {
+    height: 100vh;
+  }
+
+  .cine-video,
+  .cine-scroll i {
+    animation: none;
+  }
+}

@@ -119,22 +119,45 @@ const AdminMedia = lazy(() =>
   import("./pages/admin/AdminMedia").then((m) => ({ default: m.AdminMedia })),
 );
 
+/** Tab pages first, then detail pages, so a tap never waits on a chunk mid-transition. */
 const PREFETCH = [
   () => import("./pages/Courses"),
-  () => import("./pages/News"),
   () => import("./pages/University"),
   () => import("./pages/Travel"),
+  () => import("./pages/Quiz"),
+  () => import("./pages/News"),
+  () => import("./pages/CourseDetail"),
+  () => import("./pages/UniversityDetail"),
+  () => import("./pages/TravelDetail"),
+  () => import("./pages/NewsDetail"),
   () => import("./pages/Shop"),
+  () => import("./pages/ProductDetail"),
   () => import("./pages/About"),
+  () => import("./pages/Contact"),
+  () => import("./pages/Enroll"),
+  () => import("./pages/Translation"),
+  () => import("./pages/Profile"),
+  () => import("./pages/Auth"),
 ];
 
 export default function App() {
   useEffect(() => {
-    // Warm the main public pages once the first paint is done.
+    // Warm every public page once the first paint is done, one per idle slot so the
+    // downloads never compete with scrolling.
     const idle =
       window.requestIdleCallback ??
-      ((cb: () => void) => window.setTimeout(cb, 1500));
-    idle(() => PREFETCH.forEach((load) => void load()));
+      ((cb: () => void) => window.setTimeout(cb, 300));
+    let i = 0;
+    let cancelled = false;
+    const next = () => {
+      if (cancelled || i >= PREFETCH.length) return;
+      void PREFETCH[i++]().finally(() => idle(next));
+    };
+    const start = window.setTimeout(() => idle(next), 1200);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(start);
+    };
   }, []);
 
   return (

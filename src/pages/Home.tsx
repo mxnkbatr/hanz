@@ -1,11 +1,7 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import { PageShell, Reveal, Stagger, StaggerItem } from "../components/PageShell";
 import { Marquee } from "../components/Marquee";
 import { SafeImage } from "../components/SafeImage";
-import { TiltCard } from "../components/TiltCard";
-import { ProductCard } from "../components/ProductCard";
-import { HeroIntro, shouldPlayHeroIntro } from "../components/HeroIntro";
 import { MobileHome } from "../components/MobileHome";
 import { DesktopHero } from "../components/DesktopHero";
 import { useDesktop } from "../hooks/useDesktop";
@@ -16,7 +12,21 @@ import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { loc } from "../lib/i18nText";
 import { toDateTime } from "../lib/date";
+import { whyHanzMeta } from "../data/content";
 
+const STEPS = [
+  ["step1", "step1_d"],
+  ["step2", "step2_d"],
+  ["step3", "step3_d"],
+  ["step4", "step4_d"],
+] as const;
+
+const FAQS = [
+  ["faq1_q", "faq1_a"],
+  ["faq2_q", "faq2_a"],
+  ["faq3_q", "faq3_a"],
+  ["faq4_q", "faq4_a"],
+] as const;
 
 export function Home() {
   const desktop = useDesktop();
@@ -30,73 +40,139 @@ export function Home() {
   return <HomeDesktop />;
 }
 
+/**
+ * Desktop home, ordered the way people decide on a school:
+ * promise (hero) → proof (numbers) → what we teach (programs) → why us →
+ * the study-in-China path → try it (hanzi) → news → questions → enrol.
+ */
 function HomeDesktop() {
   const { t, lang } = useI18n();
-  const { academyLive: academy, newsLive, productsLive } = useSiteContent();
-  const [introDone, setIntroDone] = useState(() => !shouldPlayHeroIntro());
-  const playIntro = !introDone;
-
-  const heroReady = introDone;
+  const { academyLive: academy, newsLive, coursesLive, universitiesLive } =
+    useSiteContent();
+  const [lead, ...restCourses] = coursesLive;
 
   return (
     <PageShell className="page-home">
-      {playIntro && <HeroIntro onComplete={() => setIntroDone(true)} />}
-
-      <DesktopHero ready={heroReady} />
+      {/* No separate intro screen: the hero's letterbox opening is the intro. */}
+      <DesktopHero ready />
 
       <div className="home-below">
-        <Reveal>
-          <Marquee />
-        </Reveal>
-
+        {/* 1 · Proof right under the promise */}
         <StatsStrip />
 
-        <LearnScroll />
+        {/* 2 · Programs: bento grid, first course large, quiz card last */}
+        <section className="section hx-section">
+          <Reveal>
+            <div className="section-row">
+              <div>
+                <p className="eyebrow">{t("courses_title")}</p>
+                <h2 className="h2">{t("hd_programs")}</h2>
+                <p className="lead hx-lead">{t("hd_programs_lead")}</p>
+              </div>
+              <Link to="/courses" className="text-link">
+                {t("see_all")} <i aria-hidden>→</i>
+              </Link>
+            </div>
+          </Reveal>
 
-        <section className="section">
-          <Stagger className="split-promo">
+          <Stagger className="hx-bento">
+            {lead && (
+              <StaggerItem className="hx-bento-lead">
+                <CourseTile course={lead} large />
+              </StaggerItem>
+            )}
+            {restCourses.slice(0, 3).map((c) => (
+              <StaggerItem key={c.id}>
+                <CourseTile course={c} />
+              </StaggerItem>
+            ))}
             <StaggerItem>
-              <TiltCard>
-                <Link to="/about" className="promo-panel">
-                  <img
-                    src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1000&q=72"
-                    loading="lazy"
-                    decoding="async"
-                    alt={t("about_title")}
-                  />
-                  <div>
-                    <p className="eyebrow light">{t("about_title")}</p>
-                    <h3>{t("courses_title")}</h3>
-                    <span>
-                      {t("view")} <i aria-hidden>→</i>
-                    </span>
-                  </div>
-                </Link>
-              </TiltCard>
-            </StaggerItem>
-            <StaggerItem>
-              <TiltCard>
-                <Link to="/university" className="promo-panel">
-                  <img
-                    src="https://images.unsplash.com/photo-1547981609-4b6bfe67ca0b?auto=format&fit=crop&w=1000&q=72"
-                    loading="lazy"
-                    decoding="async"
-                    alt={t("uni_title")}
-                  />
-                  <div>
-                    <p className="eyebrow light">{t("nav_uni")}</p>
-                    <h3>{t("china_home_title")}</h3>
-                    <span>
-                      {t("uni_more")} <i aria-hidden>→</i>
-                    </span>
-                  </div>
-                </Link>
-              </TiltCard>
+              <Link to="/courses" className="hx-match">
+                <span className="hx-match-glyph" aria-hidden>
+                  测
+                </span>
+                <strong>{t("hd_match_t")}</strong>
+                <span>{t("hd_match_d")}</span>
+                <em className="hx-match-cta">
+                  {t("hd_match_cta")} <i aria-hidden>→</i>
+                </em>
+              </Link>
             </StaggerItem>
           </Stagger>
         </section>
 
-        <section className="section">
+        {/* 3 · Why Hanz */}
+        <section className="section hx-section">
+          <Reveal>
+            <p className="eyebrow">{t("why_title")}</p>
+            <h2 className="h2">{t("why_title")}</h2>
+          </Reveal>
+          <Stagger className="hx-why">
+            {whyHanzMeta.map((w) => (
+              <StaggerItem key={w.id}>
+                <article className="hx-why-card">
+                  <span className="hx-why-icon" aria-hidden>
+                    {w.icon}
+                  </span>
+                  <h3>{t(w.titleKey)}</h3>
+                  <p>{t(w.descKey)}</p>
+                </article>
+              </StaggerItem>
+            ))}
+          </Stagger>
+        </section>
+
+        {/* 4 · Study in China: the four steps + a few universities */}
+        <section className="section hx-section hx-china">
+          <div className="hx-china-copy">
+            <Reveal>
+              <p className="eyebrow">{t("hd_china_eyebrow")}</p>
+              <h2 className="h2">{t("china_home_title")}</h2>
+              <p className="lead hx-lead">{t("china_home_lead")}</p>
+            </Reveal>
+            <ol className="hx-steps">
+              {STEPS.map(([title, desc], i) => (
+                <li key={title}>
+                  <span className="hx-step-num">{String(i + 1).padStart(2, "0")}</span>
+                  <div>
+                    <strong>{t(title)}</strong>
+                    <span>{t(desc)}</span>
+                  </div>
+                </li>
+              ))}
+            </ol>
+            <Link to="/university" className="btn btn-seal hx-china-cta">
+              <span>{t("uni_more")}</span>
+              <i aria-hidden>→</i>
+            </Link>
+          </div>
+          <Stagger className="hx-unis">
+            {universitiesLive.slice(0, 3).map((u) => (
+              <StaggerItem key={u.id}>
+                <Link to={`/university/${u.id}`} className="hx-uni">
+                  <SafeImage
+                    src={u.image}
+                    alt={loc(lang, t, u.title, u.titleKey ?? u.nameMnKey)}
+                  />
+                  <span className="hx-uni-body">
+                    <small>{loc(lang, t, u.city, u.cityKey)}</small>
+                    <strong>{loc(lang, t, u.title, u.titleKey ?? u.nameMnKey)}</strong>
+                  </span>
+                </Link>
+              </StaggerItem>
+            ))}
+          </Stagger>
+        </section>
+
+        {/* 5 · Try a character */}
+        <LearnScroll />
+
+        <Reveal>
+          <Marquee />
+        </Reveal>
+
+        {/* 6 · News */}
+        <section className="section hx-section">
           <Reveal>
             <div className="section-row">
               <div>
@@ -104,8 +180,7 @@ function HomeDesktop() {
                 <h2 className="h2">{t("home_news")}</h2>
               </div>
               <Link to="/medee" className="text-link">
-                {t("see_all")}
-                <i aria-hidden>→</i>
+                {t("see_all")} <i aria-hidden>→</i>
               </Link>
             </div>
           </Reveal>
@@ -132,29 +207,35 @@ function HomeDesktop() {
           </Stagger>
         </section>
 
-        <section className="section section-last">
+        {/* 7 · Questions, answered next to the way to ask more */}
+        <section className="section section-last hx-section hx-faq">
           <Reveal>
-            <div className="section-row">
-              <div>
-                <p className="eyebrow">{t("nav_shop")}</p>
-                <h2 className="h2">{t("home_shop")}</h2>
-              </div>
-              <Link to="/shop" className="text-link">
-                {t("shop_link")}
-                <i aria-hidden>→</i>
-              </Link>
+            <div className="hx-faq-head">
+              <p className="eyebrow">FAQ</p>
+              <h2 className="h2">{t("faq_title")}</h2>
+              <p className="lead hx-lead">{t("hd_faq_more")}</p>
+              <a className="btn hero-film-ghost" href={`tel:${academy.phoneRaw[0]}`}>
+                <span>
+                  {t("call")} · {academy.phone[0]}
+                </span>
+              </a>
             </div>
           </Reveal>
-          <Stagger className="shop-grid home-shop">
-            {productsLive.slice(0, 2).map((p) => (
-              <StaggerItem key={p.id}>
-                <ProductCard product={p} />
-              </StaggerItem>
+          <div className="hx-faq-list">
+            {FAQS.map(([q, a], i) => (
+              <details key={q} className="hx-faq-item" open={i === 0}>
+                <summary>
+                  {t(q)}
+                  <i aria-hidden>+</i>
+                </summary>
+                <p>{t(a)}</p>
+              </details>
             ))}
-          </Stagger>
+          </div>
         </section>
       </div>
 
+      {/* 8 · Enrol */}
       <section className="home-finale">
         <span className="home-finale-mark" aria-hidden>
           汉
@@ -175,11 +256,35 @@ function HomeDesktop() {
               <i aria-hidden>→</i>
             </MagneticButton>
             <a className="btn hero-film-ghost" href={`tel:${academy.phoneRaw[0]}`}>
-              <span>{t("call")} · {academy.phone[0]}</span>
+              <span>
+                {t("call")} · {academy.phone[0]}
+              </span>
             </a>
           </div>
         </Reveal>
       </section>
     </PageShell>
+  );
+}
+
+type Course = ReturnType<typeof useSiteContent>["coursesLive"][number];
+
+function CourseTile({ course, large = false }: { course: Course; large?: boolean }) {
+  const { t, lang } = useI18n();
+  const title = loc(lang, t, course.title, course.titleKey);
+  return (
+    <Link to={`/courses/${course.id}`} className={`hx-course${large ? " is-large" : ""}`}>
+      <span className="hx-course-media">
+        <SafeImage src={course.image} alt={title} />
+      </span>
+      <span className="hx-course-body">
+        <span className="hx-course-tag">{loc(lang, t, course.tag, course.tagKey)}</span>
+        <strong>{title}</strong>
+        {large && <span className="hx-course-desc">{loc(lang, t, course.body, course.descKey)}</span>}
+        <span className="hx-course-meta">
+          {t(course.unitKey)} <i aria-hidden>→</i>
+        </span>
+      </span>
+    </Link>
   );
 }

@@ -8,15 +8,6 @@ import { courseFilters, filterKeyLabel, type CourseFilter } from "../data/course
 import { SafeImage } from "./SafeImage";
 import { ease, navSpring } from "../lib/motion";
 
-const FILTER_ICON: Record<CourseFilter, string> = {
-  all: "✦",
-  classroom: "🏫",
-  online: "💻",
-  corporate: "🏢",
-  short: "⚡",
-  kids: "🧸",
-};
-
 const FEATURE_MS = 5200;
 
 function helloKey(h: number) {
@@ -135,8 +126,8 @@ export function MobileHome() {
 
   return (
     <div className="m-home">
-      <motion.header {...rise} transition={{ duration: 0.5, ease }}>
-        <p className="m-hello">{hello} 👋</p>
+      <motion.header className="m-head" {...rise} transition={{ duration: 0.5, ease }}>
+        <p className="m-hello">{hello}</p>
         <h1 className="m-title">
           {t("mh_title_a")} <em>{t("mh_title_em")}</em> {t("mh_title_b")}
         </h1>
@@ -279,7 +270,6 @@ export function MobileHome() {
                   {filter === f ? (
                     <motion.span className="m-chip-pill" layoutId="m-chip" transition={navSpring} />
                   ) : null}
-                  <span aria-hidden>{FILTER_ICON[f]}</span>
                   <span>{t(filterKeyLabel(f))}</span>
                 </button>
               ))}
@@ -398,26 +388,6 @@ export function MobileHome() {
         )}
       </AnimatePresence>
 
-      <motion.a
-        href={academyLive.messenger}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="m-fab"
-        aria-label={t("mh_chat")}
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 0.8, ...navSpring }}
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
-          <path
-            d="M12 3C6.9 3 3 6.7 3 11.4c0 2.6 1.2 4.9 3.2 6.4V21l2.9-1.6c.9.3 1.9.4 2.9.4 5.1 0 9-3.7 9-8.4S17.1 3 12 3Z"
-            stroke="currentColor"
-            strokeWidth="1.7"
-            strokeLinejoin="round"
-          />
-          <path d="m7.5 13.5 3-3.2 2.2 2.2 3.8-3.6-3 3.4-2.2-2.1-3.8 3.3Z" fill="currentColor" />
-        </svg>
-      </motion.a>
     </div>
   );
 }
