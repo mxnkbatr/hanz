@@ -14,6 +14,8 @@ type Props = {
   defaultKind?: "course" | "travel" | "consult";
   defaultLevel?: string;
   defaultSchedule?: string;
+  /** Extra line saved at the top of the lead message, e.g. the chosen university. */
+  context?: string;
 };
 
 function resolveKind(interest: string): "course" | "travel" | "consult" {
@@ -27,6 +29,7 @@ export function EnrollForm({
   defaultKind,
   defaultLevel = kidsLevels[0].id,
   defaultSchedule = kidsSchedules[0].id,
+  context,
 }: Props) {
   const { t } = useI18n();
   const [interest, setInterest] = useState(defaultInterest);
@@ -83,7 +86,7 @@ export function EnrollForm({
             .join("\n")
         : "";
 
-    const fullMessage = [kids, message].filter(Boolean).join("\n");
+    const fullMessage = [context, kids, message].filter(Boolean).join("\n");
 
     setStatus("sending");
     const supabase = await getSupabase();
