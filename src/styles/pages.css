@@ -471,3 +471,327 @@
   line-height: 1.5;
   color: var(--ash);
 }
+
+/* ─── HSK 3.0 programme (/hsk) ─── */
+.hsk-hero {
+  padding: clamp(1.5rem, 4vw, 3rem) 0 0.5rem;
+}
+
+.hsk-subtitle {
+  margin: 0.5rem 0 0.75rem;
+  font-family: var(--serif);
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  font-style: italic;
+  color: var(--seal);
+}
+
+.hsk-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.hsk-btn-ghost {
+  border: 1px solid var(--edge-strong);
+  background: var(--surface-1);
+  color: var(--text);
+}
+
+.hsk-about {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 70ch;
+}
+
+.hsk-about p,
+.hsk-plan p {
+  color: var(--ash);
+  line-height: 1.65;
+}
+
+/* 3 columns on desktop, 2 on tablets, 1 on phones */
+.hsk-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 899px) {
+  .hsk-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 599px) {
+  .hsk-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hsk-grid > * {
+  display: flex;
+}
+
+.hsk-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 1.4rem;
+  border: 1px solid var(--edge);
+  border-radius: 24px;
+  background: var(--surface-1);
+  box-shadow: var(--shadow);
+}
+
+.hsk-card header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.75rem;
+}
+
+.hsk-card-level {
+  font-family: var(--serif);
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--seal);
+}
+
+.hsk-card-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ash);
+}
+
+.hsk-card-stats {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  margin: 1rem 0;
+  padding: 0.8rem 1rem;
+  border-radius: 16px;
+  background: var(--seal-tint);
+}
+
+.hsk-card-stats dt,
+.hsk-detail-stats dt {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ash);
+}
+
+.hsk-card-stats dd {
+  margin: 0.15rem 0 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.hsk-card-stats small {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--ash);
+}
+
+.hsk-card h3 {
+  margin: 0.6rem 0 0.25rem;
+  font-size: 0.85rem;
+}
+
+.hsk-card p {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--ash);
+}
+
+.hsk-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding-top: 1.1rem;
+}
+
+.hsk-note {
+  max-width: 80ch;
+  margin-top: 0.9rem;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--ash);
+}
+
+.hsk-schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+@media (max-width: 699px) {
+  .hsk-schedule-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hsk-plan {
+  height: 100%;
+  padding: 1.4rem;
+  border: 1px solid var(--edge);
+  border-radius: 24px;
+  background: var(--surface-1);
+}
+
+.hsk-plan h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.15rem;
+}
+
+.hsk-plan p + p {
+  margin-top: 0.4rem;
+}
+
+.hsk-fees {
+  display: grid;
+  gap: 0.4rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hsk-fees li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: 12px;
+  background: var(--seal-tint);
+}
+
+.hsk-fees strong {
+  color: var(--seal);
+}
+
+.class-hours dd.hsk-small {
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* Detail dialog */
+.hsk-dialog {
+  width: min(860px, calc(100vw - 2rem));
+  max-height: calc(100svh - 2rem);
+  padding: 0;
+  border: 1px solid var(--edge);
+  border-radius: 28px;
+  background: var(--page, var(--surface-1));
+  color: var(--text);
+  box-shadow: 0 40px 100px -30px rgba(0, 0, 0, 0.45);
+}
+
+.hsk-dialog::backdrop {
+  background: rgba(14, 14, 17, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.hsk-detail {
+  position: relative;
+  padding: clamp(1.4rem, 4vw, 2.5rem);
+}
+
+.hsk-dialog-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--edge);
+  border-radius: 50%;
+  background: var(--surface-1);
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.hsk-detail-stage {
+  margin-top: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--seal);
+}
+
+.hsk-detail .h2 {
+  margin-top: 0.3rem;
+  padding-right: 2.5rem;
+}
+
+.hsk-detail-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 1.4rem 0;
+}
+
+.hsk-detail-stats > div {
+  padding: 0.9rem 1rem;
+  border-radius: 16px;
+  background: var(--seal-tint);
+}
+
+.hsk-detail-stats dd {
+  margin: 0.2rem 0 0;
+  font-family: var(--serif);
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--seal);
+}
+
+.hsk-detail-cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+@media (max-width: 699px) {
+  .hsk-detail-cols {
+    grid-template-columns: 1fr;
+  }
+
+  .hsk-detail-stats dd {
+    font-size: 1.3rem;
+  }
+}
+
+.hsk-detail-cols h3 {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.hsk-detail-cols ul {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--ash);
+  line-height: 1.5;
+}
+
+.hsk-detail-who,
+.hsk-detail-next {
+  margin-top: 1.1rem;
+  line-height: 1.55;
+  color: var(--ash);
+}
+
+.hsk-detail-who strong,
+.hsk-detail-next strong {
+  color: var(--text);
+}

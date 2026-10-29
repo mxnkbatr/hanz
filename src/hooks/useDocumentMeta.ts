@@ -30,6 +30,7 @@ const routeMetaKey: Record<string, string> = {
   "/profile": "meta_profile",
   "/auth": "meta_auth",
   "/quiz": "meta_quiz",
+  "/hsk": "nav_hsk",
   "/translation": "nav_translation",
 };
 
