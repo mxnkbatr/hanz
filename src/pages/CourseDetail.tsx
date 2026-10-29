@@ -194,6 +194,11 @@ export function CourseDetail() {
             </div>
             <h1 className="h1">{title}</h1>
             {unit && <p className="course-detail-lead">{unit}</p>}
+            {course.id === "hsk" && (
+              <Link to="/hsk" className="text-link">
+                {t("hsk_levels_link")} <i aria-hidden>→</i>
+              </Link>
+            )}
           </header>
         </Reveal>
 
