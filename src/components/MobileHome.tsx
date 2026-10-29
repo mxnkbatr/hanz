@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useI18n } from "../i18n/I18nContext";
@@ -6,6 +6,7 @@ import { useSiteContent } from "../lib/SiteContentContext";
 import { loc } from "../lib/i18nText";
 import { courseFilters, filterKeyLabel, type CourseFilter } from "../data/courseMatch";
 import { SafeImage } from "./SafeImage";
+import { useImageTints } from "../lib/imageTint";
 import { ease, navSpring } from "../lib/motion";
 
 const FEATURE_MS = 5200;
@@ -123,6 +124,7 @@ export function MobileHome() {
     (f) => f === "all" || coursesLive.some((c) => c.filter === f),
   );
   const current = featured[slide % Math.max(featured.length, 1)];
+  const tints = useImageTints(featured.map((f) => f.image));
 
   return (
     <div className="m-home">
@@ -194,20 +196,27 @@ export function MobileHome() {
             exit={{ opacity: 0 }}
           >
             {current ? (
-              <section className="m-feature" aria-label={t("mh_featured")}>
-                {/* Frame color comes from the photo itself: a blurred, enlarged copy behind the card. */}
+              <section
+                className={`m-feature${tints[current.image] ? " is-tinted" : ""}`}
+                aria-label={t("mh_featured")}
+                style={{ "--tint": tints[current.image] } as CSSProperties}
+              >
+                {/* Frame colour = the photo's own colour (lib/imageTint), fading per slide.
+                    Until it is sampled (or if it can't be), a blurred copy of the photo stands in. */}
                 <AnimatePresence initial={false}>
-                  <motion.span
-                    key={current.id + current.kind}
-                    className="m-feature-glow"
-                    aria-hidden
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.8, ease }}
-                  >
-                    <SafeImage src={current.image} alt="" loading="eager" />
-                  </motion.span>
+                  {!tints[current.image] && (
+                    <motion.span
+                      key={current.id + current.kind}
+                      className="m-feature-glow"
+                      aria-hidden
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.8, ease }}
+                    >
+                      <SafeImage src={current.image} alt="" loading="eager" />
+                    </motion.span>
+                  )}
                 </AnimatePresence>
                 <AnimatePresence mode="popLayout" initial={false}>
                   <motion.div

@@ -862,3 +862,26 @@
     border-top-color: var(--hair);
   }
 }
+
+/* Card takes the photo's own colour (MobileHome → useImageTints) and fades between slides. */
+.m-feature.is-tinted {
+  background-color: var(--tint);
+  box-shadow: 0 26px 50px -24px color-mix(in srgb, var(--tint) 80%, transparent);
+  transition: background-color 0.8s ease, box-shadow 0.8s ease;
+}
+
+/* A little light at the top and depth at the bottom, like a lit surface. */
+.m-feature.is-tinted::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(120% 60% at 50% 0%, rgba(255, 255, 255, 0.14), transparent 60%),
+    linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.22));
+  pointer-events: none;
+}
+
+html.site .app-shell .m-feature.is-tinted .m-feature-body em {
+  color: rgba(255, 255, 255, 0.78);
+}
