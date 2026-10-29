@@ -812,11 +812,11 @@ html.site .app-shell .cine-lead {
 }
 
 /*
- * Particle hero (ParticleGlyph inside DesktopHero): taller section so the glyph
- * can morph 汉 → 字 → 学 before the copy lifts away; dark stage with a warm glow.
+ * Particle hero (ParticleGlyph inside DesktopHero): one screen tall so scrolling
+ * is never held; the glyph cycles 汉 → 字 → 学 on a timer. Dark stage, warm glow.
  */
 .cine.cine-particles {
-  height: 300vh;
+  height: 100vh;
 }
 
 .pglyph-bg {
@@ -852,6 +852,10 @@ html.site .app-shell .cine-lead {
   justify-items: end;
   gap: 0.9rem;
   pointer-events: none;
+}
+
+.pglyph-steps button {
+  pointer-events: auto;
 }
 
 html.site .app-shell .pglyph-caption p {
@@ -899,6 +903,7 @@ html.site .app-shell .pglyph-caption p {
 }
 
 .pglyph-steps li {
+  position: relative;
   width: 22px;
   height: 2px;
   border-radius: 2px;
@@ -911,8 +916,12 @@ html.site .app-shell .pglyph-caption p {
   background: #ff6b6e;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .cine.cine-particles {
-    height: 100vh;
-  }
+/* Bigger hit area than the 2px line */
+.pglyph-steps button {
+  position: absolute;
+  inset: -10px -3px;
+  border: 0;
+  background: none;
+  cursor: pointer;
 }
+

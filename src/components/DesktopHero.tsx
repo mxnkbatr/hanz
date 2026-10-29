@@ -5,7 +5,6 @@ import {
   animate,
   motion,
   useMotionValue,
-  useMotionValueEvent,
   useReducedMotion,
   useScroll,
   useSpring,
@@ -18,18 +17,21 @@ import { MagneticButton } from "./MagneticButton";
 import { ParticleGlyph } from "./ParticleGlyph";
 import { RotatingSeal } from "./RotatingSeal";
 
-/** The three characters the particles form while you scroll, with pinyin and meaning. */
+/** The three characters the particles cycle through, with pinyin and meaning. */
 const GLYPHS = [
   { ch: "汉", pinyin: "hàn", key: "hero_glyph_han" },
   { ch: "字", pinyin: "zì", key: "hero_glyph_zi" },
   { ch: "学", pinyin: "xué", key: "hero_glyph_xue" },
 ] as const;
 
+/** How long each character holds before the points re-form into the next. */
+const GLYPH_MS = 5000;
+
 /**
  * Desktop hero: a dark stage where thousands of points gather into 汉, scatter
- * from the pointer, and re-form into 字 and 学 as you scroll (ParticleGlyph).
- * The section is taller than the screen with a sticky stage; in the last part of
- * the scroll the stage settles into a rounded frame and the copy lifts away.
+ * from the pointer, and re-form into 字, 学 and back on their own every few
+ * seconds (ParticleGlyph). Scrolling is never held: the hero is one screen tall
+ * and only eases into a rounded frame while it scrolls away.
  * Only transform/opacity animate on the page; the particles are one canvas.
  */
 export function DesktopHero({ ready }: { ready: boolean }) {
@@ -39,24 +41,26 @@ export function DesktopHero({ ready }: { ready: boolean }) {
   const root = useRef<HTMLElement>(null);
   const [glyphIndex, setGlyphIndex] = useState(0);
 
-  const { scrollYProgress } = useScroll({ target: root, offset: ["start start", "end end"] });
+  // Cycle 汉 → 字 → 学 → 汉 … ; a click on a step mark jumps there and restarts the timer.
+  useEffect(() => {
+    if (reduce) return;
+    const id = window.setTimeout(() => setGlyphIndex((i) => (i + 1) % GLYPHS.length), GLYPH_MS);
+    return () => window.clearTimeout(id);
+  }, [glyphIndex, reduce]);
+
+  // 0 while the hero fills the screen → 1 once it has scrolled out of view.
+  const { scrollYProgress } = useScroll({ target: root, offset: ["start start", "end start"] });
   const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 30, restDelta: 0.001 });
 
-  // 汉 for the first third of the scroll, then 字, then 学.
-  useMotionValueEvent(scrollYProgress, "change", (p) => {
-    const next = p < 0.28 ? 0 : p < 0.56 ? 1 : 2;
-    setGlyphIndex((cur) => (cur === next ? cur : next));
-  });
+  const frameScale = useTransform(progress, [0, 1], [1, 0.9]);
+  const copyY = useTransform(progress, [0, 0.7], ["0%", "-20%"]);
+  const copyOpacity = useTransform(progress, [0, 0.6], [1, 0]);
+  const metaY = useTransform(progress, [0, 0.7], [0, 30]);
 
-  const frameScale = useTransform(progress, [0.72, 1], [1, 0.86]);
-  const copyY = useTransform(progress, [0.72, 1], ["0%", "-28%"]);
-  const copyOpacity = useTransform(progress, [0.72, 1], [1, 0]);
-  const metaY = useTransform(progress, [0.72, 1], [0, 30]);
-
-  // The stats fade in after the intro and fade out at the end; both drive one opacity.
+  // The stats fade in after the intro and fade out on scroll; both drive one opacity.
   const metaIntro = useMotionValue(0);
   const metaOpacity = useTransform([metaIntro, progress], ([intro, p]: number[]) =>
-    intro * (p < 0.72 ? 1 : Math.max(0, 1 - (p - 0.72) / 0.28)),
+    intro * Math.max(0, 1 - p / 0.6),
   );
 
   useEffect(() => {
@@ -102,9 +106,11 @@ export function DesktopHero({ ready }: { ready: boolean }) {
               <strong>{t(glyph.key)}</strong>
             </motion.p>
           </AnimatePresence>
-          <ol className="pglyph-steps" aria-hidden>
+          <ol className="pglyph-steps">
             {GLYPHS.map((g, i) => (
-              <li key={g.ch} className={i === glyphIndex ? "is-on" : undefined} />
+              <li key={g.ch} className={i === glyphIndex ? "is-on" : undefined}>
+                <button type="button" aria-label={`${g.ch} · ${g.pinyin}`} onClick={() => setGlyphIndex(i)} />
+              </li>
             ))}
           </ol>
         </div>
