@@ -22,6 +22,14 @@ const mn: Dict = {
   nav_main: "Үндсэн цэс",
   nav_mobile: "Мобайл цэс",
   call: "Залгах",
+  theme_dark: "Харанхуй горим",
+  theme_light: "Цайвар горим",
+  mm_explore: "Судлах",
+  mm_academy: "Академи",
+  mm_settings: "Тохиргоо",
+  mm_close: "Хаах",
+  pf_since: "Гишүүн болсон",
+  pf_quiz: "Түвшин шалгах",
   brand: "ХАНЗ",
   brand_sub: "Академи",
   hero_kicker:
@@ -144,6 +152,13 @@ const mn: Dict = {
   hd_line2: "Ханзаас",
   hd_line3: "эхлүүл.",
   hd_featured: "Онцлох",
+  hd_programs: "Сургалтын хөтөлбөр",
+  hd_programs_lead: "Анхан шатнаас HSK 6 хүртэл — танхим, онлайн, байгууллага, богино хугацааны.",
+  hd_match_t: "Аль сургалт танд тохирох вэ?",
+  hd_match_d: "Хэдхэн асуултад хариулаад өөрт тохирох хөтөлбөрөө олоорой.",
+  hd_match_cta: "Тест эхлүүлэх",
+  hd_china_eyebrow: "Хятадад суралцах",
+  hd_faq_more: "Өөр асуулт байна уу? Бидэнтэй холбогдоорой.",
 };
 
 const en: Dict = {
@@ -160,6 +175,14 @@ const en: Dict = {
   nav_main: "Main",
   nav_mobile: "Mobile",
   call: "Call",
+  theme_dark: "Dark mode",
+  theme_light: "Light mode",
+  mm_explore: "Explore",
+  mm_academy: "Academy",
+  mm_settings: "Settings",
+  mm_close: "Close",
+  pf_since: "Member since",
+  pf_quiz: "Check my level",
   brand: "HANZ",
   brand_sub: "Academy",
   hero_kicker:
@@ -280,6 +303,13 @@ const en: Dict = {
   hd_line2: "Chinese",
   hd_line3: "with Hanz.",
   hd_featured: "Featured",
+  hd_programs: "Programs",
+  hd_programs_lead: "From first characters to HSK 6 — classroom, online, corporate and short courses.",
+  hd_match_t: "Which course fits you?",
+  hd_match_d: "Answer a few questions and find the right program.",
+  hd_match_cta: "Start the quiz",
+  hd_china_eyebrow: "Study in China",
+  hd_faq_more: "Still have a question? Get in touch.",
 };
 
 const zh: Dict = {
@@ -296,6 +326,14 @@ const zh: Dict = {
   nav_main: "主导航",
   nav_mobile: "移动导航",
   call: "致电",
+  theme_dark: "深色模式",
+  theme_light: "浅色模式",
+  mm_explore: "探索",
+  mm_academy: "学院",
+  mm_settings: "设置",
+  mm_close: "关闭",
+  pf_since: "注册于",
+  pf_quiz: "水平测试",
   brand: "汉兹",
   brand_sub: "学院",
   hero_kicker:
@@ -409,14 +447,21 @@ const zh: Dict = {
   hd_line2: "开启",
   hd_line3: "你的中文。",
   hd_featured: "精选",
+  hd_programs: "课程项目",
+  hd_programs_lead: "从零基础到 HSK 6 —— 面授、线上、企业及短期课程。",
+  hd_match_t: "哪门课程适合你？",
+  hd_match_d: "回答几个问题，找到适合你的课程。",
+  hd_match_cta: "开始测试",
+  hd_china_eyebrow: "来华留学",
+  hd_faq_more: "还有疑问？欢迎联系我们。",
 };
 
 export const dictionaries: Record<Lang, Dict> = { mn, en, zh };
 
 export const navKeys = [
-  { to: "/", key: "nav_home", icon: "home" as const, top: false, tab: false, menu: false },
-  { to: "/courses", key: "nav_courses", icon: "courses" as const, top: true, tab: false, menu: false },
-  { to: "/medee", key: "nav_news", icon: "news" as const, top: true, tab: true, menu: false },
+  { to: "/", key: "nav_home", icon: "home" as const, top: false, tab: true, menu: false },
+  { to: "/courses", key: "nav_courses", icon: "courses" as const, top: true, tab: true, menu: false },
+  { to: "/medee", key: "nav_news", icon: "news" as const, top: true, tab: false, menu: true },
   {
     to: "/university",
     key: "nav_uni",

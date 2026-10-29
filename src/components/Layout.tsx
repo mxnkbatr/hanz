@@ -1,40 +1,70 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { LayoutGroup, motion, useReducedMotion } from "framer-motion";
+import {
+  AnimatePresence,
+  LayoutGroup,
+  motion,
+  useReducedMotion,
+} from "framer-motion";
 import { useDocumentMeta } from "../hooks/useDocumentMeta";
 import { navKeys } from "../i18n/translations";
 import { useI18n } from "../i18n/I18nContext";
 import { AnimatedOutlet } from "./AnimatedOutlet";
-import { MenuOverlay } from "./MenuOverlay";
-import { IconClose, IconMenu, IconProfile, NavIcon } from "./Icons";
+import { DesktopNav } from "./DesktopNav";
+import { MobileMenuSheet } from "./MobileMenuSheet";
+import { useDesktop } from "../hooks/useDesktop";
+import {
+  IconClose,
+  IconMenu,
+  IconMoon,
+  IconPhone,
+  IconProfile,
+  IconSun,
+  NavIcon,
+} from "./Icons";
 import { Logo } from "./Logo";
 import { Onboard } from "./Onboard";
-import { Snowfall } from "./Snowfall";
 import { FxLayer } from "./FxLayer";
+import { FloatingGlyphs } from "./FloatingGlyphs";
+import { ScrollFx } from "./ScrollFx";
 import { useAuth } from "../lib/AuthContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { hapticLight } from "../lib/native";
+import { ThemeContext, useSiteTheme } from "../lib/theme";
 import { ease, navSpring } from "../lib/motion";
 
 const YEAR = new Date().getFullYear();
 
 export function Layout() {
   const location = useLocation();
-  const { t } = useI18n();
+  const { t, lang, setLang, langs } = useI18n();
   const { user } = useAuth();
   const { academyLive: academy } = useSiteContent();
   const reduceMotion = useReducedMotion();
   const [menuOpen, setMenuOpen] = useState(false);
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
+  const desktop = useDesktop();
   const [scrolled, setScrolled] = useState(false);
+  const [tabCompact, setTabCompact] = useState(false);
   const [routeTick, setRouteTick] = useState(0);
   const isHome = location.pathname === "/";
   const isAuth = location.pathname.startsWith("/auth");
 
   useDocumentMeta();
 
+  // Light/dark site theme for the public site only; the admin keeps its own.
+  const themeState = useSiteTheme();
+  const { theme, toggle: toggleTheme } = themeState;
+
+  // Every route starts at the top (below); stop the browser restoring an old offset on Back.
+  useEffect(() => {
+    history.scrollRestoration = "manual";
+  }, []);
+
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     setRouteTick((n) => n + 1);
+    setTabCompact(false);
   }, [location.pathname]);
 
   useEffect(() => {
@@ -42,15 +72,24 @@ export function Layout() {
   }, [location.pathname]);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      // Hysteresis: a gap between on/off so momentum scrolling near the top can't flicker it.
+      setScrolled((was) => (was ? y > 6 : y > 24));
+      // iOS 26-style: the tab bar shrinks while reading down, returns on the way up.
+      if (Math.abs(y - lastY) > 6) {
+        setTabCompact(y > lastY && y > 160);
+        lastY = y;
+      }
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const topItems = navKeys.filter((item) => item.top);
-
   return (
+    <ThemeContext.Provider value={themeState}>
     <div
       className={`app-shell liquid-shell${isHome ? " is-home" : ""}${
         isAuth ? " is-auth" : ""
@@ -63,25 +102,15 @@ export function Layout() {
       <div className="ambient" aria-hidden>
         <span className="ambient-wash" />
       </div>
-      <Snowfall />
+      <FloatingGlyphs />
       <FxLayer />
+      <ScrollFx />
 
       <header
         className={`topbar${isHome ? " is-over-hero" : ""}${scrolled ? " is-scrolled" : ""}`}
       >
         <div className="topbar-stack">
-          <motion.div
-            className="topbar-capsule"
-            animate={
-              reduceMotion
-                ? undefined
-                : {
-                    y: scrolled ? 0 : 0,
-                    scale: scrolled ? 0.985 : 1,
-                  }
-            }
-            transition={navSpring}
-          >
+          <div className="topbar-capsule">
             {!reduceMotion && (
               <motion.span
                 key={routeTick}
@@ -102,36 +131,49 @@ export function Layout() {
               <Logo size="sm" />
             </NavLink>
 
-            <LayoutGroup id="topnav">
-              <nav className="topnav" aria-label={t("nav_main")}>
-                {topItems.map((item) => (
-                  <NavLink
-                    key={item.to}
-                    to={item.to}
-                    end={item.to === "/"}
-                    className={({ isActive }) =>
-                      `topnav-link${isActive ? " is-active" : ""}`
-                    }
-                    onClick={() => void hapticLight()}
-                  >
-                    {({ isActive }) => (
-                      <>
-                        {isActive && (
-                          <motion.span
-                            className="topnav-pill"
-                            layoutId="nav-pill"
-                            transition={navSpring}
-                          />
-                        )}
-                        <span className="topnav-text">{t(item.key)}</span>
-                      </>
-                    )}
-                  </NavLink>
-                ))}
-              </nav>
-            </LayoutGroup>
+            <DesktopNav />
 
             <div className="topbar-actions">
+              <div className="topbar-tools">
+              {desktop && (
+                <div className="topbar-lang" role="group" aria-label={t("profile_lang")}>
+                  {langs.map((l) => (
+                    <button
+                      key={l.code}
+                      type="button"
+                      aria-pressed={lang === l.code}
+                      className={lang === l.code ? "is-active" : ""}
+                      onClick={() => setLang(l.code)}
+                    >
+                      {l.short}
+                    </button>
+                  ))}
+                </div>
+              )}
+              <button
+                type="button"
+                className="topbar-icon-btn theme-toggle"
+                aria-label={t(theme === "dark" ? "theme_light" : "theme_dark")}
+                title={t(theme === "dark" ? "theme_light" : "theme_dark")}
+                onClick={() => {
+                  toggleTheme();
+                  void hapticLight();
+                }}
+              >
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.span
+                    key={theme}
+                    style={{ display: "grid" }}
+                    initial={{ rotate: -90, scale: 0.5, opacity: 0 }}
+                    animate={{ rotate: 0, scale: 1, opacity: 1 }}
+                    exit={{ rotate: 90, scale: 0.5, opacity: 0 }}
+                    transition={{ duration: 0.25, ease }}
+                  >
+                    {theme === "dark" ? <IconSun /> : <IconMoon />}
+                  </motion.span>
+                </AnimatePresence>
+              </button>
+
               <NavLink
                 to={user ? "/profile" : "/auth?mode=login"}
                 className={({ isActive }) =>
@@ -143,29 +185,48 @@ export function Layout() {
                 <IconProfile />
               </NavLink>
 
-              <button
-                type="button"
-                className={`topbar-icon-btn topbar-menu-btn${menuOpen ? " is-active" : ""}`}
-                aria-label={t("nav_menu")}
-                aria-expanded={menuOpen}
-                aria-controls="site-menu"
-                onClick={() => {
-                  setMenuOpen((v) => !v);
-                  void hapticLight();
-                }}
-              >
-                {menuOpen ? <IconClose /> : <IconMenu />}
-              </button>
+              {/* Phones only: on desktop every page is in the header or footer. */}
+              {!desktop && (
+                <button
+                  type="button"
+                  className={`topbar-icon-btn topbar-menu-btn${menuOpen ? " is-active" : ""}`}
+                  aria-label={t("nav_menu")}
+                  aria-expanded={menuOpen}
+                  aria-controls="site-menu"
+                  onClick={() => {
+                    setMenuOpen((v) => !v);
+                    void hapticLight();
+                  }}
+                >
+                  {menuOpen ? <IconClose /> : <IconMenu />}
+                </button>
+              )}
+              </div>
 
-              <a className="topbar-cta" href={`tel:${academy.phoneRaw[0]}`}>
-                <span>{t("call")}</span>
+              <a
+                className="topbar-phone"
+                href={`tel:${academy.phoneRaw[0]}`}
+                aria-label={`${t("call")} ${academy.phone[0]}`}
+              >
+                <IconPhone />
+                <span>{academy.phone[0]}</span>
+              </a>
+
+              <a
+                className="topbar-cta"
+                href={academy.registerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>{t("register_cta")}</span>
+                <i aria-hidden>→</i>
               </a>
             </div>
-          </motion.div>
+          </div>
         </div>
       </header>
 
-      <MenuOverlay open={menuOpen} onClose={() => setMenuOpen(false)} />
+      {!desktop && <MobileMenuSheet open={menuOpen} onClose={closeMenu} />}
 
       <main id="main" className="main">
         <LayoutGroup id="shared-routes">
@@ -224,6 +285,7 @@ export function Layout() {
               <NavLink to="/about">{t("nav_about")}</NavLink>
               <NavLink to="/courses">{t("nav_courses")}</NavLink>
               <NavLink to="/travel">{t("nav_travel")}</NavLink>
+              <NavLink to="/translation">{t("nav_translation")}</NavLink>
               <NavLink to="/contact">{t("nav_contact")}</NavLink>
               <NavLink to="/enroll">{t("register_cta")}</NavLink>
               <a href={academy.shopUrl} target="_blank" rel="noopener noreferrer">
@@ -241,7 +303,10 @@ export function Layout() {
       </footer>
 
       <LayoutGroup id="tabnav">
-        <nav className="tabbar glass-dock" aria-label={t("nav_mobile")}>
+        <nav
+          className={`tabbar glass-dock${tabCompact ? " is-compact" : ""}`}
+          aria-label={t("nav_mobile")}
+        >
           {navKeys
             .filter((item) => item.tab)
             .map((item) => (
@@ -282,5 +347,6 @@ export function Layout() {
 
       <Onboard />
     </div>
+    </ThemeContext.Provider>
   );
 }

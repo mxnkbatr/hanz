@@ -13,6 +13,7 @@ import { loc } from "../lib/i18nText";
 import { ease } from "../lib/motion";
 import { MagneticButton } from "./MagneticButton";
 import { SafeImage } from "./SafeImage";
+import { RotatingSeal } from "./RotatingSeal";
 
 const HERO_VIDEO = "/videos/hero-banner.mp4";
 const SLIDE_MS = 5600;
@@ -173,6 +174,7 @@ export function DesktopHero({ ready }: { ready: boolean }) {
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
           >
+            <RotatingSeal className="dhero-seal" />
             <Link to={slide.to} className="dhero-card-link">
               <span className="dhero-card-media">
                 <AnimatePresence initial={false}>
