@@ -23,26 +23,8 @@ export function EnrollDock({ title, status, to, cta }: Props) {
     <motion.div
       className="app-enroll-dock"
       initial={reduce ? false : { opacity: 0, y: 18 }}
-      animate={
-        reduce
-          ? { opacity: 1 }
-          : {
-              opacity: 1,
-              y: [0, -5, 0],
-            }
-      }
-      transition={
-        reduce
-          ? { duration: 0.2 }
-          : {
-              opacity: { duration: 0.28 },
-              y: {
-                duration: 3.2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              },
-            }
-      }
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: reduce ? 0.2 : 0.45, ease: [0.16, 1, 0.3, 1] }}
     >
       <div className="app-enroll-dock-copy">
         <strong>{title}</strong>
