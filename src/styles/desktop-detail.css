@@ -62,6 +62,10 @@
     margin-top: 1.6rem;
   }
 
+  .app-shell .course-detail-block > .ios-label {
+    margin-bottom: 0.75rem;
+  }
+
   /* Enroll dock: a floating card bottom-right instead of a bar across the text */
   .app-shell .app-enroll-dock,
   body > .app-enroll-dock {
@@ -70,6 +74,26 @@
     bottom: 2rem !important;
     width: 380px;
     max-width: calc(100vw - 4rem);
+  }
+
+  /* "Related" link under travel / school pages: a compact card, not a full-width phone row. */
+  .app-shell .app-related {
+    max-width: 560px;
+    margin-top: 2rem;
+    padding: 0.75rem 1.1rem 0.75rem 0.75rem;
+    gap: 1rem;
+  }
+
+  .app-shell .app-related .app-row-thumb {
+    width: 104px;
+    height: 76px;
+    border-radius: 14px;
+    flex: none;
+  }
+
+  /* Room under the last block so the floating card never sits on it at the end. */
+  .app-shell .has-enroll-dock {
+    padding-bottom: 8rem;
   }
 
   /* News article: centered reading column, calmer hero */
@@ -115,22 +139,21 @@
     gap: 1rem;
   }
 
+  /* Label above a visible field, two per row — the same look as the comment form. */
   .app-shell .kids-ios-form-list {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1px;
+    gap: 0.9rem 1rem;
     padding: 0;
-    overflow: hidden;
-    border: 1px solid var(--hair);
-    border-radius: 20px;
-    background: var(--hair);
+    border: 0;
+    background: none;
   }
 
   .app-shell .kids-ios-field {
     display: grid;
-    gap: 0.35rem;
-    padding: 0.9rem 1.1rem;
-    background: var(--paper);
+    gap: 0.45rem;
+    padding: 0;
+    background: none;
   }
 
   .app-shell .kids-ios-field-area {
@@ -149,22 +172,32 @@
   .app-shell .kids-ios-field input,
   .app-shell .kids-ios-field textarea {
     width: 100%;
-    min-height: 0;
-    padding: 0.2rem 0;
-    border: 0 !important;
-    border-radius: 0 !important;
+    min-height: 48px;
+    padding: 0.75rem 0.95rem;
+    border: 1px solid var(--edge-strong) !important;
+    border-radius: 14px !important;
     outline: 0;
-    background: transparent !important;
+    background: var(--raised) !important;
     box-shadow: none !important;
     font: inherit;
-    font-size: 1.02rem;
-    font-weight: 600;
-    color: var(--ink);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text);
     resize: vertical;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
   }
 
-  .app-shell .kids-ios-field:focus-within {
-    background: #fff8f8;
+  .app-shell .kids-ios-field textarea {
+    min-height: 96px;
+  }
+
+  .app-shell .kids-ios-field :is(input, textarea):focus {
+    border-color: color-mix(in srgb, var(--seal) 55%, transparent) !important;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--seal) 12%, transparent) !important;
+  }
+
+  html.site .app-shell .kids-ios-form-list .kids-ios-field:focus-within {
+    background: none;
   }
 
   .app-shell .kids-enroll-submit {

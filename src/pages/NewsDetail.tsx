@@ -90,6 +90,25 @@ export function NewsDetail() {
               </StaggerItem>
             ))}
           </Stagger>
+
+          <Stagger className="news-grid desk-only">
+            {related.map((n) => (
+              <StaggerItem key={n.id}>
+                <Link to={`/medee/${n.id}`} className="news-card">
+                  <div className="news-card-media">
+                    <SafeImage src={n.image} alt={loc(lang, t, n.title, n.titleKey)} />
+                  </div>
+                  <div className="news-card-body">
+                    <div className="news-meta">
+                      <span>{loc(lang, t, n.tag, n.tagKey)}</span>
+                      <time dateTime={toDateTime(n.date)}>{n.date}</time>
+                    </div>
+                    <h3>{loc(lang, t, n.title, n.titleKey)}</h3>
+                  </div>
+                </Link>
+              </StaggerItem>
+            ))}
+          </Stagger>
         </section>
       )}
     </PageShell>
