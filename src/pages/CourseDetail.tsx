@@ -10,6 +10,7 @@ import { PageShell, Reveal } from "../components/PageShell";
 import { SafeImage } from "../components/SafeImage";
 import { StickyCta } from "../components/StickyCta";
 import { SuccessBurst } from "../components/SuccessBurst";
+import { TeamCard } from "../components/TeachersSection";
 import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import type { CourseLive } from "../lib/cms";
@@ -26,6 +27,7 @@ export function CourseDetail() {
     kidsLevelsLive,
     kidsSchedulesLive,
     kidsTeachersLive,
+    teamLive,
   } = useSiteContent();
   const course = (coursesLive.find((c) => c.id === id) ??
     getCourseById(id)) as CourseLive | undefined;
@@ -68,6 +70,9 @@ export function CourseDetail() {
     .map((line) => line.trim())
     .filter(Boolean);
   const highlights = course.highlights ?? [];
+  const courseTeachers = (course.teacherIds ?? [])
+    .map((tid) => teamLive.find((m) => m.id === tid))
+    .filter((m): m is NonNullable<typeof m> => Boolean(m));
 
   async function onEnroll(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -169,9 +174,10 @@ export function CourseDetail() {
       <PhotoGlow src={course.image} />
       <article className="course-detail">
         <Reveal>
-          <div className="course-detail-hero-media">
+          {/* The course poster when there is one (shown whole), else the photo. */}
+          <div className={`course-detail-hero-media${course.poster ? " is-poster" : ""}`}>
             <SafeImage
-              src={course.image}
+              src={course.poster || course.image}
               alt={title}
               loading="eager"
             />
@@ -199,15 +205,37 @@ export function CourseDetail() {
                 <p key={p.slice(0, 24)}>{p}</p>
               ))}
             </div>
-            {highlights.length > 0 && (
-              <ul className="course-detail-points">
-                {highlights.map((key) => (
-                  <li key={key}>{t(key)}</li>
-                ))}
-              </ul>
-            )}
           </section>
         </Reveal>
+
+        {highlights.length > 0 && (
+          <Reveal>
+            <section className="course-detail-block">
+              <h2 className="ios-label">{t("course_advantages")}</h2>
+              <ol className="course-advantages">
+                {highlights.map((key, i) => (
+                  <li key={key}>
+                    <span aria-hidden>{String(i + 1).padStart(2, "0")}</span>
+                    <p>{t(key)}</p>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          </Reveal>
+        )}
+
+        {courseTeachers.length > 0 && (
+          <Reveal>
+            <section className="course-detail-block">
+              <h2 className="ios-label">{t("course_teachers")}</h2>
+              <div className="course-teachers">
+                {courseTeachers.map((member) => (
+                  <TeamCard key={member.id} member={member} showBio />
+                ))}
+              </div>
+            </section>
+          </Reveal>
+        )}
 
         {isKids && (
           <>

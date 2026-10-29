@@ -10,6 +10,7 @@ import {
   kidsTeachers,
   kidsLevels,
   kidsSchedules,
+  teachersMeta,
 } from "../data/content";
 import { quizQuestions as defaultQuizQuestions } from "../data/quiz";
 import type { CmsRow } from "./cmsApi";
@@ -88,6 +89,20 @@ export type TranslationFeatureCms = {
   body: I18nText;
 };
 
+/** A member of the adult-program team (About page, course pages). */
+export type TeamMemberCms = {
+  id: string;
+  name: I18nText;
+  role: I18nText;
+  level: I18nText;
+  bio: I18nText;
+  hsk: number[];
+  photo: string;
+  nameKey?: string;
+  roleKey?: string;
+  levelKey?: string;
+};
+
 export type KidsTeacherCms = {
   id: string;
   name: I18nText;
@@ -143,6 +158,7 @@ export type SiteBundle = {
     university?: Record<string, EnrollWindowCms[]>;
   };
   translationFeatures?: TranslationFeatureCms[];
+  team?: TeamMemberCms[];
   kidsTeachers?: KidsTeacherCms[];
   kidsLevels?: KidsLevelCms[];
   kidsSchedules?: KidsScheduleCms[];
@@ -160,6 +176,7 @@ export const emptyBundle = (): SiteBundle => ({
   branches: [],
   enrollWindows: {},
   translationFeatures: [],
+  team: [],
   kidsTeachers: [],
   kidsLevels: [],
   kidsSchedules: [],
@@ -211,6 +228,10 @@ export type CourseLive = {
   filter: string;
   image: string;
   highlights?: readonly string[];
+  /** Team member ids who teach this course. */
+  teacherIds?: readonly string[];
+  /** Course poster (portrait flyer); shown instead of the photo when set. */
+  poster?: string;
   title?: I18nText;
   body?: I18nText;
   tag?: I18nText;
@@ -315,6 +336,22 @@ export const DEFAULT_TRANS_FEATURE_KEYS = [
   { id: "3", ico: "书", t: "trans_feat_3_t", d: "trans_feat_3_d" },
   { id: "4", ico: "✓", t: "trans_feat_4_t", d: "trans_feat_4_d" },
 ] as const;
+
+export function mergeTeam(bundle: SiteBundle): TeamMemberCms[] {
+  if (bundle.team && bundle.team.length > 0) return bundle.team;
+  return teachersMeta.map((m) => ({
+    id: m.id,
+    name: {},
+    role: {},
+    level: {},
+    bio: {},
+    hsk: [...(m.hsk ?? [])],
+    photo: m.photo ?? "",
+    nameKey: m.nameKey,
+    roleKey: m.roleKey ?? "teacher_role",
+    levelKey: m.levelKey,
+  }));
+}
 
 export function mergeKidsTeachers(bundle: SiteBundle): KidsTeacherCms[] {
   if (bundle.kidsTeachers && bundle.kidsTeachers.length > 0)
@@ -472,6 +509,11 @@ export function mergeCourses(
         const metaHl = Array.isArray(r.meta?.highlights)
           ? (r.meta.highlights as string[])
           : undefined;
+        const metaTeachers = Array.isArray(r.meta?.teacherIds)
+          ? (r.meta.teacherIds as string[])
+          : undefined;
+        const metaPoster =
+          typeof r.meta?.poster === "string" ? r.meta.poster : undefined;
         return {
           ...base,
           id: r.slug || r.id,
@@ -481,6 +523,10 @@ export function mergeCourses(
           body: r.body,
           tag: r.tag,
           highlights: metaHl?.length ? metaHl : base.highlights,
+          teacherIds:
+            metaTeachers ??
+            ("teacherIds" in base ? (base.teacherIds as readonly string[]) : undefined),
+          poster: metaPoster || undefined,
           fromDb: true,
         };
       });

@@ -1,21 +1,22 @@
 import { useState } from "react";
-import { classDay, teachersMeta } from "../data/content";
+import { classDay } from "../data/content";
 import { useI18n } from "../i18n/I18nContext";
+import type { TeamMemberCms } from "../lib/cms";
+import { loc } from "../lib/i18nText";
+import { useSiteContent } from "../lib/SiteContentContext";
 import { Reveal, Stagger, StaggerItem } from "./PageShell";
 
-type Teacher = (typeof teachersMeta)[number];
-
 /** Portrait when the file exists, otherwise the first letter of the given name. */
-function TeacherAvatar({ teacher, name }: { teacher: Teacher; name: string }) {
+function MemberAvatar({ photo, name }: { photo: string; name: string }) {
   const [failed, setFailed] = useState(false);
   const initial = name.split(" ").pop()?.charAt(0) ?? "";
 
-  if (teacher.photo && !failed) {
+  if (photo && !failed) {
     return (
       <span className="teacher-avatar has-photo">
         <img
           className="photo"
-          src={teacher.photo}
+          src={photo}
           alt={name}
           loading="lazy"
           decoding="async"
@@ -31,9 +32,38 @@ function TeacherAvatar({ teacher, name }: { teacher: Teacher; name: string }) {
   );
 }
 
+/** One team member: portrait, name, role, teaching level, HSK classes and an optional bio. */
+export function TeamCard({ member, showBio = false }: { member: TeamMemberCms; showBio?: boolean }) {
+  const { t, lang } = useI18n();
+  const name = loc(lang, t, member.name, member.nameKey);
+  const role = loc(lang, t, member.role, member.roleKey);
+  const level = loc(lang, t, member.level, member.levelKey);
+  const bio = showBio ? loc(lang, t, member.bio) : "";
+
+  return (
+    <article className="teacher-card">
+      <MemberAvatar photo={member.photo} name={name} />
+      <div className="teacher-body">
+        <h3>{name}</h3>
+        {role && <p className="teacher-role">{role}</p>}
+        {level && <p className="teacher-level">{level}</p>}
+        {member.hsk.length > 0 && (
+          <ul className="teacher-hsk" aria-label="HSK">
+            {member.hsk.map((n) => (
+              <li key={n}>HSK {n}</li>
+            ))}
+          </ul>
+        )}
+        {bio && <p className="teacher-bio">{bio}</p>}
+      </div>
+    </article>
+  );
+}
+
 /** The team (director, teachers by level, manager) plus the daily class hours. About page, phone and desktop. */
 export function TeachersSection() {
   const { t } = useI18n();
+  const { teamLive } = useSiteContent();
 
   return (
     <section className="section teachers-section">
@@ -44,28 +74,11 @@ export function TeachersSection() {
       </Reveal>
 
       <Stagger className="teachers-grid">
-        {teachersMeta.map((teacher) => {
-          const name = t(teacher.nameKey);
-          return (
-            <StaggerItem key={teacher.id}>
-              <article className="teacher-card">
-                <TeacherAvatar teacher={teacher} name={name} />
-                <div className="teacher-body">
-                  <h3>{name}</h3>
-                  <p className="teacher-role">{t(teacher.roleKey ?? "teacher_role")}</p>
-                  {teacher.levelKey && <p className="teacher-level">{t(teacher.levelKey)}</p>}
-                  {teacher.hsk && (
-                    <ul className="teacher-hsk" aria-label="HSK">
-                      {teacher.hsk.map((n) => (
-                        <li key={n}>HSK {n}</li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              </article>
-            </StaggerItem>
-          );
-        })}
+        {teamLive.map((member) => (
+          <StaggerItem key={member.id}>
+            <TeamCard member={member} />
+          </StaggerItem>
+        ))}
       </Stagger>
 
       <Reveal>

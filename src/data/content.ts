@@ -99,6 +99,8 @@ export const coursesMeta = [
       "course_classroom_h2",
       "course_classroom_h3",
     ] as const,
+    /** Classroom covers HSK 1–6, so every teaching member of the team. */
+    teacherIds: ["otgonjargal", "dagula", "michidmaa", "tsetsenbileg"] as const,
   },
   {
     id: "online",
