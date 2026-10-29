@@ -17,7 +17,6 @@ import {
   IconClose,
   IconMenu,
   IconMoon,
-  IconPhone,
   IconProfile,
   IconSun,
   NavIcon,
@@ -46,6 +45,7 @@ export function Layout() {
   const desktop = useDesktop();
   const [scrolled, setScrolled] = useState(false);
   const [tabCompact, setTabCompact] = useState(false);
+  const [onFilm, setOnFilm] = useState(true);
   const [routeTick, setRouteTick] = useState(0);
   const isHome = location.pathname === "/";
   const isAuth = location.pathname.startsWith("/auth");
@@ -77,6 +77,8 @@ export function Layout() {
       const y = window.scrollY;
       // Hysteresis: a gap between on/off so momentum scrolling near the top can't flicker it.
       setScrolled((was) => (was ? y > 6 : y > 24));
+      // Over the home film the header goes clear with white type (desktop CSS).
+      setOnFilm(y < window.innerHeight * 0.55);
       // iOS 26-style: the tab bar shrinks while reading down, returns on the way up.
       if (Math.abs(y - lastY) > 6) {
         setTabCompact(y > lastY && y > 160);
@@ -107,7 +109,9 @@ export function Layout() {
       <ScrollFx />
 
       <header
-        className={`topbar${isHome ? " is-over-hero" : ""}${scrolled ? " is-scrolled" : ""}`}
+        className={`topbar${isHome ? " is-over-hero" : ""}${scrolled ? " is-scrolled" : ""}${
+          isHome && onFilm ? " is-on-film" : ""
+        }${tabCompact && !menuOpen ? " is-tucked" : ""}`}
       >
         <div className="topbar-stack">
           <div className="topbar-capsule">
@@ -202,15 +206,6 @@ export function Layout() {
                 </button>
               )}
               </div>
-
-              <a
-                className="topbar-phone"
-                href={`tel:${academy.phoneRaw[0]}`}
-                aria-label={`${t("call")} ${academy.phone[0]}`}
-              >
-                <IconPhone />
-                <span>{academy.phone[0]}</span>
-              </a>
 
               <a
                 className="topbar-cta"

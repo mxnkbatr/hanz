@@ -62,6 +62,20 @@
       rel="stylesheet"
     />
     <title>Ханз Академи · Hanz Academy Mongolia</title>
+    <script>
+      // Apply the site theme before first paint, so the header never flashes the
+      // old white style before React mounts (lib/theme.ts keeps it in sync after).
+      (function () {
+        if (location.pathname.indexOf("/admin") === 0) return;
+        var root = document.documentElement;
+        var theme = "light";
+        try {
+          if (localStorage.getItem("hanz-theme") === "dark") theme = "dark";
+        } catch (e) {}
+        root.classList.add("site");
+        root.setAttribute("data-theme", theme);
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

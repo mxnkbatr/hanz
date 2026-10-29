@@ -542,77 +542,6 @@ html.site .app-shell .china-map-svg-wrap {
   background: radial-gradient(ellipse 80% 60% at 50% 40%, var(--seal-tint), transparent 70%);
 }
 
-/* ─── Desktop hero: film under a page-coloured veil ─── */
-html.site .app-shell .dhero {
-  background: var(--page);
-}
-
-html.site .app-shell .dhero-media video {
-  filter: var(--hero-film);
-}
-
-html.site .app-shell .dhero-shade {
-  background:
-    linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--page) calc(var(--hero-veil) * 100%), transparent) 0%,
-      color-mix(in srgb, var(--page) 72%, transparent) 38%,
-      color-mix(in srgb, var(--page) 18%, transparent) 70%,
-      transparent 100%
-    ),
-    radial-gradient(ellipse at 80% 0%, rgb(255 59 63 / calc(var(--glow-strength) * 1.3)), transparent 55%),
-    linear-gradient(180deg, color-mix(in srgb, var(--page) 45%, transparent) 0%, transparent 22%, transparent 65%, var(--page) 100%);
-}
-
-html.site .app-shell .dhero-grain {
-  opacity: 0.05;
-}
-
-html.site .app-shell .dhero-eyebrow {
-  background: var(--seal-tint);
-  border: 1px solid color-mix(in srgb, var(--seal) 30%, transparent);
-  color: var(--seal);
-}
-
-html.site .app-shell .dhero-title {
-  font-family: var(--display);
-  font-weight: 700;
-  letter-spacing: -0.045em;
-  color: var(--text);
-}
-
-/* Editorial accent: the key word in italic serif, solid logo red (no shimmer). */
-html.site .app-shell .dhero-accent {
-  font-style: italic;
-  font-weight: 500;
-  background: none;
-  -webkit-text-fill-color: currentColor;
-  color: var(--seal);
-  animation: none;
-}
-
-html.site .app-shell .dhero-lead {
-  color: var(--ash);
-}
-
-html.site .app-shell .dhero-card {
-  background: var(--chrome);
-  border: 1px solid var(--edge-strong);
-  color: var(--text);
-  -webkit-backdrop-filter: blur(24px) saturate(1.8);
-  backdrop-filter: blur(24px) saturate(1.8);
-  box-shadow: inset 0 1px 0 var(--glass-hi), 0 40px 80px -30px var(--drop-deep);
-}
-
-html.site .app-shell .dhero-card-media {
-  background: var(--raised);
-}
-
-html.site .app-shell .dhero-chips em:not(.is-seal) {
-  background: var(--chrome-strong);
-  color: var(--text);
-}
-
 /* ─── Desktop sections below the hero ─── */
 html.site .app-shell .marquee {
   background: transparent;
@@ -703,18 +632,6 @@ html.site .app-shell .home-finale-mark {
   font-size: 1.6rem;
   line-height: 1;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 10px 26px -8px var(--seal-glow, rgba(227, 38, 43, 0.4));
-}
-
-/* Desktop: stamped onto the featured card's corner. */
-.dhero-card {
-  overflow: visible;
-}
-
-.dhero-seal {
-  position: absolute;
-  top: -52px;
-  left: -52px;
-  z-index: 3;
 }
 
 /* Phone: small badge beside the large title. */
@@ -848,6 +765,222 @@ html.site .app-shell .site-footer {
     background: var(--surface-1);
     border: 1px solid var(--edge);
     box-shadow: none;
+  }
+}
+
+/*
+ * Desktop header motion (all transform/opacity/colour — nothing that re-lays out):
+ *   entrance  capsule drops in, links follow one by one
+ *   on-film   clear glass + white type while over the home film
+ *   tucked    slides up while reading down, returns on the way up
+ */
+@media (min-width: 900px) {
+  @keyframes topbar-drop {
+    from {
+      opacity: 0;
+      transform: translateY(-28px) scale(0.97);
+      filter: blur(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
+  }
+
+  @keyframes topnav-rise {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  html.site .app-shell .topbar-capsule {
+    animation: topbar-drop 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+  }
+
+  html.site .app-shell .topnav > * {
+    animation: topnav-rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  html.site .app-shell .topnav > :nth-child(1) { animation-delay: 0.45s; }
+  html.site .app-shell .topnav > :nth-child(2) { animation-delay: 0.51s; }
+  html.site .app-shell .topnav > :nth-child(3) { animation-delay: 0.57s; }
+  html.site .app-shell .topnav > :nth-child(4) { animation-delay: 0.63s; }
+  html.site .app-shell .topnav > :nth-child(5) { animation-delay: 0.69s; }
+  html.site .app-shell .topnav > :nth-child(6) { animation-delay: 0.75s; }
+
+  html.site .app-shell .topbar {
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  html.site .app-shell .topbar.is-tucked {
+    transform: translateY(-120%);
+  }
+
+  /* Over the film: clear glass — a whisper of white, white type, lit top edge. */
+  html.site .app-shell .topbar.is-on-film .topbar-capsule {
+    background: rgba(255, 255, 255, 0.07) !important;
+    border-color: rgba(255, 255, 255, 0.16) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+    /* Light blur: this glass sits on moving video, a heavy blur re-renders every frame. */
+    -webkit-backdrop-filter: blur(8px) saturate(1.2) !important;
+    backdrop-filter: blur(8px) saturate(1.2) !important;
+  }
+
+  /*
+   * Everywhere else the capsule stays glass too (never solid paper): low-alpha
+   * tint + strong blur, so the page shows through while the type stays readable.
+   */
+  html.site .app-shell .topbar:not(.is-on-film) .topbar-capsule,
+  html.site .app-shell .topbar.is-scrolled:not(.is-on-film) .topbar-capsule {
+    background: color-mix(in srgb, var(--surface-1) 52%, transparent) !important;
+    border-color: color-mix(in srgb, var(--surface-1) 70%, transparent) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(1.8);
+    backdrop-filter: blur(22px) saturate(1.8);
+    box-shadow: inset 0 1px 0 var(--glass-hi), 0 16px 40px -22px var(--drop) !important;
+  }
+
+  /* Lit rim: a soft highlight that fades along the top edge, both states. */
+  html.site .app-shell .topbar-capsule::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(100deg, transparent 10%, rgba(255, 255, 255, 0.55) 45%, transparent 80%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  html.site .app-shell .topbar.is-on-film .topbar-capsule::before {
+    opacity: 0.8;
+  }
+
+  /*
+   * Film timeline: a red hairline along the capsule's bottom edge that fills with
+   * page scroll (CSS scroll-driven animation; browsers without it just skip it).
+   */
+  @supports (animation-timeline: scroll()) {
+    html.site .app-shell .topbar-capsule::after {
+      content: "";
+      position: absolute;
+      left: 26px;
+      right: 26px;
+      bottom: -1px;
+      height: 2px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--seal-deep), var(--seal), #ff8a8d);
+      box-shadow: 0 0 10px var(--seal-glow);
+      transform-origin: 0 50%;
+      transform: scaleX(0);
+      animation: topbar-timeline linear both;
+      animation-timeline: scroll(root block);
+      pointer-events: none;
+    }
+
+    @keyframes topbar-timeline {
+      to {
+        transform: scaleX(1);
+      }
+    }
+
+    /* The header carries the progress now; drop the page-top bar. */
+    html.site .fx-progress {
+      display: none;
+    }
+  }
+
+  /* Register: a slow sheen sweeps across every few seconds. */
+  html.site .app-shell .topbar-cta {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  html.site .app-shell .topbar-cta::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -60%;
+    width: 50%;
+    z-index: -1;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+    transform: skewX(-20deg);
+    animation: cta-sheen 5.5s ease-in-out 2.4s infinite;
+  }
+
+  @keyframes cta-sheen {
+    0% {
+      left: -60%;
+    }
+    22%,
+    100% {
+      left: 130%;
+    }
+  }
+
+  /* Active page dot breathes softly. */
+  html.site .app-shell .topnav-dot {
+    animation: dot-breathe 2.8s ease-in-out infinite;
+  }
+
+  @keyframes dot-breathe {
+    50% {
+      box-shadow: 0 0 0 4px var(--seal-tint), 0 0 14px var(--seal-glow);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.site .app-shell :is(.topbar-cta::before, .topnav-dot, .topbar-capsule, .topnav > *) {
+      animation: none !important;
+    }
+  }
+
+  html.site .app-shell .topbar.is-on-film :is(.topnav-link, .topbar-phone, .brand-logo-text strong) {
+    color: rgba(255, 255, 255, 0.82) !important;
+  }
+
+  html.site .app-shell .topbar.is-on-film :is(.topnav-link:hover, .topnav-link.is-open) {
+    color: #fff !important;
+  }
+
+  html.site .app-shell .topbar.is-on-film .topnav-hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  html.site .app-shell .topbar.is-on-film .topbar-tools {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+
+  html.site .app-shell .topbar.is-on-film :is(.topbar-tools .topbar-icon-btn, .topbar-lang button) {
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  html.site .app-shell .topbar.is-on-film .topbar-lang {
+    border-color: rgba(255, 255, 255, 0.16);
+  }
+
+  html.site .app-shell .topbar.is-on-film .topbar-lang button.is-active {
+    background: rgba(255, 255, 255, 0.92);
+    color: #111;
+  }
+
+  html.site .app-shell .topbar.is-on-film .topbar-phone svg {
+    color: #ff8a8d;
+  }
+
+  html.site .app-shell .topbar :is(.topnav-link, .topbar-phone, .brand-logo-text strong, .topbar-tools) {
+    transition: color 0.4s ease, background-color 0.4s ease, border-color 0.4s ease;
   }
 }
 

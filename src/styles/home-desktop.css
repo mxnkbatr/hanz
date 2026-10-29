@@ -409,3 +409,272 @@
     line-height: 1.65;
   }
 }
+
+/*
+ * Cinematic hero (components/DesktopHero.tsx). The section is 175vh with a sticky
+ * 100vh stage; GSAP scrubs the frame from full-bleed to a rounded card while the
+ * copy lifts away. The film is always graded dark with white type, in both themes —
+ * it is the one "night" moment on a light page.
+ */
+.cine {
+  position: relative;
+  height: 175vh;
+  /* full-bleed even though .page is width-limited */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
+
+.cine-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  isolation: isolate;
+  color: #fff;
+}
+
+.cine-frame {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  /* Fixed radius: animating it re-clipped the playing video every frame (scroll stutter). */
+  border-radius: 32px;
+  background: #0b0b0c;
+  transform-origin: 50% 40%;
+  will-change: transform;
+}
+
+.cine-video {
+  position: absolute;
+  inset: 0;
+  width: 140%;
+  max-width: none;
+  height: 100%;
+  object-fit: cover;
+  /* The footage has the logo seal baked into its right edge; keep it off-screen. */
+  object-position: 0% 50%;
+  /* No CSS filter here: filtering a playing video costs a full repaint per frame. */
+  animation: cine-drift 28s ease-in-out infinite alternate;
+}
+
+/* Slow Ken Burns drift so even a still moment feels alive. */
+@keyframes cine-drift {
+  from {
+    transform: scale(1.08) translateX(0);
+  }
+  to {
+    transform: scale(1) translateX(-2%);
+  }
+}
+
+.cine-grade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(8, 8, 9, 0.16), rgba(8, 8, 9, 0.16)),
+    linear-gradient(180deg, rgba(8, 8, 9, 0.55) 0%, rgba(8, 8, 9, 0) 26%),
+    linear-gradient(0deg, rgba(8, 8, 9, 0.88) 0%, rgba(8, 8, 9, 0.35) 42%, rgba(8, 8, 9, 0) 70%),
+    linear-gradient(90deg, rgba(8, 8, 9, 0.55) 0%, rgba(8, 8, 9, 0) 55%),
+    radial-gradient(60% 50% at 85% 10%, rgba(227, 38, 43, 0.18), transparent 70%);
+}
+
+.cine-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22160%22 height=%22160%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E");
+}
+
+.cine-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  height: 12vh;
+  background: #050505;
+  pointer-events: none;
+}
+
+.cine-bar.is-top {
+  top: 0;
+  transform-origin: 50% 0;
+}
+
+.cine-bar.is-bottom {
+  bottom: 0;
+  transform-origin: 50% 100%;
+}
+
+.cine-copy {
+  position: absolute;
+  left: max(4rem, calc((100vw - 1240px) / 2 + 1rem));
+  bottom: 12vh;
+  z-index: 3;
+  max-width: 780px;
+  will-change: transform, opacity;
+}
+
+/* Prefixed: the theme colours every <p> grey, which vanished on the dark film. */
+html.site .app-shell .cine-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1.6rem;
+  font-family: var(--font-ui);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
+}
+
+.cine-eyebrow i {
+  width: 36px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+html.site .app-shell .cine-title {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(3.6rem, 7.4vw, 7.4rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  color: #fff;
+  text-shadow: 0 2px 40px rgba(0, 0, 0, 0.25);
+}
+
+.cine-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.06em;
+}
+
+.cine-line > span {
+  display: inline-block;
+}
+
+html.site .app-shell .cine-accent {
+  font-style: italic;
+  font-weight: 500;
+  color: #ff6b6e;
+}
+
+html.site .app-shell .cine-lead {
+  max-width: 46ch;
+  margin-top: 1.6rem;
+  font-size: 1.08rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.cine-cta {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+  margin-top: 2.2rem;
+}
+
+.cine-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.4rem 0;
+  font-weight: 600;
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  transition: border-color 0.3s ease, gap 0.3s ease;
+}
+
+.cine-ghost:hover {
+  gap: 0.8rem;
+  border-color: #fff;
+}
+
+.cine-ghost i {
+  font-style: normal;
+}
+
+.cine-meta {
+  position: absolute;
+  right: max(4rem, calc((100vw - 1240px) / 2 + 1rem));
+  bottom: 12vh;
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  gap: 2.4rem;
+}
+
+.cine-meta dl {
+  display: flex;
+  gap: 2rem;
+  margin: 0;
+}
+
+.cine-meta dt {
+  font-family: var(--display);
+  font-size: 2.2rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.cine-meta dd {
+  margin: 0.35rem 0 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.cine-seal {
+  width: 104px;
+}
+
+.cine-seal .rseal-ring text {
+  fill: rgba(255, 255, 255, 0.85);
+}
+
+.cine-scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 3.2vh;
+  z-index: 3;
+  width: 1px;
+  height: 56px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.cine-scroll i {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  animation: cine-scroll 2.2s cubic-bezier(0.76, 0, 0.24, 1) infinite;
+}
+
+@keyframes cine-scroll {
+  0% {
+    transform: translateY(-100%);
+  }
+  60%,
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cine {
+    height: 100vh;
+  }
+
+  .cine-video,
+  .cine-scroll i {
+    animation: none;
+  }
+}
