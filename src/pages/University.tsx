@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { AppLink } from "../components/AppLink";
 import { ConsultForm } from "../components/ConsultForm";
+import { partnerUniversities } from "../data/content";
 import { IosFilterBar } from "../components/IosFilterBar";
 import { PageShell, Reveal, Stagger, StaggerItem } from "../components/PageShell";
 import { SafeImage } from "../components/SafeImage";
@@ -83,6 +84,13 @@ export function University() {
       return hay.includes(query);
     });
   }, [city, q, t, lang, universitiesLive]);
+
+  const listed = useMemo(() => {
+    const query = q.trim().toLowerCase();
+    return query
+      ? partnerUniversities.filter((name) => name.toLowerCase().includes(query))
+      : partnerUniversities;
+  }, [q]);
 
   const hasQuery = q.trim().length > 0;
   const isFiltered = city !== "all" || hasQuery;
@@ -176,6 +184,26 @@ export function University() {
               </StaggerItem>
             ))}
           </Stagger>
+        )}
+      </section>
+
+      {/* Full A–Z list; the search box above filters it too. */}
+      <section className="section tight uni-list-section">
+        <Reveal>
+          <div className="ios-section-head">
+            <h2>{t("uni_list_title")}</h2>
+            <em>{listed.length}</em>
+          </div>
+          <p className="uni-list-lead">{t("uni_list_lead")}</p>
+        </Reveal>
+        {listed.length === 0 ? (
+          <p className="ios-empty">{t("uni_list_empty")}</p>
+        ) : (
+          <ul className="uni-list">
+            {listed.map((name) => (
+              <li key={name}>{name}</li>
+            ))}
+          </ul>
         )}
       </section>
 
