@@ -630,18 +630,10 @@ export function mergeUniversities(
         };
       });
   }
-  const hidden = new Set(bundle.hiddenUniversity ?? []);
-  return chinaProgramsMeta
-    .filter((u) => !hidden.has(u.id))
-    .map((u) => ({
-      id: u.id,
-      titleKey: u.titleKey,
-      descKey: u.descKey,
-      nameMnKey: u.nameMnKey,
-      nameZhKey: u.nameZhKey,
-      cityKey: u.cityKey,
-      image: u.image,
-    }));
+  // The old built-in sample schools are retired: the public list is now
+  // partnerUniversities (data/content.ts). Only schools added in admin show here.
+  void bundle;
+  return [];
 }
 
 export const ADMIN_PAGES = [

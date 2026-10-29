@@ -13,7 +13,8 @@ import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { loc } from "../lib/i18nText";
 import { toDateTime } from "../lib/date";
-import { whyHanzMeta } from "../data/content";
+import { featuredUniversities, partnerUniversities, whyHanzMeta } from "../data/content";
+import { UniversityCard } from "../components/UniversityCard";
 
 const STEPS = [
   ["step1", "step1_d"],
@@ -48,7 +49,7 @@ export function Home() {
  */
 function HomeDesktop() {
   const { t, lang } = useI18n();
-  const { academyLive: academy, newsLive, coursesLive, universitiesLive } =
+  const { academyLive: academy, newsLive, coursesLive } =
     useSiteContent();
   const [lead, ...restCourses] = coursesLive;
 
@@ -148,22 +149,18 @@ function HomeDesktop() {
               <i aria-hidden>→</i>
             </Link>
           </div>
-          <Stagger className="hx-unis">
-            {universitiesLive.slice(0, 3).map((u) => (
-              <StaggerItem key={u.id}>
-                <Link to={`/university/${u.id}`} className="hx-uni">
-                  <SafeImage
-                    src={u.image}
-                    alt={loc(lang, t, u.title, u.titleKey ?? u.nameMnKey)}
-                  />
-                  <span className="hx-uni-body">
-                    <small>{loc(lang, t, u.city, u.cityKey)}</small>
-                    <strong>{loc(lang, t, u.title, u.titleKey ?? u.nameMnKey)}</strong>
-                  </span>
-                </Link>
-              </StaggerItem>
-            ))}
-          </Stagger>
+          <div className="hx-unis-wrap">
+            <Stagger className="uni-tiles hx-uni-tiles">
+              {featuredUniversities.map((name) => (
+                <StaggerItem key={name}>
+                  <UniversityCard name={name} />
+                </StaggerItem>
+              ))}
+            </Stagger>
+            <Link to="/university" className="text-link">
+              {t("uni_all_link")} ({partnerUniversities.length}) <i aria-hidden>→</i>
+            </Link>
+          </div>
         </section>
 
         {/* 5 · Try a character */}

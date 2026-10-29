@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import {
-  chinaProgramsMeta,
   coursesMeta,
+  featuredUniversities,
+  partnerUniversities,
   whyHanzMeta,
 } from "../data/content";
+import { UniversityCard } from "../components/UniversityCard";
 import { PageShell, Reveal, Stagger, StaggerItem } from "../components/PageShell";
 import { TeachersSection } from "../components/TeachersSection";
 import { useI18n } from "../i18n/I18nContext";
@@ -115,21 +117,10 @@ export function About() {
             </Link>
           </div>
         </Reveal>
-        <Stagger className="app-list">
-          {chinaProgramsMeta.map((p) => (
-            <StaggerItem key={p.id}>
-              <Link to="/university/china" className="app-row">
-                <span className="app-row-icon" aria-hidden>
-                  校
-                </span>
-                <span className="app-row-body">
-                  <strong>{t(p.nameMnKey)}</strong>
-                  <em>{t(p.cityKey)}</em>
-                </span>
-                <span className="app-row-chevron" aria-hidden>
-                  ›
-                </span>
-              </Link>
+        <Stagger className="uni-tiles">
+          {featuredUniversities.slice(0, 4).map((name) => (
+            <StaggerItem key={name}>
+              <UniversityCard name={name} />
             </StaggerItem>
           ))}
         </Stagger>
@@ -263,19 +254,16 @@ export function About() {
               <h2 className="h2">{t("china_home_title")}</h2>
               <p className="lead">{t("china_home_lead")}</p>
             </div>
-            <Link to="/university/china" className="text-link">
-              {t("uni_more")}
+            <Link to="/university" className="text-link">
+              {t("uni_all_link")} ({partnerUniversities.length})
               <i aria-hidden>→</i>
             </Link>
           </div>
         </Reveal>
-        <Stagger className="home-prog-grid">
-          {chinaProgramsMeta.map((p) => (
-            <StaggerItem key={p.id}>
-              <article className="home-prog-card">
-                <h3>{t(p.titleKey)}</h3>
-                <p>{t(p.descKey)}</p>
-              </article>
+        <Stagger className="uni-tiles">
+          {featuredUniversities.map((name) => (
+            <StaggerItem key={name}>
+              <UniversityCard name={name} />
             </StaggerItem>
           ))}
         </Stagger>

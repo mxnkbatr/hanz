@@ -2,28 +2,9 @@ import { useMemo, useState } from "react";
 import { AppLink } from "../components/AppLink";
 import { ConsultForm } from "../components/ConsultForm";
 import { partnerUniversities } from "../data/content";
-import { IosFilterBar } from "../components/IosFilterBar";
 import { PageShell, Reveal, Stagger, StaggerItem } from "../components/PageShell";
-import { SafeImage } from "../components/SafeImage";
+import { UniversityCard } from "../components/UniversityCard";
 import { useI18n } from "../i18n/I18nContext";
-import { useSiteContent } from "../lib/SiteContentContext";
-import { loc } from "../lib/i18nText";
-import { hapticLight } from "../lib/native";
-
-type UniCityFilter =
-  | "all"
-  | "map_beijing"
-  | "map_chongqing"
-  | "map_nanjing"
-  | "map_chengdu";
-
-const CITY_FILTERS: UniCityFilter[] = [
-  "all",
-  "map_beijing",
-  "map_chongqing",
-  "map_nanjing",
-  "map_chengdu",
-];
 
 const steps = [
   ["step1", "step1_d"],
@@ -47,43 +28,8 @@ const compareRows = [
 ] as const;
 
 export function University() {
-  const { t, lang } = useI18n();
-  const { universitiesLive } = useSiteContent();
+  const { t } = useI18n();
   const [q, setQ] = useState("");
-  const [city, setCity] = useState<UniCityFilter>("all");
-
-  const counts = useMemo(() => {
-    const map: Record<string, number> = { all: universitiesLive.length };
-    for (const p of universitiesLive) {
-      const key = p.cityKey || "all";
-      map[key] = (map[key] || 0) + 1;
-    }
-    return map;
-  }, [universitiesLive]);
-
-  const options = useMemo(
-    () =>
-      CITY_FILTERS.map((f) => ({
-        id: f,
-        label: f === "all" ? t("filter_all") : t(f),
-        count: counts[f] ?? 0,
-      })),
-    [counts, t],
-  );
-
-  const schools = useMemo(() => {
-    const byCity =
-      city === "all"
-        ? universitiesLive
-        : universitiesLive.filter((p) => (p.cityKey || "") === city);
-    const query = q.trim().toLowerCase();
-    if (!query) return byCity;
-    return byCity.filter((p) => {
-      const hay =
-        `${loc(lang, t, p.title, p.titleKey)} ${loc(lang, t, p.title, p.nameMnKey)} ${loc(lang, t, p.title, p.nameZhKey)} ${loc(lang, t, p.city, p.cityKey)} ${loc(lang, t, p.body, p.descKey)}`.toLowerCase();
-      return hay.includes(query);
-    });
-  }, [city, q, t, lang, universitiesLive]);
 
   const listed = useMemo(() => {
     const query = q.trim().toLowerCase();
@@ -93,7 +39,6 @@ export function University() {
   }, [q]);
 
   const hasQuery = q.trim().length > 0;
-  const isFiltered = city !== "all" || hasQuery;
 
   return (
     <PageShell className="page-uni is-app ios-app">
@@ -104,6 +49,7 @@ export function University() {
         </Reveal>
       </header>
 
+      {/* The academy's universities as cards (A–Z); the search filters them. */}
       <section className="section tight uni-schools-section">
         <Reveal>
           <div className="ios-toolbar">
@@ -127,68 +73,9 @@ export function University() {
                 </button>
               )}
             </label>
-
-            <IosFilterBar
-              options={options}
-              value={city}
-              onChange={(id) => setCity(id as UniCityFilter)}
-              ariaLabel={t("uni_filter_label")}
-              layoutId="uni-filter-pill"
-              showClear={isFiltered}
-              clearLabel={t("news_clear")}
-              onClear={() => {
-                setCity("all");
-                setQ("");
-              }}
-            />
           </div>
         </Reveal>
 
-        <Reveal>
-          <div className="ios-section-head">
-            <h2>{t("uni_schools")}</h2>
-            <em>{schools.length}</em>
-          </div>
-        </Reveal>
-
-        {schools.length === 0 ? (
-          <p className="ios-empty">{t("empty_uni")}</p>
-        ) : (
-          <Stagger className="ios-feed ios-feed-schools">
-            {schools.map((p) => (
-              <StaggerItem key={p.id}>
-                <AppLink
-                  to={`/university/${p.id}`}
-                  className="ios-card"
-                  onClick={() => void hapticLight()}
-                >
-                  <div className="ios-card-media">
-                    <SafeImage
-                      src={p.image}
-                      alt={loc(lang, t, p.title, p.nameMnKey || p.titleKey)}
-                    />
-                    <span className="ios-badge ios-badge-soft">
-                      {loc(lang, t, p.city, p.cityKey)}
-                    </span>
-                  </div>
-                  <div className="ios-card-body">
-                    <h3>{loc(lang, t, p.title, p.nameMnKey || p.titleKey)}</h3>
-                    <p className="ios-card-sub">
-                      {loc(lang, t, p.title, p.titleKey)}
-                    </p>
-                    <p className="ios-card-desc">
-                      {loc(lang, t, p.body, p.descKey)}
-                    </p>
-                  </div>
-                </AppLink>
-              </StaggerItem>
-            ))}
-          </Stagger>
-        )}
-      </section>
-
-      {/* Full A–Z list; the search box above filters it too. */}
-      <section className="section tight uni-list-section">
         <Reveal>
           <div className="ios-section-head">
             <h2>{t("uni_list_title")}</h2>
@@ -196,14 +83,17 @@ export function University() {
           </div>
           <p className="uni-list-lead">{t("uni_list_lead")}</p>
         </Reveal>
+
         {listed.length === 0 ? (
           <p className="ios-empty">{t("uni_list_empty")}</p>
         ) : (
-          <ul className="uni-list">
+          <Stagger className="uni-tiles">
             {listed.map((name) => (
-              <li key={name}>{name}</li>
+              <StaggerItem key={name}>
+                <UniversityCard name={name} />
+              </StaggerItem>
             ))}
-          </ul>
+          </Stagger>
         )}
       </section>
 

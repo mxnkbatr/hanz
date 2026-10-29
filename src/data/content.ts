@@ -876,3 +876,13 @@ export const partnerUniversities = [
   "Zhejiang University of Science and Technology",
   "Zhengzhou University",
 ] as const;
+
+/** Six well-known names from partnerUniversities, shown on Home and About. */
+export const featuredUniversities = [
+  "Peking University",
+  "Tsinghua University",
+  "Fudan University",
+  "Shanghai Jiao Tong University",
+  "Beijing Language and Culture University",
+  "Renmin University",
+] as const;

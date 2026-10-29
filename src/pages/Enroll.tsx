@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import {
   enrollInterests,
   kidsLevels,
+  partnerUniversities,
   kidsSchedules,
 } from "../data/content";
 import { EnrollForm } from "../components/EnrollForm";
@@ -26,12 +27,15 @@ export function Enroll() {
   }, [params]);
 
   const interestMeta = enrollInterests.find((i) => i.id === interest);
+  // A university name from the A–Z list (/university cards); anything else is ignored.
+  const school = (params.get("school") || "").trim();
+  const schoolName = partnerUniversities.some((u) => u === school) ? school : "";
   const isKids = interest === "kids";
   const isTravel = interest.startsWith("travel_");
   const backTo = isTravel
     ? `/travel/${interest.replace("travel_", "")}`
     : interest === "consult" && params.get("uni")
-      ? `/university/${params.get("uni")}`
+      ? "/university"
       : "/";
 
   return (
@@ -64,6 +68,12 @@ export function Enroll() {
             <span>{t("form_interest")}</span>
             <strong>{t(interestMeta.labelKey)}</strong>
           </div>
+          {schoolName && (
+            <div className="enroll-context">
+              <span>{t("nav_uni")}</span>
+              <strong>{schoolName}</strong>
+            </div>
+          )}
         </Reveal>
       )}
 
@@ -73,6 +83,7 @@ export function Enroll() {
             defaultInterest={interest}
             defaultLevel={level}
             defaultSchedule={schedule}
+            context={schoolName ? `${t("nav_uni")}: ${schoolName}` : undefined}
             compact
           />
         </Reveal>
