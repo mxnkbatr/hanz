@@ -362,3 +362,50 @@
     padding: 0.85rem 0.9rem 1rem;
   }
 }
+
+/* ─── University A–Z list ─── */
+.uni-list-lead {
+  max-width: 60ch;
+  margin: 0.25rem 0 1rem;
+  font-size: 0.95rem;
+  color: var(--ash);
+}
+
+.uni-list {
+  columns: 3 240px;
+  column-gap: 2rem;
+  margin: 0;
+  padding: 1rem 1.4rem;
+  list-style: none;
+  border: 1px solid var(--edge);
+  border-radius: 20px;
+  background: var(--surface-1);
+}
+
+.uni-list li {
+  break-inside: avoid;
+  padding: 0.55rem 0 0.55rem 1rem;
+  border-bottom: 1px solid var(--edge);
+  position: relative;
+  font-size: 0.92rem;
+  line-height: 1.35;
+  color: var(--text);
+}
+
+.uni-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1.05rem;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--seal);
+}
+
+@media (max-width: 899px) {
+  .uni-list {
+    columns: 1;
+    padding: 0.4rem 1rem;
+  }
+}

@@ -191,7 +191,7 @@ html.site .app-shell :is(h1, h2, .h1, .h2, .m-title) {
 }
 
 /* Small caps section labels are often h2s; keep them in the UI face, not the display serif. */
-html.site .app-shell :is(.ios-label, .desk-detail-label, .app-section-title) {
+html.site .app-shell :is(.ios-label, .desk-detail-label, .app-section-title, .ios-section-head h2) {
   font-family: var(--font-ui);
   font-weight: 600;
   letter-spacing: 0.14em;
