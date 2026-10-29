@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { supabase } from "../../lib/supabase";
+import { supabase } from "../../lib/supabaseClient";
 import { type EnrollmentRow } from "../../lib/cms";
 import { useI18n } from "../../i18n/I18nContext";
 import { ADMIN_HUB_GROUPS, ADMIN_QUICK_ADD } from "../../lib/adminNav";

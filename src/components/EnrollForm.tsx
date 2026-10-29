@@ -5,7 +5,7 @@ import {
   kidsSchedules,
 } from "../data/content";
 import { SuccessBurst } from "./SuccessBurst";
-import { supabase } from "../lib/supabase";
+import { getSupabase } from "../lib/supabase";
 import { useI18n } from "../i18n/I18nContext";
 
 type Props = {
@@ -86,6 +86,7 @@ export function EnrollForm({
     const fullMessage = [kids, message].filter(Boolean).join("\n");
 
     setStatus("sending");
+    const supabase = await getSupabase();
     const { error } = await supabase.from("enrollments").insert({
       name,
       phone,

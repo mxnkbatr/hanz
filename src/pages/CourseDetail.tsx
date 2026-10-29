@@ -14,7 +14,7 @@ import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import type { CourseLive } from "../lib/cms";
 import { loc } from "../lib/i18nText";
-import { supabase } from "../lib/supabase";
+import { getSupabase } from "../lib/supabase";
 import { hapticLight } from "../lib/native";
 import { PhotoGlow } from "../components/PhotoGlow";
 
@@ -103,6 +103,7 @@ export function CourseDetail() {
           .filter(Boolean)
           .join("\n");
 
+    const supabase = await getSupabase();
     const { error } = await supabase.from("enrollments").insert({
       name,
       phone,

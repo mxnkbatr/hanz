@@ -176,21 +176,111 @@
     color: var(--seal);
   }
 
-  /* ─── Why Hanz: 3×2 cards with a seal-tinted glyph ─── */
+  /* ─── Why Hanz: heading held on the left, bento of six on the right ─── */
+  .hx-why-wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.7fr);
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: start;
+  }
+
+  .hx-why-head {
+    position: sticky;
+    top: 7rem;
+  }
+
+  /* One feature (3×2), two wide (3×1), three small (2×1) on a six-column grid. */
   .hx-why {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.1rem;
-    margin-top: 2.25rem;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: minmax(150px, auto);
+    gap: 1rem;
+  }
+
+  .hx-why > * {
+    display: flex;
+  }
+
+  .hx-why > .is-feature {
+    grid-column: span 3;
+    grid-row: span 2;
+  }
+
+  .hx-why > .is-wide {
+    grid-column: span 3;
+  }
+
+  .hx-why > .is-small {
+    grid-column: span 2;
   }
 
   .hx-why-card {
-    height: 100%;
-    padding: 1.6rem;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    padding: 1.5rem;
     border-radius: 24px;
     border: 1px solid var(--edge);
     background: var(--surface-1);
     box-shadow: var(--shadow);
+  }
+
+  .is-wide .hx-why-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 1.1rem;
+    align-content: center;
+  }
+
+  .is-wide .hx-why-icon {
+    grid-row: span 2;
+    margin-bottom: 0;
+  }
+
+  /* Feature card: the glyph grows into a watermark and the copy sits at the foot. */
+  .is-feature .hx-why-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 2rem;
+    background:
+      radial-gradient(90% 70% at 100% 0%, var(--seal-tint), transparent 70%),
+      var(--surface-1);
+  }
+
+  .is-feature .hx-why-icon {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.5rem;
+    width: auto;
+    height: auto;
+    margin: 0;
+    background: none;
+    font-size: clamp(7rem, 12vw, 10rem);
+    line-height: 1;
+    color: color-mix(in srgb, var(--seal) 16%, transparent);
+  }
+
+  .is-feature .hx-why-card h3 {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 2.2vw, 1.9rem);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .is-feature .hx-why-card p {
+    max-width: 34ch;
+    font-size: 1rem;
+  }
+
+  .hx-display {
+    margin-top: 1rem;
+    font-family: var(--serif);
+    font-size: clamp(2.4rem, 4.2vw, 3.8rem);
+    font-weight: 700;
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+    color: var(--text);
   }
 
   .hx-why-icon {
@@ -486,15 +576,6 @@
     radial-gradient(60% 50% at 85% 10%, rgba(227, 38, 43, 0.18), transparent 70%);
 }
 
-.cine-grain {
-  position: absolute;
-  inset: 0;
-  opacity: 0.07;
-  mix-blend-mode: overlay;
-  pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22160%22 height=%22160%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E");
-}
-
 .cine-bar {
   position: absolute;
   left: 0;
@@ -684,4 +765,34 @@ html.site .app-shell .cine-lead {
   .cine-scroll i {
     animation: none;
   }
+}
+
+/* ─── Numbered section label: "01 — Programs" ─── */
+.hx-index {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ash);
+}
+
+.hx-index-num {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--seal);
+}
+
+.hx-index i {
+  width: 2.25rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.4;
 }

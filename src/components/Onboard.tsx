@@ -180,7 +180,7 @@ export function Onboard() {
                   exit={{ opacity: 0, x: dir >= 0 ? -36 : 36 }}
                   transition={spring}
                 >
-                  <img src={slide.image} alt="" draggable={false} />
+                  <img className="photo" src={slide.image} alt="" draggable={false} />
                 </motion.div>
               </AnimatePresence>
             </div>

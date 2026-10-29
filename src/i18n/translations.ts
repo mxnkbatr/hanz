@@ -158,6 +158,8 @@ const mn: Dict = {
   hd_match_d: "Хэдхэн асуултад хариулаад өөрт тохирох хөтөлбөрөө олоорой.",
   hd_match_cta: "Тест эхлүүлэх",
   hd_china_eyebrow: "Хятадад суралцах",
+  hd_why_eyebrow: "Яагаад Ханз",
+  hd_why_lead: "10 гаруй жилийн туршлага, суралцагч бүрт тохирсон арга барил — хичээлээс эхлээд Хятадад суралцах хүртэл.",
   hd_faq_more: "Өөр асуулт байна уу? Бидэнтэй холбогдоорой.",
 };
 
@@ -309,6 +311,8 @@ const en: Dict = {
   hd_match_d: "Answer a few questions and find the right program.",
   hd_match_cta: "Start the quiz",
   hd_china_eyebrow: "Study in China",
+  hd_why_eyebrow: "Why Hanz",
+  hd_why_lead: "Over ten years of teaching Chinese, with an approach shaped around each student — from the first lesson to studying in China.",
   hd_faq_more: "Still have a question? Get in touch.",
 };
 
@@ -453,6 +457,8 @@ const zh: Dict = {
   hd_match_d: "回答几个问题，找到适合你的课程。",
   hd_match_cta: "开始测试",
   hd_china_eyebrow: "来华留学",
+  hd_why_eyebrow: "为什么选择我们",
+  hd_why_lead: "十余年中文教学经验，因材施教——从第一节课到赴华留学。",
   hd_faq_more: "还有疑问？欢迎联系我们。",
 };
 

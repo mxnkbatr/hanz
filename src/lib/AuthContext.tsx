@@ -7,7 +7,7 @@ import {
   type ReactNode,
 } from "react";
 import type { Session, User } from "@supabase/supabase-js";
-import { supabase } from "./supabase";
+import { getSupabase } from "./supabase";
 
 type AuthCtx = {
   user: User | null;
@@ -53,16 +53,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     // Prefer onAuthStateChange; getSession is fallback if INITIAL_SESSION is slow.
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, next) => {
-      applySession(next);
-    });
-    void supabase.auth.getSession().then(({ data }) => {
-      if (!alive || ready) return;
-      applySession(data.session ?? null);
+    let unsubscribe: (() => void) | undefined;
+    void getSupabase().then((supabase) => {
+      if (!alive) return;
+      const { data: sub } = supabase.auth.onAuthStateChange((_event, next) => {
+        applySession(next);
+      });
+      unsubscribe = () => sub.subscription.unsubscribe();
+      void supabase.auth.getSession().then(({ data }) => {
+        if (!alive || ready) return;
+        applySession(data.session ?? null);
+      });
     });
     return () => {
       alive = false;
-      sub.subscription.unsubscribe();
+      unsubscribe?.();
     };
   }, []);
 
@@ -83,9 +88,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     setAdminChecked(false);
-    void supabase
-      .rpc("is_admin")
-      .then(({ data, error }) => {
+    void getSupabase().then((supabase) =>
+      supabase.rpc("is_admin").then(({ data, error }) => {
         if (!alive) return;
         if (error) {
           // Fallback: allowlist table (if RPC not migrated yet)
@@ -103,7 +107,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
         setIsAdmin(Boolean(data));
         setAdminChecked(true);
-      });
+      }),
+    );
 
     return () => {
       alive = false;
@@ -118,6 +123,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isAdmin,
       adminChecked,
       async signIn(email, password) {
+        const supabase = await getSupabase();
         const { error } = await supabase.auth.signInWithPassword({
           email: email.trim(),
           password,
@@ -125,6 +131,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return error ? { error: error.message } : {};
       },
       async signUp(email, password) {
+        const supabase = await getSupabase();
         const { error } = await supabase.auth.signUp({
           email: email.trim(),
           password,
@@ -132,7 +139,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return error ? { error: error.message } : {};
       },
       async signOut() {
-        await supabase.auth.signOut();
+        await (await getSupabase()).auth.signOut();
       },
     }),
     [session, loading, isAdmin, adminChecked],

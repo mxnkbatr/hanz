@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { supabase } from "../../lib/supabase";
+import { supabase } from "../../lib/supabaseClient";
 import { type EnrollmentRow, type LeadStatus } from "../../lib/cms";
 import { useI18n } from "../../i18n/I18nContext";
 import { hapticLight } from "../../lib/native";

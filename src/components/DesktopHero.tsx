@@ -1,9 +1,16 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { motion, useReducedMotion } from "framer-motion";
+import {
+  animate,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
-import { gsap, ScrollTrigger } from "../lib/gsap";
 import { cloudPoster, cloudVideo } from "../lib/cloudinary";
 import { ease } from "../lib/motion";
 import { MagneticButton } from "./MagneticButton";
@@ -20,17 +27,34 @@ const HERO_POSTER = cloudPoster(HERO_ID) ?? undefined;
  * fills the screen under a dark grade, and a serif headline rises line by line.
  * The section is taller than the screen and its stage is sticky, so while you
  * scroll the full-bleed film settles into a rounded frame and the copy lifts away
- * (GSAP scrub). Only transform/opacity/radius animate — no layout work.
+ * (scroll-linked motion values). Only transform/opacity animate — no layout work.
  */
 export function DesktopHero({ ready }: { ready: boolean }) {
   const { t } = useI18n();
   const { academyLive: academy } = useSiteContent();
   const reduce = useReducedMotion();
   const root = useRef<HTMLElement>(null);
-  const frame = useRef<HTMLDivElement>(null);
-  const copy = useRef<HTMLDivElement>(null);
-  const meta = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Film → frame on scroll, smoothed a little like a scrubbed timeline.
+  const { scrollYProgress } = useScroll({ target: root, offset: ["start start", "end end"] });
+  const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 30, restDelta: 0.001 });
+  const frameScale = useTransform(progress, [0, 1], [1, 0.86]);
+  const copyY = useTransform(progress, [0, 1], ["0%", "-28%"]);
+  const copyOpacity = useTransform(progress, [0, 1], [1, 0]);
+  const metaY = useTransform(progress, [0, 1], [0, 30]);
+  // The stats fade in after the intro and fade out on scroll; both drive one opacity.
+  const metaIntro = useMotionValue(0);
+  const metaOpacity = useTransform(
+    [metaIntro, progress],
+    ([intro, p]: number[]) => intro * (1 - p),
+  );
+
+  useEffect(() => {
+    if (!ready) return;
+    const fade = animate(metaIntro, 1, { delay: 2.2, duration: 1 });
+    return () => fade.stop();
+  }, [ready, metaIntro]);
 
   // Keep the film playing only while the tab is visible.
   useEffect(() => {
@@ -42,28 +66,6 @@ export function DesktopHero({ ready }: { ready: boolean }) {
     play();
     document.addEventListener("visibilitychange", onVis);
     return () => document.removeEventListener("visibilitychange", onVis);
-  }, [reduce]);
-
-  // Film → frame on scroll.
-  useEffect(() => {
-    if (reduce || !root.current) return;
-    const ctx = gsap.context(() => {
-      gsap
-        .timeline({
-          defaults: { ease: "none" },
-          scrollTrigger: {
-            trigger: root.current,
-            start: "top top",
-            end: "bottom bottom",
-            scrub: 0.6,
-          },
-        })
-        .to(frame.current, { scale: 0.86 }, 0)
-        .to(copy.current, { yPercent: -28, opacity: 0 }, 0)
-        .to(meta.current, { opacity: 0, y: 30 }, 0);
-      ScrollTrigger.refresh();
-    }, root);
-    return () => ctx.revert();
   }, [reduce]);
 
   const lines = [
@@ -80,7 +82,7 @@ export function DesktopHero({ ready }: { ready: boolean }) {
   return (
     <section className="cine" ref={root}>
       <div className="cine-stage">
-        <div className="cine-frame" ref={frame}>
+        <motion.div className="cine-frame" style={reduce ? undefined : { scale: frameScale }}>
           <video
             ref={videoRef}
             className="cine-video"
@@ -96,7 +98,7 @@ export function DesktopHero({ ready }: { ready: boolean }) {
             <source src={HERO_LOCAL} type="video/mp4" />
           </video>
           <div className="cine-grade" aria-hidden />
-        </div>
+        </motion.div>
 
         {/* Letterbox: two bars that pull away once the intro is done. */}
         <motion.span
@@ -114,7 +116,10 @@ export function DesktopHero({ ready }: { ready: boolean }) {
           transition={{ delay: 0.15, duration: 1.4, ease: [0.76, 0, 0.24, 1] }}
         />
 
-        <div className="cine-copy" ref={copy}>
+        <motion.div
+          className="cine-copy"
+          style={reduce ? undefined : { y: copyY, opacity: copyOpacity }}
+        >
           <motion.p className="cine-eyebrow" {...beat(0.9)}>
             <span>{t("hero_eyebrow")}</span>
             <i aria-hidden />
@@ -155,14 +160,11 @@ export function DesktopHero({ ready }: { ready: boolean }) {
               <i aria-hidden>↓</i>
             </Link>
           </motion.div>
-        </div>
+        </motion.div>
 
         <motion.div
           className="cine-meta"
-          ref={meta}
-          initial={{ opacity: 0 }}
-          animate={ready ? { opacity: 1 } : undefined}
-          transition={{ delay: 2.2, duration: 1 }}
+          style={reduce ? { opacity: metaIntro } : { y: metaY, opacity: metaOpacity }}
         >
           <dl>
             <div>

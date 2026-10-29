@@ -179,25 +179,7 @@ html.site .app-shell .ambient-wash {
     var(--page);
 }
 
-html.site .fx-progress {
-  background: linear-gradient(90deg, var(--leaf), var(--seal));
-  box-shadow: none;
-}
-
 /* Desktop: the floating header is the one thing at the top edge; no progress line. */
-@media (min-width: 900px) {
-  html.site .fx-progress {
-    display: none;
-  }
-}
-
-html.site .fx-grain {
-  opacity: 0.035;
-}
-
-html.site[data-theme="dark"] .fx-grain {
-  mix-blend-mode: screen;
-}
 
 /* ─── Type: editorial serif headlines, italic red accents ─── */
 html.site .app-shell :is(h1, h2, .h1, .h2, .m-title) {
@@ -344,11 +326,6 @@ html.site .app-shell .topnav-link {
 
 html.site .app-shell :is(.topnav-link.is-active, .topnav-link:hover) {
   color: var(--text);
-}
-
-html.site .app-shell .topnav-pill {
-  background: color-mix(in srgb, var(--text) 8%, transparent);
-  box-shadow: inset 0 1px 0 var(--glass-hi);
 }
 
 html.site .app-shell .topbar-icon-btn {
@@ -532,10 +509,6 @@ html.site .app-shell :is(.onboard-hero-card, .hero-intro-skip) {
   color: var(--text);
 }
 
-html.site .app-shell .hero-intro {
-  background: radial-gradient(ellipse 60% 50% at 50% 45%, var(--seal-tint), transparent 70%), var(--page);
-}
-
 html.site .app-shell :is(.page-auth, .page-quiz.quiz-game:not(.is-playing)) {
   background: radial-gradient(ellipse 90% 55% at 15% -10%, var(--seal-tint), transparent 60%), transparent;
 }
@@ -645,21 +618,6 @@ html.site .app-shell .home-finale-mark {
   position: relative;
 }
 
-.m-seal {
-  position: absolute;
-  top: -22px;
-  right: -4px;
-  width: 72px;
-}
-
-.m-seal .rseal-ring text {
-  font-size: 16px;
-}
-
-.m-seal .rseal-core {
-  font-size: 1.15rem;
-}
-
 /*
  * Compositor-only loops (transform animations, no JS): the seal ring, the floating
  * hanzi and the marquee. They keep moving without touching the main thread, so
@@ -708,10 +666,6 @@ html.site .app-shell .home-finale-mark {
 }
 
 /* Grain overlays were blended over the whole screen / the playing video every frame. */
-.fx-grain,
-.cine-grain {
-  display: none !important;
-}
 
 @media (prefers-reduced-motion: reduce) {
   .rseal-ring,
@@ -721,9 +675,9 @@ html.site .app-shell .home-finale-mark {
   }
 }
 
-/* ─── Floating hanzi behind everything (FloatingGlyphs) ─── */
+/* ─── Floating hanzi behind the home finale (FloatingGlyphs) ─── */
 .fglyphs {
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 0;
   overflow: hidden;
@@ -752,7 +706,13 @@ html.site .fglyph:nth-child(odd) {
   }
 }
 
-/* .main already stacks at z-index 2; lift the footer over the glyph layer too. */
+/* Finale copy sits over its glyph layer. */
+.home-finale > :not(.fglyphs, .home-finale-mark) {
+  position: relative;
+  z-index: 1;
+}
+
+/* .main already stacks at z-index 2; lift the footer over the ambient wash too. */
 html.site .app-shell .site-footer {
   position: relative;
   z-index: 1;
@@ -1039,10 +999,6 @@ html.site .app-shell .site-footer {
   .topbar-tools {
     display: contents;
   }
-
-  .topbar-phone {
-    display: none;
-  }
 }
 
 /*
@@ -1228,29 +1184,6 @@ html.site .app-shell .site-footer {
   html.site .app-shell .topbar-tools svg {
     width: 18px;
     height: 18px;
-  }
-
-  html.site .app-shell .topbar-phone {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    padding: 0.5rem 0.75rem;
-    border-radius: 999px;
-    font-size: 0.88rem;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-    color: var(--text);
-    transition: background 0.25s ease;
-  }
-
-  html.site .app-shell .topbar-phone svg {
-    width: 16px;
-    height: 16px;
-    color: var(--seal);
-  }
-
-  html.site .app-shell .topbar-phone:hover {
-    background: color-mix(in srgb, var(--text) 6%, transparent);
   }
 
   html.site .app-shell .topbar-cta {
@@ -2175,4 +2108,17 @@ html.site .app-shell .pf-title {
   .pf-version {
     text-align: left;
   }
+}
+
+/*
+ * One photo grade for the whole site: stock shots come in many colour casts, so
+ * every content photo (SafeImage → img.photo) is pulled toward the same warm,
+ * slightly muted look. Shop photos keep true colour — people buy what they see.
+ */
+html.site img.photo {
+  filter: saturate(0.86) sepia(0.08) contrast(1.04) brightness(1.01);
+}
+
+html.site .shop-media img.photo {
+  filter: none;
 }

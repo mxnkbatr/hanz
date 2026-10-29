@@ -23,7 +23,6 @@ import {
 } from "./Icons";
 import { Logo } from "./Logo";
 import { Onboard } from "./Onboard";
-import { FloatingGlyphs } from "./FloatingGlyphs";
 import { useAuth } from "../lib/AuthContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { hapticLight } from "../lib/native";
@@ -119,7 +118,6 @@ export function Layout() {
       <div className="ambient" aria-hidden>
         <span className="ambient-wash" />
       </div>
-      <FloatingGlyphs />
 
       <header
         className={`topbar${isHome ? " is-over-hero" : ""}${scrolled ? " is-scrolled" : ""}${

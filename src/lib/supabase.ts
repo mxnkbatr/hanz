@@ -1,12 +1,13 @@
-import { createClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
-const url = import.meta.env.VITE_SUPABASE_URL;
-const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+let client: Promise<SupabaseClient> | undefined;
 
-if (!url || !anonKey) {
-  console.warn(
-    "[supabase] Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY in .env.local",
-  );
+/**
+ * The Supabase SDK (~210 KB) loads on first use instead of with the main bundle,
+ * so the first screen paints without waiting for it. Admin pages are lazy routes
+ * already and import `supabase` from ./supabaseClient directly.
+ */
+export function getSupabase(): Promise<SupabaseClient> {
+  client ??= import("./supabaseClient").then((m) => m.supabase);
+  return client;
 }
-
-export const supabase = createClient(url ?? "", anonKey ?? "");

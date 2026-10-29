@@ -8,6 +8,7 @@ import { useDesktop } from "../hooks/useDesktop";
 import { LearnScroll } from "../components/LearnScroll";
 import { StatsStrip } from "../components/StatsStrip";
 import { MagneticButton } from "../components/MagneticButton";
+import { FloatingGlyphs } from "../components/FloatingGlyphs";
 import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { loc } from "../lib/i18nText";
@@ -65,7 +66,7 @@ function HomeDesktop() {
           <Reveal>
             <div className="section-row">
               <div>
-                <p className="eyebrow">{t("courses_title")}</p>
+                <SectionIndex n={1} label={t("courses_title")} />
                 <h2 className="h2">{t("hd_programs")}</h2>
                 <p className="lead hx-lead">{t("hd_programs_lead")}</p>
               </div>
@@ -101,15 +102,16 @@ function HomeDesktop() {
           </Stagger>
         </section>
 
-        {/* 3 · Why Hanz */}
-        <section className="section hx-section">
-          <Reveal>
-            <p className="eyebrow">{t("why_title")}</p>
-            <h2 className="h2">{t("why_title")}</h2>
+        {/* 3 · Why Hanz: big serif heading held on the left, bento on the right */}
+        <section className="section hx-section hx-why-wrap">
+          <Reveal className="hx-why-head">
+            <SectionIndex n={2} label={t("hd_why_eyebrow")} />
+            <h2 className="hx-display">{t("why_title")}</h2>
+            <p className="lead hx-lead">{t("hd_why_lead")}</p>
           </Reveal>
           <Stagger className="hx-why">
-            {whyHanzMeta.map((w) => (
-              <StaggerItem key={w.id}>
+            {whyHanzMeta.map((w, i) => (
+              <StaggerItem key={w.id} className={WHY_SIZES[i]}>
                 <article className="hx-why-card">
                   <span className="hx-why-icon" aria-hidden>
                     {w.icon}
@@ -126,7 +128,7 @@ function HomeDesktop() {
         <section className="section hx-section hx-china">
           <div className="hx-china-copy">
             <Reveal>
-              <p className="eyebrow">{t("hd_china_eyebrow")}</p>
+              <SectionIndex n={3} label={t("hd_china_eyebrow")} />
               <h2 className="h2">{t("china_home_title")}</h2>
               <p className="lead hx-lead">{t("china_home_lead")}</p>
             </Reveal>
@@ -176,7 +178,7 @@ function HomeDesktop() {
           <Reveal>
             <div className="section-row">
               <div>
-                <p className="eyebrow">{t("nav_news")}</p>
+                <SectionIndex n={4} label={t("nav_news")} />
                 <h2 className="h2">{t("home_news")}</h2>
               </div>
               <Link to="/medee" className="text-link">
@@ -211,7 +213,7 @@ function HomeDesktop() {
         <section className="section section-last hx-section hx-faq">
           <Reveal>
             <div className="hx-faq-head">
-              <p className="eyebrow">FAQ</p>
+              <SectionIndex n={5} label="FAQ" />
               <h2 className="h2">{t("faq_title")}</h2>
               <p className="lead hx-lead">{t("hd_faq_more")}</p>
               <a className="btn hero-film-ghost" href={`tel:${academy.phoneRaw[0]}`}>
@@ -237,6 +239,7 @@ function HomeDesktop() {
 
       {/* 8 · Enrol */}
       <section className="home-finale">
+        <FloatingGlyphs />
         <span className="home-finale-mark" aria-hidden>
           汉
         </span>
@@ -264,6 +267,27 @@ function HomeDesktop() {
         </Reveal>
       </section>
     </PageShell>
+  );
+}
+
+/** Bento sizes for the six "why" cards: one feature, two wide, three small. */
+const WHY_SIZES = [
+  "is-feature",
+  "is-wide",
+  "is-wide",
+  "is-small",
+  "is-small",
+  "is-small",
+] as const;
+
+/** Numbered section label ("01 — Programs"), so the page reads as one sequence. */
+function SectionIndex({ n, label }: { n: number; label: string }) {
+  return (
+    <p className="hx-index">
+      <span className="hx-index-num">{String(n).padStart(2, "0")}</span>
+      <i aria-hidden />
+      <span>{label}</span>
+    </p>
   );
 }
 

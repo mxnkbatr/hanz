@@ -4,7 +4,6 @@ import { useI18n } from "../i18n/I18nContext";
 import { loc } from "../lib/i18nText";
 import type { ProductLive } from "../lib/cms";
 import { SharedMedia } from "./SharedMedia";
-import { TiltCard } from "./TiltCard";
 
 export function ProductCard({ product }: { product: ProductLive }) {
   const { t, lang } = useI18n();
@@ -21,37 +20,39 @@ export function ProductCard({ product }: { product: ProductLive }) {
         : tag || t("nav_shop");
 
   return (
-    <TiltCard>
-      <Link
-        to={`/shop/${product.id}`}
-        className={`shop-card${!product.inStock ? " is-soldout" : ""}`}
-      >
-        <div className="shop-media">
-          <SharedMedia
-            id={`shop-${product.id}`}
-            src={product.image}
-            alt={title}
-            loading="lazy"
-          />
-          {tag && <span className="tag">{tag}</span>}
-          {!product.inStock ? (
-            <em className="badge-stock">{t("out_stock")}</em>
-          ) : (
-            <em className="badge-stock is-in">{t("in_stock")}</em>
-          )}
-        </div>
-        <div className="shop-body">
-          <p className="shop-cat">{catLabel}</p>
-          <h3>{title}</h3>
-          {unit && <p className="muted">{unit}</p>}
-          <div className="shop-foot">
-            <p className="price">{formatPrice(product.price, lang)}</p>
-            <em className="card-cta">
-              {t("view_detail")} <i aria-hidden>→</i>
-            </em>
+    <div className="tilt-card">
+      <div className="tilt-card-inner">
+        <Link
+          to={`/shop/${product.id}`}
+          className={`shop-card${!product.inStock ? " is-soldout" : ""}`}
+        >
+          <div className="shop-media">
+            <SharedMedia
+              id={`shop-${product.id}`}
+              src={product.image}
+              alt={title}
+              loading="lazy"
+            />
+            {tag && <span className="tag">{tag}</span>}
+            {!product.inStock ? (
+              <em className="badge-stock">{t("out_stock")}</em>
+            ) : (
+              <em className="badge-stock is-in">{t("in_stock")}</em>
+            )}
           </div>
-        </div>
-      </Link>
-    </TiltCard>
+          <div className="shop-body">
+            <p className="shop-cat">{catLabel}</p>
+            <h3>{title}</h3>
+            {unit && <p className="muted">{unit}</p>}
+            <div className="shop-foot">
+              <p className="price">{formatPrice(product.price, lang)}</p>
+              <em className="card-cta">
+                {t("view_detail")} <i aria-hidden>→</i>
+              </em>
+            </div>
+          </div>
+        </Link>
+      </div>
+    </div>
   );
 }
