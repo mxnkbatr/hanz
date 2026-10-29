@@ -58,7 +58,7 @@ export function DesktopHero({ ready }: { ready: boolean }) {
             scrub: 0.6,
           },
         })
-        .to(frame.current, { scale: 0.86, yPercent: 4 }, 0)
+        .to(frame.current, { scale: 0.86 }, 0)
         .to(copy.current, { yPercent: -28, opacity: 0 }, 0)
         .to(meta.current, { opacity: 0, y: 30 }, 0);
       ScrollTrigger.refresh();
@@ -96,7 +96,6 @@ export function DesktopHero({ ready }: { ready: boolean }) {
             <source src={HERO_LOCAL} type="video/mp4" />
           </video>
           <div className="cine-grade" aria-hidden />
-          <div className="cine-grain" aria-hidden />
         </div>
 
         {/* Letterbox: two bars that pull away once the intro is done. */}

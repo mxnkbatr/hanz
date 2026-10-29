@@ -326,8 +326,7 @@ html.site .app-shell :is(
 html.site .app-shell :is(
   .topbar-capsule,
   .topbar.is-scrolled .topbar-capsule
-),
-html.site .app-shell.is-home .topbar:not(.is-scrolled) .topbar-capsule {
+) {
   background: var(--chrome) !important;
   border: 1px solid var(--edge) !important;
   -webkit-backdrop-filter: blur(24px) saturate(1.8);
@@ -661,6 +660,67 @@ html.site .app-shell .home-finale-mark {
   font-size: 1.15rem;
 }
 
+/*
+ * Compositor-only loops (transform animations, no JS): the seal ring, the floating
+ * hanzi and the marquee. They keep moving without touching the main thread, so
+ * scrolling stays smooth.
+ */
+@keyframes rseal-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rseal-ring {
+  animation: rseal-spin 18s linear infinite;
+  will-change: transform;
+}
+
+@keyframes fglyph-float {
+  from {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  to {
+    transform: translate3d(var(--fx, 24px), var(--fy, -32px), 0) rotate(var(--fr, 14deg));
+  }
+}
+
+.fglyph-inner {
+  animation: fglyph-float var(--fd, 9s) ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.fglyph:nth-child(1) .fglyph-inner { --fx: 28px; --fy: -36px; --fr: 12deg; --fd: 10s; }
+.fglyph:nth-child(2) .fglyph-inner { --fx: -22px; --fy: 30px; --fr: -16deg; --fd: 8s; }
+.fglyph:nth-child(3) .fglyph-inner { --fx: 18px; --fy: 40px; --fr: 10deg; --fd: 11s; }
+.fglyph:nth-child(4) .fglyph-inner { --fx: -30px; --fy: -20px; --fr: -12deg; --fd: 9s; }
+.fglyph:nth-child(5) .fglyph-inner { --fx: 20px; --fy: 24px; --fr: 18deg; --fd: 7.5s; }
+.fglyph:nth-child(6) .fglyph-inner { --fx: -18px; --fy: -28px; --fr: -10deg; --fd: 12s; }
+
+@keyframes marquee-slide {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.marquee-track {
+  animation: marquee-slide 40s linear infinite;
+}
+
+/* Grain overlays were blended over the whole screen / the playing video every frame. */
+.fx-grain,
+.cine-grain {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rseal-ring,
+  .fglyph-inner,
+  .marquee-track {
+    animation: none;
+  }
+}
+
 /* ─── Floating hanzi behind everything (FloatingGlyphs) ─── */
 .fglyphs {
   position: fixed;
@@ -676,7 +736,6 @@ html.site .app-shell .home-finale-mark {
   font-weight: 700;
   line-height: 1;
   color: var(--watermark, rgba(0, 0, 0, 0.035));
-  will-change: transform;
 }
 
 .fglyph-inner {
@@ -697,6 +756,39 @@ html.site .fglyph:nth-child(odd) {
 html.site .app-shell .site-footer {
   position: relative;
   z-index: 1;
+}
+
+/*
+ * Native-app feel on phones:
+ *  - no grey tap flash, no long-press "copy / open link" callout on app chrome
+ *  - sections far below the fold skip rendering until they come near the screen
+ *    (content-visibility), so the first screen paints and scrolls faster
+ */
+@media (max-width: 899px) {
+  html.site :is(a, button, label, [role="tab"]) {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html.site .app-shell :is(.tabbar, .topbar, .mm-sheet, .m-chips, .m-rail, .btn, .mm-tile, .mm-quick-btn, .pf-quick-btn, .sl-row) {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  html.site .app-shell :is(.m-section, .m-cta, .site-footer) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 420px;
+  }
+
+  html.site .app-shell :is(.m-rail, .m-chips) {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+  }
+
+  html.site .app-shell .m-rail > * {
+    scroll-snap-align: start;
+  }
 }
 
 /* ─── App feel on phones: press feedback like native buttons ─── */
@@ -840,87 +932,98 @@ html.site .app-shell .site-footer {
   }
 
   /*
-   * Off the film: an ink pill. Near-solid in the page's own ink so it reads as a
-   * deliberate dark object on paper — a thin dark tint over cream only made mud.
-   * Edge = 1px light border + inner top highlight; depth = tight contact shadow
-   * plus one long soft one.
+   * Two states, same shape:
+   *   top of page  clear glass — white type over the home film, ink type on paper
+   *   scrolled     a white capsule with ink type (dark surface in dark mode)
+   * Over the film the header stays clear until the film is behind you.
    */
-  html.site .app-shell .topbar:not(.is-on-film) .topbar-capsule,
+  html.site .app-shell .topbar:not(.is-on-film) .topbar-capsule {
+    background: color-mix(in srgb, var(--surface-1) 30%, transparent) !important;
+    border-color: color-mix(in srgb, var(--text) 8%, transparent) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(1.4);
+    backdrop-filter: blur(12px) saturate(1.4);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+  }
+
   html.site .app-shell .topbar.is-scrolled:not(.is-on-film) .topbar-capsule {
-    background: rgba(21, 19, 20, 0.9) !important;
-    border-color: rgba(255, 255, 255, 0.08) !important;
-    -webkit-backdrop-filter: blur(16px) saturate(1.3);
-    backdrop-filter: blur(16px) saturate(1.3);
+    background: color-mix(in srgb, var(--surface-1) 94%, transparent) !important;
+    border-color: color-mix(in srgb, var(--text) 7%, transparent) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(1.6);
+    backdrop-filter: blur(18px) saturate(1.6);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.1),
-      0 1px 2px rgba(22, 22, 22, 0.14),
-      0 14px 34px -14px rgba(22, 22, 22, 0.38) !important;
+      inset 0 1px 0 var(--glass-hi),
+      0 1px 2px rgba(22, 22, 22, 0.06),
+      0 14px 34px -16px rgba(22, 22, 22, 0.22) !important;
   }
 
-  /* Dark theme: a shade lighter than the page so the pill still separates. */
   html.site[data-theme="dark"] .app-shell .topbar:not(.is-on-film) .topbar-capsule {
-    background: rgba(31, 28, 29, 0.92) !important;
-    border-color: rgba(255, 255, 255, 0.1) !important;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 14px 34px -14px rgba(0, 0, 0, 0.7) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
   }
 
-  /* No decorative pseudo-elements on the capsule: rim, timeline and sheen are gone. */
+  html.site[data-theme="dark"] .app-shell .topbar.is-scrolled:not(.is-on-film) .topbar-capsule {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 14px 34px -14px rgba(0, 0, 0, 0.7) !important;
+  }
+
+  /* No decorative pseudo-elements on the capsule. */
   html.site .app-shell :is(.topbar-capsule, .topbar-cta)::before,
   html.site .app-shell .topbar-capsule::after {
     content: none;
-  }
-
-  /* Type on the dark header: paper-tinted white, quieter until hovered or current. */
-  html.site .app-shell .topbar :is(.topnav-link, .topbar-phone) {
-    color: rgba(243, 239, 233, 0.72) !important;
-  }
-
-  html.site .app-shell .topbar :is(.topnav-link:hover, .topnav-link.is-open, .topnav-link.is-active) {
-    color: #f3efe9 !important;
-  }
-
-  html.site .app-shell .topbar .brand-logo-text strong {
-    color: #f3efe9 !important;
-  }
-
-  html.site .app-shell .topbar .brand-logo-text small {
-    color: rgba(243, 239, 233, 0.55) !important;
-  }
-
-  html.site .app-shell .topbar .topnav-hover {
-    background: rgba(255, 255, 255, 0.09);
-  }
-
-  html.site .app-shell .topbar .topbar-tools {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-
-  html.site .app-shell .topbar :is(.topbar-tools .topbar-icon-btn, .topbar-lang button) {
-    color: rgba(243, 239, 233, 0.7);
-  }
-
-  html.site .app-shell .topbar .topbar-tools .topbar-icon-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #f3efe9;
-    box-shadow: none;
-  }
-
-  html.site .app-shell .topbar .topbar-lang {
-    border-color: rgba(255, 255, 255, 0.12);
-  }
-
-  html.site .app-shell .topbar .topbar-lang button.is-active {
-    background: #f3efe9;
-    color: #161616;
-    box-shadow: none;
   }
 
   html.site .app-shell .topbar .topbar-cta i {
     display: none;
   }
 
-  html.site .app-shell .topbar :is(.topnav-link, .brand-logo-text strong, .topbar-tools) {
+  /* Ink type on paper (default) ... */
+  html.site .app-shell .topbar .topnav-link {
+    color: color-mix(in srgb, var(--text) 66%, transparent);
+  }
+
+  html.site .app-shell .topbar :is(.topnav-link:hover, .topnav-link.is-open, .topnav-link.is-active) {
+    color: var(--text) !important;
+  }
+
+  html.site .app-shell .topbar .brand-logo-text small {
+    color: var(--seal);
+  }
+
+  /* ... white type while over the film. */
+  html.site .app-shell .topbar.is-on-film .topnav-link {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  html.site .app-shell .topbar.is-on-film :is(.topnav-link:hover, .topnav-link.is-open, .topnav-link.is-active),
+  html.site .app-shell .topbar.is-on-film .brand-logo-text strong {
+    color: #fff !important;
+  }
+
+  html.site .app-shell .topbar.is-on-film .brand-logo-text small {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  html.site .app-shell .topbar.is-on-film .topnav-hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  html.site .app-shell .topbar.is-on-film .topbar-tools {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+
+  html.site .app-shell .topbar.is-on-film :is(.topbar-tools .topbar-icon-btn, .topbar-lang button) {
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  html.site .app-shell .topbar.is-on-film .topbar-lang {
+    border-color: rgba(255, 255, 255, 0.16);
+  }
+
+  html.site .app-shell .topbar.is-on-film .topbar-lang button.is-active {
+    background: rgba(255, 255, 255, 0.92);
+    color: #161616;
+  }
+
+  html.site .app-shell .topbar :is(.topnav-link, .brand-logo-text strong, .brand-logo-text small, .topbar-tools, .topbar-icon-btn, .topbar-lang button) {
     transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
   }
 

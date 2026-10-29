@@ -425,6 +425,12 @@
 }
 
 .cine-stage {
+  /*
+   * Hero scale, bounded by width AND height so a wide-but-short screen (1920×900)
+   * doesn't get a three-line 118px headline. Gutter matches the header's inner edge.
+   */
+  --cine-gutter: max(3rem, calc((100vw - 1240px) / 2 + 1.25rem));
+  --cine-bottom: clamp(56px, 9vh, 112px);
   position: sticky;
   top: 0;
   height: 100vh;
@@ -441,7 +447,8 @@
   /* Fixed radius: animating it re-clipped the playing video every frame (scroll stutter). */
   border-radius: 32px;
   background: #0b0b0c;
-  transform-origin: 50% 40%;
+  /* Shrink from the top edge so the film stays under the floating header. */
+  transform-origin: 50% 0;
   will-change: transform;
 }
 
@@ -510,10 +517,10 @@
 
 .cine-copy {
   position: absolute;
-  left: max(4rem, calc((100vw - 1240px) / 2 + 1rem));
-  bottom: 12vh;
+  left: var(--cine-gutter);
+  bottom: var(--cine-bottom);
   z-index: 3;
-  max-width: 780px;
+  max-width: 720px;
   will-change: transform, opacity;
 }
 
@@ -522,11 +529,11 @@ html.site .app-shell .cine-eyebrow {
   display: inline-flex;
   align-items: center;
   gap: 0.8rem;
-  margin-bottom: 1.6rem;
+  margin-bottom: clamp(0.9rem, 2.2vh, 1.4rem);
   font-family: var(--font-ui);
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.92);
   text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
@@ -542,9 +549,9 @@ html.site .app-shell .cine-title {
   margin: 0;
   font-family: var(--display);
   font-weight: 500;
-  font-size: clamp(3.6rem, 7.4vw, 7.4rem);
-  line-height: 0.98;
-  letter-spacing: -0.035em;
+  font-size: clamp(2.75rem, min(5.4vw, 8.2vh), 5.75rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
   color: #fff;
   text-shadow: 0 2px 40px rgba(0, 0, 0, 0.25);
 }
@@ -566,9 +573,9 @@ html.site .app-shell .cine-accent {
 }
 
 html.site .app-shell .cine-lead {
-  max-width: 46ch;
-  margin-top: 1.6rem;
-  font-size: 1.08rem;
+  max-width: 44ch;
+  margin-top: clamp(1rem, 2.4vh, 1.5rem);
+  font-size: clamp(0.98rem, 1.7vh, 1.08rem);
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.78);
 }
@@ -577,7 +584,7 @@ html.site .app-shell .cine-lead {
   display: flex;
   align-items: center;
   gap: 1.4rem;
-  margin-top: 2.2rem;
+  margin-top: clamp(1.25rem, 3.2vh, 2rem);
 }
 
 .cine-ghost {
@@ -602,23 +609,23 @@ html.site .app-shell .cine-lead {
 
 .cine-meta {
   position: absolute;
-  right: max(4rem, calc((100vw - 1240px) / 2 + 1rem));
-  bottom: 12vh;
+  right: var(--cine-gutter);
+  bottom: var(--cine-bottom);
   z-index: 3;
   display: flex;
   align-items: flex-end;
-  gap: 2.4rem;
+  gap: 2rem;
 }
 
 .cine-meta dl {
   display: flex;
-  gap: 2rem;
+  gap: 1.75rem;
   margin: 0;
 }
 
 .cine-meta dt {
   font-family: var(--display);
-  font-size: 2.2rem;
+  font-size: clamp(1.6rem, min(2vw, 3.4vh), 2.1rem);
   font-weight: 500;
   line-height: 1;
   letter-spacing: -0.03em;
@@ -626,14 +633,14 @@ html.site .app-shell .cine-lead {
 
 .cine-meta dd {
   margin: 0.35rem 0 0;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.65);
 }
 
 .cine-seal {
-  width: 104px;
+  width: clamp(76px, 9.5vh, 96px);
 }
 
 .cine-seal .rseal-ring text {

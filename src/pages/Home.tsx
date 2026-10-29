@@ -1,9 +1,7 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import { PageShell, Reveal, Stagger, StaggerItem } from "../components/PageShell";
 import { Marquee } from "../components/Marquee";
 import { SafeImage } from "../components/SafeImage";
-import { HeroIntro, shouldPlayHeroIntro } from "../components/HeroIntro";
 import { MobileHome } from "../components/MobileHome";
 import { DesktopHero } from "../components/DesktopHero";
 import { useDesktop } from "../hooks/useDesktop";
@@ -51,15 +49,12 @@ function HomeDesktop() {
   const { t, lang } = useI18n();
   const { academyLive: academy, newsLive, coursesLive, universitiesLive } =
     useSiteContent();
-  const [introDone, setIntroDone] = useState(() => !shouldPlayHeroIntro());
-
   const [lead, ...restCourses] = coursesLive;
 
   return (
     <PageShell className="page-home">
-      {!introDone && <HeroIntro onComplete={() => setIntroDone(true)} />}
-
-      <DesktopHero ready={introDone} />
+      {/* No separate intro screen: the hero's letterbox opening is the intro. */}
+      <DesktopHero ready />
 
       <div className="home-below">
         {/* 1 · Proof right under the promise */}

@@ -23,9 +23,7 @@ import {
 } from "./Icons";
 import { Logo } from "./Logo";
 import { Onboard } from "./Onboard";
-import { FxLayer } from "./FxLayer";
 import { FloatingGlyphs } from "./FloatingGlyphs";
-import { ScrollFx } from "./ScrollFx";
 import { useAuth } from "../lib/AuthContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { hapticLight } from "../lib/native";
@@ -65,6 +63,9 @@ export function Layout() {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     setRouteTick((n) => n + 1);
     setTabCompact(false);
+    // Re-measure header state (film behind it?) once the new page has painted.
+    const raf = requestAnimationFrame(() => window.dispatchEvent(new Event("scroll")));
+    return () => cancelAnimationFrame(raf);
   }, [location.pathname]);
 
   useEffect(() => {
@@ -73,21 +74,35 @@ export function Layout() {
 
   useEffect(() => {
     let lastY = window.scrollY;
+    let queued = 0;
+    // At most once per frame: scroll events can fire several times between paints.
     const onScroll = () => {
+      if (!queued) queued = requestAnimationFrame(measure);
+    };
+    const measure = () => {
+      queued = 0;
       const y = window.scrollY;
       // Hysteresis: a gap between on/off so momentum scrolling near the top can't flicker it.
       setScrolled((was) => (was ? y > 6 : y > 24));
-      // Over the home film the header goes clear with white type (desktop CSS).
-      setOnFilm(y < window.innerHeight * 0.55);
+      // Clear glass + white type only while the home film is actually behind the
+      // header (measured, so it holds while the film shrinks into its frame).
+      // The film only exists on the desktop home page; skip the layout read elsewhere.
+      const film = filmEl?.isConnected ? filmEl : (filmEl = document.querySelector(".cine-frame"));
+      const box = film?.getBoundingClientRect();
+      setOnFilm(!!box && box.top < 40 && box.bottom > 96);
       // iOS 26-style: the tab bar shrinks while reading down, returns on the way up.
       if (Math.abs(y - lastY) > 6) {
         setTabCompact(y > lastY && y > 160);
         lastY = y;
       }
     };
-    onScroll();
+    let filmEl: Element | null = null;
+    measure();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      cancelAnimationFrame(queued);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   return (
@@ -105,8 +120,6 @@ export function Layout() {
         <span className="ambient-wash" />
       </div>
       <FloatingGlyphs />
-      <FxLayer />
-      <ScrollFx />
 
       <header
         className={`topbar${isHome ? " is-over-hero" : ""}${scrolled ? " is-scrolled" : ""}${

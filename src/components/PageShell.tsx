@@ -52,6 +52,8 @@ export function Reveal({
   y?: number;
 }) {
   const reduce = useReducedMotion();
+  // Phones (iOS-style route stack): content is just there, like a native list.
+  if (useInRouteStack()) return <div className={`reveal-block ${className}`}>{children}</div>;
   return (
     <motion.div
       className={`reveal-block ${className}`}
@@ -87,6 +89,7 @@ export function StaggerItem({
   className?: string;
 }) {
   const reduce = useReducedMotion();
+  if (useInRouteStack()) return <div className={`stagger-item ${className}`}>{children}</div>;
   return (
     <motion.div
       className={`stagger-item ${className}`}
