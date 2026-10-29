@@ -184,6 +184,13 @@ html.site .fx-progress {
   box-shadow: none;
 }
 
+/* Desktop: the floating header is the one thing at the top edge; no progress line. */
+@media (min-width: 900px) {
+  html.site .fx-progress {
+    display: none;
+  }
+}
+
 html.site .fx-grain {
   opacity: 0.035;
 }
@@ -833,154 +840,94 @@ html.site .app-shell .site-footer {
   }
 
   /*
-   * Everywhere else it keeps the same look as over the film — dark smoked glass with
-   * white type — so the desktop header is one consistent bar on every page.
+   * Off the film: an ink pill. Near-solid in the page's own ink so it reads as a
+   * deliberate dark object on paper — a thin dark tint over cream only made mud.
+   * Edge = 1px light border + inner top highlight; depth = tight contact shadow
+   * plus one long soft one.
    */
   html.site .app-shell .topbar:not(.is-on-film) .topbar-capsule,
   html.site .app-shell .topbar.is-scrolled:not(.is-on-film) .topbar-capsule {
-    background: rgba(34, 26, 28, 0.62) !important;
-    border-color: rgba(255, 255, 255, 0.14) !important;
-    -webkit-backdrop-filter: blur(18px) saturate(1.4);
-    backdrop-filter: blur(18px) saturate(1.4);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 18px 40px -22px rgba(20, 10, 12, 0.45) !important;
+    background: rgba(21, 19, 20, 0.9) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(1.3);
+    backdrop-filter: blur(16px) saturate(1.3);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 1px 2px rgba(22, 22, 22, 0.14),
+      0 14px 34px -14px rgba(22, 22, 22, 0.38) !important;
   }
 
-  /* Lit rim: a soft highlight that fades along the top edge, both states. */
-  html.site .app-shell .topbar-capsule::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(100deg, transparent 10%, rgba(255, 255, 255, 0.55) 45%, transparent 80%);
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    opacity: 0.35;
-    pointer-events: none;
+  /* Dark theme: a shade lighter than the page so the pill still separates. */
+  html.site[data-theme="dark"] .app-shell .topbar:not(.is-on-film) .topbar-capsule {
+    background: rgba(31, 28, 29, 0.92) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 14px 34px -14px rgba(0, 0, 0, 0.7) !important;
   }
 
-  html.site .app-shell .topbar.is-on-film .topbar-capsule::before {
-    opacity: 0.8;
+  /* No decorative pseudo-elements on the capsule: rim, timeline and sheen are gone. */
+  html.site .app-shell :is(.topbar-capsule, .topbar-cta)::before,
+  html.site .app-shell .topbar-capsule::after {
+    content: none;
   }
 
-  /*
-   * Film timeline: a red hairline along the capsule's bottom edge that fills with
-   * page scroll (CSS scroll-driven animation; browsers without it just skip it).
-   */
-  @supports (animation-timeline: scroll()) {
-    html.site .app-shell .topbar-capsule::after {
-      content: "";
-      position: absolute;
-      left: 26px;
-      right: 26px;
-      bottom: -1px;
-      height: 2px;
-      border-radius: 2px;
-      background: linear-gradient(90deg, var(--seal-deep), var(--seal), #ff8a8d);
-      box-shadow: 0 0 10px var(--seal-glow);
-      transform-origin: 0 50%;
-      transform: scaleX(0);
-      animation: topbar-timeline linear both;
-      animation-timeline: scroll(root block);
-      pointer-events: none;
-    }
-
-    @keyframes topbar-timeline {
-      to {
-        transform: scaleX(1);
-      }
-    }
-
-    /* The header carries the progress now; drop the page-top bar. */
-    html.site .fx-progress {
-      display: none;
-    }
+  /* Type on the dark header: paper-tinted white, quieter until hovered or current. */
+  html.site .app-shell .topbar :is(.topnav-link, .topbar-phone) {
+    color: rgba(243, 239, 233, 0.72) !important;
   }
 
-  /* Register: a slow sheen sweeps across every few seconds. */
-  html.site .app-shell .topbar-cta {
-    position: relative;
-    overflow: hidden;
-    isolation: isolate;
+  html.site .app-shell .topbar :is(.topnav-link:hover, .topnav-link.is-open, .topnav-link.is-active) {
+    color: #f3efe9 !important;
   }
 
-  html.site .app-shell .topbar-cta::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: -60%;
-    width: 50%;
-    z-index: -1;
-    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.45), transparent);
-    transform: skewX(-20deg);
-    animation: cta-sheen 5.5s ease-in-out 2.4s infinite;
+  html.site .app-shell .topbar .brand-logo-text strong {
+    color: #f3efe9 !important;
   }
 
-  @keyframes cta-sheen {
-    0% {
-      left: -60%;
-    }
-    22%,
-    100% {
-      left: 130%;
-    }
-  }
-
-  /* Active page dot breathes softly. */
-  html.site .app-shell .topnav-dot {
-    animation: dot-breathe 2.8s ease-in-out infinite;
-  }
-
-  @keyframes dot-breathe {
-    50% {
-      box-shadow: 0 0 0 4px var(--seal-tint), 0 0 14px var(--seal-glow);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    html.site .app-shell :is(.topbar-cta::before, .topnav-dot, .topbar-capsule, .topnav > *) {
-      animation: none !important;
-    }
-  }
-
-  html.site .app-shell .topbar :is(.topnav-link, .topbar-phone, .brand-logo-text strong) {
-    color: rgba(255, 255, 255, 0.82) !important;
-  }
-
-  html.site .app-shell .topbar :is(.topnav-link:hover, .topnav-link.is-open) {
-    color: #fff !important;
+  html.site .app-shell .topbar .brand-logo-text small {
+    color: rgba(243, 239, 233, 0.55) !important;
   }
 
   html.site .app-shell .topbar .topnav-hover {
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.09);
   }
 
   html.site .app-shell .topbar .topbar-tools {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.1);
   }
 
   html.site .app-shell .topbar :is(.topbar-tools .topbar-icon-btn, .topbar-lang button) {
-    color: rgba(255, 255, 255, 0.78);
+    color: rgba(243, 239, 233, 0.7);
+  }
+
+  html.site .app-shell .topbar .topbar-tools .topbar-icon-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #f3efe9;
+    box-shadow: none;
   }
 
   html.site .app-shell .topbar .topbar-lang {
-    border-color: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.12);
   }
 
   html.site .app-shell .topbar .topbar-lang button.is-active {
-    background: rgba(255, 255, 255, 0.92);
-    color: #111;
+    background: #f3efe9;
+    color: #161616;
+    box-shadow: none;
   }
 
-  html.site .app-shell .topbar .topbar-phone svg {
-    color: #ff8a8d;
+  html.site .app-shell .topbar .topbar-cta i {
+    display: none;
   }
 
-  html.site .app-shell .topbar :is(.topnav-link, .topbar-phone, .brand-logo-text strong, .topbar-tools) {
-    transition: color 0.4s ease, background-color 0.4s ease, border-color 0.4s ease;
+  html.site .app-shell .topbar :is(.topnav-link, .brand-logo-text strong, .topbar-tools) {
+    transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.site .app-shell :is(.topbar-capsule, .topnav > *) {
+      animation: none !important;
+    }
   }
 }
 
