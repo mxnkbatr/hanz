@@ -8,7 +8,7 @@ export const academy = {
   tianjinStudents: "250+",
   phone: ["9990-7748", "9999-1573"],
   phoneRaw: ["99907748", "99991573"],
-  email: "hanzacademy1@gmail.com",
+  email: "surgalthanz@gmail.com",
   facebook: "https://www.facebook.com/HanzAcademy",
   instagram: "https://www.instagram.com/khanzacademy/",
   messenger: "https://m.me/HanzAcademy",
@@ -17,9 +17,70 @@ export const academy = {
   founded: "2014",
   address:
     "СБД, 1-р хороо, Замын цагдаагийн зүүн талд, Union Building, А блок, 12 давхар, 1204",
-  hours: "Даваа–Бямба · өдөр бүр 8 цагийн сургалт",
+  hours: "Даваа–Бямба · 10:00–18:00 (цайны цаг 13:00–14:00)",
   whatsapp: "https://wa.me/97699907748",
 };
+
+/** Class day: lessons 10:00–18:00 with a lunch break 13:00–14:00. */
+export const classDay = {
+  start: "10:00",
+  end: "18:00",
+  lunchStart: "13:00",
+  lunchEnd: "14:00",
+} as const;
+
+type TeacherMeta = {
+  id: string;
+  nameKey: string;
+  /** Defaults to "teacher_role" (Багш). */
+  roleKey?: string;
+  /** Teaching level and HSK classes; left out for staff who don't teach. */
+  levelKey?: string;
+  hsk?: readonly number[];
+  /** Portrait under public/; until the file exists the card shows the name's initial. */
+  photo?: string;
+};
+
+/** The team on the About page: director, teachers (with the HSK levels they teach), manager. */
+export const teachersMeta: readonly TeacherMeta[] = [
+  {
+    id: "otgonjargal",
+    nameKey: "teacher_otgonjargal",
+    roleKey: "teacher_role_director",
+    levelKey: "teacher_lvl_adv",
+    hsk: [5, 6],
+    photo: "/images/teachers/otgonjargal.jpg",
+  },
+  {
+    id: "dagula",
+    nameKey: "teacher_dagula",
+    levelKey: "teacher_lvl_adv",
+    hsk: [4, 5, 6],
+    photo: "/images/teachers/dagula.jpg",
+  },
+  {
+    id: "michidmaa",
+    nameKey: "teacher_michidmaa",
+    roleKey: "teacher_role_trainee",
+    levelKey: "teacher_lvl_beg_mid",
+    hsk: [1, 2, 3],
+    photo: "/images/teachers/michidmaa.jpg",
+  },
+  {
+    id: "tsetsenbileg",
+    nameKey: "teacher_tsetsenbileg",
+    roleKey: "teacher_role_trainee",
+    levelKey: "teacher_lvl_beg",
+    hsk: [1, 2],
+    photo: "/images/teachers/tsetsenbileg.jpg",
+  },
+  {
+    id: "sarantuya",
+    nameKey: "teacher_sarantuya",
+    roleKey: "teacher_role_manager",
+    photo: "/images/teachers/sarantuya.jpg",
+  },
+];
 
 /** Real programs from client deck (Taniltsuulga Hanz.pptx) */
 export const coursesMeta = [
