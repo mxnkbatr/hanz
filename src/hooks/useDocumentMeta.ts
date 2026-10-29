@@ -7,6 +7,7 @@ import {
   getTravelById,
   getUniversityById,
 } from "../data/content";
+import { describeUniversity, getUniversityBySlug } from "../data/universities";
 import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import type {
@@ -122,7 +123,12 @@ export function useDocumentMeta() {
       const id = uniMatch.params.id;
       const track = getUniversityById(id);
       const school = universitiesLive.find((u) => u.id === id);
-      if (track) {
+      const listed = getUniversityBySlug(id);
+      if (listed && !track) {
+        document.title = `${listed.name} · ${BRAND}`;
+        description = describeUniversity(listed, lang);
+        if (listed.photo) image = listed.photo.src;
+      } else if (track) {
         document.title = `${t(track.titleKey)} · ${BRAND}`;
       } else if (school) {
         document.title = `${loc(lang, t, school.title, school.nameMnKey || school.titleKey)} · ${BRAND}`;

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { AppLink } from "../components/AppLink";
 import { ConsultForm } from "../components/ConsultForm";
-import { partnerUniversities } from "../data/content";
+import { CITY_LABELS, universities } from "../data/universities";
 import { PageShell, Reveal, Stagger, StaggerItem } from "../components/PageShell";
 import { UniversityCard } from "../components/UniversityCard";
 import { useI18n } from "../i18n/I18nContext";
@@ -31,11 +31,14 @@ export function University() {
   const { t } = useI18n();
   const [q, setQ] = useState("");
 
+  // English name, Chinese name or city (any language) all match.
   const listed = useMemo(() => {
     const query = q.trim().toLowerCase();
-    return query
-      ? partnerUniversities.filter((name) => name.toLowerCase().includes(query))
-      : partnerUniversities;
+    if (!query) return universities;
+    return universities.filter((u) => {
+      const city = u.city ? Object.values(CITY_LABELS[u.city] ?? {}).join(" ") : "";
+      return `${u.name} ${u.zh ?? ""} ${u.city ?? ""} ${city}`.toLowerCase().includes(query);
+    });
   }, [q]);
 
   const hasQuery = q.trim().length > 0;
@@ -88,9 +91,9 @@ export function University() {
           <p className="ios-empty">{t("uni_list_empty")}</p>
         ) : (
           <Stagger className="uni-tiles">
-            {listed.map((name) => (
-              <StaggerItem key={name}>
-                <UniversityCard name={name} />
+            {listed.map((u) => (
+              <StaggerItem key={u.slug}>
+                <UniversityCard university={u} />
               </StaggerItem>
             ))}
           </Stagger>
