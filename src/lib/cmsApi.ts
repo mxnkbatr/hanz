@@ -1,4 +1,4 @@
-import { supabase } from "./supabase";
+import { getSupabase } from "./supabase";
 import type { I18nText } from "./i18nText";
 
 export type CmsTable =
@@ -35,6 +35,7 @@ export async function listCms(
   table: CmsTable,
   opts?: { includeHidden?: boolean },
 ) {
+  const supabase = await getSupabase();
   let q = supabase.from(table).select("*").order("sort_order", {
     ascending: true,
   });
@@ -50,6 +51,7 @@ export async function createCms(
   table: CmsTable,
   row: Partial<CmsRow>,
 ) {
+  const supabase = await getSupabase();
   const { data, error } = await supabase
     .from(table)
     .insert(row)
@@ -64,6 +66,7 @@ export async function updateCms(
   id: string,
   patch: Partial<CmsRow>,
 ) {
+  const supabase = await getSupabase();
   const { data, error } = await supabase
     .from(table)
     .update({ ...patch, updated_at: new Date().toISOString() })
@@ -75,6 +78,7 @@ export async function updateCms(
 }
 
 export async function removeCms(table: CmsTable, id: string) {
+  const supabase = await getSupabase();
   const { error } = await supabase.from(table).delete().eq("id", id);
   if (error) return { error: error.message };
   return {};
@@ -83,6 +87,7 @@ export async function removeCms(table: CmsTable, id: string) {
 export async function uploadMedia(file: File, folder = "uploads") {
   const ext = file.name.split(".").pop()?.toLowerCase() || "webp";
   const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+  const supabase = await getSupabase();
   const { error } = await supabase.storage.from("media").upload(path, file, {
     cacheControl: "3600",
     upsert: false,

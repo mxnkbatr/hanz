@@ -159,7 +159,7 @@ export function MobileMenuSheet({ open, onClose }: Props) {
                       className={({ isActive }) => `mm-tile${isActive ? " is-active" : ""}`}
                       onClick={go}
                     >
-                      <img src={tile.img} alt="" loading="lazy" decoding="async" />
+                      <img className="photo" src={tile.img} alt="" loading="lazy" decoding="async" />
                       <span className="mm-tile-label">{t(tile.key)}</span>
                     </NavLink>
                   </motion.div>

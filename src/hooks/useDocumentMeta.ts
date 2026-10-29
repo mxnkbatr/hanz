@@ -45,6 +45,22 @@ function setMeta(attr: "name" | "property", key: string, content: string) {
   el.setAttribute("content", content);
 }
 
+/** Page-level structured data (e.g. a Course), next to the static organisation block. */
+function setPageJsonLd(data: Record<string, unknown> | undefined) {
+  let el = document.getElementById("ld-page");
+  if (!data) {
+    el?.remove();
+    return;
+  }
+  if (!el) {
+    el = document.createElement("script");
+    el.id = "ld-page";
+    el.setAttribute("type", "application/ld+json");
+    document.head.appendChild(el);
+  }
+  el.textContent = JSON.stringify(data);
+}
+
 export function useDocumentMeta() {
   const { pathname } = useLocation();
   const { t, lang } = useI18n();
@@ -60,6 +76,7 @@ export function useDocumentMeta() {
     const siteTitle = t("meta_title");
     let description = t("meta_desc");
     let image: string | undefined;
+    let course: { name: string; description: string } | undefined;
     const newsMatch = matchPath("/medee/:id", pathname);
     const shopMatch = matchPath("/shop/:id", pathname);
     const uniMatch = matchPath("/university/:id", pathname);
@@ -73,6 +90,7 @@ export function useDocumentMeta() {
       if (item) {
         description = t(item.descKey) || description;
         image = item.image;
+        course = { name: loc(lang, t, item.title, item.titleKey), description };
       }
       document.title = item
         ? `${loc(lang, t, item.title, item.titleKey)} · ${BRAND}`
@@ -145,6 +163,22 @@ export function useDocumentMeta() {
     setMeta("name", "twitter:description", description);
     setMeta("name", "twitter:image", imageUrl);
     document.querySelector('link[rel="canonical"]')?.setAttribute("href", url);
+    setPageJsonLd(
+      course && {
+        "@context": "https://schema.org",
+        "@type": "Course",
+        name: course.name,
+        description: course.description,
+        url,
+        image: imageUrl,
+        inLanguage: lang === "zh" ? "zh-CN" : lang,
+        provider: {
+          "@type": "EducationalOrganization",
+          name: "Ханз Академи · Hanz Academy Mongolia",
+          sameAs: window.location.origin + "/",
+        },
+      },
+    );
 
     document.documentElement.lang = lang === "zh" ? "zh-CN" : lang;
   }, [

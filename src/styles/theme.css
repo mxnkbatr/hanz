@@ -120,16 +120,6 @@
   border-color: var(--hair);
 }
 
-.app-shell .site-menu-app-icon {
-  background: var(--ink);
-  color: var(--ivory);
-  box-shadow: none;
-}
-
-.app-shell .site-menu-app-link.is-active .site-menu-app-icon {
-  background: var(--seal);
-}
-
 /* ─── Search ─── */
 .app-shell .ios-search,
 .app-shell .ios-app .ios-toolbar .ios-search {

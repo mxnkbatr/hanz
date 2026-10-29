@@ -7,7 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { supabase } from "./supabase";
+import { getSupabase } from "./supabase";
 import { listCms, type CmsRow } from "./cmsApi";
 import {
   emptyBundle,
@@ -65,6 +65,7 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
+    const supabase = await getSupabase();
     const [siteRes, news, products, courses, travel, universities] =
       await Promise.all([
         supabase.from("site_content").select("data").eq("id", 1).maybeSingle(),
@@ -98,6 +99,7 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
   }, [refresh]);
 
   const saveBundle = useCallback(async (next: SiteBundle) => {
+    const supabase = await getSupabase();
     const { error } = await supabase.from("site_content").upsert({
       id: 1,
       data: next,

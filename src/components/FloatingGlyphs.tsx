@@ -1,4 +1,4 @@
-/** Big faint characters drifting behind the page: [glyph, left %, top %, size rem]. */
+/** Big faint characters drifting behind a section: [glyph, left %, top %, size rem]. */
 const GLYPHS: [string, number, number, number][] = [
   ["汉", 6, 14, 9],
   ["字", 84, 22, 7],
@@ -9,9 +9,10 @@ const GLYPHS: [string, number, number, number][] = [
 ];
 
 /**
- * Site-wide background layer: each glyph slowly floats and turns on its own loop.
- * Pure CSS transform animations (see .fglyph-inner) so the compositor runs them —
- * nothing here touches the main thread while the page scrolls.
+ * Background layer for a single section (the home finale): each glyph slowly
+ * floats and turns on its own loop. It fills its nearest positioned parent, so it
+ * stays out of the way of the reading sections. Pure CSS transform animations (see
+ * .fglyph-inner) so the compositor runs them.
  */
 export function FloatingGlyphs() {
   return (

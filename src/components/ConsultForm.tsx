@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { SuccessBurst } from "./SuccessBurst";
-import { supabase } from "../lib/supabase";
+import { getSupabase } from "../lib/supabase";
 import { useI18n } from "../i18n/I18nContext";
 
 export function ConsultForm({
@@ -41,6 +41,7 @@ export function ConsultForm({
         : `${t("form_country")}: ${country}`;
 
     setStatus("sending");
+    const supabase = await getSupabase();
     const { error } = await supabase.from("enrollments").insert({
       name,
       phone,

@@ -88,35 +88,6 @@ html {
 }
 
 /* ─── FX layer ─── */
-.fx-progress {
-  position: fixed;
-  inset: 0 0 auto;
-  height: 2px;
-  z-index: 1000;
-  transform-origin: 0 50%;
-  background: var(--ink);
-  pointer-events: none;
-}
-
-.is-home .fx-progress {
-  background: var(--brass);
-}
-
-.fx-grain {
-  position: fixed;
-  inset: 0;
-  z-index: 998;
-  pointer-events: none;
-  opacity: 0.035;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-@media (max-width: 899px) {
-  .fx-grain {
-    display: none;
-  }
-}
 
 /* ─── Type ─── */
 .h2,
@@ -210,11 +181,6 @@ html {
   transform: translateX(120%);
 }
 
-.btn-glass {
-  border-width: 1px;
-  border-color: rgba(255, 255, 255, 0.5);
-}
-
 /* ─── Top nav ─── */
 @media (min-width: 900px) {
   /* Fix: 900–1179px had neither the desktop nav nor the menu button. */
@@ -238,11 +204,6 @@ html {
 
   .topnav-link.is-active {
     color: var(--ivory);
-  }
-
-  .topnav-pill {
-    background: var(--ink);
-    box-shadow: none;
   }
 
   .topbar-capsule {
@@ -271,106 +232,8 @@ html {
 }
 
 /* ─── Hero ─── */
-.hero-cinema-shade {
-  background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.1) 38%, rgba(0, 0, 0, 0.82) 100%),
-    linear-gradient(100deg, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.25) 50%, transparent 78%);
-}
-
-.hero-eyebrow span {
-  background: transparent !important;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-}
-
-.hero-cinema-title {
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: 0.24em;
-  font-size: clamp(2.9rem, 8vw, 7rem);
-  line-height: 1;
-  letter-spacing: -0.04em;
-  text-shadow: none;
-}
-
-.hero-word {
-  display: inline-block;
-  overflow: hidden;
-  padding: 0.04em 0.04em 0.12em;
-  margin-bottom: -0.06em;
-}
-
-.hero-word-inner {
-  display: inline-block;
-  transform-origin: 0 100%;
-  filter: drop-shadow(0 4px 24px rgba(0, 0, 0, 0.3));
-}
 
 /* Last word: editorial serif italic in warm champagne. */
-.hero-word-inner.is-accent {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: -0.03em;
-  color: var(--seal-light);
-}
-
-.hero-chip {
-  background: rgba(0, 0, 0, 0.35);
-  border-color: rgba(255, 255, 255, 0.16);
-}
-
-.hero-chip strong {
-  border-right: 1px solid var(--brass-soft);
-}
-
-.hero-glyphs {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.hero-glyph {
-  position: absolute;
-  font-family: "Noto Serif SC", "Songti SC", serif;
-  font-weight: 700;
-  line-height: 1;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.16);
-  animation: glyph-float 10s ease-in-out infinite;
-  user-select: none;
-}
-
-.hero-glyph-1 {
-  right: 7%;
-  top: 15%;
-  font-size: clamp(7rem, 16vw, 15rem);
-  -webkit-text-stroke-color: rgba(255, 138, 141, 0.4);
-}
-
-.hero-glyph-2 {
-  right: 30%;
-  top: 58%;
-  font-size: clamp(3rem, 6vw, 5.5rem);
-  animation-delay: -3s;
-  animation-duration: 12s;
-}
-
-.hero-glyph-3 {
-  right: 6%;
-  bottom: 10%;
-  font-size: clamp(4rem, 9vw, 8rem);
-  animation-delay: -6s;
-}
-
-.hero-glyph-4 {
-  right: 25%;
-  top: 20%;
-  font-size: clamp(2.2rem, 4vw, 3.6rem);
-  animation-delay: -1.5s;
-  animation-duration: 14s;
-}
 
 @keyframes glyph-float {
   0%,
@@ -380,43 +243,6 @@ html {
   50% {
     transform: translate3d(0, -14px, 0);
   }
-}
-
-@media (max-width: 899px) {
-  .hero-glyph-2,
-  .hero-glyph-4 {
-    display: none;
-  }
-
-  .hero-glyph-1 {
-    top: 11%;
-    right: -4%;
-  }
-
-  .hero-glyph-3 {
-    bottom: 16%;
-    right: 2%;
-    font-size: 4.5rem;
-  }
-}
-
-.hero-scroll-cue {
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  z-index: 3;
-  width: 1px;
-  height: 64px;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.2);
-  animation: cue-in 0.8s var(--ease-out-expo) 1.2s both;
-}
-
-.hero-scroll-cue span {
-  position: absolute;
-  inset: 0;
-  background: #fff;
-  animation: cue-line 2.2s var(--ease-out-expo) infinite;
 }
 
 @keyframes cue-in {
@@ -431,12 +257,6 @@ html {
   }
   100% {
     transform: translateY(100%);
-  }
-}
-
-@media (max-width: 899px) {
-  .hero-scroll-cue {
-    display: none;
   }
 }
 
@@ -548,7 +368,6 @@ html {
 /* ─── Cards: gentle lift + soft light following the pointer ─── */
 .news-card,
 .shop-card,
-.uni-card,
 .course-card,
 .news-featured,
 .home-course-card,
@@ -565,7 +384,6 @@ html {
 @media (min-width: 900px) {
   .news-card,
   .shop-card,
-  .uni-card,
   .news-featured,
   .home-course-card,
   .home-prog-card,
@@ -576,7 +394,6 @@ html {
 
 .news-card::after,
 .shop-card::after,
-.uni-card::after,
 .course-card::after,
 .news-featured::after,
 .home-course-card::after,
@@ -611,7 +428,6 @@ html {
 @media (hover: hover) {
   .news-card:hover::after,
   .shop-card:hover::after,
-  .uni-card:hover::after,
   .course-card:hover::after,
   .news-featured:hover::after,
   .home-course-card:hover::after,
@@ -624,7 +440,6 @@ html {
 
   .news-card:hover,
   .shop-card:hover,
-  .uni-card:hover,
   .course-card:hover,
   .news-featured:hover,
   .home-course-card:hover,
@@ -637,8 +452,7 @@ html {
 
 .news-featured-media img,
 .news-card-media img,
-.shop-media img,
-.promo-panel img {
+.shop-media img {
   transition: transform 1.4s var(--ease-out-expo);
 }
 
@@ -656,46 +470,6 @@ html {
 }
 
 /* ─── Promo panels ─── */
-.promo-panel {
-  border: 0;
-}
-
-.promo-panel::after {
-  background: linear-gradient(180deg, transparent 30%, rgba(0, 0, 0, 0.85));
-}
-
-.promo-panel > div {
-  padding: clamp(1.4rem, 3vw, 2.4rem);
-}
-
-.promo-panel h3 {
-  font-family: var(--serif);
-  font-weight: 700;
-  font-size: clamp(1.6rem, 3vw, 2.4rem);
-  letter-spacing: -0.025em;
-  line-height: 1.1;
-}
-
-.promo-panel span {
-  color: #fff;
-  padding-bottom: 0.2rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-  transition: gap 0.5s var(--ease-out-expo), border-color 0.4s ease;
-}
-
-.promo-panel:hover span {
-  border-color: #fff;
-}
-
-.promo-panel:hover img {
-  transform: scale(1.05);
-}
-
-@media (min-width: 900px) {
-  .promo-panel {
-    min-height: 400px;
-  }
-}
 
 /* ─── Inner page heads ─── */
 @media (min-width: 900px) {
@@ -844,9 +618,6 @@ html {
 
 /* ─── Reduced motion ─── */
 @media (prefers-reduced-motion: reduce) {
-  .hero-glyph,
-  .hero-scroll-cue,
-  .hero-scroll-cue span,
   .eyebrow::before,
   .page-head::before,
   .page-head .h1::after {
@@ -855,7 +626,6 @@ html {
 
   .news-card:hover,
   .shop-card:hover,
-  .uni-card:hover,
   .course-card:hover {
     transform: none;
   }

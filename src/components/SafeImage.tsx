@@ -27,7 +27,7 @@ export function SafeImage({ src, alt, className, loading = "lazy" }: Props) {
       alt={alt}
       loading={loading}
       decoding="async"
-      className={className}
+      className={`photo${className ? ` ${className}` : ""}`}
       onError={() => setFailed(true)}
     />
   );

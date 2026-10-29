@@ -6,6 +6,7 @@ import {
   useReducedMotion,
 } from "framer-motion";
 
+/** Primary CTA that leans a little toward the pointer on desktop. No idle loop. */
 export function MagneticButton({
   children,
   className = "",
@@ -23,8 +24,8 @@ export function MagneticButton({
   const ref = useRef<HTMLAnchorElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const sx = useSpring(x, { stiffness: 280, damping: 18 });
-  const sy = useSpring(y, { stiffness: 280, damping: 18 });
+  const sx = useSpring(x, { stiffness: 260, damping: 22 });
+  const sy = useSpring(y, { stiffness: 260, damping: 22 });
 
   if (reduce) {
     return (
@@ -35,36 +36,30 @@ export function MagneticButton({
   }
 
   return (
-    <motion.span
-      className="magnetic-float"
-      animate={{ y: [0, -6, 0] }}
-      transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+    <motion.a
+      ref={ref}
+      href={href}
+      target={target}
+      rel={rel}
+      className={`magnetic-btn ${className}`}
+      style={{ x: sx, y: sy }}
+      whileTap={{ scale: 0.97 }}
+      onMouseMove={(e) => {
+        const el = ref.current;
+        if (!el || window.matchMedia("(pointer: fine)").matches === false)
+          return;
+        const rect = el.getBoundingClientRect();
+        const dx = e.clientX - (rect.left + rect.width / 2);
+        const dy = e.clientY - (rect.top + rect.height / 2);
+        x.set(dx * 0.14);
+        y.set(dy * 0.14);
+      }}
+      onMouseLeave={() => {
+        x.set(0);
+        y.set(0);
+      }}
     >
-      <motion.a
-        ref={ref}
-        href={href}
-        target={target}
-        rel={rel}
-        className={`magnetic-btn ${className}`}
-        style={{ x: sx, y: sy }}
-        whileTap={{ scale: 0.97 }}
-        onMouseMove={(e) => {
-          const el = ref.current;
-          if (!el || window.matchMedia("(pointer: fine)").matches === false)
-            return;
-          const rect = el.getBoundingClientRect();
-          const dx = e.clientX - (rect.left + rect.width / 2);
-          const dy = e.clientY - (rect.top + rect.height / 2);
-          x.set(dx * 0.28);
-          y.set(dy * 0.28);
-        }}
-        onMouseLeave={() => {
-          x.set(0);
-          y.set(0);
-        }}
-      >
-        {children}
-      </motion.a>
-    </motion.span>
+      {children}
+    </motion.a>
   );
 }

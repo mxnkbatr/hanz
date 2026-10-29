@@ -591,50 +591,6 @@
   font-style: normal;
 }
 
-.m-help {
-  margin-top: 1.9rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.6rem;
-}
-
-.m-help a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  height: 56px;
-  border: 1px solid var(--hair);
-  border-radius: 18px;
-  background: var(--paper);
-  color: var(--ink);
-  font-weight: 600;
-  font-size: 0.92rem;
-}
-
-.m-help a.is-ink {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: #fff;
-}
-
-.m-fab {
-  position: fixed;
-  right: 1rem;
-  bottom: calc(var(--tab) + 0.9rem);
-  z-index: 45;
-  display: grid;
-  place-items: center;
-  width: 56px;
-  height: 56px;
-  border-radius: 999px;
-  background: var(--seal);
-  color: #fff;
-  box-shadow:
-    0 0 0 6px var(--seal-tint),
-    0 16px 30px -10px var(--seal-glow);
-}
-
 /* Shimmer behind images while slow (remote) photos load. */
 .m-feature-media,
 .m-tall a,
@@ -806,11 +762,6 @@
 .m-chip-pill {
   background: var(--seal);
   box-shadow: 0 8px 18px -8px var(--seal-glow);
-}
-
-.m-help a.is-ink {
-  background: var(--seal);
-  border-color: var(--seal);
 }
 
 .m-cta {

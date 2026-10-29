@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../../lib/supabase";
+import { supabase } from "../../lib/supabaseClient";
 import { ImageUpload } from "../../components/admin/ImageUpload";
 import { useI18n } from "../../i18n/I18nContext";
 
