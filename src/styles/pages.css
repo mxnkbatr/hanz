@@ -409,3 +409,65 @@
     padding: 0.4rem 1rem;
   }
 }
+
+/* ─── Course page: poster, advantages, teachers ─── */
+.app-shell .course-detail-hero-media.is-poster {
+  aspect-ratio: auto;
+  background: var(--raised);
+}
+
+.app-shell .course-detail-hero-media.is-poster img {
+  height: auto;
+  max-height: inherit;
+  object-fit: contain;
+}
+
+.course-advantages {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.course-advantages li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.9rem;
+  align-items: start;
+  padding: 0.95rem 1.1rem;
+  border: 1px solid var(--edge);
+  border-radius: 18px;
+  background: var(--surface-1);
+}
+
+.course-advantages span {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 600;
+  color: var(--seal);
+}
+
+.course-advantages p {
+  margin: 0;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.course-teachers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.course-teachers .teacher-avatar {
+  aspect-ratio: 1;
+  font-size: 3rem;
+}
+
+.teacher-bio {
+  margin-top: 0.5rem;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--ash);
+}

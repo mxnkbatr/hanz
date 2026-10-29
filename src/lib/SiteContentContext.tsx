@@ -17,6 +17,7 @@ import {
   mergeKidsLevels,
   mergeKidsSchedules,
   mergeKidsTeachers,
+  mergeTeam,
   mergeNews,
   mergeProducts,
   mergeQuizQuestions,
@@ -39,6 +40,7 @@ type Ctx = {
   universitiesLive: ReturnType<typeof mergeUniversities>;
   branchesLive: ReturnType<typeof mergeBranches>;
   translationFeaturesLive: ReturnType<typeof mergeTranslationFeatures>;
+  teamLive: ReturnType<typeof mergeTeam>;
   kidsTeachersLive: ReturnType<typeof mergeKidsTeachers>;
   kidsLevelsLive: ReturnType<typeof mergeKidsLevels>;
   kidsSchedulesLive: ReturnType<typeof mergeKidsSchedules>;
@@ -124,6 +126,7 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
       universitiesLive: mergeUniversities(bundle, cms.universities),
       branchesLive: mergeBranches(bundle),
       translationFeaturesLive: mergeTranslationFeatures(bundle),
+      teamLive: mergeTeam(bundle),
       kidsTeachersLive: mergeKidsTeachers(bundle),
       kidsLevelsLive: mergeKidsLevels(bundle),
       kidsSchedulesLive: mergeKidsSchedules(bundle),

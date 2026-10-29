@@ -104,6 +104,9 @@ const AdminTranslationCms = lazy(() =>
     default: m.AdminTranslationCms,
   })),
 );
+const AdminTeam = lazy(() =>
+  import("./pages/admin/AdminTeam").then((m) => ({ default: m.AdminTeam })),
+);
 const AdminKids = lazy(() =>
   import("./pages/admin/AdminKids").then((m) => ({ default: m.AdminKids })),
 );
@@ -213,6 +216,7 @@ export default function App() {
             <Route path="branches" element={<AdminBranches />} />
             <Route path="windows" element={<AdminWindows />} />
             <Route path="translation" element={<AdminTranslationCms />} />
+            <Route path="team" element={<AdminTeam />} />
             <Route path="kids" element={<AdminKids />} />
             <Route path="quiz" element={<AdminQuizCms />} />
             <Route path="staff" element={<AdminStaff />} />

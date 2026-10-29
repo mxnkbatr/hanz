@@ -10,9 +10,10 @@ import {
   type CmsRow,
   type CmsTable,
 } from "../../lib/cmsApi";
-import { emptyI18nText, slugify, type I18nText } from "../../lib/i18nText";
+import { emptyI18nText, loc, slugify, type I18nText } from "../../lib/i18nText";
 import { useI18n } from "../../i18n/I18nContext";
 import { hapticLight } from "../../lib/native";
+import { useSiteContent } from "../../lib/SiteContentContext";
 
 type CollectionKey = "news" | "products" | "courses" | "travel" | "universities";
 
@@ -46,6 +47,9 @@ type Draft = {
   price: string;
   href: string;
   highlights: string;
+  /** Courses: poster image and the team members who teach it. */
+  poster: string;
+  teacherIds: string[];
   in_stock: boolean;
   hidden: boolean;
   sort_order: number;
@@ -85,6 +89,8 @@ function blankDraft(): Draft {
     price: "0",
     href: "",
     highlights: "",
+    poster: "",
+    teacherIds: [],
     in_stock: true,
     hidden: false,
     sort_order: 0,
@@ -97,6 +103,8 @@ function rowToDraft(r: CmsRow, collection: CollectionKey = "news"): Draft {
     href?: string;
     highlights?: string[];
     cityKey?: string;
+    poster?: string;
+    teacherIds?: string[];
   };
   const fallbackFilter =
     collection === "products"
@@ -124,6 +132,8 @@ function rowToDraft(r: CmsRow, collection: CollectionKey = "news"): Draft {
       : Array.isArray((r.meta as { highlights?: string[] } | undefined)?.highlights)
         ? ((r.meta as { highlights: string[] }).highlights || []).join("\n")
         : "",
+    poster: meta.poster || "",
+    teacherIds: Array.isArray(meta.teacherIds) ? meta.teacherIds : [],
     in_stock: r.in_stock ?? true,
     hidden: r.hidden,
     sort_order: r.sort_order ?? 0,
@@ -145,6 +155,16 @@ export function AdminCollection({
   ) as CollectionKey;
   const table = TABLE[key];
   const { t, lang } = useI18n();
+  const { teamLive, coursesLive } = useSiteContent();
+
+  // A course row saved before teachers existed keeps showing its default teachers; start the editor from those.
+  function openRow(r: CmsRow) {
+    const d = rowToDraft(r, key);
+    if (key === "courses" && !Array.isArray(r.meta?.teacherIds)) {
+      d.teacherIds = [...(coursesLive.find((c) => c.id === (r.slug || r.id))?.teacherIds ?? [])];
+    }
+    setDraft(d);
+  }
   const [params, setParams] = useSearchParams();
 
   const [rows, setRows] = useState<CmsRow[]>([]);
@@ -242,6 +262,8 @@ export function AdminCollection({
             .split("\n")
             .map((s) => s.trim())
             .filter(Boolean),
+          poster: draft.poster || undefined,
+          teacherIds: draft.teacherIds,
         },
       });
     }
@@ -507,16 +529,43 @@ export function AdminCollection({
                   </select>
                 </label>
                 <label className="admin-field">
-                  <span>{t("admin_highlights")}</span>
+                  <span>{t("admin_course_advantages")}</span>
                   <textarea
-                    rows={3}
+                    rows={4}
                     value={draft.highlights}
                     onChange={(e) =>
                       setDraft({ ...draft, highlights: e.target.value })
                     }
-                    placeholder="course_xxx_h1&#10;course_xxx_h2"
                   />
                 </label>
+                <div className="admin-field">
+                  <span>{t("admin_course_poster")}</span>
+                  <ImageUpload
+                    value={draft.poster}
+                    onChange={(poster) => setDraft({ ...draft, poster })}
+                    folder="courses"
+                  />
+                </div>
+                <fieldset className="admin-field admin-checks">
+                  <legend>{t("admin_course_teachers")}</legend>
+                  {teamLive.map((m) => (
+                    <label key={m.id} className="admin-check">
+                      <input
+                        type="checkbox"
+                        checked={draft.teacherIds.includes(m.id)}
+                        onChange={(e) =>
+                          setDraft({
+                            ...draft,
+                            teacherIds: e.target.checked
+                              ? [...draft.teacherIds, m.id]
+                              : draft.teacherIds.filter((x) => x !== m.id),
+                          })
+                        }
+                      />
+                      <span>{loc(lang, t, m.name, m.nameKey)}</span>
+                    </label>
+                  ))}
+                </fieldset>
               </>
             )}
 
@@ -603,7 +652,7 @@ export function AdminCollection({
                 <button
                   type="button"
                   className="admin-rn-card-main"
-                  onClick={() => setDraft(rowToDraft(r, key))}
+                  onClick={() => openRow(r)}
                 >
                   <strong>{title}</strong>
                   <em>
@@ -708,7 +757,7 @@ export function AdminCollection({
                       <button
                         type="button"
                         className="admin-btn"
-                        onClick={() => setDraft(rowToDraft(r, key))}
+                        onClick={() => openRow(r)}
                       >
                         {t("admin_edit")}
                       </button>
