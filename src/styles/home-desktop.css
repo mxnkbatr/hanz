@@ -810,3 +810,109 @@ html.site .app-shell .cine-lead {
     width: 100%;
   }
 }
+
+/*
+ * Particle hero (ParticleGlyph inside DesktopHero): taller section so the glyph
+ * can morph 汉 → 字 → 学 before the copy lifts away; dark stage with a warm glow.
+ */
+.cine.cine-particles {
+  height: 300vh;
+}
+
+.pglyph-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(42% 55% at 72% 48%, rgba(227, 38, 43, 0.22), transparent 70%),
+    radial-gradient(60% 60% at 15% 100%, rgba(227, 38, 43, 0.08), transparent 70%),
+    linear-gradient(180deg, #0d0c0e 0%, #141215 100%);
+}
+
+/* Left side darker so the copy always reads over drifting particles */
+.pglyph-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(10, 10, 12, 0.7) 0%, rgba(10, 10, 12, 0) 48%);
+}
+
+.pglyph-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.pglyph-caption {
+  position: absolute;
+  top: clamp(7rem, 16vh, 10rem);
+  right: var(--cine-gutter);
+  z-index: 3;
+  display: grid;
+  justify-items: end;
+  gap: 0.9rem;
+  pointer-events: none;
+}
+
+html.site .app-shell .pglyph-caption p {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.pglyph-caption span {
+  font-family: "Noto Serif SC", serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #ff6b6e;
+}
+
+.pglyph-caption em {
+  font-family: var(--display);
+  font-size: 1.15rem;
+  font-style: italic;
+}
+
+.pglyph-caption i {
+  width: 28px;
+  height: 1px;
+  align-self: center;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.pglyph-caption strong {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.pglyph-steps {
+  display: flex;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pglyph-steps li {
+  width: 22px;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.25);
+  transition: background 0.4s ease, width 0.4s ease;
+}
+
+.pglyph-steps li.is-on {
+  width: 40px;
+  background: #ff6b6e;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cine.cine-particles {
+    height: 100vh;
+  }
+}
