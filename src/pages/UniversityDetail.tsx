@@ -1,3 +1,5 @@
+import { getUniversityBySlug } from "../data/universities";
+import { UniversitySchool } from "./UniversitySchool";
 import { Link, Navigate, useParams } from "react-router-dom";
 import {
   getUniversityById,
@@ -20,6 +22,10 @@ export function UniversityDetail() {
 
   const track = getUniversityById(id);
   const school = universitiesLive.find((x) => x.id === id);
+
+  // A university from the academy's A–Z list has its own page.
+  const listed = getUniversityBySlug(id);
+  if (listed && !track) return <UniversitySchool u={listed} />;
 
   if (!track && !school) return <Navigate to="/university" replace />;
 
