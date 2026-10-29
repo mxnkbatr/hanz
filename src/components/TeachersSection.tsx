@@ -6,14 +6,25 @@ import { loc } from "../lib/i18nText";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { Reveal, Stagger, StaggerItem } from "./PageShell";
 
-/** Portrait when the file exists, otherwise the first letter of the given name. */
-function MemberAvatar({ photo, name }: { photo: string; name: string }) {
+/**
+ * Portrait when the file exists, otherwise the first letter of the given name.
+ * `className` styles the frame (team card, course page tile, enroll strip).
+ */
+export function MemberAvatar({
+  photo,
+  name,
+  className = "teacher-avatar",
+}: {
+  photo: string;
+  name: string;
+  className?: string;
+}) {
   const [failed, setFailed] = useState(false);
   const initial = name.split(" ").pop()?.charAt(0) ?? "";
 
   if (photo && !failed) {
     return (
-      <span className="teacher-avatar has-photo">
+      <span className={`${className} has-photo`}>
         <img
           className="photo"
           src={photo}
@@ -26,7 +37,7 @@ function MemberAvatar({ photo, name }: { photo: string; name: string }) {
     );
   }
   return (
-    <span className="teacher-avatar" aria-hidden>
+    <span className={className} aria-hidden>
       {initial}
     </span>
   );

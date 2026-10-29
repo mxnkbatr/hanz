@@ -80,7 +80,7 @@ export function Hsk() {
                   <button type="button" className="btn btn-ink" onClick={() => setOpen(lvl)}>
                     <span>Дэлгэрэнгүй</span>
                   </button>
-                  <Link to={ENROLL} className="text-link">
+                  <Link to={`${ENROLL}&level=hsk${lvl.level}`} className="text-link">
                     Бүртгүүлэх <i aria-hidden>→</i>
                   </Link>
                 </div>
@@ -237,7 +237,7 @@ function LevelDialog({ level, onClose }: { level: HskLevel | null; onClose: () =
           </p>
 
           <div className="hsk-actions">
-            <Link to={ENROLL} className="btn btn-seal" onClick={onClose}>
+            <Link to={`${ENROLL}&level=hsk${level.level}`} className="btn btn-seal" onClick={onClose}>
               <span>Сургалтад бүртгүүлэх</span>
             </Link>
           </div>

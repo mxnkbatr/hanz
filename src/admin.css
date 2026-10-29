@@ -1482,3 +1482,31 @@
   font-size: 0.8rem;
   font-weight: 600;
 }
+
+/* Leads: pipeline counts + the applicant's picks */
+.admin-pipeline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.5rem 0;
+}
+
+.admin-lead-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.2rem;
+  margin: 0.4rem 0;
+}
+
+.admin-lead-facts dt {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.6;
+}
+
+.admin-lead-facts dd {
+  margin: 0;
+  font-weight: 600;
+}

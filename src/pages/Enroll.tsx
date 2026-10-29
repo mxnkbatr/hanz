@@ -1,32 +1,17 @@
 import { useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import {
-  enrollInterests,
-  kidsLevels,
-  partnerUniversities,
-  kidsSchedules,
-} from "../data/content";
-import { EnrollForm } from "../components/EnrollForm";
+import { partnerUniversities } from "../data/content";
+import { programFromInterest } from "../data/enroll";
+import { EnrollWizard } from "../components/EnrollWizard";
 import { PageShell, Reveal } from "../components/PageShell";
 import { useI18n } from "../i18n/I18nContext";
 
 export function Enroll() {
   const { t } = useI18n();
   const [params] = useSearchParams();
-  const interest = useMemo(() => {
-    const raw = params.get("interest") || "consult";
-    return enrollInterests.some((i) => i.id === raw) ? raw : "consult";
-  }, [params]);
-  const level = useMemo(() => {
-    const raw = params.get("level") || kidsLevels[0].id;
-    return kidsLevels.some((l) => l.id === raw) ? raw : kidsLevels[0].id;
-  }, [params]);
-  const schedule = useMemo(() => {
-    const raw = params.get("schedule") || kidsSchedules[0].id;
-    return kidsSchedules.some((s) => s.id === raw) ? raw : kidsSchedules[0].id;
-  }, [params]);
-
-  const interestMeta = enrollInterests.find((i) => i.id === interest);
+  const interest = useMemo(() => programFromInterest(params.get("interest")), [params]);
+  // hsk1…hsk6 or a kids level id; the form ignores anything that does not fit the programme.
+  const level = params.get("level") || "";
   // A university name from the A–Z list (/university cards); anything else is ignored.
   const school = (params.get("school") || "").trim();
   const schoolName = partnerUniversities.some((u) => u === school) ? school : "";
@@ -48,7 +33,6 @@ export function Enroll() {
 
       <header className="page-head app-head enroll-ios-head">
         <Reveal>
-          <p className="enroll-step-label">{t("enroll_step")}</p>
           <h1 className="h1">
             {isKids ? t("kids_enroll_title") : t("enroll_page")}
           </h1>
@@ -62,29 +46,22 @@ export function Enroll() {
         </Reveal>
       </header>
 
-      {interestMeta && (
+      {schoolName && (
         <Reveal>
           <div className="enroll-context">
-            <span>{t("form_interest")}</span>
-            <strong>{t(interestMeta.labelKey)}</strong>
+            <span>{t("nav_uni")}</span>
+            <strong>{schoolName}</strong>
           </div>
-          {schoolName && (
-            <div className="enroll-context">
-              <span>{t("nav_uni")}</span>
-              <strong>{schoolName}</strong>
-            </div>
-          )}
         </Reveal>
       )}
 
       <section className="section tight section-last enroll-wrap enroll-ios-sheet">
         <Reveal>
-          <EnrollForm
-            defaultInterest={interest}
+          {/* No ?interest= → start at "choose a programme"; with one → straight to its details. */}
+          <EnrollWizard
+            defaultInterest={params.get("interest")}
             defaultLevel={level}
-            defaultSchedule={schedule}
             context={schoolName ? `${t("nav_uni")}: ${schoolName}` : undefined}
-            compact
           />
         </Reveal>
       </section>
