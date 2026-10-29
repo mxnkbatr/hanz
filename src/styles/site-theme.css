@@ -222,6 +222,15 @@ html.site .app-shell .eyebrow {
   color: var(--leaf);
 }
 
+/*
+ * The pill hugs its text even where an older rule turns it into a block or flex
+ * box (.desk-only forces display:block !important on desktop).
+ */
+html.site .app-shell .eyebrow {
+  width: fit-content;
+  max-width: 100%;
+}
+
 html.site .app-shell .eyebrow::before {
   content: none;
 }
@@ -283,6 +292,11 @@ html.site .app-shell :is(input, textarea, select) {
 
 html.site .app-shell :is(input, textarea)::placeholder {
   color: var(--placeholder);
+}
+
+/* The search pill is the field; its input stays see-through inside it. */
+html.site .app-shell .ios-search input {
+  background: transparent;
 }
 
 html.site .app-shell .kids-ios-field:focus-within {
