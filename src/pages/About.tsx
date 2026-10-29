@@ -5,6 +5,7 @@ import {
   whyHanzMeta,
 } from "../data/content";
 import { PageShell, Reveal, Stagger, StaggerItem } from "../components/PageShell";
+import { TeachersSection } from "../components/TeachersSection";
 import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { loc } from "../lib/i18nText";
@@ -22,6 +23,8 @@ export function About() {
           <p className="lead home-about-copy">{t("about_body")}</p>
         </Reveal>
       </header>
+
+      <TeachersSection />
 
       {/* Mobile */}
       <section className="section tight app-mobile">
