@@ -16,7 +16,16 @@ import { quizQuestions as defaultQuizQuestions } from "../data/quiz";
 import type { CmsRow } from "./cmsApi";
 import type { I18nText } from "./i18nText";
 
-export type LeadStatus = "new" | "contacted" | "done" | "spam";
+/** Admission pipeline; "done" is kept for leads from before enrollments-v2.sql. */
+export type LeadStatus =
+  | "new"
+  | "contacted"
+  | "placed"
+  | "paid"
+  | "enrolled"
+  | "declined"
+  | "done"
+  | "spam";
 
 export type EnrollmentRow = {
   id: string;
@@ -30,6 +39,12 @@ export type EnrollmentRow = {
   message: string | null;
   status: LeadStatus;
   admin_note: string | null;
+  /** enrollments-v2.sql columns (absent on older rows). */
+  hsk_level?: string | null;
+  schedule?: string | null;
+  plan?: string | null;
+  plan_price?: number | null;
+  child_name?: string | null;
 };
 
 export type ProductOverride = {
