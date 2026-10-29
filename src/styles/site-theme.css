@@ -833,16 +833,16 @@ html.site .app-shell .site-footer {
   }
 
   /*
-   * Everywhere else the capsule stays glass too (never solid paper): low-alpha
-   * tint + strong blur, so the page shows through while the type stays readable.
+   * Everywhere else it keeps the same look as over the film — dark smoked glass with
+   * white type — so the desktop header is one consistent bar on every page.
    */
   html.site .app-shell .topbar:not(.is-on-film) .topbar-capsule,
   html.site .app-shell .topbar.is-scrolled:not(.is-on-film) .topbar-capsule {
-    background: color-mix(in srgb, var(--surface-1) 52%, transparent) !important;
-    border-color: color-mix(in srgb, var(--surface-1) 70%, transparent) !important;
-    -webkit-backdrop-filter: blur(22px) saturate(1.8);
-    backdrop-filter: blur(22px) saturate(1.8);
-    box-shadow: inset 0 1px 0 var(--glass-hi), 0 16px 40px -22px var(--drop) !important;
+    background: rgba(34, 26, 28, 0.62) !important;
+    border-color: rgba(255, 255, 255, 0.14) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);
+    backdrop-filter: blur(18px) saturate(1.4);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 18px 40px -22px rgba(20, 10, 12, 0.45) !important;
   }
 
   /* Lit rim: a soft highlight that fades along the top edge, both states. */
@@ -945,37 +945,37 @@ html.site .app-shell .site-footer {
     }
   }
 
-  html.site .app-shell .topbar.is-on-film :is(.topnav-link, .topbar-phone, .brand-logo-text strong) {
+  html.site .app-shell .topbar :is(.topnav-link, .topbar-phone, .brand-logo-text strong) {
     color: rgba(255, 255, 255, 0.82) !important;
   }
 
-  html.site .app-shell .topbar.is-on-film :is(.topnav-link:hover, .topnav-link.is-open) {
+  html.site .app-shell .topbar :is(.topnav-link:hover, .topnav-link.is-open) {
     color: #fff !important;
   }
 
-  html.site .app-shell .topbar.is-on-film .topnav-hover {
+  html.site .app-shell .topbar .topnav-hover {
     background: rgba(255, 255, 255, 0.12);
   }
 
-  html.site .app-shell .topbar.is-on-film .topbar-tools {
+  html.site .app-shell .topbar .topbar-tools {
     background: rgba(255, 255, 255, 0.08);
     border-color: rgba(255, 255, 255, 0.14);
   }
 
-  html.site .app-shell .topbar.is-on-film :is(.topbar-tools .topbar-icon-btn, .topbar-lang button) {
+  html.site .app-shell .topbar :is(.topbar-tools .topbar-icon-btn, .topbar-lang button) {
     color: rgba(255, 255, 255, 0.78);
   }
 
-  html.site .app-shell .topbar.is-on-film .topbar-lang {
+  html.site .app-shell .topbar .topbar-lang {
     border-color: rgba(255, 255, 255, 0.16);
   }
 
-  html.site .app-shell .topbar.is-on-film .topbar-lang button.is-active {
+  html.site .app-shell .topbar .topbar-lang button.is-active {
     background: rgba(255, 255, 255, 0.92);
     color: #111;
   }
 
-  html.site .app-shell .topbar.is-on-film .topbar-phone svg {
+  html.site .app-shell .topbar .topbar-phone svg {
     color: #ff8a8d;
   }
 
@@ -1091,14 +1091,14 @@ html.site .app-shell .site-footer {
     transition: color 0.25s ease;
   }
 
-  html.site .app-shell :is(.topnav-link:hover, .topnav-link.is-active, .topnav-link.is-open) {
+  html.site .app-shell :is(.topnav-link:hover, .topnav-link.is-open) {
     color: var(--text);
   }
 
   /* !important: hero.css forces white for the old solid-red active pill. */
   html.site .app-shell .topnav-link.is-active {
     font-weight: 600;
-    color: var(--text) !important;
+    color: #fff !important;
   }
 
   html.site .app-shell .topnav-hover {
