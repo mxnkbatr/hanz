@@ -7,6 +7,7 @@
 export const siteCopy = {
   en: {
     course_reviews: "Student reviews",
+    wz_change: "Change",
   },
 
   mn: {
@@ -93,6 +94,7 @@ export const siteCopy = {
     tag_advanced: "Ахисан шат",
     course_learn: "Юу сурах вэ",
     course_reviews: "Суралцагчдын сэтгэгдэл",
+    wz_change: "Солих",
     course_fees_title: "Хуваарь ба төлбөр",
     course_duration: "Хугацаа",
     course_schedule_value: "Даваа – Бямба гараг, 10:00–18:00, өдрийн бүтэн цагаар",
@@ -277,6 +279,7 @@ export const siteCopy = {
     tag_advanced: "高级",
     course_learn: "学习内容",
     course_reviews: "学员评价",
+    wz_change: "更改",
     course_fees_title: "课时与学费",
     course_duration: "时长",
     course_schedule_value: "周一至周六，10:00–18:00，全天上课",
