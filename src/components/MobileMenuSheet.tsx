@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, type ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 import { AnimatePresence, motion, useDragControls, useReducedMotion } from "framer-motion";
 import { useI18n } from "../i18n/I18nContext";
@@ -7,27 +7,27 @@ import { useAuth } from "../lib/AuthContext";
 import { hapticLight } from "../lib/native";
 import { lockBodyScroll, unlockBodyScroll } from "../lib/scrollLock";
 import { ease, sheetEase } from "../lib/motion";
-import { IconClose, IconPhone } from "./Icons";
-import { Logo } from "./Logo";
-import { DarkModeRow, Group, LanguageRow } from "./SettingsList";
+import { IconClose, IconPhone, NavIcon } from "./Icons";
+import { DarkModeRow, Group, LanguageRow, Row } from "./SettingsList";
 
 type Props = { open: boolean; onClose: () => void };
 
-/** Pages the tab bar doesn't already cover, as photo tiles. */
-const TILES = [
-  { to: "/pricing", key: "nav_pricing", img: "/courses/image12.webp" },
-  { to: "/hsk", key: "nav_hsk", img: "/courses/image8.webp" },
-  { to: "/medee", key: "nav_news", img: "/courses/image14.webp" },
-  { to: "/shop", key: "nav_shop", img: "/images/shop-hero.webp" },
-  { to: "/translation", key: "nav_translation", img: "/courses/image4.webp" },
-  { to: "/about", key: "nav_about", img: "/courses/image15.webp" },
-  { to: "/contact", key: "nav_contact", img: "/courses/image11.webp" },
-] as const;
+const glyph = (g: string) => <span className="sl-glyph">{g}</span>;
+
+/** Pages the tab bar doesn't already cover. */
+const PAGES: { to: string; key: string; icon: ReactNode }[] = [
+  { to: "/pricing", key: "nav_pricing", icon: glyph("₮") },
+  { to: "/hsk", key: "nav_hsk", icon: glyph("考") },
+  { to: "/medee", key: "nav_news", icon: <NavIcon name="news" /> },
+  { to: "/shop", key: "nav_shop", icon: <NavIcon name="bag" /> },
+  { to: "/translation", key: "nav_translation", icon: glyph("译") },
+  { to: "/about", key: "nav_about", icon: <NavIcon name="about" /> },
+];
 
 /**
- * Phone menu: a soft editorial bottom sheet. A glass brand card with the main
- * actions, photo tiles for the pages the tab bar doesn't cover, then language and
- * appearance. Drag the handle down (or tap outside) to close.
+ * Phone menu: an iOS Settings-style bottom sheet. Account row, the one main action
+ * (with a call button), then grouped lists for pages and settings. Drag the grabber down (or tap
+ * outside) to close.
  */
 export function MobileMenuSheet({ open, onClose }: Props) {
   const { t } = useI18n();
@@ -52,23 +52,14 @@ export function MobileMenuSheet({ open, onClose }: Props) {
     void hapticLight();
   };
 
-  const tiles = [
-    ...TILES,
-    {
-      to: user ? "/profile" : "/auth?mode=login",
-      key: user ? "nav_profile" : "auth_login",
-      img: "/images/hero-hanz.webp",
-    },
-  ];
-
-  // Tiles rise in one after another once the sheet has landed.
+  // Groups settle in one after another once the sheet has landed.
   const rise = (i: number) =>
     reduce
       ? {}
       : {
-          initial: { opacity: 0, y: 14 },
+          initial: { opacity: 0, y: 12 },
           animate: { opacity: 1, y: 0 },
-          transition: { delay: 0.18 + i * 0.04, duration: 0.45, ease },
+          transition: { delay: 0.12 + i * 0.05, duration: 0.4, ease },
         };
 
   return (
@@ -84,7 +75,7 @@ export function MobileMenuSheet({ open, onClose }: Props) {
             onClick={onClose}
           />
           <motion.div
-            className="mm-sheet"
+            className="mm-sheet is-ios"
             id="site-menu"
             role="dialog"
             aria-modal="true"
@@ -104,84 +95,59 @@ export function MobileMenuSheet({ open, onClose }: Props) {
           >
             <div className="mm-head" onPointerDown={(e) => drag.start(e)}>
               <span className="mm-grabber" aria-hidden />
-              <span className="mm-eyebrow">{t("menu_title")}</span>
+              <h2 className="mm-title">{t("menu_title")}</h2>
               <button type="button" className="mm-close" aria-label={t("mm_close")} onClick={onClose}>
                 <IconClose />
               </button>
             </div>
 
             <div className="mm-body">
-              <motion.section className="mm-brand" {...rise(0)}>
-                <span className="mm-brand-mark" aria-hidden>
-                  汉
-                </span>
-                <Logo size="sm" />
-                <h2 className="mm-brand-title">
-                  {t("hd_line1")} <em>{t("hd_line2")}</em> {t("hd_line3")}
-                </h2>
-                <p className="mm-brand-tag">{t("footer_tag")}</p>
-                <div className="mm-brand-actions">
-                  <NavLink to="/enroll" className="mm-cta" onClick={go}>
-                    <span>{t("register_cta")}</span>
-                    <i aria-hidden>→</i>
-                  </NavLink>
-                  <a
-                    href={`tel:${academy.phoneRaw[0]}`}
-                    className="mm-round"
-                    aria-label={`${t("call")} ${academy.phone[0]}`}
-                    onClick={() => void hapticLight()}
-                  >
-                    <IconPhone />
-                  </a>
-                  <a
-                    href={academy.messenger}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mm-round"
-                    aria-label="Messenger"
-                  >
-                    <svg viewBox="0 0 24 24" fill="none" aria-hidden>
-                      <path
-                        d="M12 3C6.9 3 3 6.7 3 11.4c0 2.6 1.2 4.9 3.2 6.4V21l2.9-1.6c.9.3 1.9.4 2.9.4 5.1 0 9-3.7 9-8.4S17.1 3 12 3Z"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </a>
-                </div>
-              </motion.section>
+              <motion.div {...rise(0)}>
+                <NavLink
+                  to={user ? "/profile" : "/auth?mode=login"}
+                  className="mm-account"
+                  onClick={go}
+                >
+                  <img className="mm-account-avatar" src="/images/logo-official.webp" alt="" />
+                  <span className="mm-account-text">
+                    <strong>{user ? t("nav_profile") : t("auth_login")}</strong>
+                    <small>{user?.email ?? t("brand")}</small>
+                  </span>
+                  <svg className="sl-chevron" viewBox="0 0 12 12" aria-hidden>
+                    <path d="M4.5 2.5 8 6l-3.5 3.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </NavLink>
+              </motion.div>
 
-              <h3 className="mm-section">{t("mm_explore")}</h3>
-              <div className="mm-tiles">
-                {tiles.map((tile, i) => (
-                  <motion.div key={tile.to} {...rise(i + 1)}>
-                    <NavLink
-                      to={tile.to}
-                      className={({ isActive }) => `mm-tile${isActive ? " is-active" : ""}`}
-                      onClick={go}
-                    >
-                      <img className="photo" src={tile.img} alt="" loading="lazy" decoding="async" />
-                      <span className="mm-tile-label">{t(tile.key)}</span>
-                    </NavLink>
-                  </motion.div>
-                ))}
-              </div>
-
-              <Group title={t("mm_settings")}>
-                <LanguageRow id="mm-lang" />
-                <DarkModeRow />
-              </Group>
-
-              <div className="mm-social">
-                <a href={academy.facebook} target="_blank" rel="noopener noreferrer">
-                  Facebook
+              <motion.div className="mm-actions" {...rise(1)}>
+                <NavLink to="/enroll" className="mm-cta" onClick={go}>
+                  <span>{t("register_cta")}</span>
+                  <i aria-hidden>→</i>
+                </NavLink>
+                <a
+                  href={`tel:${academy.phoneRaw[0]}`}
+                  className="mm-round"
+                  aria-label={`${t("call")} ${academy.phone[0]}`}
+                  onClick={() => void hapticLight()}
+                >
+                  <IconPhone />
                 </a>
-                <a href={academy.instagram} target="_blank" rel="noopener noreferrer">
-                  Instagram
-                </a>
-                <a href={`mailto:${academy.email}`}>{academy.email}</a>
-              </div>
+              </motion.div>
+
+              <motion.div {...rise(2)}>
+                <Group title={t("mm_explore")}>
+                  {PAGES.map((p) => (
+                    <Row key={p.to} to={p.to} icon={p.icon} label={t(p.key)} onGo={onClose} />
+                  ))}
+                </Group>
+              </motion.div>
+
+              <motion.div {...rise(3)}>
+                <Group title={t("mm_settings")}>
+                  <LanguageRow id="mm-lang" />
+                  <DarkModeRow />
+                </Group>
+              </motion.div>
             </div>
           </motion.div>
         </>

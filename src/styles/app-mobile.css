@@ -1,0 +1,253 @@
+/* ─── Phone: an app, not a shrunk website ───
+   Nav bar with Back and a title that rises into it, no web footer, lists instead
+   of tables, and the touch rules a native app gets for free. */
+@media (max-width: 899px) {
+  html.site {
+    touch-action: manipulation;
+    scrollbar-width: none;
+  }
+
+  html.site::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Chrome and controls don't select or pop link previews on a long press. */
+  html.site .app-shell :is(.topbar, .tabbar, .mm-sheet, a, button, [role="button"], label) {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  html.site .app-shell img {
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
+  }
+
+  /* The menu sheet carries call, Messenger and every page; a web footer is just more scroll. */
+  html.site .app-shell .site-footer {
+    display: none;
+  }
+
+  /* The nav bar has Back now; drop each page's own back link. */
+  html.site .app-shell :is(.cd-back, .back-link) {
+    display: none;
+  }
+
+  /* ─── Nav bar ─── */
+  html.site .app-shell .topbar-back {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.05rem;
+    height: 40px;
+    padding: 0 0.7rem 0 0.2rem;
+    border: 0;
+    border-radius: 999px;
+    background: none;
+    color: var(--seal);
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+  }
+
+  html.site .app-shell .topbar-back svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  html.site .app-shell .topbar-title {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 1;
+    max-width: calc(100% - 196px);
+    overflow: hidden;
+    color: var(--text);
+    font-size: 0.98rem;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, -20%);
+    transition:
+      opacity 0.22s ease,
+      transform 0.32s cubic-bezier(0.2, 0.9, 0.3, 1);
+  }
+
+  html.site .app-shell .topbar.has-title .topbar-title {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+
+  /* On tab pages the wordmark steps aside for the title; the seal stays. */
+  html.site .app-shell .topbar .brand-logo-text {
+    transition:
+      opacity 0.2s ease,
+      transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+  }
+
+  html.site .app-shell .topbar.has-title .brand-logo-text {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+
+  /* ─── Pricing: a list of fee cards, not a spreadsheet ─── */
+  html.site .app-shell .price-table,
+  html.site .app-shell .price-table :is(tbody, tr, th, td) {
+    display: block;
+  }
+
+  html.site .app-shell .price-table {
+    border: 0;
+    border-radius: 0;
+    background: none;
+    overflow: visible;
+  }
+
+  html.site .app-shell .price-table thead {
+    display: none;
+  }
+
+  html.site .app-shell .price-table tbody {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  html.site .app-shell .price-table tbody tr {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "name fee"
+      "time fee";
+    align-items: center;
+    column-gap: 1rem;
+    row-gap: 0.15rem;
+    padding: 0.95rem 1.1rem;
+    border: 1px solid var(--edge);
+    border-radius: 20px;
+    background: var(--surface-1);
+  }
+
+  html.site .app-shell .price-table tbody :is(th, td) {
+    padding: 0;
+    border: 0;
+  }
+
+  html.site .app-shell .price-table tbody th {
+    grid-area: name;
+    font-size: 1rem;
+  }
+
+  /* The whole card opens the course. */
+  html.site .app-shell .price-table tbody th a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  html.site .app-shell .price-table tbody td:nth-child(2) {
+    grid-area: time;
+    color: var(--ash);
+    font-size: 0.85rem;
+  }
+
+  html.site .app-shell .price-table tbody td:last-child {
+    grid-area: fee;
+    font-size: 1.05rem;
+  }
+}
+
+/* ─── Phone menu: iOS Settings-style sheet ─── */
+html.site .mm-sheet.is-ios {
+  background: color-mix(in srgb, var(--page) 96%, transparent);
+}
+
+html.site .mm-sheet.is-ios .mm-head {
+  padding: 1.6rem 1.1rem 0.6rem 1.25rem;
+}
+
+html.site .mm-sheet.is-ios .mm-title {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+html.site .mm-sheet.is-ios .mm-close {
+  border: 0;
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  color: var(--ash);
+}
+
+html.site .mm-sheet.is-ios .mm-body {
+  padding-top: 0.6rem;
+}
+
+/* Account row, like the Apple ID card at the top of Settings. */
+html.site .mm-account {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.75rem 0.95rem;
+  margin-bottom: 0.8rem;
+  border: 1px solid var(--edge);
+  border-radius: 18px;
+  background: var(--surface-1);
+  color: var(--text);
+}
+
+html.site .mm-account-avatar {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #fff;
+  box-shadow: 0 0 0 1px var(--edge);
+}
+
+html.site .mm-account-text {
+  flex: 1;
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+html.site .mm-account-text strong {
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+
+html.site .mm-account-text small {
+  overflow: hidden;
+  color: var(--ash);
+  font-size: 0.82rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+html.site .mm-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.4rem;
+}
+
+html.site .mm-actions .mm-cta {
+  min-height: 50px;
+  border-radius: 16px;
+}
+
+html.site .mm-actions .mm-round {
+  width: 50px;
+  height: 50px;
+  border-radius: 16px;
+}

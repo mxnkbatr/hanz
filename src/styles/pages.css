@@ -1769,3 +1769,126 @@ html.site .app-shell h2.cd-label {
 .wz {
   width: 100%;
 }
+
+/* ─── Enrol: the student form (AnketForm) ─── */
+.ak-form {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.ak-form .wz-lead {
+  margin: 0;
+}
+
+.ak-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+  align-items: end;
+}
+
+.ak-form label small {
+  font-weight: 500;
+  color: var(--ash);
+}
+
+/* "Other" answers open a text field under their chips. */
+.ak-form .enroll-choices > input:not([type="radio"], [type="checkbox"]) {
+  position: static;
+  flex: 1 1 100%;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ak-group {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.ak-group legend {
+  margin-bottom: 0.2rem;
+  font-size: 0.88rem;
+  font-weight: 650;
+  color: var(--ink-soft);
+}
+
+.ak-hint {
+  margin: -0.2rem 0 0;
+  font-size: 0.8rem;
+  color: var(--ash);
+}
+
+.ak-terms {
+  border: 1px solid var(--edge-strong);
+  border-radius: 16px;
+  background: var(--surface-1);
+}
+
+.ak-terms summary {
+  padding: 0.85rem 1rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.ak-terms ol {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0 1.1rem 1rem 2.2rem;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.consult-form .ak-agree {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--edge-strong);
+  border-radius: 16px;
+  background: var(--surface-1);
+  font-weight: 550;
+  line-height: 1.45;
+  cursor: pointer;
+}
+
+.consult-form .ak-agree.is-on {
+  border-color: var(--seal);
+  background: var(--seal-tint);
+}
+
+.consult-form .ak-agree input {
+  flex: 0 0 auto;
+  width: 20px;
+  min-height: 0;
+  height: 20px;
+  margin-top: 0.1rem;
+  padding: 0;
+  accent-color: var(--seal);
+}
+
+@media (max-width: 420px) {
+  .ak-pair {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Chips and the agreement are answers, not field captions: no small caps. */
+.app-shell .consult-form.ak-form :is(.enroll-chip, .ak-agree) {
+  font-family: var(--font-ui);
+  font-size: 0.92rem;
+  font-weight: 550;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--text);
+}
+
+.app-shell .consult-form.ak-form .enroll-choices legend {
+  font-size: 0.88rem;
+  font-weight: 650;
+  color: var(--ink-soft);
+}
