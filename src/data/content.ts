@@ -549,31 +549,19 @@ export const universitiesMeta = [
     descKey: "poland_desc",
     bodyKey: "poland_b",
     points: ["p4", "p5", "p6"] as const,
-    image:
-      "https://images.unsplash.com/photo-1467269204594-59904b4cbaba?auto=format&fit=crop&w=1000&q=72",
+    image: "/images/poland/warsaw.webp",
+    /** Two intakes a year (Think Poland webinar): late February and early October. */
     enrollWindows: [
-      {
-        id: "now" as const,
-        labelKey: "uni_enroll_now",
-        dateKey: "uni_enroll_poland_now_d",
-        status: "open" as UniEnrollStatus,
-      },
       {
         id: "spring" as const,
         labelKey: "uni_enroll_spring",
         dateKey: "uni_enroll_poland_spring_d",
-        status: "closed" as UniEnrollStatus,
+        status: "open" as UniEnrollStatus,
       },
       {
         id: "autumn" as const,
         labelKey: "uni_enroll_autumn",
         dateKey: "uni_enroll_poland_autumn_d",
-        status: "soon" as UniEnrollStatus,
-      },
-      {
-        id: "start" as const,
-        labelKey: "uni_enroll_start",
-        dateKey: "uni_enroll_poland_start_d",
         status: "soon" as UniEnrollStatus,
       },
     ],
