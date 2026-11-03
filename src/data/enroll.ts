@@ -1,10 +1,9 @@
-import { enrollInterests, kidsLevels } from "./content";
-import { hskSchedule } from "./hsk";
+import { enrollInterests, hskFees, kidsLevels } from "./content";
 
 /**
  * What the enroll form offers per programme: which level list, which schedules
- * and which payment plans. Prices and kids options come from the academy's HSK
- * 3.0 document (data/hsk.ts).
+ * and which payment plans. The HSK 1–6 class and its fees come from the
+ * academy's page copy (data/content.ts → hskFees).
  */
 export type Choice = { id: string; labelKey: string };
 export type Plan = { id: string; labelKey: string; amount: number };
@@ -20,59 +19,46 @@ export type Program = {
   plans: Plan[];
 };
 
-const intensiveFees = hskSchedule.intensive.fees;
-const kidsFees = hskSchedule.kids.fees;
-
-const SPECIAL: Record<string, Omit<Program, "id" | "kind">> = {
-  intensive: {
-    labelKey: "program_intensive",
-    levels: "hsk",
-    schedules: [{ id: "intensive", labelKey: "sch_intensive" }],
-    plans: [
-      { id: "m1", labelKey: "plan_m1", amount: intensiveFees[0].amount },
-      { id: "m6", labelKey: "plan_m6", amount: intensiveFees[1].amount },
-    ],
-  },
-  kids: {
-    labelKey: "course_kids_t",
-    levels: "kids",
-    schedules: [
-      { id: "kids_a_am", labelKey: "sch_kids_a_am" },
-      { id: "kids_a_pm", labelKey: "sch_kids_a_pm" },
-      { id: "kids_b_am", labelKey: "sch_kids_b_am" },
-      { id: "kids_b_pm", labelKey: "sch_kids_b_pm" },
-    ],
-    plans: [{ id: "m9", labelKey: "plan_m9", amount: kidsFees[0].amount }],
-  },
+const intensive: Program = {
+  id: "intensive",
+  kind: "course",
+  labelKey: "program_intensive",
+  levels: "hsk",
+  schedules: [{ id: "intensive", labelKey: "sch_intensive" }],
+  plans: [
+    { id: "m1", labelKey: "plan_m1", amount: hskFees.month },
+    { id: "m6", labelKey: "plan_m6", amount: hskFees.sixMonth },
+  ],
 };
 
-/** Courses where a HSK level question makes sense. */
-const HSK_LEVEL_COURSES = new Set(["online", "short", "year", "speak"]);
-
-/** Classroom and HSK courses are the intensive class; everything else keeps its own entry. */
+/** The HSK class first, then travel and general advice. */
 export const programs: Program[] = [
-  { id: "intensive", kind: "course", ...SPECIAL.intensive },
+  intensive,
   ...enrollInterests
-    .filter((i) => i.id !== "classroom" && i.id !== "hsk")
-    .map((i): Program =>
-      SPECIAL[i.id]
-        ? { id: i.id, kind: i.kind, ...SPECIAL[i.id] }
-        : {
-            id: i.id,
-            kind: i.kind,
-            labelKey: i.labelKey,
-            levels: HSK_LEVEL_COURSES.has(i.id) ? "hsk" : null,
-            schedules: [],
-            plans: [],
-          },
-    ),
+    .filter((i) => i.kind !== "course")
+    .map((i): Program => ({
+      id: i.id,
+      kind: i.kind,
+      labelKey: i.labelKey,
+      levels: null,
+      schedules: [],
+      plans: [],
+    })),
 ];
 
 /** Map an incoming ?interest= (or course id) to a programme id. */
 export function programFromInterest(raw: string | null | undefined): string {
   const id = (raw || "").trim();
-  if (id === "classroom" || id === "hsk") return "intensive";
+  if (id === "classroom" || id === "hsk" || id === "intensive" || /^hsk[1-6]$/.test(id)) {
+    return "intensive";
+  }
   return programs.some((p) => p.id === id) ? id : "consult";
+}
+
+/** The 6-month class covers HSK 1–5, so HSK 6 only has the 1-month plan. */
+export function plansForLevel(program: Program | undefined, level: string): Plan[] {
+  const plans = program?.plans ?? [];
+  return level === "hsk6" ? plans.filter((p) => p.id !== "m6") : plans;
 }
 
 export const hskLevelChoices: Choice[] = [

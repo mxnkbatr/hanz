@@ -1,0 +1,265 @@
+/*
+ * Sections added with the academy's page copy: home about / levels, the five
+ * stats, the course page closing line, and the /pricing table. Site-theme
+ * tokens only, so light and dark both work.
+ */
+
+/* ─── Stats: five figures ─── */
+.stats-strip-inner > .stats-item:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 900px) {
+  .stats-strip-inner {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .stats-strip-inner > .stats-item:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+}
+
+/* Phone menu: an odd last tile takes the whole row */
+.mm-tiles > :last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+/* ─── Home: about ─── */
+.hx-about {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.hx-about-copy {
+  display: grid;
+  gap: 1rem;
+  max-width: 68ch;
+}
+
+.hx-about-copy p:not(.lead) {
+  color: var(--ash);
+  line-height: 1.7;
+}
+
+@media (min-width: 900px) {
+  .hx-about {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.7fr);
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: start;
+  }
+}
+
+/* Services are links on the home page */
+a.hx-why-card {
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.3s ease, transform 0.4s var(--ease-out-expo);
+}
+
+a.hx-why-card:hover {
+  border-color: color-mix(in srgb, var(--seal) 30%, transparent);
+  transform: translateY(-3px);
+}
+
+/* ─── Home: levels and fees ─── */
+.hx-levels {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 2.25rem;
+}
+
+.hx-levels > * {
+  display: flex;
+}
+
+.hx-levels > .hx-level-wide {
+  grid-column: 1 / -1;
+}
+
+.hx-level {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 0.5rem;
+  width: 100%;
+  overflow: hidden;
+  padding: 1.5rem;
+  border: 1px solid var(--edge);
+  border-radius: 24px;
+  background: var(--surface-1);
+  color: var(--text);
+  text-decoration: none;
+  isolation: isolate;
+  transition: transform 0.4s var(--ease-out-expo), border-color 0.3s ease;
+}
+
+.hx-level:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--seal) 30%, transparent);
+}
+
+.hx-level-glyph {
+  position: absolute;
+  top: -0.4rem;
+  right: 0.8rem;
+  z-index: -1;
+  font-family: "Noto Serif SC", serif;
+  font-size: 5.5rem;
+  line-height: 1;
+  color: var(--seal-tint);
+}
+
+.hx-level strong {
+  font-family: var(--display);
+  font-size: 1.3rem;
+  letter-spacing: -0.02em;
+}
+
+.hx-level-sum {
+  color: var(--ash);
+  line-height: 1.55;
+}
+
+.hx-level-meta {
+  margin-top: auto;
+  padding-top: 0.5rem;
+  font-weight: 600;
+  color: var(--seal);
+}
+
+.hx-level.is-long {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: var(--seal-tint);
+}
+
+.hx-level.is-long .hx-level-meta {
+  margin: 0;
+  padding: 0;
+  font-size: 1.15rem;
+}
+
+@media (max-width: 1100px) {
+  .hx-levels {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ─── Closing call to action ─── */
+.home-finale-body {
+  position: relative;
+  max-width: 52ch;
+  margin: 1.25rem auto 0;
+  color: var(--ash);
+  line-height: 1.6;
+}
+
+.m-kicker {
+  margin-top: 0.6rem;
+  color: var(--ash);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.m-cta-body {
+  position: relative;
+  margin-top: 0.75rem;
+  color: var(--ash);
+  line-height: 1.55;
+}
+
+/* ─── Course page: closing line + enrol ─── */
+.cd-cta {
+  justify-items: start;
+  gap: 0.85rem;
+  padding: 1.25rem 1.3rem;
+  border: 1px solid var(--edge);
+  border-radius: 22px;
+  background: var(--seal-tint);
+}
+
+.cd-cta p {
+  font-family: var(--display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+/* ─── /pricing ─── */
+.price-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border: 1px solid var(--edge);
+  border-radius: 22px;
+  background: var(--surface-1);
+}
+
+.price-table th,
+.price-table td {
+  padding: 0.95rem 1.1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--edge);
+}
+
+.price-table thead th {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ash);
+}
+
+.price-table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.price-table tbody th {
+  font-weight: 600;
+}
+
+.price-table tbody th a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.price-table tbody th a:hover {
+  color: var(--seal);
+}
+
+.price-table td:last-child {
+  font-weight: 600;
+  color: var(--seal);
+  white-space: nowrap;
+}
+
+.price-table tr.is-long {
+  background: var(--seal-tint);
+}
+
+.price-schedule {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1rem 0 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.price-schedule li {
+  padding: 0.85rem 1.1rem;
+  border: 1px solid var(--edge);
+  border-radius: 16px;
+  background: var(--surface-1);
+}
+
+@media (max-width: 599px) {
+  .price-table th,
+  .price-table td {
+    padding: 0.8rem 0.75rem;
+    font-size: 0.92rem;
+  }
+}

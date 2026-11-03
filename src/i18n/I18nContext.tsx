@@ -7,6 +7,7 @@ import {
 } from "react";
 import { dictionaries, langs, type Lang } from "./translations";
 import { featureKeys } from "./featureKeys";
+import { siteCopy } from "./siteCopy";
 
 type I18nCtx = {
   lang: Lang;
@@ -18,12 +19,16 @@ type I18nCtx = {
 const Ctx = createContext<I18nCtx | null>(null);
 const STORAGE = "hanz-lang";
 
+const copy = siteCopy as Partial<Record<Lang, Record<string, string>>>;
+
 function lookup(lang: Lang, key: string) {
   const features = featureKeys[lang] as Record<string, string>;
   const fallback = featureKeys.mn as Record<string, string>;
   return (
+    copy[lang]?.[key] ??
     features[key] ??
     dictionaries[lang][key] ??
+    copy.mn?.[key] ??
     fallback[key] ??
     dictionaries.mn[key] ??
     key

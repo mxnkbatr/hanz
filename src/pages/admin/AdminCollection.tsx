@@ -56,17 +56,7 @@ type Draft = {
   published_at: string;
 };
 
-const COURSE_FILTERS = [
-  "classroom",
-  "online",
-  "corporate",
-  "short",
-  "kids",
-  "year",
-  "hsk",
-  "speak",
-  "english",
-] as const;
+const COURSE_FILTERS = ["beginner", "intermediate", "advanced"] as const;
 
 const CITY_KEYS = [
   "map_beijing",
@@ -110,7 +100,7 @@ function rowToDraft(r: CmsRow, collection: CollectionKey = "news"): Draft {
     collection === "products"
       ? "porcelain"
       : collection === "courses"
-        ? "classroom"
+        ? "beginner"
         : collection === "universities"
           ? meta.cityKey || r.city?.mn || ""
           : "tag_academy";
@@ -206,7 +196,7 @@ export function AdminCollection({
     const d = blankDraft();
     d.sort_order = rows.length;
     if (key === "products") d.filter_key = "porcelain";
-    if (key === "courses") d.filter_key = "classroom";
+    if (key === "courses") d.filter_key = "beginner";
     setDraft(d);
   }
 
@@ -256,7 +246,7 @@ export function AdminCollection({
     if (key === "courses") {
       Object.assign(base, {
         tag: draft.tag,
-        filter_key: draft.filter_key || "classroom",
+        filter_key: draft.filter_key || "beginner",
         meta: {
           highlights: draft.highlights
             .split("\n")
@@ -516,7 +506,7 @@ export function AdminCollection({
                 <label className="admin-field">
                   <span>{t("admin_filter_key")}</span>
                   <select
-                    value={draft.filter_key || "classroom"}
+                    value={draft.filter_key || "beginner"}
                     onChange={(e) =>
                       setDraft({ ...draft, filter_key: e.target.value })
                     }

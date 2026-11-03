@@ -3,6 +3,7 @@ import { formatPrice } from "../data/content";
 import {
   hskLevelChoices,
   kidsLevelChoices,
+  plansForLevel,
   programFromInterest,
   programs,
   type Choice,
@@ -24,8 +25,9 @@ type Phase = "form" | "sending" | "paying" | "paid" | "done";
 /** Columns from supabase/enrollments-v2.sql; dropped on retry if the DB doesn't have them yet. */
 const V2_COLUMNS = ["hsk_level", "schedule", "plan", "plan_price", "child_name"] as const;
 
-/** The course page behind a programme (intensive = the classroom course). */
-const courseIdOf = (programId: string) => (programId === "intensive" ? "classroom" : programId);
+/** The course page behind a programme: the HSK class shows the chosen level (HSK 1 until one is picked). */
+const courseIdOf = (programId: string, level = "") =>
+  programId === "intensive" ? (/^hsk[1-6]$/.test(level) ? level : "hsk1") : programId;
 
 /**
  * App-style enrollment: programme → details (teachers, advantages, level,
@@ -58,26 +60,26 @@ export function EnrollWizard({
   const [leadId, setLeadId] = useState("");
 
   const program = programs.find((p) => p.id === programId);
-  const course = program && coursesLive.find((c) => c.id === courseIdOf(program.id));
   const isKids = program?.levels === "kids";
   const levelChoices: Choice[] =
     program?.levels === "hsk" ? hskLevelChoices : isKids ? kidsLevelChoices : [];
   const levelId = levelChoices.some((c) => c.id === level) ? level : "";
+  const course = program && coursesLive.find((c) => c.id === courseIdOf(program.id, levelId));
+  const plans = plansForLevel(program, levelId);
   const scheduleId =
     program?.schedules.length === 1
       ? program.schedules[0].id
       : program?.schedules.some((s) => s.id === schedule)
         ? schedule
         : "";
-  const planMeta =
-    program?.plans.length === 1 ? program.plans[0] : program?.plans.find((p) => p.id === plan);
+  const planMeta = plans.length === 1 ? plans[0] : plans.find((p) => p.id === plan);
   const label = (c: Choice) => (c.labelKey.startsWith("HSK ") ? c.labelKey : t(c.labelKey));
 
   const steps: Step[] = [
     "program",
     "details",
     "you",
-    ...(program?.plans.length ? (["pay"] as Step[]) : []),
+    ...(plans.length ? (["pay"] as Step[]) : []),
     "confirm",
   ];
   const index = steps.indexOf(step);
@@ -384,7 +386,7 @@ export function EnrollWizard({
         <div className="wz-plans">
           <fieldset className="enroll-choices enroll-plans">
             <legend>{t("enroll_plan")}</legend>
-            {program.plans.map((p) => (
+            {plans.map((p) => (
               <label key={p.id} className={`enroll-plan${planMeta?.id === p.id ? " is-on" : ""}`}>
                 <input type="radio" name="plan" checked={planMeta?.id === p.id} onChange={() => setPlan(p.id)} />
                 <span>{t(p.labelKey)}</span>

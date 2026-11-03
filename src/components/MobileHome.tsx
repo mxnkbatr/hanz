@@ -133,6 +133,7 @@ export function MobileHome() {
         <h1 className="m-title">
           {t("mh_title_a")} <em>{t("mh_title_em")}</em> {t("mh_title_b")}
         </h1>
+        <p className="m-kicker">{t("hero_kicker")}</p>
       </motion.header>
 
       <motion.div
@@ -373,6 +374,7 @@ export function MobileHome() {
               <h2>
                 {t("mh_cta_a")} <em>{t("mh_cta_em")}</em> {t("mh_cta_b")}
               </h2>
+              <p className="m-cta-body">{t("cta_body")}</p>
               <div className="m-cta-actions">
                 <a
                   href={academyLive.registerUrl}

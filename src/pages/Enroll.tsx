@@ -11,7 +11,9 @@ export function Enroll() {
   const [params] = useSearchParams();
   const interest = useMemo(() => programFromInterest(params.get("interest")), [params]);
   // hsk1…hsk6 or a kids level id; the form ignores anything that does not fit the programme.
-  const level = params.get("level") || "";
+  // A course page link (?interest=hsk3) already names the level.
+  const rawInterest = params.get("interest") || "";
+  const level = params.get("level") || (/^hsk[1-6]$/.test(rawInterest) ? rawInterest : "");
   // A university name from the A–Z list (/university cards); anything else is ignored.
   const school = (params.get("school") || "").trim();
   const schoolName = partnerUniversities.some((u) => u === school) ? school : "";

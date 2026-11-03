@@ -290,6 +290,7 @@ export function Layout() {
               <h3>{t("footer_links")}</h3>
               <NavLink to="/about">{t("nav_about")}</NavLink>
               <NavLink to="/courses">{t("nav_courses")}</NavLink>
+              <NavLink to="/pricing">{t("nav_pricing")}</NavLink>
               <NavLink to="/travel">{t("nav_travel")}</NavLink>
               <NavLink to="/translation">{t("nav_translation")}</NavLink>
               <NavLink to="/contact">{t("nav_contact")}</NavLink>

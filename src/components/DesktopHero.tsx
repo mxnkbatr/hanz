@@ -74,7 +74,7 @@ export function DesktopHero({ ready }: { ready: boolean }) {
     { text: t("hd_line1") },
     { text: t("hd_line2"), accent: true },
     { text: t("hd_line3") },
-  ];
+  ].filter((l) => l.text);
   const beat = (delay: number) => ({
     initial: { opacity: 0, y: 22 },
     animate: ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 },
@@ -177,12 +177,12 @@ export function DesktopHero({ ready }: { ready: boolean }) {
         <motion.div className="cine-meta" style={reduce ? { opacity: metaIntro } : { y: metaY, opacity: metaOpacity }}>
           <dl>
             <div>
-              <dt>{academy.graduates || "7300+"}</dt>
+              <dt>{academy.graduates || "2000+"}</dt>
               <dd>{t("stat_students")}</dd>
             </div>
             <div>
-              <dt>{academy.partnerUniversities || "300+"}</dt>
-              <dd>{t("stat_unis")}</dd>
+              <dt>{academy.scholarshipStudents || "1000+"}</dt>
+              <dd>{t("stat_scholarship")}</dd>
             </div>
           </dl>
           <RotatingSeal className="cine-seal" />

@@ -4,9 +4,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   courseFilters,
   filterKeyLabel,
+  matchLevels,
   resolveMatch,
   type CourseFilter,
-  type MatchAnswer,
+  type MatchLevel,
   type MatchResult,
 } from "../data/courseMatch";
 import { IosFilterBar } from "../components/IosFilterBar";
@@ -19,14 +20,6 @@ import { hapticLight } from "../lib/native";
 import { ease } from "../lib/motion";
 
 type MatchPhase = "intro" | "ask" | "done";
-type MatchField = keyof MatchAnswer;
-
-const emptyMatch: MatchAnswer = {
-  who: "",
-  goal: "",
-  when: "",
-  age: "",
-};
 
 export function Courses() {
   const { t, lang } = useI18n();
@@ -36,8 +29,6 @@ export function Courses() {
   const [filter, setFilter] = useState<CourseFilter>("all");
 
   const [matchPhase, setMatchPhase] = useState<MatchPhase>("intro");
-  const [matchStep, setMatchStep] = useState(0);
-  const [answers, setAnswers] = useState<MatchAnswer>(emptyMatch);
   const [matchResult, setMatchResult] = useState<MatchResult | null>(null);
 
   const counts = useMemo(() => {
@@ -77,54 +68,31 @@ export function Courses() {
 
   function startMatch() {
     setMatchPhase("ask");
-    setMatchStep(0);
-    setAnswers(emptyMatch);
     setMatchResult(null);
     void hapticLight();
   }
 
   function resetMatch() {
     setMatchPhase("intro");
-    setMatchStep(0);
-    setAnswers(emptyMatch);
     setMatchResult(null);
     void hapticLight();
   }
 
-  function answerMatch(field: MatchField, value: string) {
-    const next = { ...answers, [field]: value } as MatchAnswer;
-    if (field === "who") {
-      next.goal = "";
-      next.age = "";
-    }
-    setAnswers(next);
-    void hapticLight();
-
-    const who = field === "who" ? value : next.who;
-    const steps: MatchField[] =
-      who === "child" ? ["who", "when", "age"] : ["who", "goal", "when"];
-
-    const idx = steps.indexOf(field);
-    if (idx >= 0 && idx < steps.length - 1) {
-      setMatchStep(idx + 1);
-      return;
-    }
-
-    if (who === "child") next.goal = "kids";
-    setMatchResult(resolveMatch(next));
+  function answerMatch(done: MatchLevel) {
+    setMatchResult(resolveMatch(done));
     setMatchPhase("done");
+    void hapticLight();
   }
-
-  const askField =
-    answers.who === "child"
-      ? (["who", "when", "age"] as const)[matchStep]
-      : (["who", "goal", "when"] as const)[matchStep];
 
   return (
     <PageShell className="page-courses is-app ios-app">
       <header className="page-head app-head">
         <Reveal>
           <h1 className="h1">{t("courses_title")}</h1>
+          <p className="lead">{t("levels_lead")}</p>
+          <Link to="/pricing" className="text-link">
+            {t("nav_pricing")} <i aria-hidden>→</i>
+          </Link>
         </Reveal>
       </header>
 
@@ -163,90 +131,27 @@ export function Courses() {
               </div>
 
               <AnimatePresence mode="wait">
-                {matchPhase === "ask" && askField && (
+                {matchPhase === "ask" && (
                   <motion.div
-                    key={`ask-${askField}-${matchStep}`}
+                    key="ask"
                     className="course-match-ask"
                     initial={{ opacity: 0, x: 12 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.25, ease }}
                   >
-                    <p className="course-match-q">
-                      {askField === "who" && t("cmatch_q_who")}
-                      {askField === "goal" && t("cmatch_q_goal")}
-                      {askField === "when" && t("cmatch_q_when")}
-                      {askField === "age" && t("cmatch_q_age")}
-                    </p>
+                    <p className="course-match-q">{t("cmatch_q_level")}</p>
                     <div className="course-match-options">
-                      {askField === "who" &&
-                        (
-                          [
-                            ["child", "cmatch_a_child"],
-                            ["adult", "cmatch_a_adult"],
-                          ] as const
-                        ).map(([value, key]) => (
-                          <button
-                            key={value}
-                            type="button"
-                            className="course-match-opt"
-                            onClick={() => answerMatch("who", value)}
-                          >
-                            {t(key)}
-                          </button>
-                        ))}
-                      {askField === "goal" &&
-                        (
-                          [
-                            ["classroom", "cmatch_a_classroom"],
-                            ["hsk", "cmatch_a_hsk"],
-                            ["year", "cmatch_a_year"],
-                            ["speak", "cmatch_a_speak"],
-                            ["online", "cmatch_a_online"],
-                          ] as const
-                        ).map(([value, key]) => (
-                          <button
-                            key={value}
-                            type="button"
-                            className="course-match-opt"
-                            onClick={() => answerMatch("goal", value)}
-                          >
-                            {t(key)}
-                          </button>
-                        ))}
-                      {askField === "when" &&
-                        (
-                          [
-                            ["weekday", "cmatch_a_weekday"],
-                            ["weekend", "cmatch_a_weekend"],
-                          ] as const
-                        ).map(([value, key]) => (
-                          <button
-                            key={value}
-                            type="button"
-                            className="course-match-opt"
-                            onClick={() => answerMatch("when", value)}
-                          >
-                            {t(key)}
-                          </button>
-                        ))}
-                      {askField === "age" &&
-                        (
-                          [
-                            ["7-8", "kids_lvl_beginner_age"],
-                            ["9-11", "kids_lvl_elementary_age"],
-                            ["12-14", "kids_lvl_intermediate_age"],
-                          ] as const
-                        ).map(([value, key]) => (
-                          <button
-                            key={value}
-                            type="button"
-                            className="course-match-opt"
-                            onClick={() => answerMatch("age", value)}
-                          >
-                            {t(key)}
-                          </button>
-                        ))}
+                      {matchLevels.map((n) => (
+                        <button
+                          key={n}
+                          type="button"
+                          className="course-match-opt"
+                          onClick={() => answerMatch(n)}
+                        >
+                          {n === 0 ? t("cmatch_lvl_0") : t("cmatch_lvl_n").replace("{n}", String(n))}
+                        </button>
+                      ))}
                     </div>
                     <button
                       type="button"
@@ -361,7 +266,7 @@ export function Courses() {
                   </div>
                   <div className="course-product-body">
                     <h3>{loc(lang, t, c.title, c.titleKey)}</h3>
-                    <p>{loc(lang, t, c.body, c.descKey) || t(c.unitKey)}</p>
+                    <p>{c.sumKey ? t(c.sumKey) : loc(lang, t, c.body, c.descKey)}</p>
                     <em>
                       {t("view_detail")} <i aria-hidden>→</i>
                     </em>
