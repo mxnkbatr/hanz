@@ -8,7 +8,7 @@ import { hapticLight } from "../lib/native";
 import { lockBodyScroll, unlockBodyScroll } from "../lib/scrollLock";
 import { ease, sheetEase } from "../lib/motion";
 import { IconClose, IconPhone, NavIcon } from "./Icons";
-import { DarkModeRow, Group, LanguageRow, LinkRow, Row } from "./SettingsList";
+import { DarkModeRow, Group, LanguageRow, Row } from "./SettingsList";
 
 type Props = { open: boolean; onClose: () => void };
 
@@ -22,12 +22,11 @@ const PAGES: { to: string; key: string; icon: ReactNode }[] = [
   { to: "/shop", key: "nav_shop", icon: <NavIcon name="bag" /> },
   { to: "/translation", key: "nav_translation", icon: glyph("译") },
   { to: "/about", key: "nav_about", icon: <NavIcon name="about" /> },
-  { to: "/contact", key: "nav_contact", icon: <IconPhone /> },
 ];
 
 /**
- * Phone menu: an iOS Settings-style bottom sheet. Account row, the one main action,
- * then grouped lists for pages, contact and settings. Drag the grabber down (or tap
+ * Phone menu: an iOS Settings-style bottom sheet. Account row, the one main action
+ * (with a call button), then grouped lists for pages and settings. Drag the grabber down (or tap
  * outside) to close.
  */
 export function MobileMenuSheet({ open, onClose }: Props) {
@@ -144,21 +143,6 @@ export function MobileMenuSheet({ open, onClose }: Props) {
               </motion.div>
 
               <motion.div {...rise(3)}>
-                <Group title={t("footer_contact")}>
-                  <LinkRow
-                    href={`tel:${academy.phoneRaw[0]}`}
-                    icon={<IconPhone />}
-                    label={academy.phone[0]}
-                    detail={t("call")}
-                  />
-                  <LinkRow href={academy.messenger} external icon={glyph("m")} label="Messenger" />
-                  <LinkRow href={academy.facebook} external icon={glyph("f")} label="Facebook" />
-                  <LinkRow href={academy.instagram} external icon={glyph("◎")} label="Instagram" />
-                  <LinkRow href={`mailto:${academy.email}`} icon={glyph("@")} label={academy.email} />
-                </Group>
-              </motion.div>
-
-              <motion.div {...rise(4)}>
                 <Group title={t("mm_settings")}>
                   <LanguageRow id="mm-lang" />
                   <DarkModeRow />

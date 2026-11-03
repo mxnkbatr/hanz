@@ -1,0 +1,300 @@
+/* ─── Phone: iOS type, nav bar material, sticky filters, cards ───
+   One type scale modelled on iOS text styles (Large Title 34 · Title 2 22 ·
+   Headline 17 · Subheadline 15 · Footnote 13 · Caption 11), the system face
+   (SF Pro on iPhone, Roboto on Android) with Onest as the fallback, and one
+   card recipe for every list. */
+@media (max-width: 899px) {
+  html.site {
+    --ios-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Onest", "Noto Sans SC", system-ui, sans-serif;
+    --ios-label: var(--text);
+    --ios-secondary: color-mix(in srgb, var(--text) 60%, transparent);
+    --ios-tertiary: color-mix(in srgb, var(--text) 38%, transparent);
+    --ios-hairline: color-mix(in srgb, var(--text) 10%, transparent);
+    --ios-material: color-mix(in srgb, var(--page) 90%, transparent);
+    --ios-card-shadow: 0 1px 1px rgba(20, 14, 10, 0.03), 0 8px 24px -10px rgba(60, 30, 20, 0.16);
+    --nav-h: calc(64px + env(safe-area-inset-top));
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  html.site[data-theme="dark"] {
+    --ios-material: color-mix(in srgb, var(--page) 86%, transparent);
+    --ios-card-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 10px 28px -12px rgba(0, 0, 0, 0.6);
+  }
+
+  html.site body,
+  html.site .app-shell,
+  html.site .app-shell :is(button, input, select, textarea) {
+    font-family: var(--ios-font);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ─── Type scale ─── */
+  /* Large Title */
+  html.site .app-shell :is(h1, .h1, .m-title) {
+    font-family: var(--ios-font);
+    font-size: clamp(28px, 8.6vw, 34px);
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.022em;
+    color: var(--ios-label);
+  }
+
+  /* The brand flourish stays: the red italic word in a title. */
+  html.site .app-shell :is(h1, .h1, .m-title) em {
+    font-family: var(--font-s);
+    font-weight: 600;
+  }
+
+  /* Title 2 (section headings); small-caps labels keep their own style. */
+  html.site .app-shell :is(h2, .h2):not(.ios-label, .app-section-title, .desk-detail-label, .sl-group-title, .wz-title, .cd-label, .mm-title) {
+    font-family: var(--ios-font);
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.22;
+    letter-spacing: -0.018em;
+    color: var(--ios-label);
+  }
+
+  /* Detail pages: the title is a Large Title too (an older rule keeps it serif). */
+  html.site .app-shell .cd-head .cd-title {
+    font-family: var(--ios-font);
+    font-weight: 700;
+    letter-spacing: -0.022em;
+  }
+
+  /* Section headers above grouped content, as in iOS lists. */
+  html.site .app-shell :is(.cd-label, .app-section-title),
+  html.site .app-shell .ios-section-head h2:not(.ios-label) {
+    font-family: var(--ios-font);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ios-secondary);
+  }
+
+  /* Body / lead */
+  html.site .app-shell .lead {
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.42;
+    letter-spacing: -0.01em;
+    color: var(--ios-secondary);
+  }
+
+  /* Greeting above the home title: Subheadline, not shouted. */
+  html.site .app-shell .m-hello {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    text-transform: none;
+    color: var(--ios-secondary);
+  }
+
+  /* Footnote: dates, meta, kinds. */
+  html.site .app-shell :is(.ios-meta, .m-row-body em, .m-promo em, .uni-tile-body em) {
+    font-family: var(--ios-font);
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ios-secondary);
+  }
+
+  html.site .app-shell .eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── Nav bar: edge-to-edge material once content scrolls under it ─── */
+  html.site .app-shell .topbar {
+    height: var(--nav-h);
+    padding: calc(0.5rem + env(safe-area-inset-top)) 0 0.5rem;
+    box-sizing: border-box;
+  }
+
+  html.site .app-shell .topbar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--ios-material);
+    -webkit-backdrop-filter: blur(22px) saturate(1.8);
+    backdrop-filter: blur(22px) saturate(1.8);
+    box-shadow: inset 0 -0.5px 0 var(--ios-hairline);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  html.site .app-shell .topbar.is-scrolled::before {
+    opacity: 1;
+  }
+
+  /* The bar is the material now; the pill around its contents goes. */
+  /* !important: several older theme layers paint the pill at higher specificity. */
+  html.site .app-shell .topbar .topbar-capsule {
+    min-height: 48px;
+    padding: 0 0.1rem;
+    border: 0 !important;
+    border-radius: 0;
+    background: none !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  html.site .app-shell .topbar-title {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  html.site .app-shell .topbar-back {
+    font-size: 17px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+
+  /* ─── Sticky filters: the search scrolls under the bar, the chips stay ─── */
+  /* Sticky on the toolbar's own wrapper: a sticky box only travels inside its parent. */
+  html.site .app-shell .ios-app .reveal-block:has(> .ios-toolbar .ios26-filter) {
+    position: sticky;
+    /* Search field height + gap above the chips: that much slides under the bar. */
+    top: calc(var(--nav-h) - 64px);
+    z-index: 30;
+    box-sizing: border-box;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    padding: 0 calc(50vw - 50%) 0.6rem;
+    background: var(--ios-material);
+    -webkit-backdrop-filter: blur(22px) saturate(1.8);
+    backdrop-filter: blur(22px) saturate(1.8);
+  }
+
+  html.site .app-shell .ios-app .ios-toolbar:has(.ios26-filter) .ios-search {
+    height: 52px;
+    margin: 0;
+  }
+
+  html.site .app-shell .ios-app .ios-toolbar:has(.ios26-filter) {
+    gap: 12px;
+    margin: 0;
+  }
+
+  html.site .app-shell .m-chips {
+    position: sticky;
+    top: var(--nav-h);
+    z-index: 30;
+    padding-top: 0.5rem;
+    padding-bottom: 0.6rem;
+    background: var(--ios-material);
+    -webkit-backdrop-filter: blur(22px) saturate(1.8);
+    backdrop-filter: blur(22px) saturate(1.8);
+  }
+
+  html.site .app-shell :is(.ios26-filter-chip, .m-chips button) {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── Cards: one recipe ─── */
+  html.site .app-shell :is(.course-product-card, .ios-card, .uni-tile, .m-square, .m-promo) {
+    overflow: hidden;
+    border: 0;
+    border-radius: 22px;
+    background: var(--surface-1);
+    box-shadow: var(--ios-card-shadow);
+    transition: box-shadow 0.2s ease;
+  }
+
+  html.site .app-shell :is(.course-product-media, .ios-card-media, .uni-tile-media) {
+    border-radius: 0;
+  }
+
+  html.site .app-shell :is(.course-product-body, .ios-card-body, .uni-tile-body) {
+    display: grid;
+    gap: 4px;
+    padding: 12px 14px 14px;
+  }
+
+  /* Headline */
+  html.site .app-shell :is(.course-product-body h3, .ios-card-body h3, .uni-tile-body strong, .m-row-body strong, .m-square strong, .m-promo strong) {
+    margin: 0;
+    font-family: var(--ios-font);
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.022em;
+    color: var(--ios-label);
+  }
+
+  /* Two-up grids: a notch smaller so long Mongolian words fit. */
+  html.site .app-shell :is(.course-product-grid, .uni-tiles) :is(h3, .uni-tile-body strong) {
+    font-size: 16px;
+  }
+
+  /* Subheadline, two lines at most */
+  html.site .app-shell :is(.course-product-body p, .ios-card-desc) {
+    display: -webkit-box;
+    margin: 0;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    color: var(--ios-secondary);
+  }
+
+  html.site .app-shell .uni-tile-body small {
+    font-size: 13px;
+    color: var(--ios-secondary);
+  }
+
+  /* The whole card opens; no "see more →" line inside it. */
+  html.site .app-shell .course-product-body > em {
+    display: none;
+  }
+
+  /* Caption badges on photos: small frosted capsules. */
+  html.site .app-shell :is(.course-product-tag, .ios-badge, .m-chip-light) {
+    padding: 4px 9px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.82);
+    -webkit-backdrop-filter: blur(12px) saturate(1.6);
+    backdrop-filter: blur(12px) saturate(1.6);
+    color: #1c1c1e;
+    font-family: var(--ios-font);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    box-shadow: none;
+  }
+
+  /* List rows (home news, results): inset grouped list style. */
+  html.site .app-shell .m-row {
+    gap: 12px;
+  }
+
+  html.site .app-shell .m-row-thumb {
+    border-radius: 12px;
+  }
+
+  html.site .app-shell .m-section-head h2 {
+    font-size: 22px;
+  }
+
+  html.site .app-shell .m-section-head a {
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+}

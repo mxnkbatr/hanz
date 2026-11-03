@@ -13,6 +13,7 @@ import "./styles/home-desktop.css";
 import "./styles/site-copy.css";
 import "./styles/refresh.css";
 import "./styles/app-mobile.css";
+import "./styles/ios-ui.css";
 import App from "./App.tsx";
 import { AuthProvider } from "./lib/AuthContext.tsx";
 import { SiteContentProvider } from "./lib/SiteContentContext.tsx";
