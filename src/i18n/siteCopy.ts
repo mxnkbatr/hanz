@@ -8,6 +8,8 @@ export const siteCopy = {
   en: {
     course_reviews: "Student reviews",
     wz_change: "Change",
+    program_university: "University application",
+    wz_university_lead: "We help you choose the university and programme. Leave your contact details on the next screen and we will call you.",
   },
 
   mn: {
@@ -95,6 +97,9 @@ export const siteCopy = {
     course_learn: "Юу сурах вэ",
     course_reviews: "Суралцагчдын сэтгэгдэл",
     wz_change: "Солих",
+    program_university: "Их сургуульд элсэх",
+    wz_university_lead:
+      "Их сургууль, хөтөлбөрөө сонгоход бид тусална. Дараагийн алхамд холбоо барих мэдээллээ үлдээгээрэй — бид тантай холбогдоно.",
     course_fees_title: "Хуваарь ба төлбөр",
     course_duration: "Хугацаа",
     course_schedule_value: "Даваа – Бямба гараг, 10:00–18:00, өдрийн бүтэн цагаар",
@@ -280,6 +285,8 @@ export const siteCopy = {
     course_learn: "学习内容",
     course_reviews: "学员评价",
     wz_change: "更改",
+    program_university: "大学申请",
+    wz_university_lead: "我们协助您选择大学和专业。请在下一步留下联系方式，我们会与您联系。",
     course_fees_title: "课时与学费",
     course_duration: "时长",
     course_schedule_value: "周一至周六，10:00–18:00，全天上课",

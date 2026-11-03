@@ -16,7 +16,6 @@ export const academy = {
   instagram: "https://www.instagram.com/khanzacademy/",
   messenger: "https://m.me/HanzAcademy",
   shopUrl: "https://bumtankhanz.mn",
-  registerUrl: "https://forms.gle/xFXQ1u7c6qnkJYhE8",
   founded: "2014",
   address:
     "СБД, 1-р хороо, Замын цагдаагийн зүүн талд, Union Building, А блок, 12 давхар, 1204",
@@ -350,6 +349,7 @@ export function getTravelById(id: string) {
 
 export const enrollInterests = [
   { id: "hsk", kind: "course" as const, labelKey: "program_intensive" },
+  { id: "university", kind: "consult" as const, labelKey: "program_university" },
   { id: "travel_china", kind: "travel" as const, labelKey: "travel_china_t" },
   { id: "travel_poland", kind: "travel" as const, labelKey: "travel_poland_t" },
   { id: "consult", kind: "consult" as const, labelKey: "enroll_interest_consult" },

@@ -376,14 +376,9 @@ export function MobileHome() {
               </h2>
               <p className="m-cta-body">{t("cta_body")}</p>
               <div className="m-cta-actions">
-                <a
-                  href={academyLive.registerUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="is-seal"
-                >
+                <Link to="/enroll?interest=hsk" className="is-seal">
                   {t("register_cta")} →
-                </a>
+                </Link>
                 <a href={`tel:${academyLive.phoneRaw[0]}`}>☏ {t("call")}</a>
               </div>
               <a

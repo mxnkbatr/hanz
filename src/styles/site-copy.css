@@ -188,6 +188,20 @@ a.hx-why-card:hover {
   line-height: 1.35;
 }
 
+/* University list: enrol button under the title */
+.uni-head-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  margin-top: 1rem;
+}
+
+/* Enrol form: programmes without a course photo (university, advice) use the full width */
+.wz-course:not(:has(.wz-course-media)) {
+  grid-template-columns: 1fr;
+}
+
 /* Enrol form: level already chosen on the course page */
 .enroll-change {
   margin-left: auto;

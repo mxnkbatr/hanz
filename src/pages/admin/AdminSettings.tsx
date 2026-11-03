@@ -30,7 +30,6 @@ export function AdminSettings() {
         email: String(fd.get("email") || "").trim(),
         address: String(fd.get("address") || "").trim(),
         hours: String(fd.get("hours") || "").trim(),
-        registerUrl: String(fd.get("registerUrl") || "").trim(),
         facebook: String(fd.get("facebook") || "").trim(),
         instagram: String(fd.get("instagram") || "").trim(),
         messenger: String(fd.get("messenger") || "").trim(),
@@ -80,14 +79,6 @@ export function AdminSettings() {
           <span>{t("hours_label")}</span>
           <input name="hours" defaultValue={a.hours || academy.hours} />
         </label>
-        <label>
-          <span>{t("admin_register_url")}</span>
-          <input
-            name="registerUrl"
-            defaultValue={a.registerUrl || academy.registerUrl}
-          />
-        </label>
-
         <h3 className="admin-form-section">{t("admin_settings_social")}</h3>
         <label>
           <span>Facebook</span>

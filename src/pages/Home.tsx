@@ -260,12 +260,7 @@ function HomeDesktop() {
           </h2>
           <p className="home-finale-body">{t("cta_body")}</p>
           <div className="home-finale-ctas">
-            <MagneticButton
-              href={academy.registerUrl}
-              className="btn btn-seal"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <MagneticButton href="/enroll?interest=hsk" className="btn btn-seal">
               <span>{t("register_cta")}</span>
               <i aria-hidden>→</i>
             </MagneticButton>

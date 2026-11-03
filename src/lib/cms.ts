@@ -72,7 +72,6 @@ export type SiteSettings = Partial<{
   address: string;
   whatsapp: string;
   hours: string;
-  registerUrl: string;
   founded: string;
   yearsExp: string;
   graduates: string;
