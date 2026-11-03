@@ -57,6 +57,9 @@ const Auth = lazy(() =>
 const Quiz = lazy(() =>
   import("./pages/Quiz").then((m) => ({ default: m.Quiz })),
 );
+const Pricing = lazy(() =>
+  import("./pages/Pricing").then((m) => ({ default: m.Pricing })),
+);
 const Hsk = lazy(() =>
   import("./pages/Hsk").then((m) => ({ default: m.Hsk })),
 );
@@ -232,6 +235,7 @@ export default function App() {
             <Route path="courses" element={<Courses />} />
             <Route path="courses/:id" element={<CourseDetail />} />
             <Route path="hsk" element={<Hsk />} />
+            <Route path="pricing" element={<Pricing />} />
             <Route path="enroll" element={<Enroll />} />
             <Route path="medee" element={<News />} />
             <Route path="medee/:id" element={<NewsDetail />} />

@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react";
 import { createPortal } from "react-dom";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { formatPrice, getCourseById } from "../data/content";
-import { programFromInterest, programs } from "../data/enroll";
+import { plansForLevel, programFromInterest, programs } from "../data/enroll";
 import {
   addCourseComment,
   getCourseComments,
@@ -32,8 +32,7 @@ export function CourseDetail() {
   const [commentStatus, setCommentStatus] = useState<"idle" | "ok">("idle");
 
   if (!course) {
-    // legacy slot urls → kids program
-    if (id.includes("__")) return <Navigate to="/courses/kids" replace />;
+    // Retired course ids (classroom, online, kids…) land on the course list.
     return <Navigate to="/courses" replace />;
   }
 
@@ -49,10 +48,11 @@ export function CourseDetail() {
   const teachers = (course.teacherIds ?? [])
     .map((tid) => teamLive.find((m) => m.id === tid))
     .filter((m): m is TeamMemberCms => Boolean(m));
-  const plans = program?.plans ?? [];
+  const plans = course.level ? plansForLevel(program, course.id) : (program?.plans ?? []);
   const fromPrice = plans.length ? Math.min(...plans.map((p) => p.amount)) : 0;
-  const levelText =
-    program?.levels === "hsk"
+  const levelText = course.level
+    ? `HSK ${course.level}`
+    : program?.levels === "hsk"
       ? "HSK 1–6"
       : program?.levels === "kids"
         ? kidsLevelsLive.map((l) => loc(lang, t, l.label, l.labelKey)).join(" · ")
@@ -96,11 +96,6 @@ export function CourseDetail() {
               {tag && <span className="cd-tag">{tag}</span>}
               <h1 className="cd-title">{title}</h1>
               {unit && <p className="cd-unit">{unit}</p>}
-              {course.id === "hsk" && (
-                <Link to="/hsk" className="text-link">
-                  {t("hsk_levels_link")} <i aria-hidden>→</i>
-                </Link>
-              )}
             </header>
           </Reveal>
 
@@ -152,7 +147,7 @@ export function CourseDetail() {
           {highlights.length > 0 && (
             <Reveal>
               <section className="cd-group">
-                <h2 className="cd-label">{t("course_advantages")}</h2>
+                <h2 className="cd-label">{course.level ? t("course_learn") : t("course_advantages")}</h2>
                 <ul className="cd-card cd-list">
                   {highlights.map((h) => (
                     <li key={h}>
@@ -183,8 +178,20 @@ export function CourseDetail() {
           {plans.length > 0 && (
             <Reveal>
               <section className="cd-group">
-                <h2 className="cd-label">{t("enroll_plan")}</h2>
+                <h2 className="cd-label">{course.level ? t("course_fees_title") : t("enroll_plan")}</h2>
                 <ul className="cd-card cd-list">
+                  {course.level ? (
+                    <>
+                      <li className="cd-row is-muted">
+                        <span>{t("course_duration")}</span>
+                        <span>{t("course_unit")}</span>
+                      </li>
+                      <li className="cd-row is-muted">
+                        <span>{t("enroll_schedule")}</span>
+                        <span>{t("course_schedule_value")}</span>
+                      </li>
+                    </>
+                  ) : null}
                   {plans.map((p) => (
                     <li key={p.id} className="cd-row">
                       <span>{t(p.labelKey)}</span>
@@ -202,9 +209,20 @@ export function CourseDetail() {
             </Reveal>
           )}
 
+          {course.ctaKey && (
+            <Reveal>
+              <section className="cd-group cd-cta">
+                <p>{t(course.ctaKey)}</p>
+                <Link to={enrollTo} className="btn btn-seal" onClick={() => void hapticLight()}>
+                  <span>{t("register_cta")}</span>
+                </Link>
+              </section>
+            </Reveal>
+          )}
+
           <Reveal>
             <section className="cd-group">
-              <h2 className="cd-label">{t("kids_comments_title")}</h2>
+              <h2 className="cd-label">{t("course_reviews")}</h2>
               {comments.length > 0 && (
                 <ul className="cd-card cd-comments">
                   {comments.map((c) => (

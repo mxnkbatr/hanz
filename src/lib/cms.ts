@@ -73,8 +73,11 @@ export type SiteSettings = Partial<{
   whatsapp: string;
   hours: string;
   registerUrl: string;
+  founded: string;
+  yearsExp: string;
   graduates: string;
   scholarshipStudents: string;
+  polandUnis: string;
   partnerUniversities: string;
   branchCount: string;
 }>;
@@ -242,6 +245,12 @@ export type CourseLive = {
   unitKey: string;
   filter: string;
   image: string;
+  /** HSK level 1–6. */
+  level?: number;
+  sumKey?: string;
+  ctaKey?: string;
+  /** Also offered as the 6-month HSK 1–5 class. */
+  sixMonth?: boolean;
   highlights?: readonly string[];
   /** Team member ids who teach this course. */
   teacherIds?: readonly string[];

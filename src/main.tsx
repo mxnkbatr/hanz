@@ -10,6 +10,7 @@ import "./styles/hero.css";
 import "./styles/desktop-detail.css";
 import "./styles/site-theme.css";
 import "./styles/home-desktop.css";
+import "./styles/site-copy.css";
 import App from "./App.tsx";
 import { AuthProvider } from "./lib/AuthContext.tsx";
 import { SiteContentProvider } from "./lib/SiteContentContext.tsx";

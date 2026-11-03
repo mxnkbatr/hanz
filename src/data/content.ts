@@ -1,9 +1,11 @@
 import { universities } from "./universities";
 export const academy = {
   brand: "ХАНЗ",
-  /** From client deck — totals since founding */
-  graduates: "7300+",
-  scholarshipStudents: "1080+",
+  /** From the academy's page copy (khanz_mn_huudasnii_tekst.docx) */
+  graduates: "2000+",
+  scholarshipStudents: "1000+",
+  yearsExp: "12",
+  polandUnis: "35",
   partnerUniversities: "300+",
   colleges: "70+",
   tianjinStudents: "250+",
@@ -83,148 +85,43 @@ export const teachersMeta: readonly TeacherMeta[] = [
   },
 ];
 
-/** Real programs from client deck (Taniltsuulga Hanz.pptx) */
+/** Fee per level and for the 6-month HSK 1–5 class (page copy, "Үнэ / Төлбөр"). */
+export const hskFees = { month: 1_800_000, sixMonth: 4_800_000 } as const;
+
+export type HskStage = "beginner" | "intermediate" | "advanced";
+
+function hskCourse(level: number, filter: HskStage, image: string, points: number) {
+  return {
+    id: `hsk${level}`,
+    level,
+    titleKey: `course_hsk${level}_t`,
+    descKey: `course_hsk${level}_b`,
+    /** One line for cards and the levels list. */
+    sumKey: `course_hsk${level}_sum`,
+    /** Headline after the level name ("Хятад хэлний бат суурийг тавина"). */
+    unitKey: `course_hsk${level}_head`,
+    /** Closing line above the enrol button. */
+    ctaKey: `course_hsk${level}_cta`,
+    tagKey: `tag_${filter}`,
+    icon: "一二三四五六"[level - 1],
+    filter,
+    image,
+    highlights: Array.from({ length: points }, (_, i) => `course_hsk${level}_h${i + 1}`),
+    teacherIds: teachersMeta.filter((m) => m.hsk?.includes(level)).map((m) => m.id),
+    /** HSK 6 is not part of the 6-month HSK 1–5 class. */
+    sixMonth: level <= 5,
+  };
+}
+
+/** HSK 1–6, one course page per level (khanz_mn_huudasnii_tekst.docx). */
 export const coursesMeta = [
-  {
-    id: "classroom",
-    titleKey: "course_classroom_t",
-    descKey: "course_classroom_d",
-    bodyKey: "course_classroom_b",
-    tagKey: "tag_classroom",
-    unitKey: "course_classroom_u",
-    icon: "堂",
-    filter: "classroom" as const,
-    image: "/courses/image12.webp",
-    highlights: [
-      "course_classroom_h1",
-      "course_classroom_h2",
-      "course_classroom_h3",
-    ] as const,
-    /** Classroom covers HSK 1–6, so every teaching member of the team. */
-    teacherIds: ["otgonjargal", "dagula", "michidmaa", "tsetsenbileg"] as const,
-  },
-  {
-    id: "online",
-    titleKey: "course_online_t",
-    descKey: "course_online_d",
-    bodyKey: "course_online_b",
-    tagKey: "tag_online",
-    unitKey: "course_online_u",
-    icon: "网",
-    filter: "online" as const,
-    image: "/courses/image14.webp",
-    highlights: [
-      "course_online_h1",
-      "course_online_h2",
-      "course_online_h3",
-    ] as const,
-  },
-  {
-    id: "corporate",
-    titleKey: "course_corporate_t",
-    descKey: "course_corporate_d",
-    bodyKey: "course_corporate_b",
-    tagKey: "tag_corporate",
-    unitKey: "course_corporate_u",
-    icon: "企",
-    filter: "corporate" as const,
-    image: "/courses/image15.webp",
-    highlights: [
-      "course_corporate_h1",
-      "course_corporate_h2",
-      "course_corporate_h3",
-    ] as const,
-  },
-  {
-    id: "short",
-    titleKey: "course_short_t",
-    descKey: "course_short_d",
-    bodyKey: "course_short_b",
-    tagKey: "tag_short",
-    unitKey: "course_short_u",
-    icon: "暑",
-    filter: "short" as const,
-    image: "/courses/image16.webp",
-    highlights: [
-      "course_short_h1",
-      "course_short_h2",
-      "course_short_h3",
-    ] as const,
-  },
-  {
-    id: "year",
-    titleKey: "course_year_t",
-    descKey: "course_year_d",
-    bodyKey: "course_year_b",
-    tagKey: "tag_intensive",
-    unitKey: "course_year_u",
-    icon: "年",
-    filter: "classroom" as const,
-    image: "/courses/image4.webp",
-    highlights: ["course_year_h1", "course_year_h2", "course_year_h3"] as const,
-  },
-  {
-    id: "hsk",
-    titleKey: "course_hsk_t",
-    descKey: "course_hsk_d",
-    bodyKey: "course_hsk_b",
-    tagKey: "tag_hsk",
-    unitKey: "course_hsk_u",
-    icon: "汉",
-    filter: "classroom" as const,
-    image: "/courses/image8.webp",
-    highlights: ["course_hsk_h1", "course_hsk_h2", "course_hsk_h3"] as const,
-  },
-  {
-    id: "speak",
-    titleKey: "course_speak_t",
-    descKey: "course_speak_d",
-    bodyKey: "course_speak_b",
-    tagKey: "tag_speak",
-    unitKey: "course_speak_u",
-    icon: "说",
-    filter: "classroom" as const,
-    image: "/courses/image11.webp",
-    highlights: [
-      "course_speak_h1",
-      "course_speak_h2",
-      "course_speak_h3",
-    ] as const,
-  },
-  {
-    id: "english",
-    titleKey: "course_english_t",
-    descKey: "course_english_d",
-    bodyKey: "course_english_b",
-    tagKey: "tag_english",
-    unitKey: "course_english_u",
-    icon: "英",
-    filter: "classroom" as const,
-    image: "/courses/image20.webp",
-    highlights: [
-      "course_english_h1",
-      "course_english_h2",
-      "course_english_h3",
-    ] as const,
-  },
-  {
-    id: "kids",
-    titleKey: "course_kids_t",
-    descKey: "course_kids_d",
-    bodyKey: "course_kids_b",
-    tagKey: "tag_kids",
-    unitKey: "course_kids_u",
-    icon: "童",
-    filter: "kids" as const,
-    image: "/courses/image21.webp",
-    highlights: [
-      "kids_detail_h1",
-      "kids_detail_h2",
-      "kids_detail_h3",
-      "kids_detail_h4",
-    ] as const,
-  },
-] as const;
+  hskCourse(1, "beginner", "/courses/image12.webp", 7),
+  hskCourse(2, "beginner", "/courses/image14.webp", 6),
+  hskCourse(3, "intermediate", "/courses/image8.webp", 10),
+  hskCourse(4, "intermediate", "/courses/image15.webp", 8),
+  hskCourse(5, "advanced", "/courses/image4.webp", 8),
+  hskCourse(6, "advanced", "/courses/image11.webp", 9),
+];
 
 export type CourseProgram = (typeof coursesMeta)[number];
 export type CourseProgramFilter = CourseProgram["filter"] | "all";
@@ -452,15 +349,7 @@ export function getTravelById(id: string) {
 }
 
 export const enrollInterests = [
-  { id: "classroom", kind: "course" as const, labelKey: "course_classroom_t" },
-  { id: "online", kind: "course" as const, labelKey: "course_online_t" },
-  { id: "corporate", kind: "course" as const, labelKey: "course_corporate_t" },
-  { id: "short", kind: "course" as const, labelKey: "course_short_t" },
-  { id: "year", kind: "course" as const, labelKey: "course_year_t" },
-  { id: "hsk", kind: "course" as const, labelKey: "course_hsk_t" },
-  { id: "speak", kind: "course" as const, labelKey: "course_speak_t" },
-  { id: "english", kind: "course" as const, labelKey: "course_english_t" },
-  { id: "kids", kind: "course" as const, labelKey: "course_kids_t" },
+  { id: "hsk", kind: "course" as const, labelKey: "program_intensive" },
   { id: "travel_china", kind: "travel" as const, labelKey: "travel_china_t" },
   { id: "travel_poland", kind: "travel" as const, labelKey: "travel_poland_t" },
   { id: "consult", kind: "consult" as const, labelKey: "enroll_interest_consult" },
@@ -517,6 +406,14 @@ export const whyHanzMeta = [
   { id: "why4", icon: "时", titleKey: "why_4_t", descKey: "why_4_d" },
   { id: "why5", icon: "试", titleKey: "why_5_t", descKey: "why_5_d" },
   { id: "why6", icon: "校", titleKey: "why_6_t", descKey: "why_6_d" },
+] as const;
+
+/** Services on the home page (page copy, "Үйлчилгээ"). */
+export const servicesMeta = [
+  { id: "svc1", icon: "汉", titleKey: "svc_1_t", descKey: "svc_1_d", to: "/courses" },
+  { id: "svc2", icon: "奖", titleKey: "svc_2_t", descKey: "svc_2_d", to: "/university" },
+  { id: "svc3", icon: "译", titleKey: "svc_3_t", descKey: "svc_3_d", to: "/translation" },
+  { id: "svc4", icon: "旅", titleKey: "svc_4_t", descKey: "svc_4_d", to: "/travel" },
 ] as const;
 
 export const branchesMeta = [

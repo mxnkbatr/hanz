@@ -13,7 +13,13 @@ import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { loc } from "../lib/i18nText";
 import { toDateTime } from "../lib/date";
-import { featuredUniversities, partnerUniversities, whyHanzMeta } from "../data/content";
+import {
+  featuredUniversities,
+  formatPrice,
+  hskFees,
+  partnerUniversities,
+  servicesMeta,
+} from "../data/content";
 import { UniversityCard } from "../components/UniversityCard";
 
 const STEPS = [
@@ -43,15 +49,14 @@ export function Home() {
 }
 
 /**
- * Desktop home, ordered the way people decide on a school:
- * promise (hero) → proof (numbers) → what we teach (programs) → why us →
+ * Desktop home, in the order of the academy's page copy:
+ * promise (hero) → about → numbers → services → levels and fees →
  * the study-in-China path → try it (hanzi) → news → questions → enrol.
  */
 function HomeDesktop() {
   const { t, lang } = useI18n();
   const { academyLive: academy, newsLive, coursesLive } =
     useSiteContent();
-  const [lead, ...restCourses] = coursesLive;
 
   return (
     <PageShell className="page-home">
@@ -59,77 +64,85 @@ function HomeDesktop() {
       <DesktopHero ready />
 
       <div className="home-below">
-        {/* 1 · Proof right under the promise */}
+        {/* 1 · About */}
+        <section className="section hx-section hx-about">
+          <Reveal>
+            <SectionIndex n={1} label={t("about_title")} />
+            <h2 className="h2">{t("about_title")}</h2>
+          </Reveal>
+          <Reveal className="hx-about-copy">
+            <p className="lead">{t("about_body")}</p>
+            <p>{t("about_body2")}</p>
+          </Reveal>
+        </section>
+
+        {/* 2 · Numbers */}
         <StatsStrip />
 
-        {/* 2 · Programs: bento grid, first course large, quiz card last */}
+        {/* 3 · Services: heading held on the left, four cards on the right */}
+        <section className="section hx-section hx-why-wrap">
+          <Reveal className="hx-why-head">
+            <SectionIndex n={2} label={t("svc_title")} />
+            <h2 className="hx-display">{t("svc_title")}</h2>
+          </Reveal>
+          <Stagger className="hx-why">
+            {servicesMeta.map((s) => (
+              <StaggerItem key={s.id} className="is-wide">
+                <Link to={s.to} className="hx-why-card">
+                  <span className="hx-why-icon" aria-hidden>
+                    {s.icon}
+                  </span>
+                  <h3>{t(s.titleKey)}</h3>
+                  <p>{t(s.descKey)}</p>
+                </Link>
+              </StaggerItem>
+            ))}
+          </Stagger>
+        </section>
+
+        {/* 4 · Levels and fees */}
         <section className="section hx-section">
           <Reveal>
             <div className="section-row">
               <div>
-                <SectionIndex n={1} label={t("courses_title")} />
-                <h2 className="h2">{t("hd_programs")}</h2>
-                <p className="lead hx-lead">{t("hd_programs_lead")}</p>
+                <SectionIndex n={3} label={t("courses_title")} />
+                <h2 className="h2">{t("levels_title")}</h2>
+                <p className="lead hx-lead">{t("levels_lead")}</p>
               </div>
-              <Link to="/courses" className="text-link">
-                {t("see_all")} <i aria-hidden>→</i>
+              <Link to="/pricing" className="text-link">
+                {t("nav_pricing")} <i aria-hidden>→</i>
               </Link>
             </div>
           </Reveal>
-
-          <Stagger className="hx-bento">
-            {lead && (
-              <StaggerItem className="hx-bento-lead">
-                <CourseTile course={lead} large />
-              </StaggerItem>
-            )}
-            {restCourses.slice(0, 3).map((c) => (
+          <Stagger className="hx-levels">
+            {coursesLive.map((c) => (
               <StaggerItem key={c.id}>
-                <CourseTile course={c} />
+                <Link to={`/courses/${c.id}`} className="hx-level">
+                  <span className="hx-level-glyph" aria-hidden>
+                    {"一二三四五六"[(c.level ?? 1) - 1]}
+                  </span>
+                  <strong>{loc(lang, t, c.title, c.titleKey)}</strong>
+                  {c.sumKey && <span className="hx-level-sum">{t(c.sumKey)}</span>}
+                  <span className="hx-level-meta">
+                    {t("course_unit")} · {formatPrice(hskFees.month)}
+                  </span>
+                </Link>
               </StaggerItem>
             ))}
-            <StaggerItem>
-              <Link to="/courses" className="hx-match">
-                <span className="hx-match-glyph" aria-hidden>
-                  测
-                </span>
-                <strong>{t("hd_match_t")}</strong>
-                <span>{t("hd_match_d")}</span>
-                <em className="hx-match-cta">
-                  {t("hd_match_cta")} <i aria-hidden>→</i>
-                </em>
+            <StaggerItem className="hx-level-wide">
+              <Link to="/pricing" className="hx-level is-long">
+                <strong>{t("course_6m_t")}</strong>
+                <span className="hx-level-meta">{formatPrice(hskFees.sixMonth)}</span>
               </Link>
             </StaggerItem>
           </Stagger>
         </section>
 
-        {/* 3 · Why Hanz: big serif heading held on the left, bento on the right */}
-        <section className="section hx-section hx-why-wrap">
-          <Reveal className="hx-why-head">
-            <SectionIndex n={2} label={t("hd_why_eyebrow")} />
-            <h2 className="hx-display">{t("why_title")}</h2>
-            <p className="lead hx-lead">{t("hd_why_lead")}</p>
-          </Reveal>
-          <Stagger className="hx-why">
-            {whyHanzMeta.map((w, i) => (
-              <StaggerItem key={w.id} className={WHY_SIZES[i]}>
-                <article className="hx-why-card">
-                  <span className="hx-why-icon" aria-hidden>
-                    {w.icon}
-                  </span>
-                  <h3>{t(w.titleKey)}</h3>
-                  <p>{t(w.descKey)}</p>
-                </article>
-              </StaggerItem>
-            ))}
-          </Stagger>
-        </section>
-
-        {/* 4 · Study in China: the four steps + a few universities */}
+        {/* 5 · Study in China: the four steps + a few universities */}
         <section className="section hx-section hx-china">
           <div className="hx-china-copy">
             <Reveal>
-              <SectionIndex n={3} label={t("hd_china_eyebrow")} />
+              <SectionIndex n={4} label={t("hd_china_eyebrow")} />
               <h2 className="h2">{t("china_home_title")}</h2>
               <p className="lead hx-lead">{t("china_home_lead")}</p>
             </Reveal>
@@ -175,7 +188,7 @@ function HomeDesktop() {
           <Reveal>
             <div className="section-row">
               <div>
-                <SectionIndex n={4} label={t("nav_news")} />
+                <SectionIndex n={5} label={t("nav_news")} />
                 <h2 className="h2">{t("home_news")}</h2>
               </div>
               <Link to="/medee" className="text-link">
@@ -210,7 +223,7 @@ function HomeDesktop() {
         <section className="section section-last hx-section hx-faq">
           <Reveal>
             <div className="hx-faq-head">
-              <SectionIndex n={5} label="FAQ" />
+              <SectionIndex n={6} label="FAQ" />
               <h2 className="h2">{t("faq_title")}</h2>
               <p className="lead hx-lead">{t("hd_faq_more")}</p>
               <a className="btn hero-film-ghost" href={`tel:${academy.phoneRaw[0]}`}>
@@ -245,6 +258,7 @@ function HomeDesktop() {
           <h2 className="home-finale-title">
             {t("mh_cta_a")} <em>{t("mh_cta_em")}</em> {t("mh_cta_b")}
           </h2>
+          <p className="home-finale-body">{t("cta_body")}</p>
           <div className="home-finale-ctas">
             <MagneticButton
               href={academy.registerUrl}
@@ -267,16 +281,6 @@ function HomeDesktop() {
   );
 }
 
-/** Bento sizes for the six "why" cards: one feature, two wide, three small. */
-const WHY_SIZES = [
-  "is-feature",
-  "is-wide",
-  "is-wide",
-  "is-small",
-  "is-small",
-  "is-small",
-] as const;
-
 /** Numbered section label ("01 — Programs"), so the page reads as one sequence. */
 function SectionIndex({ n, label }: { n: number; label: string }) {
   return (
@@ -285,27 +289,5 @@ function SectionIndex({ n, label }: { n: number; label: string }) {
       <i aria-hidden />
       <span>{label}</span>
     </p>
-  );
-}
-
-type Course = ReturnType<typeof useSiteContent>["coursesLive"][number];
-
-function CourseTile({ course, large = false }: { course: Course; large?: boolean }) {
-  const { t, lang } = useI18n();
-  const title = loc(lang, t, course.title, course.titleKey);
-  return (
-    <Link to={`/courses/${course.id}`} className={`hx-course${large ? " is-large" : ""}`}>
-      <span className="hx-course-media">
-        <SafeImage src={course.image} alt={title} />
-      </span>
-      <span className="hx-course-body">
-        <span className="hx-course-tag">{loc(lang, t, course.tag, course.tagKey)}</span>
-        <strong>{title}</strong>
-        {large && <span className="hx-course-desc">{loc(lang, t, course.body, course.descKey)}</span>}
-        <span className="hx-course-meta">
-          {t(course.unitKey)} <i aria-hidden>→</i>
-        </span>
-      </span>
-    </Link>
   );
 }

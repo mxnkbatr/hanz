@@ -6,11 +6,14 @@ import { useSiteContent } from "../lib/SiteContentContext";
 type Stat = {
   value: number;
   suffix?: string;
+  /** A year reads wrong while counting up from 0, so it is shown as is. */
+  still?: boolean;
   labelKey:
-    | "stat_branches"
-    | "stat_unis"
+    | "stat_founded"
+    | "stat_years"
+    | "stat_students"
     | "stat_scholarship"
-    | "stat_students";
+    | "stat_poland";
 };
 
 function parseStat(
@@ -57,7 +60,7 @@ function StatItem({
 }) {
   const { t } = useI18n();
   const reduce = useReducedMotion();
-  const n = useCountUp(stat.value, active, reduce);
+  const n = useCountUp(stat.value, active, reduce || Boolean(stat.still));
 
   return (
     <div className="stats-item">
@@ -76,18 +79,16 @@ export function StatsStrip() {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.4 });
 
-  const stats: Stat[] = useMemo(() => {
-    const students = parseStat(a.graduates, "7300+");
-    const scholarship = parseStat(a.scholarshipStudents, "1080+");
-    const unis = parseStat(a.partnerUniversities, "300+");
-    const branches = parseStat(a.branchCount, "4");
-    return [
-      { ...students, labelKey: "stat_students" },
-      { ...scholarship, labelKey: "stat_scholarship" },
-      { ...unis, labelKey: "stat_unis" },
-      { ...branches, labelKey: "stat_branches" },
-    ];
-  }, [a]);
+  const stats: Stat[] = useMemo(
+    () => [
+      { ...parseStat(a.founded, "2014"), still: true, labelKey: "stat_founded" },
+      { ...parseStat(a.yearsExp, "12"), labelKey: "stat_years" },
+      { ...parseStat(a.graduates, "2000+"), labelKey: "stat_students" },
+      { ...parseStat(a.scholarshipStudents, "1000+"), labelKey: "stat_scholarship" },
+      { ...parseStat(a.polandUnis, "35"), labelKey: "stat_poland" },
+    ],
+    [a],
+  );
 
   return (
     <section className="stats-strip section" ref={ref} aria-label={t("stats_title")}>

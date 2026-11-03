@@ -1,44 +1,21 @@
 import { describe, expect, it } from "vitest";
-import { resolveMatch, type MatchAnswer } from "./courseMatch";
-
-const base: MatchAnswer = {
-  who: "",
-  goal: "",
-  when: "",
-  age: "",
-};
+import { resolveMatch } from "./courseMatch";
+import { coursesMeta } from "./content";
 
 describe("resolveMatch", () => {
-  it("routes children to kids course with age band", () => {
-    const result = resolveMatch({
-      ...base,
-      who: "child",
-      age: "9-11",
-      when: "weekend",
-    });
-    expect(result.courseId).toBe("kids");
-    expect(result.kidsLevelId).toBe("elementary");
-    expect(result.scheduleHint).toBe("weekend_am");
-    expect(result.reasonKey).toBe("cmatch_reason_kids");
+  it("sends beginners to HSK 1", () => {
+    expect(resolveMatch(0).courseId).toBe("hsk1");
   });
 
-  it("routes adult HSK goal to hsk course", () => {
-    const result = resolveMatch({
-      ...base,
-      who: "adult",
-      goal: "hsk",
-      when: "weekday",
-    });
-    expect(result.courseId).toBe("hsk");
-    expect(result.scheduleHint).toBe("wd_afternoon");
+  it("suggests the next level up", () => {
+    expect(resolveMatch(2).courseId).toBe("hsk3");
+    expect(resolveMatch(5).courseId).toBe("hsk6");
   });
+});
 
-  it("routes online goal to online course", () => {
-    const result = resolveMatch({
-      ...base,
-      who: "adult",
-      goal: "online",
-    });
-    expect(result.courseId).toBe("online");
+describe("coursesMeta", () => {
+  it("has HSK 1–6 and only HSK 1–5 join the 6-month class", () => {
+    expect(coursesMeta.map((c) => c.id)).toEqual(["hsk1", "hsk2", "hsk3", "hsk4", "hsk5", "hsk6"]);
+    expect(coursesMeta.filter((c) => c.sixMonth).map((c) => c.level)).toEqual([1, 2, 3, 4, 5]);
   });
 });

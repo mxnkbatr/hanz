@@ -32,6 +32,7 @@ const routeMetaKey: Record<string, string> = {
   "/auth": "meta_auth",
   "/quiz": "meta_quiz",
   "/hsk": "nav_hsk",
+  "/pricing": "nav_pricing",
   "/translation": "nav_translation",
 };
 

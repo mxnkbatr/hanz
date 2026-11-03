@@ -135,7 +135,7 @@ export function DesktopNav() {
                           <small>HSK 1–6</small>
                         </span>
                       </Link>
-                      {coursesLive.slice(0, 5).map((c) => {
+                      {coursesLive.slice(0, 6).map((c) => {
                         const title = loc(lang, t, c.title, c.titleKey);
                         return (
                           <Link key={c.id} to={`/courses/${c.id}`} className="mega-item">
@@ -149,6 +149,15 @@ export function DesktopNav() {
                           </Link>
                         );
                       })}
+                      <Link to="/pricing" className="mega-item">
+                        <span className="mega-thumb">
+                          <SafeImage src="/courses/image12.webp" alt="" />
+                        </span>
+                        <span className="mega-copy">
+                          <strong>{t("nav_pricing")}</strong>
+                          <small>{t("course_unit")}</small>
+                        </span>
+                      </Link>
                     </div>
                     <Link to={COURSES} className="mega-feature">
                       <span className="mega-feature-glyph" aria-hidden>

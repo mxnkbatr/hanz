@@ -89,13 +89,6 @@ export const ADMIN_HUB_GROUPS: AdminHubGroup[] = [
         preview: "/about",
       },
       {
-        id: "kids",
-        to: "/admin/kids",
-        key: "admin_kids",
-        ico: "童",
-        preview: "/courses/kids",
-      },
-      {
         id: "quiz",
         to: "/admin/quiz",
         key: "admin_quiz",

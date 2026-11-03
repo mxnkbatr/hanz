@@ -15,6 +15,7 @@ type Props = { open: boolean; onClose: () => void };
 
 /** Pages the tab bar doesn't already cover, as photo tiles. */
 const TILES = [
+  { to: "/pricing", key: "nav_pricing", img: "/courses/image12.webp" },
   { to: "/hsk", key: "nav_hsk", img: "/courses/image8.webp" },
   { to: "/medee", key: "nav_news", img: "/courses/image14.webp" },
   { to: "/shop", key: "nav_shop", img: "/images/shop-hero.webp" },

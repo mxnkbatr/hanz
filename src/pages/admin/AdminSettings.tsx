@@ -36,12 +36,11 @@ export function AdminSettings() {
         messenger: String(fd.get("messenger") || "").trim(),
         shopUrl: String(fd.get("shopUrl") || "").trim(),
         whatsapp: String(fd.get("whatsapp") || "").trim(),
+        founded: String(fd.get("founded") || "").trim(),
+        yearsExp: String(fd.get("yearsExp") || "").trim(),
         graduates: String(fd.get("graduates") || "").trim(),
         scholarshipStudents: String(fd.get("scholarshipStudents") || "").trim(),
-        partnerUniversities: String(
-          fd.get("partnerUniversities") || "",
-        ).trim(),
-        branchCount: String(fd.get("branchCount") || "").trim(),
+        polandUnis: String(fd.get("polandUnis") || "").trim(),
       },
     };
     const res = await saveBundle(next);
@@ -113,6 +112,14 @@ export function AdminSettings() {
 
         <h3 className="admin-form-section">{t("admin_settings_stats")}</h3>
         <label>
+          <span>{t("stat_founded")}</span>
+          <input name="founded" defaultValue={a.founded || academy.founded} />
+        </label>
+        <label>
+          <span>{t("stat_years")}</span>
+          <input name="yearsExp" defaultValue={a.yearsExp || academy.yearsExp} />
+        </label>
+        <label>
           <span>{t("stat_students")}</span>
           <input
             name="graduates"
@@ -129,20 +136,8 @@ export function AdminSettings() {
           />
         </label>
         <label>
-          <span>{t("stat_unis")}</span>
-          <input
-            name="partnerUniversities"
-            defaultValue={
-              a.partnerUniversities || academy.partnerUniversities
-            }
-          />
-        </label>
-        <label>
-          <span>{t("stat_branches")}</span>
-          <input
-            name="branchCount"
-            defaultValue={a.branchCount || "4"}
-          />
+          <span>{t("stat_poland")}</span>
+          <input name="polandUnis" defaultValue={a.polandUnis || academy.polandUnis} />
         </label>
 
         {err && <p className="admin-err">{err}</p>}

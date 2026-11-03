@@ -65,7 +65,7 @@ function writeLocal(slotId: string, comments: CourseComment[]) {
 
 export function getCourseComments(slotId: string): CourseComment[] {
   const level = levelFromSlotId(slotId);
-  const seeded = SEED[level] ?? SEED.beginner ?? [];
+  const seeded = SEED[level] ?? [];
   const local = readLocal(slotId);
   return [...local, ...seeded].sort(
     (a, b) => +new Date(b.createdAt) - +new Date(a.createdAt),
