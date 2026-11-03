@@ -12,14 +12,17 @@ import "./styles/site-theme.css";
 import "./styles/home-desktop.css";
 import "./styles/site-copy.css";
 import "./styles/refresh.css";
+import "./styles/app-mobile.css";
 import App from "./App.tsx";
 import { AuthProvider } from "./lib/AuthContext.tsx";
 import { SiteContentProvider } from "./lib/SiteContentContext.tsx";
 import { I18nProvider } from "./i18n/I18nContext.tsx";
 import { initNativeShell } from "./lib/native";
 import { lockPhoneViewport } from "./lib/viewport";
+import { installPressFeedback } from "./lib/pressFeedback";
 
 lockPhoneViewport();
+installPressFeedback();
 void initNativeShell();
 
 createRoot(document.getElementById("root")!).render(

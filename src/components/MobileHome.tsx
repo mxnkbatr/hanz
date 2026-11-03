@@ -133,7 +133,6 @@ export function MobileHome() {
         <h1 className="m-title">
           {t("mh_title_a")} <em>{t("mh_title_em")}</em> {t("mh_title_b")}
         </h1>
-        <p className="m-kicker">{t("hero_kicker")}</p>
       </motion.header>
 
       <motion.div

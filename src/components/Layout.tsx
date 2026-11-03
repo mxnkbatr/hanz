@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigationType } from "react-router-dom";
 import {
   AnimatePresence,
   LayoutGroup,
@@ -13,7 +13,9 @@ import { AnimatedOutlet } from "./AnimatedOutlet";
 import { DesktopNav } from "./DesktopNav";
 import { MobileMenuSheet } from "./MobileMenuSheet";
 import { useDesktop } from "../hooks/useDesktop";
+import { isTabRoot, useGoBack } from "../hooks/useGoBack";
 import {
+  IconChevronBack,
   IconClose,
   IconMenu,
   IconMoon,
@@ -28,11 +30,14 @@ import { useSiteContent } from "../lib/SiteContentContext";
 import { hapticLight } from "../lib/native";
 import { ThemeContext, useSiteTheme } from "../lib/theme";
 import { ease, navSpring } from "../lib/motion";
+import { recalledScroll } from "../lib/scrollMemory";
 
 const YEAR = new Date().getFullYear();
 
 export function Layout() {
   const location = useLocation();
+  const navType = useNavigationType();
+  const goBack = useGoBack();
   const { t, lang, setLang, langs } = useI18n();
   const { user } = useAuth();
   const { academyLive: academy } = useSiteContent();
@@ -46,6 +51,11 @@ export function Layout() {
   const [routeTick, setRouteTick] = useState(0);
   const isHome = location.pathname === "/";
   const isAuth = location.pathname.startsWith("/auth");
+  const tabRoot = isTabRoot(location.pathname);
+  // Phone nav bar: the page's own title moves up into the bar once it scrolls under it.
+  const [titleState, setTitleState] = useState({ path: "", text: "", shown: false });
+  const navTitle = titleState.path === location.pathname ? titleState.text : "";
+  const titleShown = navTitle !== "" && titleState.shown;
 
   useDocumentMeta();
 
@@ -59,13 +69,54 @@ export function Layout() {
   }, []);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    // Phones go Back to where the reader left off; everything else starts at the top.
+    const y = navType === "POP" && !desktop ? recalledScroll(location.key) : 0;
+    window.scrollTo({ top: y, left: 0, behavior: "auto" });
     setRouteTick((n) => n + 1);
     setTabCompact(false);
     // Re-measure header state (film behind it?) once the new page has painted.
-    const raf = requestAnimationFrame(() => window.dispatchEvent(new Event("scroll")));
+    const raf = requestAnimationFrame(() => {
+      // A page still short on the first pass gets its offset once it has grown.
+      if (y && Math.abs(window.scrollY - y) > 2) window.scrollTo({ top: y, left: 0, behavior: "auto" });
+      window.dispatchEvent(new Event("scroll"));
+    });
     return () => cancelAnimationFrame(raf);
+    // Once per route change only.
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (desktop || isHome) return;
+    const path = location.pathname;
+    const main = document.getElementById("main");
+    if (!main) return;
+    let queued = 0;
+    // Measured fresh each frame: lazy, CMS-fed pages can swap the heading node or its text.
+    const measure = () => {
+      queued = 0;
+      const h1 = main.querySelector<HTMLElement>(
+        `.route-layer[data-path="${CSS.escape(path)}"] h1`,
+      );
+      if (!h1) return;
+      const text = h1.textContent?.trim() ?? "";
+      // Vertical only: mid push-slide the heading is off to the side, not scrolled away.
+      const shown = h1.getBoundingClientRect().bottom < 64;
+      setTitleState((s) =>
+        s.path === path && s.text === text && s.shown === shown ? s : { path, text, shown },
+      );
+    };
+    const schedule = () => {
+      if (!queued) queued = requestAnimationFrame(measure);
+    };
+    const mo = new MutationObserver(schedule);
+    mo.observe(main, { childList: true, subtree: true, characterData: true });
+    window.addEventListener("scroll", schedule, { passive: true });
+    schedule();
+    return () => {
+      cancelAnimationFrame(queued);
+      mo.disconnect();
+      window.removeEventListener("scroll", schedule);
+    };
+  }, [location.pathname, desktop, isHome, lang]);
 
   useEffect(() => {
     setMenuOpen(false);
@@ -122,7 +173,9 @@ export function Layout() {
       <header
         className={`topbar${isHome ? " is-over-hero" : ""}${scrolled ? " is-scrolled" : ""}${
           isHome && onFilm ? " is-on-film" : ""
-        }${tabCompact && !menuOpen ? " is-tucked" : ""}`}
+        }${tabCompact && !menuOpen ? " is-tucked" : ""}${
+          !desktop && titleShown ? " has-title" : ""
+        }${!desktop && !tabRoot ? " has-back" : ""}`}
       >
         <div className="topbar-stack">
           <div className="topbar-capsule">
@@ -137,14 +190,34 @@ export function Layout() {
               />
             )}
 
-            <NavLink
-              to="/"
-              className="topbar-brand"
-              aria-label={t("nav_home")}
-              onClick={() => void hapticLight()}
-            >
-              <Logo size="sm" />
-            </NavLink>
+            {!desktop && !tabRoot ? (
+              <button
+                type="button"
+                className="topbar-back"
+                onClick={() => {
+                  void hapticLight();
+                  goBack();
+                }}
+              >
+                <IconChevronBack />
+                <span>{t("back")}</span>
+              </button>
+            ) : (
+              <NavLink
+                to="/"
+                className="topbar-brand"
+                aria-label={t("nav_home")}
+                onClick={() => void hapticLight()}
+              >
+                <Logo size="sm" />
+              </NavLink>
+            )}
+
+            {!desktop && navTitle && (
+              <span className="topbar-title" aria-hidden>
+                {navTitle}
+              </span>
+            )}
 
             <DesktopNav />
 
@@ -319,7 +392,14 @@ export function Layout() {
                 className={({ isActive }) =>
                   `tabbar-item${isActive ? " is-active" : ""}`
                 }
-                onClick={() => void hapticLight()}
+                onClick={(e) => {
+                  void hapticLight();
+                  // Tapping the tab you're on scrolls back to the top, as in iOS.
+                  if (location.pathname === item.to) {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+                  }
+                }}
               >
                 {({ isActive }) => (
                   <>
