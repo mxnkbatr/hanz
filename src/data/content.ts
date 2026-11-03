@@ -466,8 +466,7 @@ export const newsIds = [
     titleKey: "news2_t",
     excerptKey: "news2_e",
     bodyKey: "news2_b",
-    image:
-      "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1000&q=72",
+    image: "/images/news-scholarship.webp",
     href: "https://www.instagram.com/khanzacademy/",
   },
   {
