@@ -12,6 +12,12 @@ export const siteCopy = {
   mn: {
     mh_search: "HSK, тэтгэлэг, аялал…",
 
+    // Study in Poland (Think Poland webinar)
+    poland_b:
+      "Think Poland-тай хамтран Польшийн их сургуулиудад элсэх, бичиг баримт, виз, байр, даатгалын бүх шатанд дэмжлэг үзүүлнэ.\n\nАнгли хэлээр суралцах бакалавр, магистр — сургалтын төлбөр жилд ойролцоогоор 3,000 ам.доллар, амьжиргааны зардал сард 600 орчим ам.доллар.",
+    uni_enroll_poland_spring_d: "2-р сарын сүүлээр эхэлнэ · өргөдөл 12-р сарын сүүл хүртэл",
+    uni_enroll_poland_autumn_d: "10-р сарын эхээр эхэлнэ · өргөдөл 7–8-р сар хүртэл",
+
     // Hero
     hd_line1: "Ханзыг",
     hd_line2: "ханзаас.",
@@ -203,6 +209,10 @@ export const siteCopy = {
 
   zh: {
     mh_search: "HSK、奖学金、旅行…",
+    poland_b:
+      "与 Think Poland 合作，在波兰大学申请、材料、签证、住宿和保险的每个环节提供支持。\n\n英语授课本科与硕士 —— 学费约每年 3,000 美元，生活费约每月 600 美元。",
+    uni_enroll_poland_spring_d: "2 月底开学 · 12 月底前申请",
+    uni_enroll_poland_autumn_d: "10 月初开学 · 7–8 月前申请",
     hd_line1: "学汉字，",
     hd_line2: "来汉兹。",
     hd_line3: "",

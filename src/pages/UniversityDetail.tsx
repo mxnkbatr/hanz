@@ -14,6 +14,7 @@ import { mergeEnrollWindows } from "../lib/cms";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { loc } from "../lib/i18nText";
 import { PhotoGlow } from "../components/PhotoGlow";
+import { PolandGuide } from "../components/PolandGuide";
 
 export function UniversityDetail() {
   const { id = "" } = useParams();
@@ -115,6 +116,8 @@ export function UniversityDetail() {
             </div>
           </Reveal>
         </article>
+
+        {track.id === "poland" && <PolandGuide />}
 
         {other && (
           <Reveal delay={0.08}>
