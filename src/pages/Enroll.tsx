@@ -17,13 +17,19 @@ export function Enroll() {
   // A university name from the A–Z list (/university cards); anything else is ignored.
   const school = (params.get("school") || "").trim();
   const schoolName = partnerUniversities.some((u) => u === school) ? school : "";
+  // ?uni=china|poland: which study track the request came from.
+  const uni = params.get("uni");
+  const uniTrack = uni === "china" || uni === "poland" ? uni : "";
+  const contextName = schoolName || (uniTrack ? t(uniTrack) : "");
   const isKids = interest === "kids";
   const isTravel = interest.startsWith("travel_");
   const backTo = isTravel
     ? `/travel/${interest.replace("travel_", "")}`
-    : interest === "consult" && params.get("uni")
-      ? "/university"
-      : "/";
+    : uniTrack && !schoolName
+      ? `/university/${uniTrack}`
+      : uniTrack || interest === "university"
+        ? "/university"
+        : "/";
 
   return (
     <PageShell className="page-enroll is-app ios-app">
@@ -48,11 +54,11 @@ export function Enroll() {
         </Reveal>
       </header>
 
-      {schoolName && (
+      {contextName && (
         <Reveal>
           <div className="enroll-context">
             <span>{t("nav_uni")}</span>
-            <strong>{schoolName}</strong>
+            <strong>{contextName}</strong>
           </div>
         </Reveal>
       )}
@@ -63,7 +69,7 @@ export function Enroll() {
           <EnrollWizard
             defaultInterest={params.get("interest")}
             defaultLevel={level}
-            context={schoolName ? `${t("nav_uni")}: ${schoolName}` : undefined}
+            context={contextName ? `${t("nav_uni")}: ${contextName}` : undefined}
           />
         </Reveal>
       </section>

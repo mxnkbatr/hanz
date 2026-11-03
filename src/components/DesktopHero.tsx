@@ -158,12 +158,7 @@ export function DesktopHero({ ready }: { ready: boolean }) {
           </motion.p>
 
           <motion.div className="cine-cta" {...beat(1.8)}>
-            <MagneticButton
-              href={academy.registerUrl}
-              className="btn btn-seal cine-primary"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <MagneticButton href="/enroll?interest=hsk" className="btn btn-seal cine-primary">
               <span>{t("register_cta")}</span>
               <i aria-hidden>→</i>
             </MagneticButton>

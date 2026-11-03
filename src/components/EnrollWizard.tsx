@@ -334,6 +334,7 @@ export function EnrollWizard({
             </fieldset>
           )}
           {program.id === "consult" && <p className="wz-lead">{t("wz_consult_lead")}</p>}
+          {program.id === "university" && <p className="wz-lead">{t("wz_university_lead")}</p>}
         </div>
       )}
 
@@ -505,7 +506,7 @@ function ProgramCard({
   return (
     <button type="button" className={`wz-program${active ? " is-on" : ""}`} onClick={onPick} aria-pressed={active}>
       <span className="wz-program-media">
-        {course ? <SafeImage src={course.image} alt="" /> : <span aria-hidden>{program.kind === "travel" ? "旅" : "询"}</span>}
+        {course ? <SafeImage src={course.image} alt="" /> : <span aria-hidden>{program.kind === "travel" ? "旅" : program.id === "university" ? "学" : "询"}</span>}
       </span>
       <span className="wz-program-body">
         <strong>{t(program.labelKey)}</strong>

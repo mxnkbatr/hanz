@@ -49,6 +49,14 @@ export function University() {
         <Reveal>
           <h1 className="h1">{t("nav_uni")}</h1>
           <p className="lead desk-only">{t("uni_lead")}</p>
+          <div className="uni-head-actions">
+            <AppLink to="/enroll?interest=university" className="btn btn-seal">
+              <span>{t("uni_enroll_cta")}</span>
+            </AppLink>
+            <AppLink to="/university/poland" className="text-link">
+              {t("poland_title")} <i aria-hidden>→</i>
+            </AppLink>
+          </div>
         </Reveal>
       </header>
 
@@ -116,7 +124,7 @@ export function University() {
 
       <section className="section tight section-last app-mobile">
         <Reveal>
-          <AppLink to="/enroll?interest=consult&uni=china" className="ios-cta">
+          <AppLink to="/enroll?interest=university" className="ios-cta">
             {t("uni_enroll_cta")}
           </AppLink>
         </Reveal>

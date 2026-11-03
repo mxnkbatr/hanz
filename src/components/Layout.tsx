@@ -218,15 +218,10 @@ export function Layout() {
               )}
               </div>
 
-              <a
-                className="topbar-cta"
-                href={academy.registerUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <NavLink className="topbar-cta" to="/enroll?interest=hsk">
                 <span>{t("register_cta")}</span>
                 <i aria-hidden>→</i>
-              </a>
+              </NavLink>
             </div>
           </div>
         </div>

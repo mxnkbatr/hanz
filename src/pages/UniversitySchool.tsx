@@ -29,7 +29,7 @@ export function UniversitySchool({ u }: { u: University }) {
   const { t, lang } = useI18n();
   const city = cityLabel(u, lang);
   const sameCity = u.city ? universities.filter((x) => x.city === u.city && x.slug !== u.slug).slice(0, 4) : [];
-  const enrollTo = `/enroll?interest=consult&uni=china&school=${encodeURIComponent(u.name)}`;
+  const enrollTo = `/enroll?interest=university&uni=china&school=${encodeURIComponent(u.name)}`;
 
   return (
     <PageShell className="page-uni cd">
@@ -151,7 +151,7 @@ export function UniversitySchool({ u }: { u: University }) {
             <strong>{u.name}</strong>
           </div>
           <Link to={enrollTo} className="btn btn-seal" onClick={() => void hapticLight()}>
-            <span>{t("uni_tile_cta")}</span>
+            <span>{t("uni_enroll_cta")}</span>
           </Link>
         </div>,
         document.body,

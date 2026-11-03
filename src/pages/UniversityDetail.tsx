@@ -37,7 +37,7 @@ export function UniversityDetail() {
       mergeEnrollWindows(bundle, "university", track.id) ??
       track.enrollWindows;
     const hasOpen = windows.some((w) => w.status === "open");
-    const enrollTo = `/enroll?interest=consult&uni=${track.id}`;
+    const enrollTo = `/enroll?interest=university&uni=${track.id}`;
     const bodyParas = t(track.bodyKey)
       .split("\n")
       .map((line) => line.trim())
@@ -163,7 +163,7 @@ export function UniversityDetail() {
     .split("\n")
     .map((line) => line.trim())
     .filter(Boolean);
-  const enrollTo = `/enroll?interest=consult&uni=china&school=${school!.id}`;
+  const enrollTo = `/enroll?interest=university&uni=china&school=${encodeURIComponent(schoolTitle)}`;
 
   return (
     <PageShell className="page-detail page-uni is-app ios-app has-enroll-dock">
