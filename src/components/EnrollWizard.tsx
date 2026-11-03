@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { anketLines, emptyAnket, personalMissing, questionsMissing } from "../data/anket";
 import { formatPrice } from "../data/content";
 import {
   hskLevelChoices,
@@ -16,14 +17,19 @@ import { checkQpayPaid, createQpayInvoice, type QpayInvoice } from "../lib/qpay"
 import { useSiteContent } from "../lib/SiteContentContext";
 import { getSupabase } from "../lib/supabase";
 import { hapticLight } from "../lib/native";
+import { AnketPersonal, AnketQuestions } from "./AnketForm";
 import { SafeImage } from "./SafeImage";
 import { MemberAvatar } from "./TeachersSection";
 
-type Step = "program" | "details" | "you" | "pay" | "confirm";
+type Step = "program" | "details" | "you" | "anket" | "pay" | "confirm";
 type Phase = "form" | "sending" | "paying" | "paid" | "done";
 
 /** Columns from supabase/enrollments-v2.sql; dropped on retry if the DB doesn't have them yet. */
-const V2_COLUMNS = ["hsk_level", "schedule", "plan", "plan_price", "child_name"] as const;
+const V2_COLUMNS = ["hsk_level", "schedule", "plan", "plan_price", "child_name", "anket"] as const;
+
+/** Only courses have a details screen (level, teachers); everything else goes straight to the form. */
+const firstStepOf = (programId: string): Step =>
+  programs.find((p) => p.id === programId)?.kind === "course" ? "details" : "you";
 
 /** The course page behind a programme: the HSK class shows the chosen level (HSK 1 until one is picked). */
 const courseIdOf = (programId: string, level = "") =>
@@ -55,7 +61,8 @@ export function EnrollWizard({
   const [schedule, setSchedule] = useState("");
   const [plan, setPlan] = useState("");
   const [you, setYou] = useState({ name: "", phone: "", childName: "", childAge: "", note: "" });
-  const [step, setStep] = useState<Step>(startProgram ? "details" : "program");
+  const [anket, setAnket] = useState(emptyAnket);
+  const [step, setStep] = useState<Step>(startProgram ? firstStepOf(startProgram) : "program");
   const [phase, setPhase] = useState<Phase>("form");
   const [error, setError] = useState("");
   const [invoice, setInvoice] = useState<QpayInvoice | null>(null);
@@ -63,6 +70,11 @@ export function EnrollWizard({
 
   const program = programs.find((p) => p.id === programId);
   const isKids = program?.levels === "kids";
+  const isCourse = program?.kind === "course";
+  // The academy's student form, for the HSK class and university applications.
+  const useAnket = Boolean(program) && !isKids && (isCourse || program?.id === "university");
+  const applicantName = useAnket ? `${anket.surname.trim()} ${anket.name.trim()}` : you.name.trim();
+  const applicantPhone = useAnket ? anket.phone.trim() : you.phone.trim();
   const levelChoices: Choice[] =
     program?.levels === "hsk" ? hskLevelChoices : isKids ? kidsLevelChoices : [];
   const levelId = levelChoices.some((c) => c.id === level) ? level : "";
@@ -79,8 +91,9 @@ export function EnrollWizard({
 
   const steps: Step[] = [
     "program",
-    "details",
+    ...(isCourse ? (["details"] as Step[]) : []),
     "you",
+    ...(useAnket ? (["anket"] as Step[]) : []),
     ...(plans.length ? (["pay"] as Step[]) : []),
     "confirm",
   ];
@@ -94,6 +107,8 @@ export function EnrollWizard({
       if ((program?.schedules.length ?? 0) > 1 && !scheduleId) return t("wz_pick_schedule");
       return "";
     }
+    if (step === "you" && useAnket) return personalMissing(anket) && t(personalMissing(anket));
+    if (step === "anket") return questionsMissing(anket, isCourse) && t(questionsMissing(anket, isCourse));
     if (step === "you") {
       if (!you.name.trim() || you.phone.trim().length < 6) return t("wz_fill_contact");
       if (isKids && (!you.childName.trim() || !you.childAge.trim())) return t("wz_fill_child");
@@ -136,15 +151,16 @@ export function EnrollWizard({
       levelLabel ? `${t("enroll_level")}: ${label(levelLabel)}` : "",
       scheduleLabel ? `${t("enroll_schedule")}: ${t(scheduleLabel.labelKey)}` : "",
       planMeta ? `${t("enroll_plan")}: ${t(planMeta.labelKey)} · ${formatPrice(planMeta.amount)}` : "",
-      you.note.trim(),
+      ...(useAnket ? anketLines(anket, t, isCourse) : []),
+      useAnket ? "" : you.note.trim(),
     ]
       .filter(Boolean)
       .join("\n");
 
     const base = {
       id,
-      name: you.name.trim(),
-      phone: you.phone.trim(),
+      name: applicantName,
+      phone: applicantPhone,
       kind: program.kind,
       interest: program.id,
       child_age: isKids ? you.childAge.trim() || null : null,
@@ -152,10 +168,11 @@ export function EnrollWizard({
     };
     const structured = {
       hsk_level: levelId || null,
-      schedule: scheduleId || null,
+      schedule: (useAnket && isCourse ? anket.schedule : scheduleId) || null,
       plan: planMeta?.id ?? null,
       plan_price: planMeta?.amount ?? null,
       child_name: isKids ? you.childName.trim() || null : null,
+      anket: useAnket ? anket : null,
     };
 
     const supabase = await getSupabase();
@@ -333,12 +350,14 @@ export function EnrollWizard({
               ))}
             </fieldset>
           )}
-          {program.id === "consult" && <p className="wz-lead">{t("wz_consult_lead")}</p>}
-          {program.id === "university" && <p className="wz-lead">{t("wz_university_lead")}</p>}
         </div>
       )}
 
-      {step === "you" && (
+      {step === "you" && useAnket && <AnketPersonal value={anket} onChange={setAnket} />}
+
+      {step === "anket" && <AnketQuestions value={anket} onChange={setAnket} isCourse={isCourse} />}
+
+      {step === "you" && !useAnket && (
         <div className="wz-fields consult-form">
           <label>
             <span>{isKids ? t("kids_form_parent") : t("form_name")}</span>
@@ -422,16 +441,23 @@ export function EnrollWizard({
               <dd>{label(levelChoices.find((c) => c.id === levelId)!)}</dd>
             </div>
           )}
-          {scheduleId && (
+          {useAnket && isCourse && anket.schedule ? (
             <div>
               <dt>{t("enroll_schedule")}</dt>
-              <dd>{t(program.schedules.find((s) => s.id === scheduleId)!.labelKey)}</dd>
+              <dd>{anket.schedule === "other" ? anket.scheduleOther : t(`ak_sch_${anket.schedule}`)}</dd>
             </div>
+          ) : (
+            scheduleId && (
+              <div>
+                <dt>{t("enroll_schedule")}</dt>
+                <dd>{t(program.schedules.find((s) => s.id === scheduleId)!.labelKey)}</dd>
+              </div>
+            )
           )}
           <div>
             <dt>{isKids ? t("kids_form_parent") : t("form_name")}</dt>
             <dd>
-              {you.name} · {you.phone}
+              {applicantName} · {applicantPhone}
             </dd>
           </div>
           {isKids && (
