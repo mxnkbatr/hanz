@@ -188,6 +188,20 @@ a.hx-why-card:hover {
   line-height: 1.35;
 }
 
+/* Enrol form: level already chosen on the course page */
+.enroll-change {
+  margin-left: auto;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--edge-strong);
+  border-radius: 999px;
+  background: var(--surface-1);
+  color: var(--seal);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 /* ─── /pricing ─── */
 .price-table {
   width: 100%;

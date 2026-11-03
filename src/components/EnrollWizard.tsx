@@ -50,6 +50,8 @@ export function EnrollWizard({
 
   const [programId, setProgramId] = useState(startProgram);
   const [level, setLevel] = useState(defaultLevel);
+  // Arriving from a level page (HSK 2 → Enrol) the level is already known: show it, don't ask again.
+  const [levelFixed, setLevelFixed] = useState(Boolean(defaultLevel));
   const [schedule, setSchedule] = useState("");
   const [plan, setPlan] = useState("");
   const [you, setYou] = useState({ name: "", phone: "", childName: "", childAge: "", note: "" });
@@ -261,6 +263,7 @@ export function EnrollWizard({
               onPick={() => {
                 setProgramId(p.id);
                 setLevel("");
+                setLevelFixed(false);
                 setSchedule("");
                 setPlan("");
               }}
@@ -293,7 +296,15 @@ export function EnrollWizard({
 
           <TeacherStrip course={course} team={teamLive} />
 
-          {levelChoices.length > 0 && (
+          {levelChoices.length > 0 && levelFixed && levelId ? (
+            <p className="enroll-fixed">
+              <span>{t("enroll_level")}</span>
+              <strong>{label(levelChoices.find((c) => c.id === levelId)!)}</strong>
+              <button type="button" className="enroll-change" onClick={() => setLevelFixed(false)}>
+                {t("wz_change")}
+              </button>
+            </p>
+          ) : levelChoices.length > 0 && (
             <fieldset className="enroll-choices">
               <legend>{t("enroll_level")}</legend>
               {levelChoices.map((c) => (
