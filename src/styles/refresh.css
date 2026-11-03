@@ -1,0 +1,269 @@
+/*
+ * Colour refresh (loaded last): red leads, with coral, orange, gold and rose as
+ * the supporting hues instead of leaf green. Cleaner white surfaces, gradient
+ * accents on actions, numbers and headline highlights, and one warm hue per
+ * card in the service and level grids. Only tokens and a few components change;
+ * page layouts stay as they are.
+ */
+
+html.site {
+  --page: #fcf9f6;
+  --surface-1: #ffffff;
+  --raised: #f7f2ee;
+  --edge: rgba(22, 22, 22, 0.07);
+  --edge-strong: rgba(22, 22, 22, 0.13);
+  --ash: #66615e;
+
+  --c-red: #e3262b;
+  --c-coral: #ff5a3c;
+  --c-orange: #ff8a3d;
+  --c-gold: #f5b83d;
+  --c-rose: #f43f5e;
+  --c-berry: #c2185b;
+
+  --grad-brand: linear-gradient(135deg, var(--c-red) 0%, var(--c-coral) 60%, var(--c-orange) 100%);
+  --grad-sun: linear-gradient(135deg, var(--c-coral) 0%, var(--c-gold) 100%);
+  --grad-rose: linear-gradient(135deg, var(--c-rose) 0%, #fb7185 100%);
+  --grad-berry: linear-gradient(135deg, var(--c-berry) 0%, var(--c-rose) 100%);
+
+  /* The old green accent becomes coral, so pills, switches and dots stay warm. */
+  --leaf: #e8492f;
+  --leaf-tint: rgba(232, 73, 47, 0.1);
+
+  /* Background light: red, coral and gold instead of mint. */
+  --mint: rgba(255, 138, 61, 0.2);
+  --blush: rgba(244, 63, 94, 0.16);
+  --peach: rgba(245, 184, 61, 0.2);
+  --cream: rgba(227, 38, 43, 0.07);
+
+  --shadow: 0 1px 2px rgba(22, 22, 22, 0.04), 0 16px 36px -22px rgba(120, 40, 20, 0.22);
+  --shadow-hover: 0 2px 4px rgba(22, 22, 22, 0.04), 0 26px 50px -22px rgba(200, 40, 30, 0.3);
+}
+
+html.site[data-theme="dark"] {
+  --page: #0f0e10;
+  --surface-1: #18171a;
+  --raised: #211f23;
+  --edge: rgba(245, 241, 236, 0.08);
+
+  --c-red: #ff4b4f;
+  --c-coral: #ff6b4d;
+  --c-orange: #ff9a52;
+  --c-gold: #ffc65c;
+  --c-rose: #fb7185;
+  --c-berry: #e2457f;
+
+  --leaf: #ff7a5c;
+  --leaf-tint: rgba(255, 122, 92, 0.14);
+
+  --mint: rgba(255, 122, 61, 0.12);
+  --blush: rgba(244, 63, 94, 0.14);
+  --peach: rgba(245, 184, 61, 0.08);
+  --cream: rgba(227, 38, 43, 0.08);
+
+  --shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 18px 40px -22px rgba(0, 0, 0, 0.8);
+  --shadow-hover: 0 1px 0 rgba(255, 255, 255, 0.06) inset, 0 26px 56px -22px rgba(255, 60, 50, 0.28);
+}
+
+/* Phone-style pages set their own text colours; follow the theme so dark mode reads. */
+html.site .app-shell .ios-app {
+  --ios-ink: var(--text);
+  --ios-muted: var(--ash);
+}
+
+html.site .app-shell .page-courses.ios-app .app-head .lead {
+  color: var(--ash);
+}
+
+/* ─── Headline highlights: red → coral gradient text ─── */
+html.site .app-shell :is(h1, h2, .h1, .h2, .m-title, .home-finale-title, .m-cta h2) em,
+html.site .app-shell .cine-accent {
+  background: var(--grad-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--c-red);
+}
+
+/* ─── Primary actions ─── */
+html.site .app-shell :is(.btn-seal, .btn-primary, .ios-cta, .auth-cta-btn.is-primary, .topbar-cta) {
+  background: var(--grad-brand);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 14px 30px -12px rgba(227, 38, 43, 0.55);
+}
+
+html.site .app-shell :is(.btn-seal, .topbar-cta):hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 18px 36px -12px rgba(255, 90, 60, 0.6);
+}
+
+/* ─── Small labels ─── */
+html.site .app-shell :is(.eyebrow, .mm-eyebrow) {
+  background: var(--leaf-tint);
+  color: var(--leaf);
+}
+
+html.site .app-shell .hx-index-num {
+  background: var(--grad-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+html.site .app-shell .hx-index i {
+  background: var(--grad-brand);
+  opacity: 0.6;
+}
+
+/* ─── Stats: gradient figures, warm bar on top ─── */
+html.site .app-shell .stats-strip-inner {
+  background: var(--surface-1);
+  border-color: var(--edge);
+}
+
+html.site .app-shell .stats-strip-inner::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: linear-gradient(90deg, var(--c-red), var(--c-coral), var(--c-gold), var(--c-rose));
+}
+
+html.site .app-shell .stats-num {
+  background: var(--grad-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+html.site .app-shell .stats-item::after {
+  background: var(--c-coral);
+}
+
+/* ─── Cards: crisp white, warm lift on hover ─── */
+html.site .app-shell :is(.hx-why-card, .hx-level, .news-card, .course-product-card, .pl-card, .pl-uni, .uni-card) {
+  background: var(--surface-1);
+  border-color: var(--edge);
+  box-shadow: var(--shadow);
+}
+
+html.site .app-shell :is(a.hx-why-card, .hx-level, .news-card, .course-product-card, .uni-card):hover {
+  border-color: color-mix(in srgb, var(--c-coral) 35%, transparent);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Service icons: one warm hue each */
+html.site .app-shell .hx-why .hx-why-icon {
+  color: #fff;
+  background: var(--grad-brand);
+  box-shadow: 0 10px 22px -10px rgba(227, 38, 43, 0.6);
+}
+
+html.site .app-shell .hx-why > :nth-child(2) .hx-why-icon {
+  background: var(--grad-sun);
+  box-shadow: 0 10px 22px -10px rgba(255, 138, 61, 0.6);
+}
+
+html.site .app-shell .hx-why > :nth-child(3) .hx-why-icon {
+  background: var(--grad-rose);
+  box-shadow: 0 10px 22px -10px rgba(244, 63, 94, 0.6);
+}
+
+html.site .app-shell .hx-why > :nth-child(4) .hx-why-icon {
+  background: var(--grad-berry);
+  box-shadow: 0 10px 22px -10px rgba(194, 24, 91, 0.55);
+}
+
+/* Levels: a coloured strip per stage (beginner sun, middle brand, advanced berry) */
+html.site .app-shell .hx-level::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: var(--grad-sun);
+}
+
+html.site .app-shell .hx-levels > :nth-child(n + 3) .hx-level::before {
+  background: var(--grad-brand);
+}
+
+html.site .app-shell .hx-levels > :nth-child(n + 5) .hx-level::before {
+  background: var(--grad-berry);
+}
+
+html.site .app-shell .hx-level.is-long::before {
+  content: none;
+}
+
+html.site .app-shell .hx-level-glyph {
+  color: color-mix(in srgb, var(--c-coral) 14%, transparent);
+}
+
+html.site .app-shell .hx-level.is-long {
+  background: var(--grad-brand);
+  border-color: transparent;
+  color: #fff;
+}
+
+html.site .app-shell .hx-level.is-long :is(strong, .hx-level-meta) {
+  color: #fff;
+}
+
+/* Course cards: the stage tag as a warm pill */
+html.site .app-shell .course-product-tag {
+  background: var(--grad-brand);
+  color: #fff;
+  border: 0;
+}
+
+/* ─── Filter chips and tab pills ─── */
+html.site .app-shell :is(.m-chip-pill, .ios-seg-pill, .ios26-filter-pill, .news-chip-pill) {
+  background: var(--grad-brand);
+  border-color: transparent;
+  box-shadow: 0 8px 18px -10px rgba(227, 38, 43, 0.6);
+}
+
+html.site .app-shell :is(.m-chips button.is-active, .ios-seg-item.is-active) {
+  color: #fff;
+}
+
+/* ─── Pages from the academy copy ─── */
+html.site .app-shell .pl-h {
+  position: relative;
+  padding-bottom: 0.55rem;
+}
+
+html.site .app-shell .pl-h::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 44px;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--grad-brand);
+}
+
+html.site .app-shell .pl-chips.is-services li {
+  background: var(--grad-sun);
+  color: #fff;
+}
+
+html.site .app-shell .cd-cta,
+html.site .app-shell .price-table tr.is-long {
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--c-coral) 12%, transparent), color-mix(in srgb, var(--c-gold) 12%, transparent)),
+    var(--surface-1);
+}
+
+html.site .app-shell .price-table thead th {
+  background: color-mix(in srgb, var(--c-red) 5%, var(--surface-1));
+}
+
+/* ─── Closing call to action: warmer glow ─── */
+html.site .app-shell .home-finale {
+  background:
+    radial-gradient(55% 70% at 20% 100%, rgba(255, 138, 61, 0.16), transparent 70%),
+    radial-gradient(55% 70% at 80% 100%, rgba(244, 63, 94, 0.14), transparent 70%),
+    var(--page);
+}
