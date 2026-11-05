@@ -3,7 +3,6 @@ import { NavLink } from "react-router-dom";
 import { AnimatePresence, motion, useDragControls, useReducedMotion } from "framer-motion";
 import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
-import { useAuth } from "../lib/AuthContext";
 import { hapticLight } from "../lib/native";
 import { lockBodyScroll, unlockBodyScroll } from "../lib/scrollLock";
 import { ease, sheetEase } from "../lib/motion";
@@ -18,6 +17,7 @@ const glyph = (g: string) => <span className="sl-glyph">{g}</span>;
 const PAGES: { to: string; key: string; icon: ReactNode }[] = [
   { to: "/pricing", key: "nav_pricing", icon: glyph("₮") },
   { to: "/hsk", key: "nav_hsk", icon: glyph("考") },
+  { to: "/university/poland", key: "poland_title", icon: <NavIcon name="uni" /> },
   { to: "/medee", key: "nav_news", icon: <NavIcon name="news" /> },
   { to: "/shop", key: "nav_shop", icon: <NavIcon name="bag" /> },
   { to: "/translation", key: "nav_translation", icon: glyph("译") },
@@ -25,14 +25,13 @@ const PAGES: { to: string; key: string; icon: ReactNode }[] = [
 ];
 
 /**
- * Phone menu: an iOS Settings-style bottom sheet. Account row, the one main action
+ * Phone menu: an iOS Settings-style bottom sheet. The one main action
  * (with a call button), then grouped lists for pages and settings. Drag the grabber down (or tap
  * outside) to close.
  */
 export function MobileMenuSheet({ open, onClose }: Props) {
   const { t } = useI18n();
   const { academyLive: academy } = useSiteContent();
-  const { user } = useAuth();
   const reduce = useReducedMotion();
   const drag = useDragControls();
 
@@ -102,24 +101,7 @@ export function MobileMenuSheet({ open, onClose }: Props) {
             </div>
 
             <div className="mm-body">
-              <motion.div {...rise(0)}>
-                <NavLink
-                  to={user ? "/profile" : "/auth?mode=login"}
-                  className="mm-account"
-                  onClick={go}
-                >
-                  <img className="mm-account-avatar" src="/images/logo-official.webp" alt="" />
-                  <span className="mm-account-text">
-                    <strong>{user ? t("nav_profile") : t("auth_login")}</strong>
-                    <small>{user?.email ?? t("brand")}</small>
-                  </span>
-                  <svg className="sl-chevron" viewBox="0 0 12 12" aria-hidden>
-                    <path d="M4.5 2.5 8 6l-3.5 3.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </NavLink>
-              </motion.div>
-
-              <motion.div className="mm-actions" {...rise(1)}>
+              <motion.div className="mm-actions" {...rise(0)}>
                 <NavLink to="/enroll" className="mm-cta" onClick={go}>
                   <span>{t("register_cta")}</span>
                   <i aria-hidden>→</i>

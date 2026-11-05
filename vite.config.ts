@@ -18,8 +18,10 @@ function siteUrl(mode: string): Plugin {
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => ({
   plugins: [react(), siteUrl(mode)],
-  // Relative base so Capacitor can load assets from the native webview
-  base: "./",
+  // The website needs absolute asset paths, or a deep link such as /courses/hsk4 asks
+  // for /courses/assets/… and gets the index page back (a blank screen). The native
+  // apps keep a relative base: `npm run cap:sync` builds with --mode capacitor.
+  base: mode === "capacitor" ? "./" : "/",
   test: {
     environment: "jsdom",
     globals: true,

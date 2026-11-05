@@ -34,7 +34,7 @@ export function Auth() {
   }
 
   if (user) {
-    return <Navigate to="/profile" replace />;
+    return <Navigate to="/admin" replace />;
   }
 
   function switchMode(next: Mode) {
@@ -66,7 +66,7 @@ export function Auth() {
     if (mode === "signup") {
       setInfo(t("auth_signup_ok"));
     } else {
-      navigate("/profile", { replace: true });
+      navigate("/admin", { replace: true });
     }
   }
 

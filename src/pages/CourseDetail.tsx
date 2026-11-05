@@ -11,6 +11,7 @@ import {
 import { PageShell, Reveal } from "../components/PageShell";
 import { SafeImage } from "../components/SafeImage";
 import { MemberAvatar } from "../components/TeachersSection";
+import { ReadMore } from "../components/ReadMore";
 import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import type { CourseLive, TeamMemberCms } from "../lib/cms";
@@ -135,11 +136,11 @@ export function CourseDetail() {
             <Reveal>
               <section className="cd-group">
                 <h2 className="cd-label">{t("kids_detail_about")}</h2>
-                <div className="cd-card cd-copy">
+                <ReadMore className="cd-card cd-copy" lines={4}>
                   {paragraphs.map((p) => (
                     <p key={p.slice(0, 24)}>{p}</p>
                   ))}
-                </div>
+                </ReadMore>
               </section>
             </Reveal>
           )}
