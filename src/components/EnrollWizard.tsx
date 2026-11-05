@@ -299,11 +299,12 @@ export function EnrollWizard({
             )}
             <div>
               <h2 className="wz-title">{t(program.labelKey)}</h2>
-              {course?.unitKey && <p className="wz-lead">{t(course.unitKey)}</p>}
+              {course?.unitKey && (levelChoices.length === 0 || levelId) && <p className="wz-lead">{t(course.unitKey)}</p>}
             </div>
           </div>
 
-          {course?.highlights && course.highlights.length > 0 && (
+          {/* A level's points only once a level is picked: before that they would be HSK 1's. */}
+          {course?.highlights && course.highlights.length > 0 && (levelChoices.length === 0 || levelId) && (
             <ul className="wz-points">
               {course.highlights.map((h) => (
                 <li key={h}>{t(h)}</li>

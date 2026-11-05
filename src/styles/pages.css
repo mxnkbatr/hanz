@@ -826,9 +826,14 @@
 }
 
 /* Detail dialog */
+/* margin: auto puts it back in the middle: the global reset's margin: 0 had pinned the
+   open dialog to the top-left corner. */
 .hsk-dialog {
   width: min(860px, calc(100vw - 2rem));
   max-height: calc(100svh - 2rem);
+  margin: auto;
+  overflow: auto;
+  overscroll-behavior: contain;
   padding: 0;
   border: 1px solid var(--edge);
   border-radius: 28px;

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { PageShell, Reveal, Stagger, StaggerItem } from "../components/PageShell";
+import { ReadMore } from "../components/ReadMore";
 import { formatPrice } from "../data/content";
 import { hskIntro, hskk, hskLevels, hskSchedule, type HskLevel } from "../data/hsk";
 import { useSiteContent } from "../lib/SiteContentContext";
@@ -45,9 +46,11 @@ export function Hsk() {
 
       <section className="section hsk-about">
         <Reveal>
-          {hskIntro.about.map((p) => (
-            <p key={p.slice(0, 24)}>{p}</p>
-          ))}
+          <ReadMore lines={4}>
+            {hskIntro.about.map((p) => (
+              <p key={p.slice(0, 24)}>{p}</p>
+            ))}
+          </ReadMore>
         </Reveal>
       </section>
 
@@ -74,8 +77,8 @@ export function Hsk() {
                 </dl>
                 <h3>Юу сурах вэ?</h3>
                 <p>{lvl.studySummary}</p>
-                <h3>Төгсөхөд эзэмших чадвар</h3>
-                <p>{lvl.outcomeSummary}</p>
+                <h3 className="hsk-card-more">Төгсөхөд эзэмших чадвар</h3>
+                <p className="hsk-card-more">{lvl.outcomeSummary}</p>
                 <div className="hsk-card-actions">
                   <button type="button" className="btn btn-ink" onClick={() => setOpen(lvl)}>
                     <span>Дэлгэрэнгүй</span>

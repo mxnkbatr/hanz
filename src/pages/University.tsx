@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { AppLink } from "../components/AppLink";
 import { ConsultForm } from "../components/ConsultForm";
-import { CITY_LABELS, cityLabel, getUniversityBySlug, universities, type University } from "../data/universities";
+import { CITY_LABELS, cityLabel, featuredUniversities, universities, type University } from "../data/universities";
 import { IosFilterBar } from "../components/IosFilterBar";
 import { useDesktop } from "../hooks/useDesktop";
 import { PageShell, Reveal, Stagger, StaggerItem } from "../components/PageShell";
@@ -29,19 +29,7 @@ const compareRows = [
   ["cmp_degree", "cmp_c4", "cmp_p4"],
 ] as const;
 
-/** The phone page's featured rail: well-known schools that have a free photo. */
-const FEATURED = [
-  "peking-university",
-  "tsinghua-university",
-  "fudan-university",
-  "shanghai-jiao-tong-university",
-  "nanjing-university",
-  "xiamen-university",
-  "xian-jiaotong-university",
-  "harbin-institute-of-technology",
-]
-  .map(getUniversityBySlug)
-  .filter((u): u is University => Boolean(u));
+const FEATURED = featuredUniversities;
 
 /** City chips: every city with at least three schools, biggest first. */
 const CITY_CHIPS = Object.entries(

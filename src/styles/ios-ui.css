@@ -41,8 +41,14 @@
     color: var(--ios-label);
   }
 
+  /* Every serif headline on the phone uses the system face; only the brand
+     flourish below keeps the serif. */
+  html.site {
+    --display: var(--ios-font);
+  }
+
   /* The brand flourish stays: the red italic word in a title. */
-  html.site .app-shell :is(h1, .h1, .m-title) em {
+  html.site .app-shell :is(h1, h2, .h1, .h2, .m-title) em {
     font-family: var(--font-s);
     font-weight: 600;
   }
@@ -193,17 +199,6 @@
   html.site .app-shell .ios-app .ios-toolbar:has(.ios26-filter) {
     gap: 12px;
     margin: 0;
-  }
-
-  html.site .app-shell .m-chips {
-    position: sticky;
-    top: var(--nav-h);
-    z-index: 30;
-    padding-top: 0.5rem;
-    padding-bottom: 0.6rem;
-    background: var(--ios-material);
-    -webkit-backdrop-filter: blur(22px) saturate(1.8);
-    backdrop-filter: blur(22px) saturate(1.8);
   }
 
   html.site .app-shell :is(.ios26-filter-chip, .m-chips button) {
@@ -607,4 +602,311 @@ html.site[data-theme="dark"] .app-shell .quiz-option:not(.is-correct, .is-wrong)
 html.site[data-theme="dark"] .app-shell .quiz-option i {
   background: color-mix(in srgb, var(--text) 10%, transparent);
   color: color-mix(in srgb, var(--text) 70%, transparent);
+}
+
+/* Dark mode on phones: the page under everything (seen when iOS rubber-bands past the
+   top or bottom) was still the light --bg. */
+html.site[data-theme="dark"] body {
+  background: var(--page);
+}
+
+/* Dark mode: spots that hard-coded near-black text or white chips and vanished on the
+   dark surfaces (found by a contrast scan of every phone page). */
+html.site[data-theme="dark"] .app-shell .onboard-skip,
+html.site[data-theme="dark"] .onboard-skip {
+  color: color-mix(in srgb, var(--text) 70%, transparent);
+}
+
+html.site[data-theme="dark"] .onboard-dot:not(.is-on) {
+  background: color-mix(in srgb, var(--text) 22%, transparent);
+}
+
+html.site[data-theme="dark"] .app-shell :is(.ios-search > span, .app-row-chevron, .quiz-level-chevron, .uni-enroll-teaser > span) {
+  color: color-mix(in srgb, var(--text) 45%, transparent);
+}
+
+html.site[data-theme="dark"] .app-shell .course-comment-form label > span {
+  color: color-mix(in srgb, var(--text) 70%, transparent);
+}
+
+/* Photo badges stay light chips with dark text in both themes. !important: a broad
+   :is() list in site-theme.css ("text that was hard-coded near-black") outweighs this. */
+html.site[data-theme="dark"] .app-shell :is(.course-product-tag, .ios-badge, .m-chip-light) {
+  color: #1c1c1e !important;
+}
+
+/* The selected filter chip reads white on red in both themes. */
+html.site .app-shell .ios26-filter-chip.is-active .ios26-filter-label {
+  color: #fff;
+}
+
+/* Screens with their own action bar (course, school, travel detail; enrolment) hide the
+   tab bar, like a pushed iOS screen, so there is one bar at the bottom instead of two.
+   The nav bar's Back takes the user out. */
+@media (max-width: 899px) {
+  html.site body:has(.cd-bar, .app-enroll-dock) .tabbar,
+  html.site .app-shell:has(.page-enroll) .tabbar {
+    display: none;
+  }
+
+  html.site body:has(.cd-bar) .cd-bar,
+  html.site body:has(.app-enroll-dock) .app-enroll-dock,
+  html.site .app-shell .page-enroll .wz-foot {
+    bottom: calc(env(safe-area-inset-bottom) + 0.75rem);
+  }
+}
+
+/* ReadMore: first lines of long copy, then "Read more" in the brand red. */
+.read-more-body {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+}
+
+.read-more.is-open .read-more-body {
+  display: block;
+}
+
+.read-more-body > * + * {
+  margin-top: 0.6em;
+}
+
+.read-more-toggle {
+  margin-top: 6px;
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  color: var(--seal);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* /hsk on phones: each level card keeps its numbers and one short "what you learn"
+   line; the outcome paragraph lives in the level's "Дэлгэрэнгүй" sheet. */
+@media (max-width: 899px) {
+  html.site .app-shell .hsk-card .hsk-card-more {
+    display: none;
+  }
+
+  html.site .app-shell .hsk-card > p {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+}
+
+/* /hsk hero on phones: two buttons are enough; the levels start right below. */
+@media (max-width: 899px) {
+  html.site .app-shell .hsk-hero .hsk-actions > .text-link {
+    display: none;
+  }
+}
+
+/* Home quick actions: four app-icon squircles with a label under each. */
+.m-quick {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 18px 0 22px;
+}
+
+.m-quick-item {
+  display: grid;
+  justify-items: center;
+  gap: 7px;
+  color: var(--text);
+  font-family: var(--ios-font, var(--font-ui));
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+
+.m-quick-icon {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 8px 18px -10px rgba(120, 30, 20, 0.55);
+}
+
+.m-quick-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.m-quick-item.is-red .m-quick-icon {
+  background: var(--grad-brand, #e3262b);
+}
+
+.m-quick-item.is-gold .m-quick-icon {
+  background: var(--grad-sun, #f5b83d);
+}
+
+.m-quick-item.is-rose .m-quick-icon {
+  background: var(--grad-rose, #f43f5e);
+}
+
+.m-quick-item.is-green .m-quick-icon {
+  background: linear-gradient(135deg, #34c759 0%, #30b350 100%);
+}
+
+/* Home cards: titles in the system face too (they used the serif token directly). */
+@media (max-width: 899px) {
+  html.site .app-shell :is(.m-feature-body strong, .m-tall-body strong, .m-square strong, .m-cta h2) {
+    font-family: var(--ios-font);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  html.site .app-shell .m-feature-body em {
+    font-family: var(--ios-font);
+    font-style: normal;
+  }
+}
+
+@media (max-width: 899px) {
+  html.site .app-shell .m-square em {
+    font-family: var(--ios-font);
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ios-secondary);
+  }
+}
+
+/* ─── Tab pages on phones: Courses, University, Travel ─── */
+@media (max-width: 899px) {
+  /* Courses: the fees link lives in the menu and on every course page. */
+  html.site .app-shell .page-courses .page-head .text-link {
+    display: none;
+  }
+
+  /* Courses as an App Store-style list: thumbnail, title, one line, chevron. */
+  html.site .app-shell .page-courses .course-product-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+    overflow: hidden;
+    border-radius: 20px;
+    background: var(--surface-1);
+    box-shadow: var(--ios-card-shadow);
+  }
+
+  html.site .app-shell .page-courses .course-product-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 76px minmax(0, 1fr) 14px;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  html.site .app-shell .page-courses .course-product-card + .course-product-card::before,
+  html.site .app-shell .page-courses .stagger-item + .stagger-item .course-product-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 104px;
+    height: 0.5px;
+    background: var(--ios-hairline);
+  }
+
+  html.site .app-shell .page-courses .course-product-card::after {
+    content: "›";
+    grid-column: 3;
+    grid-row: 1;
+    color: var(--ios-tertiary);
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  html.site .app-shell .page-courses .course-product-media {
+    width: 76px;
+    height: 76px;
+    aspect-ratio: auto;
+    overflow: hidden;
+    border-radius: 16px;
+  }
+
+  html.site .app-shell .page-courses .course-product-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* The stage reads as a small line above the title instead of a badge on the photo. */
+  html.site .app-shell .page-courses .course-product-tag {
+    display: none;
+  }
+
+  html.site .app-shell .page-courses .course-product-body {
+    padding: 0;
+    gap: 3px;
+  }
+
+  html.site .app-shell .page-courses .course-product-body h3 {
+    font-size: 17px;
+  }
+
+  html.site .app-shell .page-courses .course-product-body p {
+    -webkit-line-clamp: 2;
+    font-size: 14px;
+  }
+
+  /* University: room between the head buttons and the featured rail. */
+  html.site .app-shell .page-uni .uni-head-actions {
+    margin-bottom: 8px;
+  }
+
+  html.site .app-shell .uni-featured-section .ios-section-head {
+    margin-top: 6px;
+  }
+
+  /* Travel: the whole card opens the trip; no separate "Үзэх →". */
+  html.site .app-shell .page-travel .ios-card-cta {
+    display: none;
+  }
+}
+
+/* HSK level details on phones: an iOS sheet from the bottom edge. */
+@media (max-width: 899px) {
+  html.site .hsk-dialog {
+    width: 100%;
+    max-width: none;
+    max-height: 90svh;
+    margin: auto 0 0;
+    border-radius: 28px 28px 0 0;
+    border-bottom: 0;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  html.site .hsk-dialog[open] {
+    animation: hsk-sheet-up 0.38s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  @keyframes hsk-sheet-up {
+    from {
+      transform: translateY(100%);
+    }
+  }
+}
+
+/* /university on phones: no button row under the title; each school page has its own
+   "apply" bar. (The academy asked for it gone.) */
+@media (max-width: 899px) {
+  html.site .app-shell .page-uni .uni-head-actions {
+    display: none;
+  }
 }

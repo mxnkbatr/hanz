@@ -4,10 +4,12 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { loc } from "../lib/i18nText";
-import { courseFilters, filterKeyLabel, type CourseFilter } from "../data/courseMatch";
 import { SafeImage } from "./SafeImage";
+import { cityLabel, featuredUniversities, universities, type University } from "../data/universities";
 import { useImageTints } from "../lib/imageTint";
-import { ease, navSpring } from "../lib/motion";
+import { ease } from "../lib/motion";
+import { hapticLight } from "../lib/native";
+import { IconPhone, NavIcon } from "./Icons";
 
 const FEATURE_MS = 5200;
 
@@ -32,14 +34,21 @@ type Entry = {
   image: string;
 };
 
+const uniEntry = (u: University, lang: "mn" | "en" | "zh"): Entry => ({
+  id: u.slug,
+  kind: "uni",
+  to: `/university/${u.slug}`,
+  title: u.name,
+  meta: [u.zh, cityLabel(u, lang)].filter(Boolean).join(" · "),
+  image: u.photo?.src ?? "",
+});
+
 /** Phone home: app-style start screen instead of the long desktop landing. */
 export function MobileHome() {
   const { t, lang } = useI18n();
   const reduce = useReducedMotion();
-  const { coursesLive, universitiesLive, travelLive, newsLive, academyLive } =
-    useSiteContent();
+  const { coursesLive, travelLive, newsLive, academyLive } = useSiteContent();
   const [q, setQ] = useState("");
-  const [filter, setFilter] = useState<CourseFilter>("all");
   const [slide, setSlide] = useState(0);
   const [hour] = useState(() => new Date().getHours());
   const hello = t(helloKey(hour));
@@ -56,17 +65,11 @@ export function MobileHome() {
       })),
     [coursesLive, lang, t],
   );
-  const unis: Entry[] = useMemo(
-    () =>
-      universitiesLive.map((u) => ({
-        id: u.id,
-        kind: "uni",
-        to: `/university/${u.id}`,
-        title: loc(lang, t, u.title, u.nameMnKey || u.titleKey),
-        meta: loc(lang, t, u.city, u.cityKey),
-        image: u.image,
-      })),
-    [universitiesLive, lang, t],
+  // The academy's full university list (search) and its featured schools (rail).
+  const unis: Entry[] = useMemo(() => universities.map((u) => uniEntry(u, lang)), [lang]);
+  const featuredUnis: Entry[] = useMemo(
+    () => featuredUniversities.map((u) => uniEntry(u, lang)),
+    [lang],
   );
   const travel: Entry[] = useMemo(
     () =>
@@ -114,15 +117,6 @@ export function MobileHome() {
       )
     : [];
 
-  const filtered =
-    filter === "all"
-      ? courses
-      : courses.filter(
-          (e) => coursesLive.find((c) => c.id === e.id)?.filter === filter,
-        );
-  const usedFilters = courseFilters.filter(
-    (f) => f === "all" || coursesLive.some((c) => c.filter === f),
-  );
   const current = featured[slide % Math.max(featured.length, 1)];
   const tints = useImageTints(featured.map((f) => f.image));
 
@@ -157,6 +151,41 @@ export function MobileHome() {
           </button>
         ) : null}
       </motion.div>
+
+      {/* Quick actions, like the shortcut row in a bank or school app. */}
+      {!query && (
+        <motion.nav
+          className="m-quick"
+          aria-label={t("mh_quick")}
+          {...rise}
+          transition={{ delay: 0.1, duration: 0.5, ease }}
+        >
+          <Link to="/enroll?interest=hsk" className="m-quick-item is-red" onClick={() => void hapticLight()}>
+            <span className="m-quick-icon">
+              <NavIcon name="courses" />
+            </span>
+            <span>{t("mh_q_enroll")}</span>
+          </Link>
+          <Link to="/quiz" className="m-quick-item is-gold" onClick={() => void hapticLight()}>
+            <span className="m-quick-icon">
+              <NavIcon name="quiz" />
+            </span>
+            <span>{t("mh_q_level")}</span>
+          </Link>
+          <Link to="/university" className="m-quick-item is-rose" onClick={() => void hapticLight()}>
+            <span className="m-quick-icon">
+              <NavIcon name="uni" />
+            </span>
+            <span>{t("mh_q_scholar")}</span>
+          </Link>
+          <a href={`tel:${academyLive.phoneRaw[0]}`} className="m-quick-item is-green" onClick={() => void hapticLight()}>
+            <span className="m-quick-icon">
+              <IconPhone />
+            </span>
+            <span>{t("mh_q_call")}</span>
+          </a>
+        </motion.nav>
+      )}
 
       <AnimatePresence mode="wait">
         {query ? (
@@ -268,22 +297,6 @@ export function MobileHome() {
               </section>
             ) : null}
 
-            <div className="m-chips">
-              {usedFilters.map((f) => (
-                <button
-                  key={f}
-                  type="button"
-                  className={filter === f ? "is-active" : ""}
-                  onClick={() => setFilter(f)}
-                >
-                  {filter === f ? (
-                    <motion.span className="m-chip-pill" layoutId="m-chip" transition={navSpring} />
-                  ) : null}
-                  <span>{t(filterKeyLabel(f))}</span>
-                </button>
-              ))}
-            </div>
-
             <section className="m-section">
               <div className="m-section-head">
                 <h2>{t("mh_courses")}</h2>
@@ -291,7 +304,7 @@ export function MobileHome() {
               </div>
               <div className="m-rail">
                 <AnimatePresence mode="popLayout" initial={false}>
-                  {filtered.map((e, i) => (
+                  {courses.map((e, i) => (
                     <motion.div
                       key={e.id}
                       layout
@@ -316,22 +329,14 @@ export function MobileHome() {
               </div>
             </section>
 
-            <Link to="/university" className="m-promo">
-              <span>
-                <em>{t("mh_promo_eyebrow")}</em>
-                <strong>{t("mh_promo_title")}</strong>
-              </span>
-              <i aria-hidden>→</i>
-            </Link>
-
-            {unis.length ? (
+            {featuredUnis.length ? (
               <section className="m-section">
                 <div className="m-section-head">
                   <h2>{t("mh_unis")}</h2>
                   <Link to="/university">{t("see_all")}</Link>
                 </div>
                 <div className="m-rail">
-                  {unis.slice(0, 8).map((e) => (
+                  {featuredUnis.map((e) => (
                     <Link key={e.id} to={e.to} className="m-square">
                       <span className="m-square-media">
                         <SafeImage src={e.image} alt={e.title} />
@@ -350,7 +355,7 @@ export function MobileHome() {
                 <Link to="/medee">{t("see_all")}</Link>
               </div>
               <ul className="m-list">
-                {news.slice(0, 4).map((e) => (
+                {news.slice(0, 3).map((e) => (
                   <li key={e.id}>
                     <Link to={e.to} className="m-row">
                       <span className="m-row-thumb is-lg">
@@ -373,21 +378,12 @@ export function MobileHome() {
               <h2>
                 {t("mh_cta_a")} <em>{t("mh_cta_em")}</em> {t("mh_cta_b")}
               </h2>
-              <p className="m-cta-body">{t("cta_body")}</p>
               <div className="m-cta-actions">
                 <Link to="/enroll?interest=hsk" className="is-seal">
                   {t("register_cta")} →
                 </Link>
                 <a href={`tel:${academyLive.phoneRaw[0]}`}>☏ {t("call")}</a>
               </div>
-              <a
-                className="m-cta-chat"
-                href={academyLive.messenger}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {t("mh_chat")} — {t("mh_call")}
-              </a>
             </section>
           </motion.div>
         )}

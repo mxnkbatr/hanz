@@ -1895,3 +1895,17 @@ export function describeUniversity(u: University, lang: Lang): string {
 }
 
 export const getUniversityBySlug = (slug: string) => universities.find((u) => u.slug === slug);
+
+/** Well-known schools with a free photo: the featured rail on /university and on Home. */
+export const featuredUniversities: University[] = [
+  "peking-university",
+  "tsinghua-university",
+  "fudan-university",
+  "shanghai-jiao-tong-university",
+  "nanjing-university",
+  "xiamen-university",
+  "xian-jiaotong-university",
+  "harbin-institute-of-technology",
+]
+  .map(getUniversityBySlug)
+  .filter((u): u is University => Boolean(u));
