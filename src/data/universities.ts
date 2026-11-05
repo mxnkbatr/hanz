@@ -27,7 +27,8 @@ export type University = {
   photo: UniversityPhoto | null;
 };
 
-export const universities: University[] = [
+/** Every school gathered, photo or not. */
+const allUniversities: University[] = [
   {
     "slug": "anhui-jianzhu-university",
     "name": "Anhui Jianzhu University",
@@ -1789,6 +1790,9 @@ export const universities: University[] = [
     }
   }
 ];
+
+/** The schools the site shows: only those with a photo (the academy's call, 2026-11-06). */
+export const universities: University[] = allUniversities.filter((u) => u.photo);
 
 type Lang = "mn" | "en" | "zh";
 type Tri = Record<Lang, string>;
