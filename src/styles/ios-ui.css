@@ -175,9 +175,19 @@
     backdrop-filter: blur(22px) saturate(1.8);
   }
 
+  /* No drop shadow: it would show through the bar once the field slides under it. */
   html.site .app-shell .ios-app .ios-toolbar:has(.ios26-filter) .ios-search {
     height: 52px;
     margin: 0;
+    box-shadow: none;
+  }
+
+  html.site .app-shell .uni-feature-body em {
+    color: rgba(255, 255, 255, 0.86);
+  }
+
+  html.site .app-shell .uni-feature-body strong {
+    color: #fff;
   }
 
   html.site .app-shell .ios-app .ios-toolbar:has(.ios26-filter) {
@@ -296,5 +306,269 @@
     font-size: 15px;
     font-weight: 500;
     letter-spacing: -0.01em;
+  }
+}
+
+/* ─── Universities on phones: featured rail + A–Z list (design C) ─── */
+.uni-feature-rail {
+  display: flex;
+  gap: 12px;
+  margin: 0 calc(50% - 50vw);
+  padding: 2px calc(50vw - 50%) 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: calc(50vw - 50%);
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.uni-feature-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.uni-feature {
+  position: relative;
+  flex: 0 0 82%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 24px;
+  scroll-snap-align: start;
+  color: #fff;
+  box-shadow: 0 1px 1px rgba(20, 14, 10, 0.04), 0 14px 30px -14px rgba(60, 30, 20, 0.35);
+}
+
+.uni-feature .uni-feature-media {
+  position: absolute;
+  inset: 0;
+}
+
+.uni-feature-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 38%, rgba(0, 0, 0, 0.18) 55%, rgba(0, 0, 0, 0.72) 100%);
+}
+
+.uni-feature-body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  gap: 3px;
+  padding: 18px 18px 20px;
+}
+
+.uni-feature-body strong {
+  font-family: var(--ios-font);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.uni-feature-zh {
+  font-family: "Noto Serif SC", serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  opacity: 0.9;
+}
+
+.uni-feature-body em {
+  font-family: var(--ios-font);
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+/* A–Z: letter headers above inset grouped lists. */
+.uni-az {
+  display: grid;
+  gap: 18px;
+}
+
+.uni-az-letter {
+  margin: 0 0 6px 16px;
+  font-family: var(--ios-font);
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.04em !important;
+  color: var(--ios-secondary, var(--ash)) !important;
+}
+
+.uni-az-list {
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--surface-1);
+  box-shadow: var(--ios-card-shadow);
+}
+
+.uni-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 68px;
+  padding: 10px 14px;
+  color: var(--text);
+}
+
+/* Inset hairline between rows, starting after the thumbnail. */
+.uni-row + .uni-row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 78px;
+  height: 0.5px;
+  background: var(--ios-hairline, var(--edge));
+}
+
+.uni-row:active {
+  background: color-mix(in srgb, var(--text) 5%, transparent);
+}
+
+.uni-row-thumb {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  overflow: hidden;
+  border-radius: 13px;
+  background: var(--seal-tint);
+  color: var(--seal);
+  font-family: "Noto Serif SC", serif;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.uni-row-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.uni-row-body {
+  flex: 1;
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.uni-row-body strong {
+  overflow: hidden;
+  font-family: var(--ios-font);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.uni-row-body small {
+  overflow: hidden;
+  font-family: var(--ios-font);
+  font-size: 13px;
+  color: var(--ios-secondary, var(--ash));
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.uni-row-chevron {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  color: var(--ios-tertiary, var(--ash));
+}
+
+/* School page on phones: name on the photo, facts as a grouped list. */
+@media (max-width: 899px) {
+  html.site .app-shell .cd-media.uni-hero {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: 26px;
+    box-shadow: 0 1px 1px rgba(20, 14, 10, 0.04), 0 18px 36px -18px rgba(60, 30, 20, 0.4);
+  }
+
+  html.site .app-shell .cd-media.uni-hero .uni-hero-media {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+  }
+
+  html.site .app-shell .uni-hero-body {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: grid;
+    gap: 4px;
+    padding: 22px 20px 22px;
+    color: #fff;
+  }
+
+  html.site .app-shell .uni-hero-body .uni-hero-title {
+    margin: 0;
+    font-size: clamp(26px, 8vw, 32px);
+    color: #fff;
+  }
+
+  html.site .app-shell .uni-hero-body em {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.86);
+  }
+
+  html.site .app-shell .uni-hero-body .uni-feature-zh {
+    color: #fff;
+  }
+
+  html.site .app-shell .uni-fact {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 50px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-size: 16px;
+  }
+
+  html.site .app-shell .uni-fact + .uni-fact::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 16px;
+    height: 0.5px;
+    background: var(--ios-hairline);
+  }
+
+  html.site .app-shell .uni-fact span {
+    flex: none;
+    color: var(--ios-label);
+  }
+
+  html.site .app-shell .uni-fact strong {
+    flex: 1;
+    overflow: hidden;
+    font-weight: 400;
+    color: var(--ios-secondary);
+    text-align: right;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  html.site .app-shell .uni-fact.is-link strong {
+    color: var(--seal);
+  }
+
+  html.site .app-shell .uni-fact i {
+    font-style: normal;
+    color: var(--seal);
   }
 }

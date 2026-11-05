@@ -1,7 +1,8 @@
 import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
 import { PageShell, Reveal, Stagger, StaggerItem } from "../components/PageShell";
-import { UniversityCard, UniversityMedia } from "../components/UniversityCard";
+import { UniversityCard, UniversityMedia, UniversityRow } from "../components/UniversityCard";
+import { useDesktop } from "../hooks/useDesktop";
 import {
   cityLabel,
   describeUniversity,
@@ -27,6 +28,7 @@ const STEPS = [
  */
 export function UniversitySchool({ u }: { u: University }) {
   const { t, lang } = useI18n();
+  const desktop = useDesktop();
   const city = cityLabel(u, lang);
   const sameCity = u.city ? universities.filter((x) => x.city === u.city && x.slug !== u.slug).slice(0, 4) : [];
   const enrollTo = `/enroll?interest=university&uni=china&school=${encodeURIComponent(u.name)}`;
@@ -35,11 +37,27 @@ export function UniversitySchool({ u }: { u: University }) {
     <PageShell className="page-uni cd">
       <div className="cd-layout">
         <Reveal className="cd-media-wrap">
-          <div className="cd-media">
+          {/* Phone: the photo carries the name, like the featured cards on /university. */}
+          <div className={`cd-media${desktop ? "" : " uni-hero"}`}>
             <UniversityMedia u={u} className="uni-hero-media" eager />
-            <Link to="/university" className="cd-back" aria-label={t("back")}>
-              ←
-            </Link>
+            {desktop ? (
+              <Link to="/university" className="cd-back" aria-label={t("back")}>
+                ←
+              </Link>
+            ) : (
+              <>
+                <span className="uni-feature-shade" aria-hidden />
+                <header className="uni-hero-body">
+                  {u.zh && (
+                    <small lang="zh" className="uni-feature-zh">
+                      {u.zh}
+                    </small>
+                  )}
+                  <h1 className="uni-hero-title">{u.name}</h1>
+                  <em>{universityType(u)[lang]}</em>
+                </header>
+              </>
+            )}
           </div>
           {u.photo && (
             <p className="uni-credit">
@@ -60,20 +78,51 @@ export function UniversitySchool({ u }: { u: University }) {
         </Reveal>
 
         <div className="cd-body">
-          <Reveal>
-            <header className="cd-head">
-              <span className="cd-tag">{universityType(u)[lang]}</span>
-              <h1 className="cd-title">{u.name}</h1>
-              {u.zh && (
-                <p className="cd-unit" lang="zh">
-                  {u.zh}
-                </p>
-              )}
-            </header>
-          </Reveal>
+          {desktop && (
+            <Reveal>
+              <header className="cd-head">
+                <span className="cd-tag">{universityType(u)[lang]}</span>
+                <h1 className="cd-title">{u.name}</h1>
+                {u.zh && (
+                  <p className="cd-unit" lang="zh">
+                    {u.zh}
+                  </p>
+                )}
+              </header>
+            </Reveal>
+          )}
+
+          {!desktop && (
+            <Reveal>
+              <section className="cd-group">
+                <h2 className="cd-label">{t("uni_facts")}</h2>
+                <div className="uni-az-list uni-facts">
+                  {city && (
+                    <div className="uni-fact">
+                      <span>{t("uni_city")}</span>
+                      <strong>{city}</strong>
+                    </div>
+                  )}
+                  {u.founded && (
+                    <div className="uni-fact">
+                      <span>{t("uni_founded")}</span>
+                      <strong>{u.founded}</strong>
+                    </div>
+                  )}
+                  {u.website && (
+                    <a className="uni-fact is-link" href={u.website} target="_blank" rel="noopener noreferrer">
+                      <span>{t("uni_website")}</span>
+                      <strong>{u.website.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}</strong>
+                      <i aria-hidden>↗</i>
+                    </a>
+                  )}
+                </div>
+              </section>
+            </Reveal>
+          )}
 
           <Reveal>
-            <ul className="cd-facts">
+            <ul className="cd-facts desk-only">
               {city && (
                 <li>
                   <span>{t("uni_city")}</span>
@@ -100,7 +149,7 @@ export function UniversitySchool({ u }: { u: University }) {
                 <p>{describeUniversity(u, lang)}</p>
                 <p>{t("uni_about_more")}</p>
               </div>
-              {u.website && (
+              {desktop && u.website && (
                 <a className="cd-card cd-link" href={u.website} target="_blank" rel="noopener noreferrer">
                   <span>{t("uni_website")}</span>
                   <i aria-hidden>↗</i>
@@ -132,13 +181,21 @@ export function UniversitySchool({ u }: { u: University }) {
             <Reveal>
               <section className="cd-group">
                 <h2 className="cd-label">{t("uni_same_city").replace("{city}", city)}</h2>
-                <Stagger className="uni-tiles uni-tiles-compact">
-                  {sameCity.map((x) => (
-                    <StaggerItem key={x.slug}>
-                      <UniversityCard university={x} />
-                    </StaggerItem>
-                  ))}
-                </Stagger>
+                {desktop ? (
+                  <Stagger className="uni-tiles uni-tiles-compact">
+                    {sameCity.map((x) => (
+                      <StaggerItem key={x.slug}>
+                        <UniversityCard university={x} />
+                      </StaggerItem>
+                    ))}
+                  </Stagger>
+                ) : (
+                  <div className="uni-az-list">
+                    {sameCity.map((x) => (
+                      <UniversityRow key={x.slug} u={x} />
+                    ))}
+                  </div>
+                )}
               </section>
             </Reveal>
           )}
@@ -151,7 +208,7 @@ export function UniversitySchool({ u }: { u: University }) {
             <strong>{u.name}</strong>
           </div>
           <Link to={enrollTo} className="btn btn-seal" onClick={() => void hapticLight()}>
-            <span>{t("uni_enroll_cta")}</span>
+            <span>{desktop ? t("uni_enroll_cta") : t("uni_apply_here")}</span>
           </Link>
         </div>,
         document.body,

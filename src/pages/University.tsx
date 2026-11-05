@@ -1,9 +1,11 @@
 import { useMemo, useState } from "react";
 import { AppLink } from "../components/AppLink";
 import { ConsultForm } from "../components/ConsultForm";
-import { CITY_LABELS, universities } from "../data/universities";
+import { CITY_LABELS, cityLabel, getUniversityBySlug, universities, type University } from "../data/universities";
+import { IosFilterBar } from "../components/IosFilterBar";
+import { useDesktop } from "../hooks/useDesktop";
 import { PageShell, Reveal, Stagger, StaggerItem } from "../components/PageShell";
-import { UniversityCard } from "../components/UniversityCard";
+import { UniversityCard, UniversityFeature, UniversityRow } from "../components/UniversityCard";
 import { useI18n } from "../i18n/I18nContext";
 
 const steps = [
@@ -27,21 +29,59 @@ const compareRows = [
   ["cmp_degree", "cmp_c4", "cmp_p4"],
 ] as const;
 
+/** The phone page's featured rail: well-known schools that have a free photo. */
+const FEATURED = [
+  "peking-university",
+  "tsinghua-university",
+  "fudan-university",
+  "shanghai-jiao-tong-university",
+  "nanjing-university",
+  "xiamen-university",
+  "xian-jiaotong-university",
+  "harbin-institute-of-technology",
+]
+  .map(getUniversityBySlug)
+  .filter((u): u is University => Boolean(u));
+
+/** City chips: every city with at least three schools, biggest first. */
+const CITY_CHIPS = Object.entries(
+  universities.reduce<Record<string, number>>((acc, u) => {
+    if (u.city) acc[u.city] = (acc[u.city] ?? 0) + 1;
+    return acc;
+  }, {}),
+)
+  .filter(([, n]) => n >= 3)
+  .sort((a, b) => b[1] - a[1]);
+
 export function University() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const desktop = useDesktop();
   const [q, setQ] = useState("");
+  const [city, setCity] = useState("all");
 
   // English name, Chinese name or city (any language) all match.
   const listed = useMemo(() => {
     const query = q.trim().toLowerCase();
-    if (!query) return universities;
-    return universities.filter((u) => {
-      const city = u.city ? Object.values(CITY_LABELS[u.city] ?? {}).join(" ") : "";
-      return `${u.name} ${u.zh ?? ""} ${u.city ?? ""} ${city}`.toLowerCase().includes(query);
+    const inCity = desktop || city === "all" ? universities : universities.filter((u) => u.city === city);
+    if (!query) return inCity;
+    return inCity.filter((u) => {
+      const names = u.city ? Object.values(CITY_LABELS[u.city] ?? {}).join(" ") : "";
+      return `${u.name} ${u.zh ?? ""} ${u.city ?? ""} ${names}`.toLowerCase().includes(query);
     });
-  }, [q]);
+  }, [q, city, desktop]);
+
+  // A–Z sections for the phone list, like Contacts.
+  const groups = useMemo(() => {
+    const map = new Map<string, University[]>();
+    for (const u of listed) {
+      const letter = u.name.charAt(0).toUpperCase();
+      map.set(letter, [...(map.get(letter) ?? []), u]);
+    }
+    return [...map.entries()];
+  }, [listed]);
 
   const hasQuery = q.trim().length > 0;
+  const showFeatured = !desktop && !hasQuery && city === "all" && FEATURED.length > 0;
 
   return (
     <PageShell className="page-uni is-app ios-app">
@@ -60,7 +100,20 @@ export function University() {
         </Reveal>
       </header>
 
-      {/* The academy's universities as cards (A–Z); the search filters them. */}
+      {showFeatured && (
+        <section className="section tight uni-featured-section">
+          <div className="ios-section-head">
+            <h2>{t("uni_featured")}</h2>
+          </div>
+          <div className="uni-feature-rail">
+            {FEATURED.map((u) => (
+              <UniversityFeature key={u.slug} u={u} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* The academy's universities: a grid on desktop, an A–Z list on phones. */}
       <section className="section tight uni-schools-section">
         <Reveal>
           <div className="ios-toolbar">
@@ -84,19 +137,48 @@ export function University() {
                 </button>
               )}
             </label>
+            {!desktop && (
+              <IosFilterBar
+                options={[
+                  { id: "all", label: t("filter_all"), count: universities.length },
+                  ...CITY_CHIPS.map(([id, n]) => ({
+                    id,
+                    label: cityLabel({ city: id } as University, lang),
+                    count: n,
+                  })),
+                ]}
+                value={city}
+                onChange={setCity}
+                ariaLabel={t("uni_city")}
+                layoutId="uni-city-pill"
+              />
+            )}
           </div>
         </Reveal>
 
         <Reveal>
           <div className="ios-section-head">
-            <h2>{t("uni_list_title")}</h2>
+            <h2>{desktop ? t("uni_list_title") : t("uni_all")}</h2>
             <em>{listed.length}</em>
           </div>
-          <p className="uni-list-lead">{t("uni_list_lead")}</p>
+          {desktop && <p className="uni-list-lead">{t("uni_list_lead")}</p>}
         </Reveal>
 
         {listed.length === 0 ? (
           <p className="ios-empty">{t("uni_list_empty")}</p>
+        ) : !desktop ? (
+          <div className="uni-az">
+            {groups.map(([letter, list]) => (
+              <section key={letter} className="uni-az-group" aria-label={letter}>
+                <h3 className="uni-az-letter">{letter}</h3>
+                <div className="uni-az-list">
+                  {list.map((u) => (
+                    <UniversityRow key={u.slug} u={u} />
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
         ) : (
           <Stagger className="uni-tiles">
             {listed.map((u) => (

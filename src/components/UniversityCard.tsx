@@ -27,6 +27,55 @@ export function UniversityMedia({
   );
 }
 
+const cityLine = (u: University, city: string) =>
+  `${city}${city && u.founded ? " · " : ""}${u.founded ?? ""}`;
+
+/** Phone: big photo card for the featured rail at the top of /university. */
+export function UniversityFeature({ u }: { u: University }) {
+  const { lang } = useI18n();
+  return (
+    <Link to={`/university/${u.slug}`} className="uni-feature">
+      <UniversityMedia u={u} className="uni-feature-media" />
+      <span className="uni-feature-shade" aria-hidden />
+      <span className="uni-feature-body">
+        {u.zh && (
+          <small lang="zh" className="uni-feature-zh">
+            {u.zh}
+          </small>
+        )}
+        <strong>{u.name}</strong>
+        <em>{cityLine(u, cityLabel(u, lang))}</em>
+      </span>
+    </Link>
+  );
+}
+
+/** Phone: one row of the A–Z list, like a Contacts entry. */
+export function UniversityRow({ u }: { u: University }) {
+  const { lang } = useI18n();
+  const line = [u.zh, cityLine(u, cityLabel(u, lang))].filter(Boolean).join(" · ");
+  return (
+    <Link to={`/university/${u.slug}`} className="uni-row">
+      <span className="uni-row-thumb">
+        {u.photo ? (
+          <img className="photo" src={u.photo.src} alt="" loading="lazy" decoding="async" />
+        ) : (
+          <span aria-hidden lang="zh">
+            {(u.zh ?? u.name).charAt(0)}
+          </span>
+        )}
+      </span>
+      <span className="uni-row-body">
+        <strong>{u.name}</strong>
+        {line && <small>{line}</small>}
+      </span>
+      <svg className="uni-row-chevron" viewBox="0 0 12 12" aria-hidden>
+        <path d="M4.5 2.5 8 6l-3.5 3.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </Link>
+  );
+}
+
 /** A university from the academy's list; opens its page. Takes the English name or the record. */
 export function UniversityCard({ name, university }: { name?: string; university?: University }) {
   const { lang } = useI18n();
