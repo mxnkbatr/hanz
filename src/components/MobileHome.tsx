@@ -1,17 +1,12 @@
-import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { loc } from "../lib/i18nText";
 import { SafeImage } from "./SafeImage";
 import { cityLabel, featuredUniversities, universities, type University } from "../data/universities";
-import { useImageTints } from "../lib/imageTint";
 import { ease } from "../lib/motion";
-import { hapticLight } from "../lib/native";
-import { IconPhone, NavIcon } from "./Icons";
-
-const FEATURE_MS = 5200;
 
 function helloKey(h: number) {
   if (h < 5) return "mh_hello_night";
@@ -46,10 +41,8 @@ const uniEntry = (u: University, lang: "mn" | "en" | "zh"): Entry => ({
 /** Phone home: app-style start screen instead of the long desktop landing. */
 export function MobileHome() {
   const { t, lang } = useI18n();
-  const reduce = useReducedMotion();
   const { coursesLive, travelLive, newsLive, academyLive } = useSiteContent();
   const [q, setQ] = useState("");
-  const [slide, setSlide] = useState(0);
   const [hour] = useState(() => new Date().getHours());
   const hello = t(helloKey(hour));
 
@@ -96,20 +89,6 @@ export function MobileHome() {
     [newsLive, lang, t],
   );
 
-  const featured = useMemo(
-    () => [...travel.slice(0, 2), ...courses.slice(0, 3)].slice(0, 5),
-    [travel, courses],
-  );
-
-  useEffect(() => {
-    if (reduce || featured.length < 2) return;
-    const id = window.setTimeout(
-      () => setSlide((s) => (s + 1) % featured.length),
-      FEATURE_MS,
-    );
-    return () => window.clearTimeout(id);
-  }, [slide, featured.length, reduce]);
-
   const query = q.trim().toLowerCase();
   const results = query
     ? [...courses, ...unis, ...travel, ...news].filter((e) =>
@@ -117,8 +96,6 @@ export function MobileHome() {
       )
     : [];
 
-  const current = featured[slide % Math.max(featured.length, 1)];
-  const tints = useImageTints(featured.map((f) => f.image));
 
   return (
     <div className="m-home">
@@ -151,41 +128,6 @@ export function MobileHome() {
           </button>
         ) : null}
       </motion.div>
-
-      {/* Quick actions, like the shortcut row in a bank or school app. */}
-      {!query && (
-        <motion.nav
-          className="m-quick"
-          aria-label={t("mh_quick")}
-          {...rise}
-          transition={{ delay: 0.1, duration: 0.5, ease }}
-        >
-          <Link to="/enroll?interest=hsk" className="m-quick-item is-red" onClick={() => void hapticLight()}>
-            <span className="m-quick-icon">
-              <NavIcon name="courses" />
-            </span>
-            <span>{t("mh_q_enroll")}</span>
-          </Link>
-          <Link to="/quiz" className="m-quick-item is-gold" onClick={() => void hapticLight()}>
-            <span className="m-quick-icon">
-              <NavIcon name="quiz" />
-            </span>
-            <span>{t("mh_q_level")}</span>
-          </Link>
-          <Link to="/university" className="m-quick-item is-rose" onClick={() => void hapticLight()}>
-            <span className="m-quick-icon">
-              <NavIcon name="uni" />
-            </span>
-            <span>{t("mh_q_scholar")}</span>
-          </Link>
-          <a href={`tel:${academyLive.phoneRaw[0]}`} className="m-quick-item is-green" onClick={() => void hapticLight()}>
-            <span className="m-quick-icon">
-              <IconPhone />
-            </span>
-            <span>{t("mh_q_call")}</span>
-          </a>
-        </motion.nav>
-      )}
 
       <AnimatePresence mode="wait">
         {query ? (
@@ -224,79 +166,6 @@ export function MobileHome() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            {current ? (
-              <section
-                className={`m-feature${tints[current.image] ? " is-tinted" : ""}`}
-                aria-label={t("mh_featured")}
-                style={{ "--tint": tints[current.image] } as CSSProperties}
-              >
-                {/* Frame colour = the photo's own colour (lib/imageTint), fading per slide.
-                    Until it is sampled (or if it can't be), a blurred copy of the photo stands in. */}
-                <AnimatePresence initial={false}>
-                  {!tints[current.image] && (
-                    <motion.span
-                      key={current.id + current.kind}
-                      className="m-feature-glow"
-                      aria-hidden
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.8, ease }}
-                    >
-                      <SafeImage src={current.image} alt="" loading="eager" />
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-                <AnimatePresence mode="popLayout" initial={false}>
-                  <motion.div
-                    key={current.id + current.kind}
-                    className="m-feature-card"
-                    initial={{ opacity: 0, x: 40 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -40 }}
-                    transition={{ duration: 0.5, ease }}
-                    drag={featured.length > 1 ? "x" : false}
-                    dragConstraints={{ left: 0, right: 0 }}
-                    dragElastic={0.25}
-                    onDragEnd={(_, info) => {
-                      if (Math.abs(info.offset.x) < 50) return;
-                      const dir = info.offset.x < 0 ? 1 : -1;
-                      setSlide((s) => (s + dir + featured.length) % featured.length);
-                    }}
-                  >
-                    <Link to={current.to} className="m-feature-link" draggable={false}>
-                      <span className="m-feature-media">
-                        <SafeImage src={current.image} alt={current.title} loading="eager" />
-                        <span className="m-chip-light">{t(`mh_kind_${current.kind}`)}</span>
-                      </span>
-                      <span className="m-feature-body">
-                        <em>{current.meta || t("mh_featured")}</em>
-                        <strong>{current.title}</strong>
-                      </span>
-                    </Link>
-                  </motion.div>
-                </AnimatePresence>
-                <div className="m-feature-bars" role="tablist">
-                  {featured.map((f, i) => (
-                    <button
-                      key={f.id + f.kind}
-                      type="button"
-                      role="tab"
-                      aria-selected={i === slide}
-                      aria-label={f.title}
-                      className={i === slide ? "is-active" : i < slide ? "is-done" : ""}
-                      onClick={() => setSlide(i)}
-                    >
-                      <span
-                        style={{ animationDuration: `${FEATURE_MS}ms` }}
-                        key={i === slide ? `run-${slide}` : "idle"}
-                      />
-                    </button>
-                  ))}
-                </div>
-              </section>
-            ) : null}
-
             <section className="m-section">
               <div className="m-section-head">
                 <h2>{t("mh_courses")}</h2>

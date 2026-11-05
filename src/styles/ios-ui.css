@@ -644,7 +644,6 @@ html.site .app-shell .ios26-filter-chip.is-active .ios26-filter-label {
    tab bar, like a pushed iOS screen, so there is one bar at the bottom instead of two.
    The nav bar's Back takes the user out. */
 @media (max-width: 899px) {
-  html.site body:has(.cd-bar, .app-enroll-dock) .tabbar,
   html.site .app-shell:has(.page-enroll) .tabbar {
     display: none;
   }
@@ -982,4 +981,45 @@ html.site .app-shell .ios26-filter-chip.is-active .ios26-filter-label {
     top: 30px;
     left: 16px;
   }
+}
+
+/* Dark mode: the enrolment-window panel (/university/poland, travel pages) and the
+   floating enrol dock kept their white glass. */
+html.site[data-theme="dark"] .app-shell .uni-enroll {
+  background: var(--surface-1);
+  border-color: var(--edge);
+}
+
+/* !important: theme.css paints both docks white with !important. */
+html.site[data-theme="dark"] :is(.app-enroll-dock, .course-detail-sticky) {
+  background: color-mix(in srgb, var(--surface-1) 92%, transparent) !important;
+  border-color: var(--edge) !important;
+  color: var(--text);
+}
+
+html.site[data-theme="dark"] .app-enroll-dock-copy strong {
+  color: var(--text);
+}
+
+html.site[data-theme="dark"] .app-enroll-dock-copy em {
+  color: #6fd23a;
+}
+
+/* Window dates: plain text in the brand red, not the italic serif. */
+html.site .app-shell .uni-enroll-row-main em {
+  font-family: var(--font-ui);
+  font-style: normal;
+  font-size: 14px;
+}
+
+/* No enrol buttons anywhere on the public site (the academy's request, 2026-11-06):
+   every link into /enroll is hidden, and the bars that only carried one go with it.
+   The /enroll page itself still works by its address. Delete this block to bring
+   the buttons back. */
+html.site a[href^="/enroll"] {
+  display: none !important;
+}
+
+html.site :is(.cd-bar, .app-enroll-dock) {
+  display: none !important;
 }
