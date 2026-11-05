@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { AppLink } from "../components/AppLink";
-import { ConsultForm } from "../components/ConsultForm";
 import { CITY_LABELS, cityLabel, featuredUniversities, universities, type University } from "../data/universities";
 import { IosFilterBar } from "../components/IosFilterBar";
 import { useDesktop } from "../hooks/useDesktop";
@@ -253,12 +252,6 @@ export function University() {
             </StaggerItem>
           ))}
         </Stagger>
-      </section>
-
-      <section className="section section-last uni-form-wrap desk-only">
-        <Reveal>
-          <ConsultForm />
-        </Reveal>
       </section>
     </PageShell>
   );

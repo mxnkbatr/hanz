@@ -291,8 +291,18 @@ export type UniversityLive = {
   fromDb?: boolean;
 };
 
+/** Stat values saved in the admin before the academy corrected them (2026-11-05). */
+const OUTDATED_SETTINGS: Partial<Record<keyof SiteSettings, string>> = { graduates: "2000+" };
+
 export function mergeAcademy(bundle: SiteBundle) {
-  return { ...academy, ...bundle.settings };
+  const saved = { ...bundle.settings };
+  // The live database still holds the old "2000+"; the code's "8000+" wins over it
+  // until someone saves a new value in Admin → Settings.
+  for (const [key, old] of Object.entries(OUTDATED_SETTINGS)) {
+    const k = key as keyof SiteSettings;
+    if (saved[k] === old) delete saved[k];
+  }
+  return { ...academy, ...saved };
 }
 
 export function mergeBranches(bundle: SiteBundle): BranchCms[] {
