@@ -19,13 +19,11 @@ import {
   IconClose,
   IconMenu,
   IconMoon,
-  IconProfile,
   IconSun,
   NavIcon,
 } from "./Icons";
 import { Logo } from "./Logo";
 import { Onboard } from "./Onboard";
-import { useAuth } from "../lib/AuthContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { hapticLight } from "../lib/native";
 import { ThemeContext, useSiteTheme } from "../lib/theme";
@@ -39,7 +37,6 @@ export function Layout() {
   const navType = useNavigationType();
   const goBack = useGoBack();
   const { t, lang, setLang, langs } = useI18n();
-  const { user } = useAuth();
   const { academyLive: academy } = useSiteContent();
   const reduceMotion = useReducedMotion();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -262,16 +259,7 @@ export function Layout() {
                 </AnimatePresence>
               </button>
 
-              <NavLink
-                to={user ? "/profile" : "/auth?mode=login"}
-                className={({ isActive }) =>
-                  `topbar-icon-btn${isActive ? " is-active" : ""}`
-                }
-                aria-label={user ? t("nav_profile") : t("auth_login")}
-                onClick={() => void hapticLight()}
-              >
-                <IconProfile />
-              </NavLink>
+              {/* No sign-in on the public site: staff reach /auth by its address. */}
 
               {/* Phones only: on desktop every page is in the header or footer. */}
               {!desktop && (
