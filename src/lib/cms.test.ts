@@ -25,8 +25,8 @@ describe("mergeProducts", () => {
   it("prefers DB rows and keeps href/specs from matching slug", () => {
     const list = mergeProducts(emptyBundle(), [
       row({
-        slug: "prod1",
-        filter_key: "porcelain",
+        slug: "prod5",
+        filter_key: "books",
         price: 99000,
         in_stock: true,
         image_url: "/courses/image11.webp",
@@ -34,9 +34,9 @@ describe("mergeProducts", () => {
       }),
     ]);
     expect(list).toHaveLength(1);
-    expect(list[0].id).toBe("prod1");
+    expect(list[0].id).toBe("prod5");
     expect(list[0].price).toBe(99000);
-    expect(list[0].cat).toBe("porcelain");
+    expect(list[0].cat).toBe("books");
     expect(list[0].fromDb).toBe(true);
     expect(list[0].href).toBeTruthy();
     expect(list[0].specs?.length).toBeGreaterThan(0);

@@ -35,7 +35,8 @@ export function Shop() {
 
   const options = useMemo(
     () =>
-      cats.map((c) => ({
+      // A category chip only while the shop has something in it.
+      cats.filter((c) => c === "all" || counts[c]).map((c) => ({
         id: c,
         label: catLabel(c, t),
         count: counts[c] ?? 0,
