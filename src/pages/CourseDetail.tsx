@@ -52,7 +52,7 @@ export function CourseDetail() {
   const plans = course.level ? plansForLevel(program, course.id) : (program?.plans ?? []);
   const fromPrice = plans.length ? Math.min(...plans.map((p) => p.amount)) : 0;
   const levelText = course.level
-    ? `HSK ${course.level}`
+    ? `HSK${course.level}`
     : program?.levels === "hsk"
       ? "HSK 1–6"
       : program?.levels === "kids"
@@ -289,7 +289,7 @@ function TeacherTile({ member }: { member: TeamMemberCms }) {
       <MemberAvatar photo={member.photo} name={name} className="cd-teacher-photo" />
       <strong>{name}</strong>
       <small>{loc(lang, t, member.role, member.roleKey)}</small>
-      {member.hsk.length > 0 && <em>HSK {member.hsk.join(" · ")}</em>}
+      {member.hsk.length > 0 && <em>HSK{member.hsk.join(" · ")}</em>}
       {bio && <p>{bio}</p>}
     </li>
   );

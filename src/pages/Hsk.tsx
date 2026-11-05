@@ -60,7 +60,7 @@ export function Hsk() {
             <StaggerItem key={lvl.level}>
               <article className="hsk-card">
                 <header>
-                  <span className="hsk-card-level">HSK {lvl.level}</span>
+                  <span className="hsk-card-level">HSK{lvl.level}</span>
                   <span className="hsk-card-tag">{lvl.tag}</span>
                 </header>
                 <dl className="hsk-card-stats">
@@ -219,7 +219,7 @@ function LevelDialog({ level, onClose }: { level: HskLevel | null; onClose: () =
             ×
           </button>
           <p className="eyebrow">
-            HSK {level.level} — {level.tag}
+            HSK{level.level} — {level.tag}
           </p>
           <p className="hsk-detail-stage">{level.stage}</p>
           <h2 id="hsk-dialog-title" className="h2">

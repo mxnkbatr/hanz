@@ -87,7 +87,7 @@ export function EnrollWizard({
         ? schedule
         : "";
   const planMeta = plans.length === 1 ? plans[0] : plans.find((p) => p.id === plan);
-  const label = (c: Choice) => (c.labelKey.startsWith("HSK ") ? c.labelKey : t(c.labelKey));
+  const label = (c: Choice) => (c.labelKey.startsWith("HSK") ? c.labelKey : t(c.labelKey));
 
   const steps: Step[] = [
     "program",
@@ -568,7 +568,7 @@ function TeacherStrip({ course, team }: { course?: CourseLive; team: TeamMemberC
                 <strong>{name}</strong>
                 <small>
                   {loc(lang, t, m.role, m.roleKey)}
-                  {m.hsk.length > 0 && ` · HSK ${m.hsk.join(", ")}`}
+                  {m.hsk.length > 0 && ` · HSK${m.hsk.join(", ")}`}
                 </small>
               </span>
             </li>

@@ -61,7 +61,7 @@ export function TeamCard({ member, showBio = false }: { member: TeamMemberCms; s
         {member.hsk.length > 0 && (
           <ul className="teacher-hsk" aria-label="HSK">
             {member.hsk.map((n) => (
-              <li key={n}>HSK {n}</li>
+              <li key={n}>HSK{n}</li>
             ))}
           </ul>
         )}
