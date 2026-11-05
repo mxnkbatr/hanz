@@ -83,7 +83,7 @@ export function StatsStrip() {
     () => [
       { ...parseStat(a.founded, "2014"), still: true, labelKey: "stat_founded" },
       { ...parseStat(a.yearsExp, "12"), labelKey: "stat_years" },
-      { ...parseStat(a.graduates, "2000+"), labelKey: "stat_students" },
+      { ...parseStat(a.graduates, "8000+"), labelKey: "stat_students" },
       { ...parseStat(a.scholarshipStudents, "1000+"), labelKey: "stat_scholarship" },
       { ...parseStat(a.polandUnis, "35"), labelKey: "stat_poland" },
     ],

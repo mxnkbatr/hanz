@@ -87,7 +87,7 @@ export function TeachersSection() {
       <Stagger className="teachers-grid">
         {teamLive.map((member) => (
           <StaggerItem key={member.id}>
-            <TeamCard member={member} />
+            <TeamCard member={member} showBio />
           </StaggerItem>
         ))}
       </Stagger>

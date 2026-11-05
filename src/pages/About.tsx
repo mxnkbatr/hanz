@@ -251,9 +251,10 @@ export function About() {
         <Reveal>
           <div className="section-row">
             <div>
-              <p className="eyebrow">{t("nav_uni")}</p>
+              <p className="eyebrow">{t("china_home_eyebrow")}</p>
               <h2 className="h2">{t("china_home_title")}</h2>
               <p className="lead">{t("china_home_lead")}</p>
+              <p className="lead">{t("china_home_scholar")}</p>
             </div>
             <Link to="/university" className="text-link">
               {t("uni_all_link")} ({partnerUniversities.length})

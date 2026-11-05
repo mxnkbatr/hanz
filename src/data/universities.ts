@@ -1,7 +1,8 @@
 /**
  * The academy's Chinese universities (A–Z) with facts from Wikidata and photos
  * from Wikimedia Commons (free licences only; author + licence kept for the
- * credit line). Gathered 2026-10-29; scripts in the session scratchpad.
+ * credit line). Gathered 2026-10-29; the schools from the academy's
+ * "Site: 100 Universities" list that were missing were added 2026-11-05.
  * Hunan University (976, Yuelu Academy) and schools without a Wikidata
  * founding year show no year.
  */
@@ -72,6 +73,22 @@ export const universities: University[] = [
     "website": "http://en.beihua.edu.cn",
     "wikidata": "Q10902560",
     "photo": null
+  },
+  {
+    "slug": "beijing-foreign-studies-university",
+    "name": "Beijing Foreign Studies University",
+    "zh": "北京外国语大学",
+    "city": "Beijing",
+    "founded": 1941,
+    "website": "https://www.bfsu.edu.cn/",
+    "wikidata": "Q1144682",
+    "photo": {
+      "src": "/images/unis/beijing-foreign-studies-university.webp",
+      "author": "N509FZ",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "page": "https://commons.wikimedia.org/wiki/File:BFSU_West_Campus_(20220624091809).jpg"
+    }
   },
   {
     "slug": "beijing-forestry-university",
@@ -170,6 +187,22 @@ export const universities: University[] = [
     }
   },
   {
+    "slug": "beijing-university-of-technology",
+    "name": "Beijing University of Technology",
+    "zh": "北京工业大学",
+    "city": "Beijing",
+    "founded": 1960,
+    "website": "https://www.bjut.edu.cn/",
+    "wikidata": "Q1674548",
+    "photo": {
+      "src": "/images/unis/beijing-university-of-technology.webp",
+      "author": "N509FZ",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "page": "https://commons.wikimedia.org/wiki/File:South_gate_of_Beijing_University_of_Technology_(20241022154233).jpg"
+    }
+  },
+  {
     "slug": "belt-and-road-school",
     "name": "Belt and Road School",
     "zh": null,
@@ -196,6 +229,42 @@ export const universities: University[] = [
     }
   },
   {
+    "slug": "central-china-normal-university",
+    "name": "Central China Normal University",
+    "zh": "华中师范大学",
+    "city": "Wuhan",
+    "founded": 1903,
+    "website": "http://www.ccnu.edu.cn",
+    "wikidata": "Q1397589",
+    "photo": null
+  },
+  {
+    "slug": "central-south-university",
+    "name": "Central South University",
+    "zh": "中南大学",
+    "city": "Changsha",
+    "founded": 2000,
+    "website": "http://www.csu.edu.cn/",
+    "wikidata": "Q5061828",
+    "photo": {
+      "src": "/images/unis/central-south-university.webp",
+      "author": "Unknown",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+      "page": "https://commons.wikimedia.org/wiki/File:Zhongnandaxue.jpg"
+    }
+  },
+  {
+    "slug": "changan-university",
+    "name": "Chang'an University",
+    "zh": "长安大学",
+    "city": "Xi’an",
+    "founded": 2000,
+    "website": "https://www.chd.edu.cn/",
+    "wikidata": "Q5071561",
+    "photo": null
+  },
+  {
     "slug": "changsha-university-of-science-and-technology",
     "name": "Changsha University of Science and Technology",
     "zh": "长沙理工大学",
@@ -204,6 +273,96 @@ export const universities: University[] = [
     "website": "http://www.csust.edu.cn/",
     "wikidata": "Q5072117",
     "photo": null
+  },
+  {
+    "slug": "china-agricultural-university",
+    "name": "China Agricultural University",
+    "zh": "中国农业大学",
+    "city": "Beijing",
+    "founded": 1905,
+    "website": "http://www.cau.edu.cn/",
+    "wikidata": "Q257655",
+    "photo": {
+      "src": "/images/unis/china-agricultural-university.webp",
+      "author": "Loong",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "page": "https://commons.wikimedia.org/wiki/File:%E4%B8%AD%E5%9B%BD%E5%86%9C%E4%B8%9A%E5%A4%A7%E5%AD%A6%E8%A5%BF%E6%A0%A1%E5%8C%BA%E4%B8%BB%E6%A5%BC.JPG"
+    }
+  },
+  {
+    "slug": "china-university-of-geosciences-beijing",
+    "name": "China University of Geosciences (Beijing)",
+    "zh": "中国地质大学（北京）",
+    "city": "Beijing",
+    "founded": 1952,
+    "website": "http://www.cugb.edu.cn/",
+    "wikidata": "Q48880972",
+    "photo": {
+      "src": "/images/unis/china-university-of-geosciences-beijing.webp",
+      "author": "Zhangmoon618",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "page": "https://commons.wikimedia.org/wiki/File:Jiao_5_in_CUG_Beijing.jpg"
+    }
+  },
+  {
+    "slug": "china-university-of-geosciences-wuhan",
+    "name": "China University of Geosciences (Wuhan)",
+    "zh": "中国地质大学（武汉）",
+    "city": "Wuhan",
+    "founded": 1952,
+    "website": "http://www.cug.edu.cn/",
+    "wikidata": "Q48880933",
+    "photo": {
+      "src": "/images/unis/china-university-of-geosciences-wuhan.webp",
+      "author": "Zhangmoon618",
+      "license": "Public domain",
+      "licenseUrl": null,
+      "page": "https://commons.wikimedia.org/wiki/File:Cug_3.JPG"
+    }
+  },
+  {
+    "slug": "china-university-of-mining-and-technology",
+    "name": "China University of Mining and Technology",
+    "zh": "中国矿业大学",
+    "city": "Xuzhou",
+    "founded": 1909,
+    "website": "http://www.cumt.edu.cn/",
+    "wikidata": "Q1074084",
+    "photo": null
+  },
+  {
+    "slug": "china-university-of-petroleum-east-china",
+    "name": "China University of Petroleum (East China)",
+    "zh": "中国石油大学（华东）",
+    "city": "Qingdao",
+    "founded": 1953,
+    "website": "http://english.upc.edu.cn/",
+    "wikidata": "Q15703466",
+    "photo": {
+      "src": "/images/unis/china-university-of-petroleum-east-china.webp",
+      "author": "Kobe Bryn",
+      "license": "CC BY 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+      "page": "https://commons.wikimedia.org/wiki/File:Huangdao,_Qingdao,_Shandong,_China_-_panoramio_(1234).jpg"
+    }
+  },
+  {
+    "slug": "china-university-of-political-science-and-law",
+    "name": "China University of Political Science and Law",
+    "zh": "中国政法大学",
+    "city": "Beijing",
+    "founded": 1952,
+    "website": "https://www.cupl.edu.cn/",
+    "wikidata": "Q833961",
+    "photo": {
+      "src": "/images/unis/china-university-of-political-science-and-law.webp",
+      "author": "N509FZ",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "page": "https://commons.wikimedia.org/wiki/File:South_gate_of_CUPL_Changping_Campus_(20210823161102).jpg"
+    }
   },
   {
     "slug": "chongqing-university",
@@ -312,6 +471,16 @@ export const universities: University[] = [
     }
   },
   {
+    "slug": "fujian-normal-university",
+    "name": "Fujian Normal University",
+    "zh": "福建师范大学",
+    "city": "Fuzhou",
+    "founded": 1907,
+    "website": "http://www.fjnu.edu.cn/",
+    "wikidata": "Q4570168",
+    "photo": null
+  },
+  {
     "slug": "guangdong-ocean-university",
     "name": "Guangdong Ocean University",
     "zh": "广东海洋大学",
@@ -326,6 +495,16 @@ export const universities: University[] = [
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
       "page": "https://commons.wikimedia.org/wiki/File:Guangdong_Ocean_University_-_P1580822.JPG"
     }
+  },
+  {
+    "slug": "guangdong-university-of-technology",
+    "name": "Guangdong University of Technology",
+    "zh": "广东工业大学",
+    "city": "Guangzhou",
+    "founded": 1958,
+    "website": "https://www.gdut.edu.cn",
+    "wikidata": "Q716822",
+    "photo": null
   },
   {
     "slug": "guangxi-medical-university",
@@ -354,6 +533,16 @@ export const universities: University[] = [
     }
   },
   {
+    "slug": "guangxi-university",
+    "name": "Guangxi University",
+    "zh": "广西大学",
+    "city": "Nanning",
+    "founded": 1928,
+    "website": "https://www.gxu.edu.cn/",
+    "wikidata": "Q1552757",
+    "photo": null
+  },
+  {
     "slug": "guizhou-normal-university",
     "name": "Guizhou Normal University",
     "zh": "贵州师范大学",
@@ -362,6 +551,22 @@ export const universities: University[] = [
     "website": "http://www.gznu.edu.cn",
     "wikidata": "Q5616948",
     "photo": null
+  },
+  {
+    "slug": "guizhou-university",
+    "name": "Guizhou University",
+    "zh": "贵州大学",
+    "city": "Guiyang",
+    "founded": 1902,
+    "website": "http://www.gzu.edu.cn/",
+    "wikidata": "Q461033",
+    "photo": {
+      "src": "/images/unis/guizhou-university.webp",
+      "author": "Olemissius at English Wikipedia (Olemissius Zhang, USA)",
+      "license": "Public domain",
+      "licenseUrl": null,
+      "page": "https://commons.wikimedia.org/wiki/File:Guizhou_Univ-North_Campus-Library.jpg"
+    }
   },
   {
     "slug": "hainan-university",
@@ -381,6 +586,16 @@ export const universities: University[] = [
     "founded": 1956,
     "website": "https://www.hdu.edu.cn/",
     "wikidata": "Q11102606",
+    "photo": null
+  },
+  {
+    "slug": "hangzhou-normal-university",
+    "name": "Hangzhou Normal University",
+    "zh": "杭州师范大学",
+    "city": "Hangzhou",
+    "founded": 1978,
+    "website": "http://www.hznu.edu.cn/",
+    "wikidata": "Q5648125",
     "photo": null
   },
   {
@@ -442,6 +657,22 @@ export const universities: University[] = [
     }
   },
   {
+    "slug": "hebei-university",
+    "name": "Hebei University",
+    "zh": "河北大学",
+    "city": "Baoding",
+    "founded": 1921,
+    "website": "http://www.hebei-university.com",
+    "wikidata": "Q835731",
+    "photo": {
+      "src": "/images/unis/hebei-university.webp",
+      "author": "Suginami",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "page": "https://commons.wikimedia.org/wiki/File:%E6%B2%B3%E5%8C%97%E5%A4%A7%E5%AD%A6%E6%96%B0%E5%8C%BA.jpg"
+    }
+  },
+  {
     "slug": "heilongjiang-university",
     "name": "Heilongjiang University",
     "zh": "黑龙江大学",
@@ -490,6 +721,22 @@ export const universities: University[] = [
     }
   },
   {
+    "slug": "huazhong-university-of-science-and-technology",
+    "name": "Huazhong University of Science and Technology",
+    "zh": "华中科技大学",
+    "city": "Wuhan",
+    "founded": 1953,
+    "website": "http://www.hust.edu.cn",
+    "wikidata": "Q1711196",
+    "photo": {
+      "src": "/images/unis/huazhong-university-of-science-and-technology.webp",
+      "author": "User:Vmenkov",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+      "page": "https://commons.wikimedia.org/wiki/File:HUST-Main-building-4111.jpg"
+    }
+  },
+  {
     "slug": "hunan-university",
     "name": "Hunan University",
     "zh": "湖南大学",
@@ -504,6 +751,16 @@ export const universities: University[] = [
       "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
       "page": "https://commons.wikimedia.org/wiki/File:Hunan_University05.jpg"
     }
+  },
+  {
+    "slug": "huzhou-normal-university",
+    "name": "Huzhou Normal University",
+    "zh": "湖州师范学院",
+    "city": "Huzhou",
+    "founded": 1916,
+    "website": "http://www.hutc.zj.cn/",
+    "wikidata": "Q15940681",
+    "photo": null
   },
   {
     "slug": "inner-mongolia-university",
@@ -698,6 +955,16 @@ export const universities: University[] = [
     }
   },
   {
+    "slug": "neusoft-institute-guangdong",
+    "name": "Neusoft Institute Guangdong",
+    "zh": "广东东软学院",
+    "city": "Foshan",
+    "founded": 2002,
+    "website": "http://nig.ciss.org.cn/",
+    "wikidata": "Q17499137",
+    "photo": null
+  },
+  {
     "slug": "ningbo-university",
     "name": "Ningbo University",
     "zh": "宁波大学",
@@ -737,6 +1004,22 @@ export const universities: University[] = [
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "page": "https://commons.wikimedia.org/wiki/File:Northwestern_Polytechnical_University_3.jpg"
+    }
+  },
+  {
+    "slug": "ocean-university-of-china",
+    "name": "Ocean University of China",
+    "zh": "中国海洋大学",
+    "city": "Qingdao",
+    "founded": 1924,
+    "website": "http://www.ouc.edu.cn/",
+    "wikidata": "Q1074015",
+    "photo": {
+      "src": "/images/unis/ocean-university-of-china.webp",
+      "author": "又黑蜗壳",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "page": "https://commons.wikimedia.org/wiki/File:%E4%B8%AD%E5%9B%BD%E6%B5%B7%E6%B4%8B%E5%A4%A7%E5%AD%A6%E6%B5%B7%E6%B4%8B%E7%A7%91%E6%8A%80%E4%B8%AD%E5%BF%83%E6%A5%BC%E5%8F%8A%E6%95%99%E5%AD%A6%E6%A5%BC.jpg"
     }
   },
   {
@@ -804,6 +1087,22 @@ export const universities: University[] = [
     }
   },
   {
+    "slug": "shaanxi-normal-university",
+    "name": "Shaanxi Normal University",
+    "zh": "陕西师范大学",
+    "city": "Xi’an",
+    "founded": 1944,
+    "website": "https://www.snnu.edu.cn/",
+    "wikidata": "Q5932856",
+    "photo": {
+      "src": "/images/unis/shaanxi-normal-university.webp",
+      "author": "Liuxingy",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "page": "https://commons.wikimedia.org/wiki/File:%E9%99%95%E5%B8%88%E5%A4%A7%E9%95%BF%E5%AE%89%E6%A0%A1%E5%8C%BA%E5%8C%97%E9%97%A8.jpg"
+    }
+  },
+  {
     "slug": "shandong-university",
     "name": "Shandong University",
     "zh": "山东大学",
@@ -820,6 +1119,22 @@ export const universities: University[] = [
     }
   },
   {
+    "slug": "shanghai-international-studies-university",
+    "name": "Shanghai International Studies University",
+    "zh": "上海外国语大学",
+    "city": "Shanghai",
+    "founded": 1949,
+    "website": "https://www.shisu.edu.cn",
+    "wikidata": "Q1455176",
+    "photo": {
+      "src": "/images/unis/shanghai-international-studies-university.webp",
+      "author": "Flsxx",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+      "page": "https://commons.wikimedia.org/wiki/File:SISU_gate.jpg"
+    }
+  },
+  {
     "slug": "shanghai-jiao-tong-university",
     "name": "Shanghai Jiao Tong University",
     "zh": "上海交通大学",
@@ -829,7 +1144,7 @@ export const universities: University[] = [
     "wikidata": "Q525169",
     "photo": {
       "src": "/images/unis/shanghai-jiao-tong-university.webp",
-      "author": "This illustration was made by Peter Potrowl. Please credit this with : © Peter Potrowl in the immediate vicinity of the ",
+      "author": "© Peter Potrowl",
       "license": "CC BY 3.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
       "page": "https://commons.wikimedia.org/wiki/File:Shanghai_Jiao_Tong_University_1.jpg"
@@ -865,6 +1180,22 @@ export const universities: University[] = [
       "license": "CC BY-SA 3.0",
       "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
       "page": "https://commons.wikimedia.org/wiki/File:SHU_library_in_Baoshan.jpg"
+    }
+  },
+  {
+    "slug": "shanghai-university-of-finance-and-economics",
+    "name": "Shanghai University of Finance and Economics",
+    "zh": "上海财经大学",
+    "city": "Shanghai",
+    "founded": 1917,
+    "website": "https://www.sufe.edu.cn",
+    "wikidata": "Q6129947",
+    "photo": {
+      "src": "/images/unis/shanghai-university-of-finance-and-economics.webp",
+      "author": "MomodaniSakura",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "page": "https://commons.wikimedia.org/wiki/File:20260607_%E8%B4%A2%E7%BB%8F%E5%A4%A7%E5%AD%A6_%E6%AD%A6%E4%B8%9C%E8%B7%AF100%E5%8F%B7%E5%A4%A7%E9%97%A8.jpg"
     }
   },
   {
@@ -907,6 +1238,16 @@ export const universities: University[] = [
     "founded": 1951,
     "website": "http://www.synu.edu.cn/",
     "wikidata": "Q7494353",
+    "photo": null
+  },
+  {
+    "slug": "shenyang-university",
+    "name": "Shenyang University",
+    "zh": "沈阳大学",
+    "city": "Shenyang",
+    "founded": 1906,
+    "website": "http://www.syu.edu.cn/",
+    "wikidata": "Q4528225",
     "photo": null
   },
   {
@@ -968,6 +1309,16 @@ export const universities: University[] = [
     }
   },
   {
+    "slug": "south-china-normal-university",
+    "name": "South China Normal University",
+    "zh": "华南师范大学",
+    "city": "Guangzhou",
+    "founded": 1933,
+    "website": "http://www.scnu.edu.cn/",
+    "wikidata": "Q3551815",
+    "photo": null
+  },
+  {
     "slug": "south-china-university-of-technology",
     "name": "South China University of Technology",
     "zh": "华南理工大学",
@@ -1016,6 +1367,26 @@ export const universities: University[] = [
     }
   },
   {
+    "slug": "southwest-university",
+    "name": "Southwest University",
+    "zh": "西南大学",
+    "city": "Chongqing",
+    "founded": 1906,
+    "website": "http://www.swu.edu.cn/",
+    "wikidata": "Q840443",
+    "photo": null
+  },
+  {
+    "slug": "southwestern-university-of-finance-and-economics",
+    "name": "Southwestern University of Finance and Economics",
+    "zh": "西南财经大学",
+    "city": "Chengdu",
+    "founded": 1925,
+    "website": "http://www.swufe.edu.cn/",
+    "wikidata": "Q1107944",
+    "photo": null
+  },
+  {
     "slug": "sun-yat-sen-university",
     "name": "Sun Yat-sen University",
     "zh": "中山大学",
@@ -1045,6 +1416,22 @@ export const universities: University[] = [
       "license": "CC BY-SA 3.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
       "page": "https://commons.wikimedia.org/wiki/File:Taiyuan_University_of_Technology_Yingxi_Campus.jpg"
+    }
+  },
+  {
+    "slug": "tianjin-foreign-studies-university",
+    "name": "Tianjin Foreign Studies University",
+    "zh": "天津外国语大学",
+    "city": "Tianjin",
+    "founded": 1964,
+    "website": "http://www.tjfsu.edu.cn/zh/",
+    "wikidata": "Q1108042",
+    "photo": {
+      "src": "/images/unis/tianjin-foreign-studies-university.webp",
+      "author": "Fanghong (talk · contribs)",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+      "page": "https://commons.wikimedia.org/wiki/File:TFLU4.jpg"
     }
   },
   {
@@ -1106,6 +1493,22 @@ export const universities: University[] = [
     }
   },
   {
+    "slug": "university-of-electronic-science-and-technology-of-china",
+    "name": "University of Electronic Science and Technology of China",
+    "zh": "电子科技大学",
+    "city": "Chengdu",
+    "founded": 1956,
+    "website": "http://www.uestc.edu.cn/",
+    "wikidata": "Q5971900",
+    "photo": {
+      "src": "/images/unis/university-of-electronic-science-and-technology-of-china.webp",
+      "author": "LimSoo-jung",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "page": "https://commons.wikimedia.org/wiki/File:UESTC_-_Building_1.jpg"
+    }
+  },
+  {
     "slug": "university-of-international-business-and-economics",
     "name": "University of International Business and Economics",
     "zh": "对外经济贸易大学",
@@ -1119,6 +1522,38 @@ export const universities: University[] = [
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "page": "https://commons.wikimedia.org/wiki/File:South_gate_of_UIBE_(20230215153342).jpg"
+    }
+  },
+  {
+    "slug": "university-of-science-and-technology-of-china",
+    "name": "University of Science and Technology of China",
+    "zh": "中国科学技术大学",
+    "city": "Hefei",
+    "founded": 1958,
+    "website": "https://ustc.edu.cn",
+    "wikidata": "Q1074103",
+    "photo": {
+      "src": "/images/unis/university-of-science-and-technology-of-china.webp",
+      "author": "Ryanli",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+      "page": "https://commons.wikimedia.org/wiki/File:Gate_of_USTC.JPG"
+    }
+  },
+  {
+    "slug": "wannan-medical-university",
+    "name": "Wannan Medical University",
+    "zh": "皖南医科大学",
+    "city": "Wuhu",
+    "founded": 1958,
+    "website": "http://www.wnmc.edu.cn/",
+    "wikidata": "Q7968031",
+    "photo": {
+      "src": "/images/unis/wannan-medical-university.webp",
+      "author": "Cohn409",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "page": "https://commons.wikimedia.org/wiki/File:WNMC_old_campus.jpg"
     }
   },
   {
@@ -1136,6 +1571,16 @@ export const universities: University[] = [
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
       "page": "https://commons.wikimedia.org/wiki/File:University_town_sign.JPG"
     }
+  },
+  {
+    "slug": "wenzhou-kean-university",
+    "name": "Wenzhou-Kean University",
+    "zh": "温州肯恩大学",
+    "city": "Wenzhou",
+    "founded": 2011,
+    "website": "https://wku.edu.cn",
+    "wikidata": "Q6382152",
+    "photo": null
   },
   {
     "slug": "wuhan-university",
@@ -1202,6 +1647,22 @@ export const universities: University[] = [
     }
   },
   {
+    "slug": "xidian-university",
+    "name": "Xidian University",
+    "zh": "西安电子科技大学",
+    "city": "Xi’an",
+    "founded": 1931,
+    "website": "http://www.xidian.edu.cn/",
+    "wikidata": "Q649906",
+    "photo": {
+      "src": "/images/unis/xidian-university.webp",
+      "author": "王滋涵",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "page": "https://commons.wikimedia.org/wiki/File:%E8%A5%BF%E5%AE%89%E7%94%B5%E5%AD%90%E7%A7%91%E6%8A%80%E5%A4%A7%E5%AD%A6%E7%BB%8F%E6%B5%8E%E4%B8%8E%E7%AE%A1%E7%90%86%E5%AD%A6%E9%99%A2.jpg"
+    }
+  },
+  {
     "slug": "xinjiang-university",
     "name": "Xinjiang University",
     "zh": "新疆大学",
@@ -1225,6 +1686,38 @@ export const universities: University[] = [
       "license": "CC BY-SA 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
       "page": "https://commons.wikimedia.org/wiki/File:Yangzhou_University.jpg"
+    }
+  },
+  {
+    "slug": "yanshan-university",
+    "name": "Yanshan University",
+    "zh": "燕山大学",
+    "city": "Qinhuangdao",
+    "founded": 1920,
+    "website": "http://www.ysu.edu.cn",
+    "wikidata": "Q832792",
+    "photo": {
+      "src": "/images/unis/yanshan-university.webp",
+      "author": "N509FZ",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "page": "https://commons.wikimedia.org/wiki/File:Gate_1_of_Yanshan_University_East_Campus_(20240403111932).jpg"
+    }
+  },
+  {
+    "slug": "yunnan-university",
+    "name": "Yunnan University",
+    "zh": "云南大学",
+    "city": "Kunming",
+    "founded": 1922,
+    "website": "http://www.ynu.edu.cn/",
+    "wikidata": "Q649882",
+    "photo": {
+      "src": "/images/unis/yunnan-university.webp",
+      "author": "Daderot",
+      "license": "Public domain",
+      "licenseUrl": null,
+      "page": "https://commons.wikimedia.org/wiki/File:Building_-_Yunnan_University_-_DSC02352.JPG"
     }
   },
   {
@@ -1348,6 +1841,13 @@ export const CITY_LABELS: Record<string, Tri> = {
   Jinhua: { mn: "Жиньхуа", en: "Jinhua", zh: "金华" },
   Jiaxing: { mn: "Жясин", en: "Jiaxing", zh: "嘉兴" },
   Jiamusi: { mn: "Жямус", en: "Jiamusi", zh: "佳木斯" },
+  Foshan: { mn: "Фошань", en: "Foshan", zh: "佛山" },
+  Huzhou: { mn: "Хужоу", en: "Huzhou", zh: "湖州" },
+  Baoding: { mn: "Баодин", en: "Baoding", zh: "保定" },
+  Qinhuangdao: { mn: "Циньхуандао", en: "Qinhuangdao", zh: "秦皇岛" },
+  Xuzhou: { mn: "Сюйжоу", en: "Xuzhou", zh: "徐州" },
+  Kunming: { mn: "Куньмин", en: "Kunming", zh: "昆明" },
+  Fuzhou: { mn: "Фүжоу", en: "Fuzhou", zh: "福州" },
 };
 
 /** Kind of school, read from its English name (first match wins). */

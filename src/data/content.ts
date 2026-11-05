@@ -2,7 +2,7 @@ import { universities } from "./universities";
 export const academy = {
   brand: "ХАНЗ",
   /** From the academy's page copy (khanz_mn_huudasnii_tekst.docx) */
-  graduates: "2000+",
+  graduates: "8000+",
   scholarshipStudents: "1000+",
   yearsExp: "12",
   polandUnis: "35",
@@ -41,6 +41,8 @@ type TeacherMeta = {
   hsk?: readonly number[];
   /** Portrait under public/; until the file exists the card shows the name's initial. */
   photo?: string;
+  /** Short introduction under the name on /about. */
+  bio?: { mn: string; en: string; zh: string };
 };
 
 /** The team on the About page: director, teachers (with the HSK levels they teach), manager. */
@@ -52,12 +54,18 @@ export const teachersMeta: readonly TeacherMeta[] = [
     levelKey: "teacher_lvl_adv",
     hsk: [5, 6],
     photo: "/images/teachers/otgonjargal.jpg",
+    // Her own wording, from her profile (2026-11-05).
+    bio: {
+      mn: "Ханз академийн үүсгэн байгуулагч, багш, орчуулагч, эрх зүйч. Боловсрол судлалын доктор эрдмийн зэрэгтэй.",
+      en: "Founder of Hanz Academy, teacher, translator and lawyer, with a doctorate in education.",
+      zh: "汉兹学院创始人，教师、翻译、法律工作者，教育学博士。",
+    },
   },
   {
     id: "dagula",
     nameKey: "teacher_dagula",
-    levelKey: "teacher_lvl_adv",
-    hsk: [4, 5, 6],
+    levelKey: "teacher_lvl_beg_mid",
+    hsk: [1, 2, 3],
     photo: "/images/teachers/dagula.jpg",
   },
   {
@@ -89,7 +97,8 @@ export const hskFees = { month: 1_800_000, sixMonth: 4_800_000 } as const;
 
 export type HskStage = "beginner" | "intermediate" | "advanced";
 
-function hskCourse(level: number, filter: HskStage, image: string, points: number) {
+/** `drop`: point numbers the academy took off the page, kept in the copy files. */
+function hskCourse(level: number, filter: HskStage, image: string, points: number, drop: number[] = []) {
   return {
     id: `hsk${level}`,
     level,
@@ -105,7 +114,9 @@ function hskCourse(level: number, filter: HskStage, image: string, points: numbe
     icon: "一二三四五六"[level - 1],
     filter,
     image,
-    highlights: Array.from({ length: points }, (_, i) => `course_hsk${level}_h${i + 1}`),
+    highlights: Array.from({ length: points }, (_, i) => i + 1)
+      .filter((n) => !drop.includes(n))
+      .map((n) => `course_hsk${level}_h${n}`),
     teacherIds: teachersMeta.filter((m) => m.hsk?.includes(level)).map((m) => m.id),
     /** HSK 6 is not part of the 6-month HSK 1–5 class. */
     sixMonth: level <= 5,
@@ -115,11 +126,11 @@ function hskCourse(level: number, filter: HskStage, image: string, points: numbe
 /** HSK 1–6, one course page per level (khanz_mn_huudasnii_tekst.docx). */
 export const coursesMeta = [
   hskCourse(1, "beginner", "/courses/image12.webp", 7),
-  hskCourse(2, "beginner", "/courses/image14.webp", 6),
-  hskCourse(3, "intermediate", "/courses/image8.webp", 10),
-  hskCourse(4, "intermediate", "/courses/image15.webp", 8),
-  hskCourse(5, "advanced", "/courses/image4.webp", 8),
-  hskCourse(6, "advanced", "/courses/image11.webp", 9),
+  hskCourse(2, "beginner", "/courses/image14.webp", 6, [2]),
+  hskCourse(3, "intermediate", "/courses/image8.webp", 10, [2, 3, 4, 5, 6, 8]),
+  hskCourse(4, "intermediate", "/courses/image15.webp", 8, [5, 6, 7, 8]),
+  hskCourse(5, "advanced", "/courses/image4.webp", 8, [5, 6, 7]),
+  hskCourse(6, "advanced", "/courses/image11.webp", 9, [7, 8, 9]),
 ];
 
 export type CourseProgram = (typeof coursesMeta)[number];
@@ -653,10 +664,15 @@ export const shopProductsMeta = [
 
 export type ShopCat = "all" | "porcelain" | "books";
 
-export const formatPrice = (n: number, lang: "mn" | "en" | "zh" = "mn") => {
-  const locale = lang === "zh" ? "zh-CN" : lang === "en" ? "en-US" : "mn-MN";
-  return `${n.toLocaleString(locale)}₮`;
-};
+/**
+ * "1 800 000 ₮": thin spaces between thousands and a space before the sign read calmer
+ * than "1,800,000₮" (the academy found the comma form looked cheap). Non-breaking, so a
+ * price never wraps. `lang` is kept for callers; every language uses this form.
+ */
+export const formatPrice = (n: number, _lang: "mn" | "en" | "zh" = "mn") =>
+  `${Math.round(n)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, " ")} ₮`;
 
 export function getNewsById(id: string) {
   return newsIds.find((n) => n.id === id);
