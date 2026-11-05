@@ -367,7 +367,7 @@ export function mergeTeam(bundle: SiteBundle): TeamMemberCms[] {
     name: {},
     role: {},
     level: {},
-    bio: {},
+    bio: m.bio ? { ...m.bio } : {},
     hsk: [...(m.hsk ?? [])],
     photo: m.photo ?? "",
     nameKey: m.nameKey,

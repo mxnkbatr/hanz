@@ -572,3 +572,39 @@
     color: var(--seal);
   }
 }
+
+/* Course and school pages: body copy near full contrast, labels a step darker
+   (the academy found the grey hard to read). All screen sizes. */
+html.site .app-shell :is(.cd-copy p, .cd-unit) {
+  color: color-mix(in srgb, var(--text) 88%, var(--page));
+}
+
+html.site .app-shell h2.cd-label {
+  color: color-mix(in srgb, var(--text) 72%, var(--page));
+}
+
+/* No red rule under page titles: it read as a stray mark next to the lead (the academy's note). */
+html.site .app-shell .page-head .h1::after {
+  display: none;
+}
+
+/* Quiz in dark mode: the prompt and answer cards were white with pale text. Right/wrong
+   states keep their own colours (they set them with .is-correct / .is-wrong). */
+html.site[data-theme="dark"] .app-shell .quiz-prompt {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(88, 204, 2, 0.12), transparent 55%),
+    var(--surface-1);
+  border-color: var(--edge);
+  color: var(--text);
+}
+
+html.site[data-theme="dark"] .app-shell .quiz-option:not(.is-correct, .is-wrong) {
+  border-color: var(--edge-strong);
+  background: color-mix(in srgb, var(--text) 6%, var(--surface-1));
+  color: var(--text);
+}
+
+html.site[data-theme="dark"] .app-shell .quiz-option i {
+  background: color-mix(in srgb, var(--text) 10%, transparent);
+  color: color-mix(in srgb, var(--text) 70%, transparent);
+}

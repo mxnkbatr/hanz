@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { PageShell, Reveal, Stagger, StaggerItem } from "../components/PageShell";
 import { formatPrice } from "../data/content";
-import { hskIntro, hskLevels, hskSchedule, type HskLevel } from "../data/hsk";
+import { hskIntro, hskk, hskLevels, hskSchedule, type HskLevel } from "../data/hsk";
 import { useSiteContent } from "../lib/SiteContentContext";
 
 const ENROLL = "/enroll?interest=hsk";
@@ -90,6 +90,35 @@ export function Hsk() {
         </Stagger>
         <p className="hsk-note">{hskIntro.hanziNote}</p>
         <p className="hsk-note">{hskIntro.outcomeNote}</p>
+      </section>
+
+      <section className="section hsk-hskk" id="hskk">
+        <Reveal>
+          <p className="eyebrow">{hskk.eyebrow}</p>
+          <h2 className="h2">{hskk.title}</h2>
+          <p className="lead">{hskk.lead}</p>
+        </Reveal>
+        <div className="hskk-grid">
+          {hskk.levels.map((l) => (
+            <Reveal key={l.zh}>
+              <article className="hsk-plan">
+                <h3 className="hskk-level">
+                  {l.name} <span lang="zh">{l.zh}</span>
+                </h3>
+                <p className="hskk-match">{l.match}</p>
+                <p>{l.tasks}</p>
+              </article>
+            </Reveal>
+          ))}
+        </div>
+        <p className="hsk-note">{hskk.format}</p>
+        <Reveal>
+          <div className="hsk-actions">
+            <Link to="/enroll?interest=consult" className="btn hsk-btn-ghost">
+              <span>HSKK-ийн талаар зөвлөгөө авах</span>
+            </Link>
+          </div>
+        </Reveal>
       </section>
 
       <section className="section section-last hsk-schedule">
