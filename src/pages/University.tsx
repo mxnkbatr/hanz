@@ -127,11 +127,10 @@ export function University() {
             {!desktop && (
               <IosFilterBar
                 options={[
-                  { id: "all", label: t("filter_all"), count: universities.length },
-                  ...CITY_CHIPS.map(([id, n]) => ({
+                  { id: "all", label: t("filter_all") },
+                  ...CITY_CHIPS.map(([id]) => ({
                     id,
                     label: cityLabel({ city: id } as University, lang),
-                    count: n,
                   })),
                 ]}
                 value={city}
@@ -146,7 +145,6 @@ export function University() {
         <Reveal>
           <div className="ios-section-head">
             <h2>{desktop ? t("uni_list_title") : t("uni_all")}</h2>
-            <em>{listed.length}</em>
           </div>
           {desktop && <p className="uni-list-lead">{t("uni_list_lead")}</p>}
         </Reveal>

@@ -26,7 +26,7 @@ function programOf(interest: string) {
 
 export function AdminLeads() {
   const { t } = useI18n();
-  const choiceLabel = (key: string) => (key.startsWith("HSK ") ? key : t(key));
+  const choiceLabel = (key: string) => (key.startsWith("HSK") ? key : t(key));
   const programLabel = (interest: string) => {
     const p = programs.find((x) => x.id === programOf(interest));
     return p ? t(p.labelKey) : interest;

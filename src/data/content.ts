@@ -92,7 +92,7 @@ export const teachersMeta: readonly TeacherMeta[] = [
   },
 ];
 
-/** Fee per level and for the 6-month HSK 1–5 class (page copy, "Үнэ / Төлбөр"). */
+/** Fee per level and for the 6-month HSK1–5 class (page copy, "Үнэ / Төлбөр"). */
 export const hskFees = { month: 1_800_000, sixMonth: 4_800_000 } as const;
 
 export type HskStage = "beginner" | "intermediate" | "advanced";
@@ -118,12 +118,12 @@ function hskCourse(level: number, filter: HskStage, image: string, points: numbe
       .filter((n) => !drop.includes(n))
       .map((n) => `course_hsk${level}_h${n}`),
     teacherIds: teachersMeta.filter((m) => m.hsk?.includes(level)).map((m) => m.id),
-    /** HSK 6 is not part of the 6-month HSK 1–5 class. */
+    /** HSK6 is not part of the 6-month HSK1–5 class. */
     sixMonth: level <= 5,
   };
 }
 
-/** HSK 1–6, one course page per level (khanz_mn_huudasnii_tekst.docx). */
+/** HSK1–6, one course page per level (khanz_mn_huudasnii_tekst.docx). */
 export const coursesMeta = [
   hskCourse(1, "beginner", "/courses/image12.webp", 7),
   hskCourse(2, "beginner", "/courses/image14.webp", 6, [2]),

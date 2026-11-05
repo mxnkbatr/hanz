@@ -28,25 +28,25 @@ export const quizLevels: {
     id: "hsk1",
     titleKey: "quiz_lvl_hsk1",
     descKey: "quiz_lvl_hsk1_d",
-    badge: "HSK 1",
+    badge: "HSK1",
   },
   {
     id: "hsk2",
     titleKey: "quiz_lvl_hsk2",
     descKey: "quiz_lvl_hsk2_d",
-    badge: "HSK 2",
+    badge: "HSK2",
   },
   {
     id: "hsk3",
     titleKey: "quiz_lvl_hsk3",
     descKey: "quiz_lvl_hsk3_d",
-    badge: "HSK 3",
+    badge: "HSK3",
   },
 ];
 
 /** Branded HSK check — questions grouped by level. */
 export const quizQuestions: QuizQuestion[] = [
-  // ─── HSK 1 ───
+  // ─── HSK1 ───
   {
     id: "h1-nihao",
     level: "hsk1",
@@ -160,7 +160,7 @@ export const quizQuestions: QuizQuestion[] = [
     correct: 0,
   },
 
-  // ─── HSK 2 ───
+  // ─── HSK2 ───
   {
     id: "h2-xuexi",
     level: "hsk2",
@@ -274,7 +274,7 @@ export const quizQuestions: QuizQuestion[] = [
     correct: 0,
   },
 
-  // ─── HSK 3 ───
+  // ─── HSK3 ───
   {
     id: "h3-jingli",
     level: "hsk3",
