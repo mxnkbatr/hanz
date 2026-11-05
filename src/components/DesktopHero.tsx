@@ -176,7 +176,7 @@ export function DesktopHero({ ready }: { ready: boolean }) {
               <dd>{t("stat_students")}</dd>
             </div>
             <div>
-              <dt>{academy.scholarshipStudents || "1000+"}</dt>
+              <dt>{academy.scholarshipStudents || "10000+"}</dt>
               <dd>{t("stat_scholarship")}</dd>
             </div>
           </dl>

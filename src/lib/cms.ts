@@ -292,7 +292,10 @@ export type UniversityLive = {
 };
 
 /** Stat values saved in the admin before the academy corrected them (2026-11-05). */
-const OUTDATED_SETTINGS: Partial<Record<keyof SiteSettings, string>> = { graduates: "2000+" };
+const OUTDATED_SETTINGS: Partial<Record<keyof SiteSettings, string>> = {
+  graduates: "2000+",
+  scholarshipStudents: "1000+",
+};
 
 export function mergeAcademy(bundle: SiteBundle) {
   const saved = { ...bundle.settings };

@@ -3,7 +3,7 @@ export const academy = {
   brand: "ХАНЗ",
   /** From the academy's page copy (khanz_mn_huudasnii_tekst.docx) */
   graduates: "8000+",
-  scholarshipStudents: "1000+",
+  scholarshipStudents: "10000+",
   yearsExp: "12",
   polandUnis: "35",
   partnerUniversities: "300+",
