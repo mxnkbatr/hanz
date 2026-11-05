@@ -53,7 +53,7 @@ export const teachersMeta: readonly TeacherMeta[] = [
     roleKey: "teacher_role_director",
     levelKey: "teacher_lvl_adv",
     hsk: [5, 6],
-    photo: "/images/teachers/otgonjargal.jpg",
+    photo: "/images/teachers/otgonjargal.webp",
     // Her own wording, from her profile (2026-11-05).
     bio: {
       mn: "Ханз академийн үүсгэн байгуулагч, багш, орчуулагч, эрх зүйч. Боловсрол судлалын доктор эрдмийн зэрэгтэй.",
@@ -66,7 +66,7 @@ export const teachersMeta: readonly TeacherMeta[] = [
     nameKey: "teacher_dagula",
     levelKey: "teacher_lvl_beg_mid",
     hsk: [1, 2, 3],
-    photo: "/images/teachers/dagula.jpg",
+    photo: "/images/teachers/dagula.webp",
   },
   {
     id: "michidmaa",
@@ -74,7 +74,7 @@ export const teachersMeta: readonly TeacherMeta[] = [
     roleKey: "teacher_role_trainee",
     levelKey: "teacher_lvl_beg_mid",
     hsk: [1, 2, 3],
-    photo: "/images/teachers/michidmaa.jpg",
+    photo: "/images/teachers/michidmaa.webp",
   },
   {
     id: "tsetsenbileg",
@@ -82,13 +82,13 @@ export const teachersMeta: readonly TeacherMeta[] = [
     roleKey: "teacher_role_trainee",
     levelKey: "teacher_lvl_beg",
     hsk: [1, 2],
-    photo: "/images/teachers/tsetsenbileg.jpg",
+    photo: "/images/teachers/tsetsenbileg.webp",
   },
   {
     id: "sarantuya",
     nameKey: "teacher_sarantuya",
     roleKey: "teacher_role_manager",
-    photo: "/images/teachers/sarantuya.jpg",
+    photo: "/images/teachers/sarantuya.webp",
   },
 ];
 
