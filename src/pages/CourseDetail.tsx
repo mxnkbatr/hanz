@@ -39,7 +39,6 @@ export function CourseDetail() {
 
   const program = programs.find((p) => p.id === programFromInterest(course.id));
   const title = loc(lang, t, course.title, course.titleKey);
-  const tag = loc(lang, t, course.tag, course.tagKey);
   const unit = course.unitKey ? t(course.unitKey) : "";
   const paragraphs = loc(lang, t, course.body, course.descKey)
     .split("\n")
@@ -94,7 +93,6 @@ export function CourseDetail() {
         <div className="cd-body">
           <Reveal>
             <header className="cd-head">
-              {tag && <span className="cd-tag">{tag}</span>}
               <h1 className="cd-title">{title}</h1>
               {unit && <p className="cd-unit">{unit}</p>}
             </header>

@@ -186,7 +186,7 @@ export function MobileHome() {
                       <Link to={e.to}>
                         <SafeImage src={e.image} alt={e.title} />
                         <span className="m-tall-shade" />
-                        <span className="m-chip-light">{e.meta}</span>
+                        {e.kind !== "course" && e.meta ? <span className="m-chip-light">{e.meta}</span> : null}
                         <span className="m-tall-body">
                           <strong>{e.title}</strong>
                           <i aria-hidden>→</i>

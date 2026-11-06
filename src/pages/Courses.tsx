@@ -260,9 +260,6 @@ export function Courses() {
                       alt={loc(lang, t, c.title, c.titleKey)}
                       loading="lazy"
                     />
-                    <span className="course-product-tag">
-                      {loc(lang, t, c.tag, c.tagKey)}
-                    </span>
                   </div>
                   <div className="course-product-body">
                     <h3>{loc(lang, t, c.title, c.titleKey)}</h3>
