@@ -23,7 +23,6 @@ export function About() {
           <p className="eyebrow">{t("about_title")}</p>
           <h1 className="h1">{t("about_title")}</h1>
           <p className="lead home-about-copy">{t("about_body")}</p>
-          <p className="lead home-about-copy">{t("about_body2")}</p>
         </Reveal>
       </header>
 
