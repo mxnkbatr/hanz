@@ -47,31 +47,40 @@ function directionFor(prev: string, next: string, navType: string): Dir {
 const iosSpring = { type: "spring" as const, stiffness: 380, damping: 40, mass: 0.9 };
 const instant = { duration: 0 };
 
+const softSpring = { type: "spring" as const, stiffness: 520, damping: 46, mass: 0.8 };
+
+/**
+ * Pages have see-through backgrounds, so two layers must never sit on top of each
+ * other for long: the old page fades out fast while the new one glides a short way in
+ * (from the right going deeper, from the left going back, straight up between tabs).
+ */
 const stackVariants = {
-  enter: ({ dir }: Custom) =>
-    dir === "fade"
-      ? { opacity: 0, x: 0, y: 0, zIndex: 2, boxShadow: "none" }
-      : dir === "push"
-        ? { x: "100%", opacity: 1, y: 0, zIndex: 2, boxShadow: "-24px 0 48px rgba(0,0,0,0.6)" }
-        : { x: "-28%", opacity: 0.6, y: 0, zIndex: 1, boxShadow: "none" },
+  enter: ({ dir }: Custom) => ({
+    opacity: 0,
+    x: dir === "push" ? 28 : dir === "pop" ? -28 : 0,
+    y: dir === "fade" ? 8 : 0,
+    zIndex: 2,
+  }),
   center: {
     x: 0,
     y: 0,
     opacity: 1,
-    boxShadow: "0 0 0 rgba(0,0,0,0)",
-    transition: { x: iosSpring, opacity: { duration: 0.28 }, boxShadow: { duration: 0.4 }, zIndex: instant },
-    transitionEnd: { zIndex: 0, boxShadow: "none" },
+    transition: { x: softSpring, y: softSpring, opacity: { duration: 0.22 }, zIndex: instant },
+    transitionEnd: { zIndex: 0 },
   },
   exit: ({ dir, fromY }: Custom) => ({
     // Keep the old page where the reader was while the window jumps to its new offset.
     y: -fromY,
-    ...(dir === "fade"
-      ? { opacity: 0, x: 0, zIndex: 1 }
-      : dir === "push"
-        ? { x: "-28%", opacity: 0.6, zIndex: 1 }
-        : // px, not %, so a page already half swiped away carries on from where the finger left it.
-          { x: window.innerWidth, opacity: 1, zIndex: 2, boxShadow: "-24px 0 48px rgba(0,0,0,0.6)" }),
-    transition: { x: iosSpring, y: instant, zIndex: instant, opacity: { duration: dir === "fade" ? 0.18 : 0.3 } },
+    zIndex: 1,
+    opacity: 0,
+    // The app's swipe-back drags the page; let it carry on off the edge from the finger.
+    ...(dir === "pop" && isNativeApp() ? { x: window.innerWidth, opacity: 1, zIndex: 2 } : {}),
+    transition: {
+      x: iosSpring,
+      y: instant,
+      zIndex: instant,
+      opacity: { duration: dir === "pop" && isNativeApp() ? 0.3 : 0.1 },
+    },
   }),
 };
 

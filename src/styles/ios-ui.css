@@ -1144,3 +1144,69 @@ html.site[data-theme="dark"] .page-quiz .quiz-prompt.is-text small {
     border-radius: 20px;
   }
 }
+
+/* ─── Header, phones: one rounded glass bar that matches the dock ─── */
+@media (max-width: 899px) {
+  html.site .app-shell .topbar::before {
+    display: none;
+  }
+  html.site body .app-shell .topbar .topbar-stack .topbar-capsule {
+    min-height: 52px;
+    padding: 0 6px 0 8px;
+    border-radius: 26px !important;
+    background: color-mix(in srgb, var(--paper, #fbf8f3) 74%, transparent) !important;
+    border: 1px solid rgba(255, 255, 255, 0.65) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(1.8) !important;
+    backdrop-filter: blur(22px) saturate(1.8) !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.8),
+      0 10px 28px -12px rgba(18, 17, 15, 0.18) !important;
+  }
+  html.site[data-theme="dark"] body .app-shell .topbar .topbar-stack .topbar-capsule {
+    background: rgba(30, 28, 26, 0.72) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      0 10px 28px -12px rgba(0, 0, 0, 0.6) !important;
+  }
+  html.site .app-shell .topbar-back {
+    height: 40px;
+    padding: 0 12px 0 6px;
+    border-radius: 999px;
+    color: var(--seal) !important;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  html.site .app-shell .topbar-back:active {
+    background: color-mix(in srgb, var(--seal) 10%, transparent);
+  }
+  html.site .app-shell .topbar-route-line {
+    display: none;
+  }
+}
+
+/* ─── Header, desktop: the active item is a soft pill, not a dot ─── */
+@media (min-width: 900px) {
+  html.site body .app-shell .topnav-dot {
+    inset: 0;
+    left: 0;
+    bottom: 0;
+    width: auto;
+    height: auto;
+    margin: 0;
+    z-index: -1;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--seal) 11%, transparent);
+    box-shadow: none;
+  }
+  html.site body .app-shell .topbar .topnav-link.is-active {
+    color: var(--seal) !important;
+    font-weight: 650;
+  }
+  html.site body .app-shell .topbar.is-on-film .topnav-link.is-active {
+    color: #fff !important;
+  }
+  html.site body .app-shell .topbar.is-on-film .topnav-dot {
+    background: rgba(255, 255, 255, 0.18);
+  }
+}
