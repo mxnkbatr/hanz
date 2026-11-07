@@ -1023,3 +1023,112 @@ html.site a[href^="/enroll"] {
 html.site :is(.cd-bar, .app-enroll-dock) {
   display: none !important;
 }
+
+/* ─── Quiz: 50-question tests (sentences instead of one big character) ─── */
+.page-quiz .quiz-passage {
+  margin: 0 0 0.7rem;
+  padding: 0.85rem 1rem;
+  max-height: 34vh;
+  text-align: left;
+  overflow-y: auto;
+  border-radius: 18px;
+  background: var(--surface, rgba(255, 255, 255, 0.78));
+  border: 1px solid rgba(18, 17, 15, 0.08);
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.page-quiz .quiz-prompt.is-text {
+  text-align: left;
+  padding: 0.95rem 1rem;
+}
+.page-quiz .quiz-prompt.is-text small {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 760;
+  letter-spacing: 0.02em;
+  color: rgba(18, 17, 15, 0.45);
+}
+.page-quiz .quiz-prompt.is-text strong {
+  font-family: inherit;
+  font-size: 1.12rem;
+  font-weight: 760;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+.page-quiz .quiz-options.is-text {
+  grid-template-columns: 1fr;
+}
+.page-quiz .quiz-options.is-text .quiz-option {
+  min-height: 52px;
+  font-weight: 650;
+  line-height: 1.4;
+}
+html.site[data-theme="dark"] .page-quiz .quiz-passage {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+html.site[data-theme="dark"] .page-quiz .quiz-prompt.is-text small {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ─── Shop product page on phones: full cover photo, a real bottom bar ─── */
+@media (max-width: 899px) {
+  html.site .page-shop.page-detail .product-detail-media {
+    aspect-ratio: 4 / 5 !important;
+    max-height: 68vh;
+    border-radius: 26px;
+    overflow: hidden;
+    background: var(--surface-2, #ebe8e2);
+  }
+  html.site .page-shop.page-detail .product-detail-media .app-detail-hero-square,
+  html.site .page-shop.page-detail .product-detail-media .shared-media {
+    aspect-ratio: auto !important;
+    width: 100%;
+    height: 100% !important;
+    border-radius: 0;
+  }
+  html.site .page-shop.page-detail .product-detail-media img {
+    width: 100%;
+    height: 100% !important;
+    object-fit: cover;
+    object-position: center top;
+  }
+  html.site .page-shop.page-detail .product-detail-body {
+    padding-bottom: 1rem;
+  }
+  html.site .page-shop.page-detail .app-price {
+    margin: 0.35rem 0 0.6rem;
+  }
+  /* Buy + ask side by side in one frosted bar above the tab bar. */
+  html.site .page-shop.page-detail .product-cta-row {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin: 1.2rem -0.25rem 0;
+    padding: 0.5rem;
+    border-radius: 22px;
+    background: color-mix(in srgb, var(--bg, #faf7f2) 82%, transparent) !important;
+    -webkit-backdrop-filter: saturate(1.6) blur(18px);
+    backdrop-filter: saturate(1.6) blur(18px);
+    border: 1px solid rgba(18, 17, 15, 0.08);
+    box-shadow: 0 10px 30px rgba(18, 17, 15, 0.12);
+    z-index: 5;
+  }
+  html.site .page-shop.page-detail .product-cta-row > * {
+    width: 100% !important;
+    min-width: 0;
+  }
+  html.site .page-shop.page-detail .product-cta-row .btn {
+    width: 100%;
+    min-height: 46px;
+    padding-inline: 0.6rem;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+  html.site[data-theme="dark"] .page-shop.page-detail .product-cta-row {
+    background: rgba(28, 26, 24, 0.82) !important;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+}
