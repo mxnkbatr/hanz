@@ -65,7 +65,7 @@ export const teachersMeta: readonly TeacherMeta[] = [
     id: "dagula",
     nameKey: "teacher_dagula",
     levelKey: "teacher_lvl_beg_mid",
-    hsk: [1, 2, 3],
+    hsk: [1, 2, 3, 5],
     photo: "/images/teachers/dagula.webp",
   },
   {
