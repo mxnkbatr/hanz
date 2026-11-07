@@ -8,6 +8,7 @@ import {
   type QuizLevel,
   type QuizQuestion,
 } from "../data/quiz";
+import { quizPassages, quizTests, type QuizTestId } from "../data/quizTests";
 import { PageShell, Reveal } from "../components/PageShell";
 import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
@@ -20,8 +21,13 @@ const HEARTS_MAX = 3;
 const XP_HIT = 10;
 const XP_STREAK_BONUS = 5;
 
+/** A word card, or a question from one of the 50-question tests. */
+type PlayQuestion = QuizQuestion & { text?: boolean; part?: string; passage?: string };
+
 type PlayState = {
-  pool: QuizQuestion[];
+  pool: PlayQuestion[];
+  /** A 50-question test: fixed order, and mistakes don't end it. */
+  test: boolean;
   order: number[];
   index: number;
   score: number;
@@ -41,12 +47,38 @@ const LEVEL_GLYPH: Record<QuizLevel, string> = {
   hsk3: "三",
 };
 
-function buildPlay(level: QuizLevel, all: QuizQuestion[]): PlayState {
-  const pool = all.filter((q) => q.level === level);
-  const order = shuffleIndices(pool.length);
+const TESTS: { id: QuizTestId; badge: string; titleKey: string; glyph: string }[] = [
+  { id: "hsk1", badge: "HSK1", titleKey: "quiz_test_hsk", glyph: "一" },
+  { id: "hsk2", badge: "HSK2", titleKey: "quiz_test_hsk", glyph: "二" },
+  { id: "hsk3", badge: "HSK3", titleKey: "quiz_test_hsk", glyph: "三" },
+  { id: "hsk4", badge: "HSK4", titleKey: "quiz_test_hsk", glyph: "四" },
+  { id: "hsk5", badge: "HSK5", titleKey: "quiz_test_hsk", glyph: "五" },
+  { id: "hsk6", badge: "HSK6", titleKey: "quiz_test_hsk", glyph: "六" },
+  { id: "applied", badge: "HSK", titleKey: "quiz_test_applied", glyph: "用" },
+  { id: "business", badge: "HSK", titleKey: "quiz_test_business", glyph: "商" },
+];
+
+function testPool(id: QuizTestId): PlayQuestion[] {
+  return quizTests[id].map((q, i) => ({
+    id: `test-${id}-${i + 1}`,
+    level: "hsk1",
+    kind: "meaning",
+    text: true,
+    hanzi: q.prompt,
+    pinyin: "",
+    part: q.part,
+    passage: q.passage === undefined ? undefined : quizPassages[q.passage],
+    options: q.options.map((o) => ({ mn: o, en: o, zh: o })),
+    correct: q.correct,
+  }));
+}
+
+function buildPlay(pool: PlayQuestion[], test: boolean): PlayState {
+  const order = test ? pool.map((_, i) => i) : shuffleIndices(pool.length);
   const first = pool[order[0]];
   return {
     pool,
+    test,
     order,
     index: 0,
     score: 0,
@@ -66,9 +98,10 @@ export function Quiz() {
   const { quizQuestionsLive } = useSiteContent();
   const [phase, setPhase] = useState<Phase>("pick");
   const [level, setLevel] = useState<QuizLevel | null>(null);
+  const [testId, setTestId] = useState<QuizTestId | null>(null);
   const [play, setPlay] = useState<PlayState | null>(null);
 
-  const question: QuizQuestion | null = useMemo(() => {
+  const question: PlayQuestion | null = useMemo(() => {
     if (phase !== "play" || !play) return null;
     return play.pool[play.order[play.index]] ?? null;
   }, [phase, play]);
@@ -90,7 +123,16 @@ export function Quiz() {
     const pool = quizQuestionsLive as QuizQuestion[];
     if (!pool.some((q) => q.level === next)) return;
     setLevel(next);
-    setPlay(buildPlay(next, pool));
+    setTestId(null);
+    setPlay(buildPlay(pool.filter((q) => q.level === next), false));
+    setPhase("play");
+    void hapticLight();
+  }
+
+  function startTest(id: QuizTestId) {
+    setTestId(id);
+    setLevel(null);
+    setPlay(buildPlay(testPool(id), true));
     setPhase("play");
     void hapticLight();
   }
@@ -102,7 +144,7 @@ export function Quiz() {
     const streak = ok ? play.streak + 1 : 0;
     const bonus = ok && streak >= 3 ? XP_STREAK_BONUS : 0;
     const xpGain = ok ? XP_HIT + bonus : 0;
-    const hearts = ok ? play.hearts : Math.max(0, play.hearts - 1);
+    const hearts = ok || play.test ? play.hearts : Math.max(0, play.hearts - 1);
 
     setPlay({
       ...play,
@@ -148,6 +190,7 @@ export function Quiz() {
   function backToLevels() {
     setPhase("pick");
     setLevel(null);
+    setTestId(null);
     setPlay(null);
   }
 
@@ -160,7 +203,10 @@ export function Quiz() {
         ? "quiz_level_good"
         : "quiz_level_start";
 
-  const levelMeta = quizLevels.find((l) => l.id === level);
+  const testMeta = TESTS.find((x) => x.id === testId);
+  const levelMeta = testMeta
+    ? { badge: testMeta.id === "applied" || testMeta.id === "business" ? t(testMeta.titleKey) : testMeta.badge }
+    : quizLevels.find((l) => l.id === level);
   const lastXpGain =
     play && isCorrect
       ? XP_HIT + (play.streak >= 3 ? XP_STREAK_BONUS : 0)
@@ -201,7 +247,7 @@ export function Quiz() {
             </div>
 
             <div className="quiz-hud-stats">
-              <div className="quiz-hearts" aria-label={t("quiz_out_hearts")}>
+              {!play.test && <div className="quiz-hearts" aria-label={t("quiz_out_hearts")}>
                 {Array.from({ length: HEARTS_MAX }, (_, i) => (
                   <motion.span
                     key={i}
@@ -216,7 +262,7 @@ export function Quiz() {
                     ♥
                   </motion.span>
                 ))}
-              </div>
+              </div>}
               <div className="quiz-xp-pill">
                 <em>{play.xp}</em>
                 <span>{t("quiz_xp")}</span>
@@ -282,6 +328,43 @@ export function Quiz() {
                   ))}
                 </div>
               </section>
+
+              <section className="quiz-pick-group">
+                <header className="quiz-pick-group-head">
+                  <h2>{t("quiz_tests_t")}</h2>
+                  <p>{t("quiz_tests_d")}</p>
+                </header>
+
+                <div className="quiz-levels">
+                  {TESTS.map((x, i) => (
+                    <motion.button
+                      key={x.id}
+                      type="button"
+                      className={`quiz-level-card quiz-test-card quiz-test-${x.id}`}
+                      onClick={() => startTest(x.id)}
+                      whileTap={{ scale: 0.985 }}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.04 * i, duration: 0.26, ease }}
+                    >
+                      <span className="quiz-level-glyph" aria-hidden>
+                        {x.glyph}
+                      </span>
+                      <span className="quiz-level-body">
+                        <span className="quiz-level-badge">{x.badge}</span>
+                        <strong>{t(x.titleKey)}</strong>
+                        <em>{t("quiz_test_count")}</em>
+                      </span>
+                      <span className="quiz-level-trail">
+                        <span className="quiz-level-play">{t("quiz_start")}</span>
+                        <span className="quiz-level-chevron" aria-hidden>
+                          ›
+                        </span>
+                      </span>
+                    </motion.button>
+                  ))}
+                </div>
+              </section>
             </motion.div>
           )}
 
@@ -310,24 +393,29 @@ export function Quiz() {
                   </motion.em>
                 ) : (
                   <em>
-                    {question.kind === "pinyin"
-                      ? t("quiz_ask_pinyin")
-                      : t("quiz_ask_meaning")}
+                    {question.text
+                      ? t("quiz_test_label")
+                      : question.kind === "pinyin"
+                        ? t("quiz_ask_pinyin")
+                        : t("quiz_ask_meaning")}
                   </em>
                 )}
               </div>
 
+              {question.passage && <p className="quiz-passage">{question.passage}</p>}
+
               <motion.div
-                className="quiz-prompt"
+                className={`quiz-prompt${question.text ? " is-text" : ""}`}
                 initial={{ scale: 0.92, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ type: "spring", stiffness: 320, damping: 18 }}
               >
+                {question.text && question.part && <small>{question.part}</small>}
                 <strong>{question.hanzi}</strong>
-                {question.kind === "meaning" && <span>{question.pinyin}</span>}
+                {!question.text && question.kind === "meaning" && <span>{question.pinyin}</span>}
               </motion.div>
 
-              <div className="quiz-options" role="group">
+              <div className={`quiz-options${question.text ? " is-text" : ""}`} role="group">
                 {play.optionOrder.map((realIdx, i) => {
                   const opt = question.options[realIdx];
                   let state = "";
@@ -449,11 +537,11 @@ export function Quiz() {
               </div>
 
               <div className="quiz-done-actions">
-                {level && (
+                {(level || testId) && (
                   <button
                     type="button"
                     className="quiz-primary"
-                    onClick={() => startLevel(level)}
+                    onClick={() => (testId ? startTest(testId) : level && startLevel(level))}
                   >
                     {t("quiz_retry")}
                   </button>

@@ -132,7 +132,8 @@ export function ProductDetail() {
               transition={{ type: "spring", stiffness: 420, damping: 28 }}
             >
               <Link to="/contact" className="btn btn-ink">
-                <span>{t("ask_product")}</span>
+                <span className="desk-only">{t("ask_product")}</span>
+                <span className="app-mobile">{t("ask_product_short")}</span>
               </Link>
             </motion.div>
           </div>
