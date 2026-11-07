@@ -117,7 +117,10 @@ function hskCourse(level: number, filter: HskStage, image: string, points: numbe
     highlights: Array.from({ length: points }, (_, i) => i + 1)
       .filter((n) => !drop.includes(n))
       .map((n) => `course_hsk${level}_h${n}`),
-    teacherIds: teachersMeta.filter((m) => m.hsk?.includes(level)).map((m) => m.id),
+    // The director is listed on every course, then that level's teachers.
+    teacherIds: teachersMeta
+      .filter((m) => m.roleKey === "teacher_role_director" || m.hsk?.includes(level))
+      .map((m) => m.id),
     /** HSK6 is not part of the 6-month HSK1–5 class. */
     sixMonth: level <= 5,
   };

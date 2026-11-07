@@ -284,13 +284,16 @@ export function CourseDetail() {
 function TeacherTile({ member }: { member: TeamMemberCms }) {
   const { t, lang } = useI18n();
   const name = loc(lang, t, member.name, member.nameKey);
-  const bio = loc(lang, t, member.bio);
+  // The director is on every course: just name and role, so her card
+  // doesn't show other levels or run taller than the teachers'.
+  const director = member.roleKey === "teacher_role_director";
+  const bio = director ? "" : loc(lang, t, member.bio);
   return (
     <li className="cd-teacher">
       <MemberAvatar photo={member.photo} name={name} className="cd-teacher-photo" />
       <strong>{name}</strong>
       <small>{loc(lang, t, member.role, member.roleKey)}</small>
-      {member.hsk.length > 0 && <em>HSK{member.hsk.join(" · ")}</em>}
+      {!director && member.hsk.length > 0 && <em>HSK{member.hsk.join(" · ")}</em>}
       {bio && <p>{bio}</p>}
     </li>
   );
