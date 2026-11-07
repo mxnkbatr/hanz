@@ -39,7 +39,6 @@ export function CourseDetail() {
 
   const program = programs.find((p) => p.id === programFromInterest(course.id));
   const title = loc(lang, t, course.title, course.titleKey);
-  const tag = loc(lang, t, course.tag, course.tagKey);
   const unit = course.unitKey ? t(course.unitKey) : "";
   const paragraphs = loc(lang, t, course.body, course.descKey)
     .split("\n")
@@ -49,7 +48,10 @@ export function CourseDetail() {
   const teachers = (course.teacherIds ?? [])
     .map((tid) => teamLive.find((m) => m.id === tid))
     .filter((m): m is TeamMemberCms => Boolean(m));
-  const plans = course.level ? plansForLevel(program, course.id) : (program?.plans ?? []);
+  // The one-level monthly price is not shown on course pages.
+  const plans = (course.level ? plansForLevel(program, course.id) : (program?.plans ?? [])).filter(
+    (p) => p.id !== "m1",
+  );
   const fromPrice = plans.length ? Math.min(...plans.map((p) => p.amount)) : 0;
   const levelText = course.level
     ? `HSK${course.level}`
@@ -94,7 +96,6 @@ export function CourseDetail() {
         <div className="cd-body">
           <Reveal>
             <header className="cd-head">
-              {tag && <span className="cd-tag">{tag}</span>}
               <h1 className="cd-title">{title}</h1>
               {unit && <p className="cd-unit">{unit}</p>}
             </header>
@@ -283,13 +284,16 @@ export function CourseDetail() {
 function TeacherTile({ member }: { member: TeamMemberCms }) {
   const { t, lang } = useI18n();
   const name = loc(lang, t, member.name, member.nameKey);
-  const bio = loc(lang, t, member.bio);
+  // The director is on every course: just name and role, so her card
+  // doesn't show other levels or run taller than the teachers'.
+  const director = member.roleKey === "teacher_role_director";
+  const bio = director ? "" : loc(lang, t, member.bio);
   return (
     <li className="cd-teacher">
       <MemberAvatar photo={member.photo} name={name} className="cd-teacher-photo" />
       <strong>{name}</strong>
       <small>{loc(lang, t, member.role, member.roleKey)}</small>
-      {member.hsk.length > 0 && <em>HSK{member.hsk.join(" · ")}</em>}
+      {!director && member.hsk.length > 0 && <em>HSK{member.hsk.join(" · ")}</em>}
       {bio && <p>{bio}</p>}
     </li>
   );

@@ -72,7 +72,6 @@ function HomeDesktop() {
           </Reveal>
           <Reveal className="hx-about-copy">
             <p className="lead">{t("about_body")}</p>
-            <p>{t("about_body2")}</p>
           </Reveal>
         </section>
 

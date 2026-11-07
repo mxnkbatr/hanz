@@ -65,7 +65,7 @@ export const teachersMeta: readonly TeacherMeta[] = [
     id: "dagula",
     nameKey: "teacher_dagula",
     levelKey: "teacher_lvl_beg_mid",
-    hsk: [1, 2, 3],
+    hsk: [1, 2, 3, 5],
     photo: "/images/teachers/dagula.webp",
   },
   {
@@ -117,7 +117,10 @@ function hskCourse(level: number, filter: HskStage, image: string, points: numbe
     highlights: Array.from({ length: points }, (_, i) => i + 1)
       .filter((n) => !drop.includes(n))
       .map((n) => `course_hsk${level}_h${n}`),
-    teacherIds: teachersMeta.filter((m) => m.hsk?.includes(level)).map((m) => m.id),
+    // The director is listed on every course, then that level's teachers.
+    teacherIds: teachersMeta
+      .filter((m) => m.roleKey === "teacher_role_director" || m.hsk?.includes(level))
+      .map((m) => m.id),
     /** HSK6 is not part of the 6-month HSK1–5 class. */
     sixMonth: level <= 5,
   };
@@ -127,7 +130,7 @@ function hskCourse(level: number, filter: HskStage, image: string, points: numbe
 export const coursesMeta = [
   hskCourse(1, "beginner", "/courses/image12.webp", 7),
   hskCourse(2, "beginner", "/courses/image14.webp", 6, [2]),
-  hskCourse(3, "intermediate", "/courses/image8.webp", 10, [2, 3, 4, 5, 6, 8]),
+  hskCourse(3, "intermediate", "/courses/image8.webp", 10, [2, 3, 4, 5, 6, 7, 8]),
   hskCourse(4, "intermediate", "/courses/image15.webp", 8, [5, 6, 7, 8]),
   hskCourse(5, "advanced", "/courses/image4.webp", 8, [5, 6, 7]),
   hskCourse(6, "advanced", "/courses/image11.webp", 9, [7, 8, 9]),
