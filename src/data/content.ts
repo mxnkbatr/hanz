@@ -130,7 +130,7 @@ function hskCourse(level: number, filter: HskStage, image: string, points: numbe
 export const coursesMeta = [
   hskCourse(1, "beginner", "/courses/image12.webp", 7),
   hskCourse(2, "beginner", "/courses/image14.webp", 6, [2]),
-  hskCourse(3, "intermediate", "/courses/image8.webp", 10, [2, 3, 4, 5, 6, 8]),
+  hskCourse(3, "intermediate", "/courses/image8.webp", 10, [2, 3, 4, 5, 6, 7, 8]),
   hskCourse(4, "intermediate", "/courses/image15.webp", 8, [5, 6, 7, 8]),
   hskCourse(5, "advanced", "/courses/image4.webp", 8, [5, 6, 7]),
   hskCourse(6, "advanced", "/courses/image11.webp", 9, [7, 8, 9]),
