@@ -801,8 +801,8 @@ export const navKeys = [
     tab: true,
     menu: false,
   },
-  { to: "/travel", key: "nav_travel", icon: "travel" as const, top: true, tab: true, menu: false },
-  { to: "/shop", key: "nav_shop", icon: "bag" as const, top: true, tab: false, menu: true },
+  { to: "/travel", key: "nav_travel", icon: "travel" as const, top: true, tab: false, menu: true },
+  { to: "/shop", key: "nav_shop", icon: "bag" as const, top: true, tab: true, menu: false },
   {
     to: "/quiz",
     key: "nav_quiz",
