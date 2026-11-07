@@ -48,7 +48,10 @@ export function CourseDetail() {
   const teachers = (course.teacherIds ?? [])
     .map((tid) => teamLive.find((m) => m.id === tid))
     .filter((m): m is TeamMemberCms => Boolean(m));
-  const plans = course.level ? plansForLevel(program, course.id) : (program?.plans ?? []);
+  // The one-level monthly price is not shown on course pages.
+  const plans = (course.level ? plansForLevel(program, course.id) : (program?.plans ?? [])).filter(
+    (p) => p.id !== "m1",
+  );
   const fromPrice = plans.length ? Math.min(...plans.map((p) => p.amount)) : 0;
   const levelText = course.level
     ? `HSK${course.level}`
