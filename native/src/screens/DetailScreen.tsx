@@ -154,7 +154,7 @@ export function DetailScreen() {
         </View>
       </Animated.ScrollView>
 
-      <Animated.View pointerEvents="none" style={[styles.sticky, { height: insets.top + 56, backgroundColor: theme.name === "dark" ? "#161014" : "#FFF8F6", borderColor: theme.line }, bar]} />
+      <Animated.View pointerEvents="none" style={[styles.sticky, { height: insets.top + 56, backgroundColor: theme.name === "dark" ? "#0C0C0E" : "#FFFFFF", borderColor: theme.line }, bar]} />
       <Pressable onPress={() => nav.goBack()} style={[styles.back, { top: insets.top + 8, backgroundColor: theme.glassStrong, borderColor: theme.glassBorder }]}>
         <Icon name="back" color={theme.ink} size={22} />
       </Pressable>

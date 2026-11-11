@@ -48,38 +48,30 @@ export function Mesh({
 }) {
   const { theme } = useTheme();
   const dark = theme.name === "dark";
-  const wash = field
-    ? (["#8E0F14", "#C81E24", "#E8433A"] as const)
-    : masthead
-      ? dark
-        ? (["#8E0F14", "#C81E24", "#2A090C", "#000000"] as const)
-        : (["#8E0F14", "#C81E24", "#E8433A", "#FFFFFF"] as const)
-      : dark
-        ? (["#5C1016", "#000000", "#000000"] as const)
-        : (["#C81E24", "#FFFFFF", "#FFFFFF"] as const);
-  const locations = field
-    ? ([0, 0.48, 1] as const)
-    : masthead
-      ? dark
-        ? ([0, 0.16, 0.4, 0.58] as const)
-        : ([0, 0.14, 0.4, 0.56] as const)
-      : ([0, 0.12, 1] as const);
+  const paper = dark ? "#000000" : "#FFFFFF";
+  if (!field) {
+    return (
+      <View style={[styles.fill, { backgroundColor: paper }, style]}>
+        {dark && !masthead ? (
+          <LinearGradient
+            pointerEvents="none"
+            colors={["rgba(62,8,10,0.55)", "rgba(0,0,0,0)"]}
+            style={{ position: "absolute", top: 0, left: 0, right: 0, height: 160 }}
+          />
+        ) : null}
+        {children}
+      </View>
+    );
+  }
   return (
-    <View style={[styles.fill, { backgroundColor: dark ? "#000" : "#fff" }, style]}>
+    <View style={[styles.fill, { backgroundColor: "#8E0F14" }, style]}>
       <LinearGradient
-        colors={wash}
-        locations={locations}
+        colors={["#8E0F14", "#A31318", "#C81E24"]}
+        locations={[0, 0.55, 1]}
         style={StyleSheet.absoluteFill}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
       />
-      {dark && !field ? (
-        <LinearGradient
-          pointerEvents="none"
-          colors={["rgba(200,30,36,0)", "rgba(200,30,36,0.2)"]}
-          style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 200 }}
-        />
-      ) : null}
       {children}
     </View>
   );
@@ -128,17 +120,14 @@ export function Glass({
   tint?: "neutral" | "brand" | "frost";
 }) {
   const { theme } = useTheme();
+  const onRed = tint === "brand" || tint === "frost";
   const veil = tint === "brand"
-    ? theme.name === "dark"
-      ? "rgba(90,12,16,0.62)"
-      : "rgba(140,18,24,0.38)"
+    ? "rgba(74,8,12,0.94)"
     : tint === "frost"
-      ? theme.name === "dark"
-        ? "rgba(255,255,255,0.1)"
-        : "rgba(255,255,255,0.34)"
+      ? "rgba(62,8,12,0.82)"
       : theme.name === "dark"
-        ? "rgba(40,8,10,0.42)"
-        : "rgba(255,255,255,0.5)";
+        ? "rgba(18,18,20,0.55)"
+        : "rgba(255,255,255,0.62)";
   const flat = StyleSheet.flatten(style) ?? {};
   const face: ViewStyle = {
     zIndex: 2,
@@ -163,7 +152,7 @@ export function Glass({
       <GlassView
         glassEffectStyle="regular"
         colorScheme={theme.name}
-        tintColor={tint === "brand" ? "#C81E24" : "rgba(200,30,36,0.18)"}
+        tintColor={onRed ? "#5C0C10" : "rgba(255,255,255,0.2)"}
         isInteractive={interactive}
         style={[{ overflow: "hidden", borderRadius: 28 }, style]}
       >
@@ -172,12 +161,12 @@ export function Glass({
     );
   }
   return (
-    <View style={[styles.glassWrap, { borderColor: theme.glassBorder, shadowColor: theme.shadow, backgroundColor: "transparent" }, style]}>
-      <BlurView intensity={intensity} tint={theme.name === "dark" ? "dark" : "light"} style={[StyleSheet.absoluteFill, { zIndex: 0 }]} />
+    <View style={[styles.glassWrap, { borderColor: onRed ? "rgba(255,255,255,0.16)" : theme.glassBorder, shadowColor: theme.shadow, backgroundColor: "transparent" }, style]}>
+      <BlurView intensity={onRed ? 24 : intensity} tint={onRed || theme.name === "dark" ? "dark" : "light"} style={[StyleSheet.absoluteFill, { zIndex: 0 }]} />
       <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: veil, zIndex: 0 }]} />
       <LinearGradient
         pointerEvents="none"
-        colors={theme.name === "dark" ? ["rgba(255,255,255,0.16)", "rgba(255,255,255,0)"] : ["rgba(255,255,255,0.75)", "rgba(255,255,255,0)"]}
+        colors={onRed ? ["rgba(255,255,255,0.14)", "rgba(255,255,255,0)"] : theme.name === "dark" ? ["rgba(255,255,255,0.12)", "rgba(255,255,255,0)"] : ["rgba(255,255,255,0.7)", "rgba(255,255,255,0)"]}
         style={[styles.sheen, { zIndex: 1 }]}
       />
       <View style={face}>{children}</View>
@@ -259,8 +248,8 @@ export function SealMark({ size = 72, light = false }: { size?: number; light?: 
         backgroundColor: "#C81E24",
         alignItems: "center",
         justifyContent: "center",
-        shadowColor: "#C81E24",
-        shadowOpacity: 0.45,
+        shadowColor: "#3A080C",
+        shadowOpacity: 0.28,
         shadowRadius: 18,
         shadowOffset: { width: 0, height: 10 },
       }}
@@ -464,7 +453,7 @@ export function SandboxQr({ seed, size = 196 }: { seed: string; size?: number })
   );
 }
 
-const CONFETTI = ["#C81E24", "#E8433A", "#FFFFFF", "#8E0F14"];
+const CONFETTI = ["#8E0F14", "#C81E24", "#FFFFFF", "#A31318"];
 
 export function Confetti({ show }: { show: boolean }) {
   const reduce = useReduceMotion();
@@ -622,9 +611,11 @@ export function Icon({ name, color, size = 22 }: { name: "home" | "search" | "qu
 export function CategoryBar({
   value,
   onChange,
+  onRed = false,
 }: {
   value: Category | "all";
   onChange: (id: Category | "all") => void;
+  onRed?: boolean;
 }) {
   const { theme, type } = useTheme();
   const options: { id: Category | "all"; label: string; color: string }[] = [
@@ -662,8 +653,8 @@ export function CategoryBar({
               }}
               style={styles.chipHit}
             >
-              {on ? null : <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: option.color, marginRight: 6 }} />}
-              <Text style={{ fontFamily: on ? type.bold : type.medium, fontSize: 13, color: on ? "#fff" : theme.ink }}>{option.label}</Text>
+              {on ? null : <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: onRed && option.id === "course" ? "rgba(255,255,255,0.85)" : option.color, marginRight: 6 }} />}
+              <Text style={{ fontFamily: on ? type.bold : type.medium, fontSize: 13, color: on || onRed ? "#fff" : theme.ink }}>{option.label}</Text>
             </Pressable>
           );
         })}

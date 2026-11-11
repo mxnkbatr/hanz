@@ -61,9 +61,9 @@ export function SplashScreen() {
       <View style={styles.center}>
         <Animated.View style={seal}>
           <View style={styles.glow}>
-            <LinearGradient colors={["rgba(200,30,36,0.0)", "rgba(200,30,36,0.35)"]} style={styles.glowFill} />
+            <LinearGradient colors={["rgba(90,10,14,0)", "rgba(58,8,12,0.45)"]} style={styles.glowFill} />
           </View>
-          <View style={{ padding: 8, borderRadius: 36, backgroundColor: "rgba(255,255,255,0.16)" }}>
+          <View style={{ padding: 8, borderRadius: 36, backgroundColor: "#5C0C10" }}>
             <SealMark size={108} />
           </View>
         </Animated.View>

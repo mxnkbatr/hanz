@@ -88,38 +88,40 @@ export function HomeScreen() {
   }, [reduce, slides.length, stride]);
 
   return (
-    <Mesh masthead>
+    <Mesh>
       <Animated.ScrollView
         onScroll={onPage}
         scrollEventThrottle={16}
-        contentContainerStyle={[styles.scroll, { paddingTop: insets.top + 64, paddingBottom: clearance + 24 }]}
+        contentContainerStyle={[styles.scroll, { paddingBottom: clearance + 24 }]}
         showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => void refresh()} tintColor={theme.seal} colors={[theme.seal]} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => void refresh()} tintColor="#FFFFFF" colors={["#C81E24"]} />}
       >
-        <Animated.View style={largeTitle}>
-          <Txt style={{ color: "rgba(255,255,255,0.82)", fontFamily: type.medium }}>{name ? `Сайн байна уу, ${name}` : greeting()}</Txt>
-          <Txt tone="display" style={{ marginTop: 4, color: "#fff" }}>
-            Хятад хэл.{"\n"}Тэтгэлэг. Хятад.
-          </Txt>
-          <Txt style={{ marginTop: 8, color: "rgba(255,255,255,0.82)", fontFamily: type.medium }}>2014 оноос HSK 1–6. Хятадын их сургуульд хүрэх зам.</Txt>
-        </Animated.View>
+        <LinearGradient colors={["#8E0F14", "#A31318", "#C81E24"]} locations={[0, 0.46, 1]} style={[styles.mast, { paddingTop: insets.top + 64 }]}>
+          <Animated.View style={largeTitle}>
+            <Txt style={{ color: "rgba(255,255,255,0.82)", fontFamily: type.medium }}>{name ? `Сайн байна уу, ${name}` : greeting()}</Txt>
+            <Txt tone="display" style={{ marginTop: 4, color: "#fff" }}>
+              Хятад хэл.{"\n"}Тэтгэлэг. Хятад.
+            </Txt>
+            <Txt style={{ marginTop: 8, color: "rgba(255,255,255,0.82)", fontFamily: type.medium }}>2014 оноос HSK 1–6. Хятадын их сургуульд хүрэх зам.</Txt>
+          </Animated.View>
 
-        <Glass style={styles.search} intensity={48} tint="frost">
-          <Icon name="search" color={theme.muted} size={18} />
-          <TextInput
-            value={q}
-            onChangeText={setQ}
-            placeholder="HSK, тэтгэлэг, аялал…"
-            placeholderTextColor={theme.muted}
-            style={[styles.input, { color: theme.ink, fontFamily: type.medium }]}
-          />
-        </Glass>
+          <Glass style={styles.search} intensity={28} tint="frost">
+            <Icon name="search" color="rgba(255,255,255,0.72)" size={18} />
+            <TextInput
+              value={q}
+              onChangeText={setQ}
+              placeholder="HSK, тэтгэлэг, аялал…"
+              placeholderTextColor="rgba(255,255,255,0.62)"
+              style={[styles.input, { color: "#fff", fontFamily: type.medium }]}
+            />
+          </Glass>
 
-        <Glass style={styles.chips} intensity={48} tint="frost">
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingRight: 4 }}>
-            <CategoryBar value={cat} onChange={setCat} />
-          </ScrollView>
-        </Glass>
+          <Glass style={styles.chips} intensity={28} tint="frost">
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingRight: 4 }}>
+              <CategoryBar value={cat} onChange={setCat} onRed />
+            </ScrollView>
+          </Glass>
+        </LinearGradient>
 
         <View style={styles.carouselWrap}>
           <Animated.ScrollView
@@ -306,7 +308,8 @@ function TextWrap({ text, family }: { text: string; family?: string }) {
 }
 
 const styles = StyleSheet.create({
-  scroll: { padding: 20, paddingTop: 18, paddingBottom: 130, gap: 20 },
+  scroll: { paddingHorizontal: 20, paddingBottom: 130, gap: 20 },
+  mast: { marginHorizontal: -20, paddingHorizontal: 20, paddingBottom: 22, gap: 20 },
   nav: { position: "absolute", top: 0, left: 0, right: 0 },
   navGlass: { borderRadius: 0, borderTopWidth: 0, paddingHorizontal: 16, paddingBottom: 8, flexDirection: "row", alignItems: "center", gap: 10 },
   stats: { borderRadius: 22, paddingVertical: 14, paddingHorizontal: 8, flexDirection: "row" },
@@ -321,7 +324,7 @@ const styles = StyleSheet.create({
   tabOn: { paddingHorizontal: 14, height: 36, borderRadius: 999, alignItems: "center", justifyContent: "center" },
   tabOff: { paddingHorizontal: 14, height: 36, borderRadius: 999, borderWidth: 1, alignItems: "center", justifyContent: "center" },
   section: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end", marginTop: 6 },
-  carouselWrap: { marginRight: -18, gap: 10 },
+  carouselWrap: { marginRight: -20, gap: 10 },
   dots: { flexDirection: "row", gap: 6, paddingLeft: 4 },
   dot: { height: 6, borderRadius: 99 },
   hero: { height: 248, borderRadius: 22, overflow: "hidden" },
