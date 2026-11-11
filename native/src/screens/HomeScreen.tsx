@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { Linking, Pressable, RefreshControl, ScrollView, StyleSheet, TextInput, useWindowDimensions, View } from "react-native";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Linking, Pressable, RefreshControl, ScrollView, StyleSheet, TextInput, useWindowDimensions, View, type ScrollViewInstance } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, { interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, type SharedValue } from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
@@ -7,11 +7,13 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { CompositeNavigationProp } from "@react-navigation/native";
 import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { Image } from "react-native";
-import { Badge, Glass, Icon, Mesh, ProgramBadges, ProgramCard, SealMark, Tilt, Txt } from "../components/ui";
+import { Badge, CategoryBar, Icon, Mesh, Money, ProgramBadges, ProgramCard, SealMark, Tilt, Txt } from "../components/ui";
 import { academy } from "../data/academy";
 import type { Category, Program } from "../domain/types";
 import { deadlineSoon, greeting, priceLabel, soonestIntake } from "../lib/format";
 import { hapticTap } from "../lib/haptics";
+import { useReduceMotion } from "../lib/motion";
+import { useTabClearance } from "../navigation/inset";
 import type { RootStackParamList, TabParamList } from "../navigation/types";
 import { useApp } from "../state/AppState";
 import { categoryMeta } from "../theme/tokens";
@@ -25,11 +27,17 @@ export function HomeScreen() {
   const nav = useNavigation<Nav>();
   const { width } = useWindowDimensions();
   const { theme, type } = useTheme();
+  const reduce = useReduceMotion();
+  const clearance = useTabClearance();
   const { programs, profile, refresh, refreshing } = useApp();
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<(typeof cats)[number]>("all");
-  const cardW = Math.min(width - 48, 420);
+  const cardW = Math.min(width - 78, 420);
+  const stride = cardW + 12;
   const scrollX = useSharedValue(0);
+  const scroller = useRef<ScrollViewInstance>(null);
+  const page = useRef(0);
+  const paused = useRef(false);
   const onScroll = useAnimatedScrollHandler({
     onScroll: (e) => {
       scrollX.value = e.contentOffset.x;
@@ -49,11 +57,23 @@ export function HomeScreen() {
   const open = filtered.filter((p) => soonestIntake(p));
   const soon = open.filter(deadlineSoon);
   const name = profile.name.trim().split(" ")[0];
+  const slides = hero.length ? hero : open.slice(0, 3);
+
+  useEffect(() => {
+    if (reduce || slides.length < 2) return;
+    const timer = setInterval(() => {
+      if (paused.current) return;
+      const next = (page.current + 1) % slides.length;
+      page.current = next;
+      scroller.current?.scrollTo({ x: next * stride, animated: true });
+    }, 4200);
+    return () => clearInterval(timer);
+  }, [reduce, slides.length, stride]);
 
   return (
     <Mesh>
       <ScrollView
-        contentContainerStyle={styles.scroll}
+        contentContainerStyle={[styles.scroll, { paddingBottom: clearance + 24 }]}
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => void refresh()} tintColor={theme.seal} colors={[theme.seal, theme.gold]} />}
       >
@@ -72,6 +92,7 @@ export function HomeScreen() {
             }}
             style={[styles.call, { backgroundColor: theme.seal }]}
           >
+            <Icon name="phone" color="#fff" size={16} />
             <Txt style={{ color: "#fff", fontFamily: type.bold, fontSize: 13 }}>Залгах</Txt>
           </Pressable>
         </View>
@@ -92,41 +113,39 @@ export function HomeScreen() {
           />
         </View>
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tabs}>
-          {cats.map((id) => {
-            const on = cat === id;
-            const label = id === "all" ? "Бүгд" : categoryMeta[id].label;
-            const color = id === "all" ? theme.seal : categoryMeta[id].a;
-            return (
-              <Pressable key={id} onPress={() => { void hapticTap(); setCat(id); }}>
-                {on ? (
-                  <LinearGradient colors={[color, id === "all" ? theme.sealDeep : categoryMeta[id].b]} style={styles.tabOn}>
-                    <Txt style={{ color: "#fff", fontFamily: type.bold, fontSize: 13 }}>{label}</Txt>
-                  </LinearGradient>
-                ) : (
-                  <View style={[styles.tabOff, { borderColor: theme.line, backgroundColor: theme.card }]}>
-                    <Txt style={{ fontFamily: type.semi, fontSize: 13 }}>{label}</Txt>
-                  </View>
-                )}
-              </Pressable>
-            );
-          })}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingRight: 8 }}>
+          <CategoryBar value={cat} onChange={setCat} />
         </ScrollView>
 
-        <Animated.ScrollView
-          horizontal
-          pagingEnabled
-          decelerationRate="fast"
-          snapToInterval={cardW + 14}
-          showsHorizontalScrollIndicator={false}
-          onScroll={onScroll}
-          scrollEventThrottle={16}
-          contentContainerStyle={{ gap: 14, paddingRight: 8 }}
-        >
-          {(hero.length ? hero : open.slice(0, 3)).map((program, index) => (
-            <Hero key={program.id} program={program} index={index} width={cardW} scrollX={scrollX} stride={cardW + 14} onPress={() => nav.navigate("Detail", { id: program.id })} />
-          ))}
-        </Animated.ScrollView>
+        <View style={styles.carouselWrap}>
+          <Animated.ScrollView
+            ref={scroller}
+            horizontal
+            decelerationRate="fast"
+            snapToInterval={stride}
+            disableIntervalMomentum
+            showsHorizontalScrollIndicator={false}
+            onScroll={onScroll}
+            scrollEventThrottle={16}
+            onScrollBeginDrag={() => {
+              paused.current = true;
+            }}
+            onMomentumScrollEnd={(e) => {
+              page.current = Math.round(e.nativeEvent.contentOffset.x / stride);
+              paused.current = false;
+            }}
+            contentContainerStyle={{ gap: 12, paddingRight: 36 }}
+          >
+            {slides.map((program, index) => (
+              <Hero key={program.id} program={program} index={index} width={cardW} scrollX={scrollX} stride={stride} onPress={() => nav.navigate("Detail", { id: program.id })} />
+            ))}
+          </Animated.ScrollView>
+          <View style={styles.dots}>
+            {slides.map((program, index) => (
+              <Dot key={program.id} index={index} scrollX={scrollX} stride={stride} />
+            ))}
+          </View>
+        </View>
 
         <Section title="Нээлттэй элсэлт" action="Бүгд" onAction={() => nav.navigate("Catalog", cat === "all" ? undefined : { category: cat })} />
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12 }}>
@@ -209,27 +228,31 @@ function Hero({
         <Animated.View style={[StyleSheet.absoluteFill, img]}>
           <Image source={{ uri: program.image }} style={styles.heroImg} />
         </Animated.View>
-        <LinearGradient colors={["rgba(0,0,0,0.05)", "rgba(0,0,0,0.72)"]} style={StyleSheet.absoluteFill} />
+        <LinearGradient colors={["rgba(0,0,0,0.05)", "rgba(0,0,0,0.2)", "rgba(0,0,0,0.88)"]} locations={[0, 0.42, 1]} style={StyleSheet.absoluteFill} />
         <View style={styles.heroBody}>
           <View style={styles.row}>
             <Badge text={cat.label} color={cat.a} />
             <ProgramBadges program={program} />
           </View>
-          <View style={styles.hanziPill}>
-            <Txt tone="zh" style={{ color: "#fff", fontSize: 28 }}>
-              {program.hanzi}
-            </Txt>
-          </View>
           <TextWrap family={type.display} text={program.title} />
-          <Txt style={{ color: "rgba(255,255,255,0.9)", marginTop: 6 }}>{program.summary}</Txt>
+          <Txt numberOfLines={2} style={{ color: "rgba(255,255,255,0.92)", marginTop: 4 }}>{program.summary}</Txt>
           <View style={styles.heroMeta}>
-            <Txt style={{ color: "#fff", fontFamily: type.bold, fontSize: 18 }}>{priceLabel(program)}</Txt>
-            <Txt style={{ color: "rgba(255,255,255,0.85)" }}>{intake?.schedule}</Txt>
+            <Money text={priceLabel(program)} light style={{ fontSize: 22 }} />
+            <Txt style={{ color: "rgba(255,255,255,0.86)" }}>{intake?.schedule}</Txt>
           </View>
         </View>
       </View>
     </Tilt>
   );
+}
+
+function Dot({ index, scrollX, stride }: { index: number; scrollX: SharedValue<number>; stride: number }) {
+  const { theme } = useTheme();
+  const style = useAnimatedStyle(() => {
+    const focus = 1 - Math.min(1, Math.abs(scrollX.value / stride - index));
+    return { width: 6 + focus * 12, opacity: 0.28 + focus * 0.72, backgroundColor: theme.ink };
+  });
+  return <Animated.View style={[styles.dot, style]} />;
 }
 
 function TextWrap({ text, family }: { text: string; family?: string }) {
@@ -244,18 +267,20 @@ const styles = StyleSheet.create({
   scroll: { padding: 18, paddingTop: 16, paddingBottom: 130, gap: 16 },
   top: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
   brand: { flexDirection: "row", alignItems: "center", gap: 10 },
-  call: { paddingHorizontal: 16, height: 40, borderRadius: 999, alignItems: "center", justifyContent: "center" },
+  call: { flexDirection: "row", alignItems: "center", gap: 6, paddingHorizontal: 12, height: 36, borderRadius: 999 },
   search: { flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 14, height: 52, borderRadius: 18, borderWidth: 1 },
   input: { flex: 1, fontSize: 15, paddingVertical: 0 },
   tabs: { gap: 8, paddingVertical: 2 },
   tabOn: { paddingHorizontal: 14, height: 36, borderRadius: 999, alignItems: "center", justifyContent: "center" },
   tabOff: { paddingHorizontal: 14, height: 36, borderRadius: 999, borderWidth: 1, alignItems: "center", justifyContent: "center" },
   section: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end", marginTop: 6 },
-  hero: { height: 430, borderRadius: 32, overflow: "hidden" },
+  carouselWrap: { marginRight: -18, gap: 10 },
+  dots: { flexDirection: "row", gap: 6, paddingLeft: 4 },
+  dot: { height: 6, borderRadius: 99 },
+  hero: { height: 312, borderRadius: 32, overflow: "hidden" },
   heroImg: { width: "100%", height: "100%" },
-  heroBody: { flex: 1, justifyContent: "flex-end", padding: 20, gap: 6 },
-  heroMeta: { marginTop: 8, gap: 2 },
-  hanziPill: { alignSelf: "flex-start", backgroundColor: "rgba(255,255,255,0.18)", borderRadius: 12, paddingHorizontal: 10, paddingVertical: 2 },
+  heroBody: { flex: 1, justifyContent: "flex-end", padding: 20, gap: 8 },
+  heroMeta: { marginTop: 6, gap: 2 },
   row: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
   cta: { borderRadius: 28, padding: 20, gap: 4 },
 });

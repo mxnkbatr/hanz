@@ -7,6 +7,7 @@ import { Glass, Mesh, Txt } from "../components/ui";
 import type { LocalEnrollment } from "../domain/types";
 import { formatMnt } from "../lib/format";
 import type { RootStackParamList, TabParamList } from "../navigation/types";
+import { useTabClearance } from "../navigation/inset";
 import { useApp } from "../state/AppState";
 import { categoryMeta } from "../theme/tokens";
 import { useTheme } from "../theme/Theme";
@@ -29,10 +30,11 @@ export function MineScreen() {
   const { enrollments } = useApp();
   const nav = useNavigation<Nav>();
   const { theme, type } = useTheme();
+  const clearance = useTabClearance();
 
   return (
     <Mesh>
-      <ScrollView contentContainerStyle={styles.scroll}>
+      <ScrollView contentContainerStyle={[styles.scroll, { paddingBottom: clearance + 24 }]}>
         <Txt tone="label">Бүртгэл</Txt>
         <Txt tone="display" style={{ fontSize: 34, lineHeight: 38 }}>
           Миний элсэлтүүд

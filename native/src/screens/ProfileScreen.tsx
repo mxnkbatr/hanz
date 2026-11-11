@@ -8,6 +8,7 @@ import { Glass, Mesh, PrimaryButton, SealMark, Txt } from "../components/ui";
 import { academy } from "../data/academy";
 import type { RootStackParamList, TabParamList } from "../navigation/types";
 import { services } from "../services";
+import { useTabClearance } from "../navigation/inset";
 import { useApp } from "../state/AppState";
 import { useTheme } from "../theme/Theme";
 
@@ -17,13 +18,14 @@ export function ProfileScreen() {
   const nav = useNavigation<Nav>();
   const { profile, setProfile, sessionEmail, signIn, signOut, preview, themeMode, setThemeMode, sourceLabel } = useApp();
   const { theme, type } = useTheme();
+  const clearance = useTabClearance();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState("");
 
   return (
     <Mesh>
-      <ScrollView contentContainerStyle={styles.scroll}>
+      <ScrollView contentContainerStyle={[styles.scroll, { paddingBottom: clearance + 24 }]}>
         <View style={styles.head}>
           <SealMark size={64} />
           <View style={{ flex: 1 }}>

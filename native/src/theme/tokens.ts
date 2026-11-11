@@ -1,8 +1,8 @@
 export const categoryMeta = {
-  course: { label: "Сургалт", a: "#FF5C7A", b: "#FF3D8A", ink: "#3B1020" },
-  scholarship: { label: "Тэтгэлэгт хөтөлбөр", a: "#F5A524", b: "#FFD27A", ink: "#3A2504" },
-  tour: { label: "Аялал", a: "#14B8A6", b: "#5EEAD4", ink: "#042E2A" },
-  quiz: { label: "Сорил", a: "#7C5CFF", b: "#F472B6", ink: "#1E1040" },
+  course: { label: "Сургалт", a: "#C81E24", b: "#E4575D", ink: "#3B1020" },
+  scholarship: { label: "Тэтгэлэгт хөтөлбөр", a: "#0E9F8A", b: "#5EEAD4", ink: "#042E2A" },
+  tour: { label: "Аялал", a: "#E09A2B", b: "#F6C56B", ink: "#3A2504" },
+  quiz: { label: "Сорил", a: "#7C5CFF", b: "#C084FC", ink: "#1E1040" },
 } as const;
 
 export type ThemeName = "light" | "dark";

@@ -6,7 +6,7 @@ export type RootStackParamList = {
   Onboarding: undefined;
   Main: NavigatorScreenParams<TabParamList> | undefined;
   Detail: { id: string };
-  Enroll: { id: string; planId?: string };
+  Enroll: { id: string; planId?: string; intakeId?: string };
   Qpay: { enrollmentId: string };
   Success: { enrollmentId: string };
   QuizPlay: { lessonId: string };

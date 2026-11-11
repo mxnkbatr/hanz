@@ -1,6 +1,7 @@
 import { useMemo, useState, type ReactNode } from "react";
 import {
   Image,
+  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -21,10 +22,10 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
-import Svg, { Circle, Path, Rect } from "react-native-svg";
+import Svg, { Circle, Defs, FeTurbulence, Filter, Path, Rect } from "react-native-svg";
 import { useEffect } from "react";
 import type { Category, Program } from "../domain/types";
-import { deadlineSoon, formatMnt, priceCaption, priceLabel, seatsLeft, soonestIntake, daysUntil } from "../lib/format";
+import { deadlineSoon, formatMnt, priceCaption, priceLabel, seatsLeft, soonestIntake } from "../lib/format";
 import { hapticTap } from "../lib/haptics";
 import { useReduceMotion } from "../lib/motion";
 import { categoryMeta } from "../theme/tokens";
@@ -32,12 +33,42 @@ import { useTheme } from "../theme/Theme";
 
 export function Mesh({ children, style }: { children?: ReactNode; style?: StyleProp<ViewStyle> }) {
   const { theme } = useTheme();
+  const reduce = useReduceMotion();
+  const drift = useSharedValue(0);
+  useEffect(() => {
+    if (reduce) return;
+    drift.value = withRepeat(withTiming(1, { duration: 14000, easing: Easing.inOut(Easing.sin) }), -1, true);
+  }, [drift, reduce]);
+  const a = useAnimatedStyle(() => ({
+    transform: [{ translateX: drift.value * 36 }, { translateY: drift.value * -22 }],
+  }));
+  const b = useAnimatedStyle(() => ({
+    transform: [{ translateX: drift.value * -28 }, { translateY: drift.value * 30 }],
+  }));
+  const c = useAnimatedStyle(() => ({
+    transform: [{ translateX: drift.value * 18 }, { translateY: drift.value * 16 }],
+  }));
+  const wash = theme.name === "dark"
+    ? (["#161016", "#1A1218", "#12161A"] as const)
+    : (["#FBF6F3", "#F7F1EC", "#F4F2F6"] as const);
+  const blobs = theme.name === "dark"
+    ? ["rgba(120,36,48,0.42)", "rgba(92,62,28,0.28)", "rgba(58,42,110,0.34)"]
+    : ["rgba(232,170,176,0.55)", "rgba(214,186,150,0.42)", "rgba(176,168,214,0.38)"];
   return (
     <View style={[styles.fill, { backgroundColor: theme.bg }, style]}>
-      <LinearGradient colors={theme.mesh} style={StyleSheet.absoluteFill} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} />
-      <View style={[styles.blob, { backgroundColor: theme.blobs[0], top: -90, right: -70 }]} />
-      <View style={[styles.blob, { backgroundColor: theme.blobs[1], top: 260, left: -100, width: 280, height: 280 }]} />
-      <View style={[styles.blob, { backgroundColor: theme.blobs[2], bottom: 40, right: -40, width: 240, height: 240 }]} />
+      <LinearGradient colors={wash} style={StyleSheet.absoluteFill} start={{ x: 0.1, y: 0 }} end={{ x: 0.9, y: 1 }} />
+      <Animated.View style={[styles.aurora, { backgroundColor: blobs[0], top: -80, right: -40 }, a]} />
+      <Animated.View style={[styles.aurora, { backgroundColor: blobs[1], width: 340, height: 340, top: 280, left: -120 }, b]} />
+      <Animated.View style={[styles.aurora, { backgroundColor: blobs[2], width: 280, height: 280, bottom: -20, right: -30 }, c]} />
+      <BlurView pointerEvents="none" intensity={theme.name === "dark" ? 36 : 28} tint={theme.name === "dark" ? "dark" : "light"} style={StyleSheet.absoluteFill} />
+      <Svg pointerEvents="none" style={StyleSheet.absoluteFill}>
+        <Defs>
+          <Filter id="hanzGrain">
+            <FeTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves={2} />
+          </Filter>
+        </Defs>
+        <Rect width="100%" height="100%" filter="url(#hanzGrain)" opacity={theme.name === "dark" ? 0.08 : 0.045} />
+      </Svg>
       {children}
     </View>
   );
@@ -219,28 +250,53 @@ export function ProgramCard({ program, onPress, wide }: { program: Program; onPr
           <ProgramBadges program={program} />
         </View>
         <View style={styles.cardBody}>
-          <Text style={{ fontFamily: type.zh, color: "#fff", fontSize: 22 }}>{program.hanzi}</Text>
           <Text style={[styles.cardTitle, { fontFamily: type.bold }]} numberOfLines={2}>
             {program.title}
           </Text>
           <Text style={{ color: "rgba(255,255,255,0.86)", fontFamily: type.medium, fontSize: 12 }} numberOfLines={1}>
             {intake ? intake.label : program.subtitle}
           </Text>
-          <Text style={{ color: "#fff", fontFamily: type.bold, marginTop: 6 }}>{priceLabel(program)}</Text>
+          <Money text={priceLabel(program)} light style={{ marginTop: 6, fontSize: 16 }} />
         </View>
       </View>
     </Tilt>
   );
 }
 
-export function Countdown({ deadline }: { deadline: string }) {
+export function Countdown({ deadline, color }: { deadline: string; color?: string }) {
   const { theme, type } = useTheme();
-  const days = Math.max(0, daysUntil(deadline));
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+  const ms = new Date(`${deadline}T23:59:59+08:00`).getTime() - now;
+  const days = Math.max(0, Math.ceil(ms / 86_400_000));
+  const hours = Math.max(0, Math.floor(ms / 3_600_000));
+  const showHours = days <= 1;
+  const value = showHours ? hours : days;
+  const unit = showHours ? "цаг" : "хоног";
+  const accent = color ?? theme.seal;
   return (
-    <View style={[styles.count, { borderColor: theme.line, backgroundColor: theme.card }]}>
-      <Text style={{ fontFamily: type.display, fontSize: 28, color: theme.seal }}>{days}</Text>
-      <Text style={{ fontFamily: type.medium, color: theme.muted, fontSize: 12 }}>хоног үлдлээ</Text>
+    <View style={styles.countWrap}>
+      <ProgressRing progress={Math.min(1, value / (showHours ? 24 : 30))} size={86} color={accent} label={String(value)} />
+      <Text style={{ fontFamily: type.medium, color: theme.muted, fontSize: 11, marginTop: 2 }}>{unit} үлдлээ</Text>
     </View>
+  );
+}
+
+export function Money({ text, style, light }: { text: string; style?: StyleProp<TextStyle>; light?: boolean }) {
+  const { type, theme } = useTheme();
+  const color = light ? "#fff" : theme.ink;
+  if (!text.includes("₮")) {
+    return <Text style={[{ fontFamily: type.bold, color, fontSize: 18 }, style]}>{text}</Text>;
+  }
+  const amount = text.replace("₮", "");
+  return (
+    <Text style={[{ fontFamily: type.bold, color, fontSize: 18 }, style]}>
+      {amount}
+      <Text style={{ fontFamily: Platform.OS === "ios" ? "Georgia" : "serif" }}>₮</Text>
+    </Text>
   );
 }
 
@@ -428,7 +484,7 @@ export function PrimaryButton({
   );
 }
 
-export function Icon({ name, color, size = 22 }: { name: "home" | "search" | "quiz" | "ticket" | "user"; color: string; size?: number }) {
+export function Icon({ name, color, size = 22 }: { name: "home" | "search" | "quiz" | "ticket" | "user" | "phone" | "back"; color: string; size?: number }) {
   const common = { width: size, height: size, viewBox: "0 0 24 24" };
   if (name === "home") {
     return (
@@ -459,11 +515,78 @@ export function Icon({ name, color, size = 22 }: { name: "home" | "search" | "qu
       </Svg>
     );
   }
+  if (name === "phone") {
+    return (
+      <Svg {...common}>
+        <Path d="M8 3.5h2.2l1.2 3-1.7 1a11 11 0 0 0 5.8 5.8l1-1.7 3 1.2V20a1.5 1.5 0 0 1-1.6 1.5A15.5 15.5 0 0 1 3.5 6.1 1.5 1.5 0 0 1 5 4.5" fill={color} />
+      </Svg>
+    );
+  }
+  if (name === "back") {
+    return (
+      <Svg {...common}>
+        <Path d="M14.5 5.5 8 12l6.5 6.5" stroke={color} strokeWidth={2.2} fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      </Svg>
+    );
+  }
   return (
     <Svg {...common}>
       <Circle cx="12" cy="9" r="3.2" fill={color} />
       <Path d="M6.2 19.2c1.2-2.6 3.2-3.8 5.8-3.8s4.6 1.2 5.8 3.8" stroke={color} strokeWidth={2} fill="none" strokeLinecap="round" />
     </Svg>
+  );
+}
+
+export function CategoryBar({
+  value,
+  onChange,
+}: {
+  value: Category | "all";
+  onChange: (id: Category | "all") => void;
+}) {
+  const { theme, type } = useTheme();
+  const options: { id: Category | "all"; label: string; color: string }[] = [
+    { id: "all", label: "Бүгд", color: theme.seal },
+    { id: "course", label: categoryMeta.course.label, color: categoryMeta.course.a },
+    { id: "scholarship", label: categoryMeta.scholarship.label, color: categoryMeta.scholarship.a },
+    { id: "tour", label: categoryMeta.tour.label, color: categoryMeta.tour.a },
+  ];
+  const [box, setBox] = useState<Record<string, { x: number; w: number }>>({});
+  const x = useSharedValue(0);
+  const w = useSharedValue(0);
+  useEffect(() => {
+    const next = box[value];
+    if (!next) return;
+    x.value = withSpring(next.x, { damping: 18, stiffness: 220 });
+    w.value = withSpring(next.w, { damping: 18, stiffness: 220 });
+  }, [box, value, w, x]);
+  const pill = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }], width: w.value }));
+  const color = options.find((o) => o.id === value)?.color ?? theme.seal;
+  return (
+    <View style={{ height: 40 }}>
+      <Animated.View style={[styles.chipPill, { backgroundColor: color }, pill]} />
+      <View style={{ flexDirection: "row", gap: 8 }}>
+        {options.map((option) => {
+          const on = option.id === value;
+          return (
+            <Pressable
+              key={option.id}
+              onLayout={(e) => {
+                const { x: left, width } = e.nativeEvent.layout;
+                setBox((prev) => (prev[option.id]?.x === left && prev[option.id]?.w === width ? prev : { ...prev, [option.id]: { x: left, w: width } }));
+              }}
+              onPress={() => {
+                void hapticTap();
+                onChange(option.id);
+              }}
+              style={styles.chipHit}
+            >
+              <Text style={{ fontFamily: on ? type.bold : type.semi, fontSize: 13, color: on ? "#fff" : theme.ink }}>{option.label}</Text>
+            </Pressable>
+          );
+        })}
+      </View>
+    </View>
   );
 }
 
@@ -479,13 +602,14 @@ export function usePressScale() {
 
 const styles = StyleSheet.create({
   fill: { flex: 1, overflow: "hidden" },
-  blob: { position: "absolute", width: 320, height: 320, borderRadius: 200 },
+  aurora: { position: "absolute", width: 420, height: 420, borderRadius: 240 },
+  countWrap: { alignItems: "center", width: 96 },
   glassWrap: { overflow: "hidden", borderWidth: 1, borderRadius: 24 },
   badge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 999, alignSelf: "flex-start" },
   row: { flexDirection: "row", flexWrap: "wrap", gap: 6 },
   card: { height: 230, borderRadius: 26, overflow: "hidden", borderWidth: 1 },
   cardImg: { ...StyleSheet.absoluteFill, width: "100%", height: "100%" },
-  cardShade: { position: "absolute", left: 0, right: 0, bottom: 0, height: 150 },
+  cardShade: { position: "absolute", left: 0, right: 0, bottom: 0, height: 190 },
   cardTop: { position: "absolute", top: 12, left: 12, right: 12, gap: 8 },
   cardBody: { position: "absolute", left: 14, right: 14, bottom: 14 },
   cardTitle: { color: "#fff", fontSize: 18, lineHeight: 22, marginTop: 2 },
@@ -497,8 +621,9 @@ const styles = StyleSheet.create({
   sheet: { borderTopLeftRadius: 28, borderTopRightRadius: 28, padding: 18, paddingBottom: 28 },
   handle: { width: 42, height: 5, borderRadius: 99, alignSelf: "center", marginBottom: 12 },
   btn: { height: 54, borderRadius: 18, alignItems: "center", justifyContent: "center" },
+  chipPill: { position: "absolute", top: 0, left: 0, height: 36, borderRadius: 999 },
+  chipHit: { height: 36, paddingHorizontal: 14, alignItems: "center", justifyContent: "center" },
 });
 
 void interpolate;
 void formatMnt;
-void withRepeat;

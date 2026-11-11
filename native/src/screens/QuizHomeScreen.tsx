@@ -7,6 +7,7 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Mesh, ProgressRing, Tilt, Txt } from "../components/ui";
 import { lessons } from "../data/quiz";
 import type { RootStackParamList, TabParamList } from "../navigation/types";
+import { useTabClearance } from "../navigation/inset";
 import { useApp } from "../state/AppState";
 import { categoryMeta } from "../theme/tokens";
 import { useTheme } from "../theme/Theme";
@@ -17,12 +18,13 @@ export function QuizHomeScreen() {
   const nav = useNavigation<Nav>();
   const { quiz } = useApp();
   const { theme, type } = useTheme();
+  const clearance = useTabClearance();
   const accent = categoryMeta.quiz;
   const level = Math.min(1, quiz.xp / 200);
 
   return (
     <Mesh>
-      <ScrollView contentContainerStyle={styles.scroll}>
+      <ScrollView contentContainerStyle={[styles.scroll, { paddingBottom: clearance + 24 }]}>
         <Txt tone="label">Сорил</Txt>
         <Txt tone="display" style={{ fontSize: 36, lineHeight: 40 }}>
           Өнөөдрийн{"\n"}ханз

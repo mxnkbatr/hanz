@@ -4,12 +4,12 @@ import { useNavigation, useRoute, type RouteProp } from "@react-navigation/nativ
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { CompositeNavigationProp } from "@react-navigation/native";
 import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import { Glass, Icon, Mesh, PrimaryButton, ProgramCard, Sheet, Txt } from "../components/ui";
+import { CategoryBar, Glass, Icon, Mesh, PrimaryButton, ProgramCard, Sheet, Txt } from "../components/ui";
 import type { Category, Stage } from "../domain/types";
 import { deadlineSoon, seatsLeft } from "../lib/format";
 import type { RootStackParamList, TabParamList } from "../navigation/types";
+import { useTabClearance } from "../navigation/inset";
 import { useApp } from "../state/AppState";
-import { categoryMeta } from "../theme/tokens";
 import { useTheme } from "../theme/Theme";
 
 type Nav = CompositeNavigationProp<BottomTabNavigationProp<TabParamList, "Catalog">, NativeStackNavigationProp<RootStackParamList>>;
@@ -19,6 +19,7 @@ export function CatalogScreen() {
   const route = useRoute<RouteProp<TabParamList, "Catalog">>();
   const { programs } = useApp();
   const { theme, type } = useTheme();
+  const clearance = useTabClearance();
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<Category | "all">(route.params?.category ?? "all");
   const [stage, setStage] = useState<Stage | "all">("all");
@@ -38,11 +39,9 @@ export function CatalogScreen() {
     });
   }, [programs, q, cat, stage, onlySoon, onlySeats]);
 
-  const cats: (Category | "all")[] = ["all", "course", "scholarship", "tour"];
-
   return (
     <Mesh>
-      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={[styles.scroll, { paddingBottom: clearance + 24 }]} showsVerticalScrollIndicator={false}>
         <Txt tone="label">Каталог</Txt>
         <Txt tone="display" style={{ fontSize: 34, lineHeight: 38 }}>
           Хөтөлбөр хайх
@@ -57,20 +56,12 @@ export function CatalogScreen() {
             style={{ flex: 1, color: theme.ink, fontFamily: type.medium, fontSize: 15 }}
           />
         </Glass>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
-          {cats.map((id) => {
-            const on = cat === id;
-            const label = id === "all" ? "Бүгд" : categoryMeta[id].label;
-            return (
-              <Pressable key={id} onPress={() => setCat(id)} style={[styles.chip, { backgroundColor: on ? theme.ink : theme.card, borderColor: theme.line }]}>
-                <Txt style={{ color: on ? theme.bg : theme.ink, fontFamily: type.semi, fontSize: 13 }}>{label}</Txt>
-              </Pressable>
-            );
-          })}
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <CategoryBar value={cat} onChange={setCat} />
           <Pressable onPress={() => setSheet(true)} style={[styles.chip, { borderColor: theme.seal, backgroundColor: theme.card }]}>
             <Txt style={{ color: theme.seal, fontFamily: type.bold, fontSize: 13 }}>Шүүлтүүр</Txt>
           </Pressable>
-        </ScrollView>
+        </View>
         <Txt tone="muted">{list.length} хөтөлбөр</Txt>
         <View style={{ gap: 12 }}>
           {list.map((p) => (

@@ -24,7 +24,7 @@ export function EnrollScreen() {
   const [phone, setPhone] = useState(profile.phone);
   const [email, setEmail] = useState(profile.email);
   const [notes, setNotes] = useState("");
-  const [intakeId, setIntakeId] = useState(program?.intakes[0]?.id ?? "");
+  const [intakeId, setIntakeId] = useState(route.params.intakeId ?? program?.intakes[0]?.id ?? "");
   const [planId, setPlanId] = useState(route.params.planId ?? program?.plans[0]?.id ?? "");
   const [docs, setDocs] = useState<string[]>([]);
   const [error, setError] = useState("");

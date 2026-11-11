@@ -5,7 +5,7 @@ import Animated, { interpolate, useAnimatedScrollHandler, useAnimatedStyle, useS
 import { useNavigation, useRoute, type RouteProp } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Badge, Countdown, Glass, PrimaryButton, ProgramBadges, Txt } from "../components/ui";
+import { Badge, Countdown, Icon, Money, PrimaryButton, ProgramBadges, Txt } from "../components/ui";
 import { formatDay, formatRange, priceCaption, priceLabel, soonestIntake } from "../lib/format";
 import { useReduceMotion } from "../lib/motion";
 import type { RootStackParamList } from "../navigation/types";
@@ -39,6 +39,7 @@ export function DetailScreen() {
   }));
   const bar = useAnimatedStyle(() => ({ opacity: interpolate(y.value, [160, 230], [0, 1]) }));
   const [planId, setPlanId] = useState(program?.plans[0]?.id);
+  const [intakeId, setIntakeId] = useState<string | undefined>(undefined);
 
   if (!program) {
     return (
@@ -48,7 +49,8 @@ export function DetailScreen() {
     );
   }
   const plan = program.plans.find((p) => p.id === planId) ?? program.plans[0];
-  const intake = soonestIntake(program) ?? program.intakes[0];
+  const openIntake = soonestIntake(program) ?? program.intakes[0];
+  const intake = program.intakes.find((i) => i.id === (intakeId ?? openIntake?.id)) ?? openIntake;
   const cat = categoryMeta[program.category];
 
   return (
@@ -58,19 +60,16 @@ export function DetailScreen() {
           <Animated.View style={[styles.cover, cover]}>
             <Image source={{ uri: program.image }} style={styles.img} />
           </Animated.View>
-          <LinearGradient colors={["rgba(0,0,0,0.15)", "transparent", "rgba(0,0,0,0.55)"]} style={StyleSheet.absoluteFill} />
-          <View style={[styles.coverCopy, { paddingTop: insets.top + 64 }]}>
+          <LinearGradient colors={["rgba(0,0,0,0.12)", "rgba(0,0,0,0.05)", "rgba(0,0,0,0.86)"]} locations={[0, 0.45, 1]} style={StyleSheet.absoluteFill} />
+          <View style={[styles.coverCopy, { paddingTop: insets.top + 72 }]}>
             <View style={styles.row}>
               <Badge text={cat.label} color={cat.a} />
               <ProgramBadges program={program} />
             </View>
-            <Txt tone="zh" style={{ color: "#fff", fontSize: 40 }}>
-              {program.hanzi}
-            </Txt>
-            <Txt tone="display" style={{ color: "#fff", fontSize: 36, lineHeight: 38 }}>
+            <Txt tone="display" style={{ color: "#fff", fontSize: 36, lineHeight: 40, marginTop: 8 }}>
               {program.title}
             </Txt>
-            <Txt style={{ color: "rgba(255,255,255,0.9)" }}>{program.subtitle}</Txt>
+            <Txt style={{ color: "rgba(255,255,255,0.9)", marginTop: 4 }}>{program.subtitle}</Txt>
           </View>
         </View>
 
@@ -78,9 +77,9 @@ export function DetailScreen() {
           <View style={styles.priceRow}>
             <View style={{ flex: 1 }}>
               <Txt tone="label">{priceCaption(program)}</Txt>
-              <Txt tone="title">{priceLabel(program, plan)}</Txt>
+              <Money text={priceLabel(program, plan)} style={{ fontSize: 26 }} />
             </View>
-            {intake ? <Countdown deadline={intake.deadline} /> : null}
+            {intake ? <Countdown deadline={intake.deadline} color={cat.a} /> : null}
           </View>
 
           <Txt>{program.body}</Txt>
@@ -102,14 +101,24 @@ export function DetailScreen() {
           <Txt tone="title" style={{ fontSize: 18 }}>
             Хуваарь
           </Txt>
-          {program.intakes.map((i) => (
-            <Glass key={i.id} style={styles.block}>
-              <Txt style={{ fontFamily: type.bold }}>{i.label}</Txt>
-              <Txt tone="muted">{formatRange(i.start, i.end)}</Txt>
-              <Txt tone="muted">{i.schedule}</Txt>
-              <Txt tone="muted">Эцсийн хугацаа {formatDay(i.deadline)} · {i.seats} суудал</Txt>
-            </Glass>
-          ))}
+          {program.intakes.map((i) => {
+            const selected = intake?.id === i.id;
+            return (
+              <Pressable
+                key={i.id}
+                onPress={() => setIntakeId(i.id)}
+                style={[styles.block, { borderColor: selected ? cat.a : theme.line, backgroundColor: selected ? `${cat.a}18` : theme.card }]}
+              >
+                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                  <Txt style={{ fontFamily: type.bold }}>{i.label}</Txt>
+                  <Txt style={{ color: selected ? cat.a : theme.muted, fontFamily: type.semi }}>{selected ? "Сонгосон" : "Сонгох"}</Txt>
+                </View>
+                <Txt tone="muted">{formatRange(i.start, i.end)}</Txt>
+                <Txt tone="muted">{i.schedule}</Txt>
+                <Txt tone="muted">Эцсийн хугацаа {formatDay(i.deadline)} · {i.seats} суудал</Txt>
+              </Pressable>
+            );
+          })}
 
           <Txt tone="title" style={{ fontSize: 18 }}>
             Багтаамж
@@ -126,10 +135,11 @@ export function DetailScreen() {
         </View>
       </Animated.ScrollView>
 
+      <Animated.View pointerEvents="none" style={[styles.sticky, { height: insets.top + 56, backgroundColor: theme.name === "dark" ? "#161014" : "#FFF8F6", borderColor: theme.line }, bar]} />
       <Pressable onPress={() => nav.goBack()} style={[styles.back, { top: insets.top + 8, backgroundColor: theme.glassStrong, borderColor: theme.glassBorder }]}>
-        <Txt style={{ fontFamily: type.bold }}>Буцах</Txt>
+        <Icon name="back" color={theme.ink} size={22} />
       </Pressable>
-      <Animated.View style={[styles.topTitle, { top: insets.top + 10 }, bar]} pointerEvents="none">
+      <Animated.View style={[styles.topTitle, { top: insets.top + 12 }, bar]} pointerEvents="none">
         <Txt numberOfLines={1} style={{ fontFamily: type.bold }}>
           {program.title}
         </Txt>
@@ -138,10 +148,10 @@ export function DetailScreen() {
       <View style={[styles.dock, { paddingBottom: Math.max(insets.bottom, 12), backgroundColor: theme.name === "dark" ? "#161014" : "#FFF8F6", borderColor: theme.line }]}>
         <View style={{ flex: 1 }}>
           <Txt tone="muted">{plan?.label}</Txt>
-          <Txt style={{ fontFamily: type.bold, fontSize: 18 }}>{priceLabel(program, plan)}</Txt>
+          <Money text={priceLabel(program, plan)} />
         </View>
         <View style={{ width: 150 }}>
-          <PrimaryButton label="Елсэх" colors={[cat.a, cat.b]} onPress={() => nav.navigate("Enroll", { id: program.id, planId: plan?.id })} />
+          <PrimaryButton label="Елсэх" colors={[cat.a, cat.b]} onPress={() => nav.navigate("Enroll", { id: program.id, planId: plan?.id, intakeId: intake?.id })} />
         </View>
       </View>
     </View>
@@ -162,8 +172,9 @@ const styles = StyleSheet.create({
   priceRow: { flexDirection: "row", gap: 12, alignItems: "center" },
   row: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
   line: { borderWidth: 1, borderRadius: 16, padding: 12, flexDirection: "row", justifyContent: "space-between" },
-  block: { padding: 14, gap: 2, borderRadius: 18 },
-  back: { position: "absolute", left: 16, height: 40, paddingHorizontal: 14, borderRadius: 999, borderWidth: 1, alignItems: "center", justifyContent: "center" },
+  block: { padding: 14, gap: 2, borderRadius: 18, borderWidth: 1.5 },
+  back: { position: "absolute", left: 16, width: 44, height: 44, borderRadius: 22, borderWidth: 1, alignItems: "center", justifyContent: "center" },
+  sticky: { position: "absolute", left: 0, right: 0, top: 0, borderBottomWidth: 1 },
   topTitle: { position: "absolute", left: 110, right: 20, height: 40, justifyContent: "center" },
   dock: { position: "absolute", left: 0, right: 0, bottom: 0, borderTopWidth: 1, flexDirection: "row", alignItems: "center", gap: 12, paddingHorizontal: 16, paddingTop: 10 },
 });
