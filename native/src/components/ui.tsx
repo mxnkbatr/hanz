@@ -1,4 +1,4 @@
-import { useMemo, useState, type ReactNode } from "react";
+import { useMemo, useRef, useState, type ReactNode } from "react";
 import {
   Image,
   Platform,
@@ -29,45 +29,27 @@ import type { Category, Program } from "../domain/types";
 import { deadlineSoon, formatMnt, priceCaption, priceLabel, seatsLeft, soonestIntake } from "../lib/format";
 import { hapticSelect, hapticTap } from "../lib/haptics";
 import { useReduceMotion } from "../lib/motion";
+import { rememberOrigin } from "../navigation/origin";
 import { categoryMeta } from "../theme/tokens";
 import { useTheme } from "../theme/Theme";
 
 export function Mesh({ children, style }: { children?: ReactNode; style?: StyleProp<ViewStyle> }) {
   const { theme } = useTheme();
-  const reduce = useReduceMotion();
-  const drift = useSharedValue(0);
-  useEffect(() => {
-    if (reduce) return;
-    drift.value = withRepeat(withTiming(1, { duration: 14000, easing: Easing.inOut(Easing.sin) }), -1, true);
-  }, [drift, reduce]);
-  const a = useAnimatedStyle(() => ({
-    transform: [{ translateX: drift.value * 36 }, { translateY: drift.value * -22 }],
-  }));
-  const b = useAnimatedStyle(() => ({
-    transform: [{ translateX: drift.value * -28 }, { translateY: drift.value * 30 }],
-  }));
-  const c = useAnimatedStyle(() => ({
-    transform: [{ translateX: drift.value * 18 }, { translateY: drift.value * 16 }],
-  }));
-  const wash = theme.name === "dark"
-    ? (["#161016", "#1A1218", "#12161A"] as const)
-    : (["#FBF6F3", "#F7F1EC", "#F4F2F6"] as const);
-  const blobs = theme.blobs;
+  const wash = theme.name === "dark" ? (["#000000", "#0A0A0A"] as const) : (["#FFFFFF", "#F6F6F7"] as const);
   return (
-    <View style={[styles.fill, { backgroundColor: theme.bg }, style]}>
-      <LinearGradient colors={wash} style={StyleSheet.absoluteFill} start={{ x: 0.1, y: 0 }} end={{ x: 0.9, y: 1 }} />
-      <Animated.View style={[styles.aurora, { backgroundColor: blobs[0], top: -80, right: -40 }, a]} />
-      <Animated.View style={[styles.aurora, { backgroundColor: blobs[1], width: 340, height: 340, top: 280, left: -120 }, b]} />
-      <Animated.View style={[styles.aurora, { backgroundColor: blobs[2], width: 280, height: 280, bottom: -20, right: -30 }, c]} />
-      <BlurView pointerEvents="none" intensity={theme.name === "dark" ? 22 : 16} tint={theme.name === "dark" ? "dark" : "light"} style={StyleSheet.absoluteFill} />
-      <Svg pointerEvents="none" style={StyleSheet.absoluteFill}>
-        <Defs>
-          <Filter id="hanzGrain">
-            <FeTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves={2} />
-          </Filter>
-        </Defs>
-        <Rect width="100%" height="100%" filter="url(#hanzGrain)" opacity={theme.name === "dark" ? 0.08 : 0.045} />
-      </Svg>
+    <View style={[styles.fill, { backgroundColor: theme.name === "dark" ? "#000" : "#fff" }, style]}>
+      <LinearGradient colors={wash} style={StyleSheet.absoluteFill} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }} />
+      <View
+        pointerEvents="none"
+        style={{
+          position: "absolute",
+          top: -40,
+          left: 0,
+          right: 0,
+          height: 180,
+          backgroundColor: theme.name === "dark" ? "rgba(200,30,36,0.05)" : "rgba(200,30,36,0.035)",
+        }}
+      />
       {children}
     </View>
   );
@@ -88,7 +70,7 @@ export function Txt({
 }) {
   const { theme, type } = useTheme();
   const map: Record<Tone, TextStyle> = {
-    display: { fontFamily: type.display, fontSize: 40, lineHeight: 44, letterSpacing: -1.2, color: theme.ink },
+    display: { fontFamily: type.display, fontSize: 34, lineHeight: 40, letterSpacing: -0.6, color: theme.ink },
     title: { fontFamily: type.bold, fontSize: 22, lineHeight: 28, letterSpacing: -0.5, color: theme.ink },
     body: { fontFamily: type.body, fontSize: 15, lineHeight: 22, color: theme.ink },
     muted: { fontFamily: type.medium, fontSize: 13, lineHeight: 18, color: theme.muted },
@@ -277,9 +259,18 @@ export function ProgramCard({ program, onPress, wide }: { program: Program; onPr
   const { theme, type } = useTheme();
   const cat = categoryMeta[program.category];
   const intake = soonestIntake(program);
+  const ref = useRef<{ measureInWindow: (cb: (x: number, y: number, w: number, h: number) => void) => void } | null>(null);
   return (
-    <Tilt onPress={onPress} style={{ width: wide ? "100%" : 250 }}>
-      <View style={[styles.card, { backgroundColor: theme.card, borderColor: theme.line }]}>
+    <Tilt
+      onPress={() => {
+        ref.current?.measureInWindow((x, y, w, h) => {
+          rememberOrigin({ x, y, w, h, image: program.image });
+          onPress();
+        });
+      }}
+      style={{ width: wide ? "100%" : 236 }}
+    >
+      <View ref={ref as never} collapsable={false} style={[styles.card, { backgroundColor: theme.card, borderColor: theme.line }]}>
         <Image source={{ uri: program.image }} style={styles.cardImg} />
         <LinearGradient colors={["transparent", "rgba(0,0,0,0.55)"]} style={styles.cardShade} />
         <View style={styles.cardTop}>
@@ -655,7 +646,7 @@ const styles = StyleSheet.create({
   sheen: { position: "absolute", top: 0, left: 0, right: 0, height: 22 },
   badge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 999, alignSelf: "flex-start" },
   row: { flexDirection: "row", flexWrap: "wrap", gap: 6 },
-  card: { height: 230, borderRadius: 26, overflow: "hidden", borderWidth: 1 },
+  card: { height: 220, borderRadius: 22, overflow: "hidden", borderWidth: 1 },
   cardImg: { ...StyleSheet.absoluteFill, width: "100%", height: "100%" },
   cardShade: { position: "absolute", left: 0, right: 0, bottom: 0, height: 190 },
   cardTop: { position: "absolute", top: 12, left: 12, right: 12, gap: 8 },

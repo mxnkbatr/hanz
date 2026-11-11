@@ -9,6 +9,7 @@ import type { Category, Stage } from "../domain/types";
 import { deadlineSoon, seatsLeft } from "../lib/format";
 import type { RootStackParamList, TabParamList } from "../navigation/types";
 import { useTabClearance } from "../navigation/inset";
+import { useScrollY } from "../navigation/scroll";
 import { useApp } from "../state/AppState";
 import { useTheme } from "../theme/Theme";
 
@@ -20,6 +21,7 @@ export function CatalogScreen() {
   const { programs } = useApp();
   const { theme, type } = useTheme();
   const clearance = useTabClearance();
+  const scrollY = useScrollY();
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<Category | "all">(route.params?.category ?? "all");
   const [stage, setStage] = useState<Stage | "all">("all");
@@ -41,7 +43,14 @@ export function CatalogScreen() {
 
   return (
     <Mesh>
-      <ScrollView contentContainerStyle={[styles.scroll, { paddingBottom: clearance + 24 }]} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={[styles.scroll, { paddingBottom: clearance + 24 }]}
+        showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
+        onScroll={(e) => {
+          if (scrollY) scrollY.value = e.nativeEvent.contentOffset.y;
+        }}
+      >
         <Txt tone="label">Каталог</Txt>
         <Txt tone="display" style={{ fontSize: 34, lineHeight: 38 }}>
           Хөтөлбөр хайх

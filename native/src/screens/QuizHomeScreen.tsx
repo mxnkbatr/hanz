@@ -7,6 +7,7 @@ import { Glass, Mesh, ProgressRing, Txt } from "../components/ui";
 import { lessons } from "../data/quiz";
 import type { RootStackParamList, TabParamList } from "../navigation/types";
 import { useTabClearance } from "../navigation/inset";
+import { useScrollY } from "../navigation/scroll";
 import { useApp } from "../state/AppState";
 import { categoryMeta } from "../theme/tokens";
 import { useTheme } from "../theme/Theme";
@@ -18,12 +19,19 @@ export function QuizHomeScreen() {
   const { quiz } = useApp();
   const { theme, type } = useTheme();
   const clearance = useTabClearance();
+  const scrollY = useScrollY();
   const accent = categoryMeta.quiz;
   const level = Math.min(1, quiz.xp / 200);
 
   return (
     <Mesh>
-      <ScrollView contentContainerStyle={[styles.scroll, { paddingBottom: clearance + 24 }]}>
+      <ScrollView
+        contentContainerStyle={[styles.scroll, { paddingBottom: clearance + 24 }]}
+        scrollEventThrottle={16}
+        onScroll={(e) => {
+          if (scrollY) scrollY.value = e.nativeEvent.contentOffset.y;
+        }}
+      >
         <Txt tone="label">Сорил</Txt>
         <Txt tone="display" style={{ fontSize: 36, lineHeight: 40 }}>
           Өнөөдрийн{"\n"}ханз

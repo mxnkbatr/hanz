@@ -1,11 +1,12 @@
-import { useEffect, useState, type ReactNode } from "react";
-import { Image, Pressable, ScrollView, StyleSheet, View } from "react-native";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { Image, Pressable, StyleSheet, useWindowDimensions, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import Animated, { interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, { interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
 import { useNavigation, useRoute, type RouteProp } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Badge, Countdown, Icon, Money, PrimaryButton, ProgramBadges, Txt } from "../components/ui";
+import { Badge, Countdown, Glass, Icon, Money, PrimaryButton, ProgramBadges, Txt } from "../components/ui";
+import { consumeOrigin } from "../navigation/origin";
 import { formatDay, formatRange, priceCaption, priceLabel, soonestIntake } from "../lib/format";
 import { useReduceMotion } from "../lib/motion";
 import type { RootStackParamList } from "../navigation/types";
@@ -17,6 +18,9 @@ export function DetailScreen() {
   const route = useRoute<RouteProp<RootStackParamList, "Detail">>();
   const nav = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const insets = useSafeAreaInsets();
+  const { width: windowWidth } = useWindowDimensions();
+  const origin = useMemo(() => consumeOrigin(), []);
+  const fly = useSharedValue(origin ? 0 : 1);
   const { programs } = useApp();
   const { theme, type } = useTheme();
   const reduce = useReduceMotion();
@@ -24,8 +28,23 @@ export function DetailScreen() {
   const y = useSharedValue(0);
   const intro = useSharedValue(reduce ? 1 : 0);
   useEffect(() => {
-    intro.value = withTiming(1, { duration: reduce ? 0 : 520 });
-  }, [intro, reduce]);
+    intro.value = withTiming(1, { duration: reduce ? 0 : 280 });
+    fly.value = withSpring(1, { damping: 22, stiffness: 260 });
+  }, [fly, intro, reduce]);
+  const flying = useAnimatedStyle(() => {
+    if (!origin) return { opacity: 0 };
+    return {
+      opacity: fly.value > 0.98 ? 0 : 1,
+      position: "absolute",
+      left: interpolate(fly.value, [0, 1], [origin.x, 0]),
+      top: interpolate(fly.value, [0, 1], [origin.y, 0]),
+      width: interpolate(fly.value, [0, 1], [origin.w, windowWidth]),
+      height: interpolate(fly.value, [0, 1], [origin.h, 400]),
+      borderRadius: interpolate(fly.value, [0, 1], [22, 0]),
+      overflow: "hidden",
+      zIndex: 30,
+    };
+  });
   const onScroll = useAnimatedScrollHandler({
     onScroll: (e) => {
       y.value = e.contentOffset.y;
@@ -145,7 +164,7 @@ export function DetailScreen() {
         </Txt>
       </Animated.View>
 
-      <View style={[styles.dock, { paddingBottom: Math.max(insets.bottom, 12), backgroundColor: theme.name === "dark" ? "rgba(12,12,14,0.92)" : "rgba(243,243,245,0.92)", borderColor: theme.line }]}>
+      <Glass style={[styles.dock, { paddingBottom: Math.max(insets.bottom, 12), borderRadius: 0 }]} intensity={70}>
         <View style={{ flex: 1 }}>
           <Txt tone="muted">{plan?.label}</Txt>
           <Money text={priceLabel(program, plan)} />
@@ -153,7 +172,12 @@ export function DetailScreen() {
         <View style={{ width: 150 }}>
           <PrimaryButton label="Елсэх" onPress={() => nav.navigate("Enroll", { id: program.id, planId: plan?.id, intakeId: intake?.id })} />
         </View>
-      </View>
+      </Glass>
+      {origin ? (
+        <Animated.View pointerEvents="none" style={flying}>
+          <Image source={{ uri: origin.image }} style={{ width: "100%", height: "100%" }} />
+        </Animated.View>
+      ) : null}
     </View>
   );
 }

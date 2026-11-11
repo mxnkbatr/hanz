@@ -1,16 +1,18 @@
 import { Pressable, StyleSheet, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
+import Animated, { Extrapolation, interpolate, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 import { useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Glass, Icon, Txt } from "../components/ui";
 import { hapticSelect } from "../lib/haptics";
+import { useScrollY } from "./scroll";
 import { CatalogScreen } from "../screens/CatalogScreen";
 import { HomeScreen } from "../screens/HomeScreen";
 import { MineScreen } from "../screens/MineScreen";
 import { ProfileScreen } from "../screens/ProfileScreen";
 import { QuizHomeScreen } from "../screens/QuizHomeScreen";
 import { useTheme } from "../theme/Theme";
+import { ScrollYProvider } from "./scroll";
 import type { TabParamList } from "./types";
 
 const Tab = createBottomTabNavigator<TabParamList>();
@@ -19,7 +21,9 @@ const icons = ["home", "search", "quiz", "ticket", "user"] as const;
 const labels = ["Нүүр", "Хайх", "Сорил", "Элсэлт", "Би"];
 
 export function Tabs() {
+  const y = useSharedValue(0);
   return (
+    <ScrollYProvider value={y}>
     <Tab.Navigator screenOptions={{ headerShown: false }} tabBar={(props) => <GlassTabBar {...props} />}>
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Catalog" component={CatalogScreen} />
@@ -27,23 +31,33 @@ export function Tabs() {
       <Tab.Screen name="Mine" component={MineScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
+    </ScrollYProvider>
   );
 }
 
 function GlassTabBar({ state, navigation }: { state: { index: number; routes: { key: string; name: string }[] }; navigation: { navigate: (name: string) => void } }) {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
+  const y = useScrollY();
   const index = useSharedValue(state.index);
   const [width, setWidth] = useState(0);
   useEffect(() => {
-    index.value = withSpring(state.index, { damping: 16, stiffness: 220 });
+    index.value = withSpring(state.index, { damping: 22, stiffness: 340 });
   }, [index, state.index]);
+  const shell = useAnimatedStyle(() => {
+    const t = y ? interpolate(y.value, [0, 48], [0, 1], Extrapolation.CLAMP) : 0;
+    return { transform: [{ scale: 1 - t * 0.045 }], marginHorizontal: t * 16 };
+  });
+  const labelStyle = useAnimatedStyle(() => {
+    const t = y ? interpolate(y.value, [0, 28], [0, 1], Extrapolation.CLAMP) : 0;
+    return { opacity: 1 - t, height: 14 - t * 14 };
+  });
   const inner = Math.max(0, width - 8);
   const slot = inner / Math.max(1, state.routes.length);
   const pill = useAnimatedStyle(() => ({ transform: [{ translateX: index.value * slot }] }));
   return (
-    <View style={[styles.wrap, { bottom: Math.max(insets.bottom, 12) }]} pointerEvents="box-none">
-      <Glass style={styles.bar} intensity={40}>
+    <Animated.View style={[styles.wrap, { bottom: Math.max(insets.bottom, 10) }, shell]} pointerEvents="box-none">
+      <Glass style={styles.bar} intensity={55} interactive>
         <View style={styles.track} onLayout={(e) => setWidth(e.nativeEvent.layout.width)}>
           {width > 0 ? <Animated.View style={[styles.pill, { width: slot - 6, backgroundColor: theme.name === "dark" ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.72)" }, pill]} /> : null}
           {state.routes.map((route, i) => {
@@ -58,13 +72,15 @@ function GlassTabBar({ state, navigation }: { state: { index: number; routes: { 
                 }}
               >
                 <TabGlyph name={icons[i] ?? "home"} color={focused ? theme.seal : theme.muted} focused={focused} />
-                <Txt style={{ fontSize: 10, color: focused ? theme.seal : theme.muted }}>{labels[i]}</Txt>
+                <Animated.View style={labelStyle}>
+                  <Txt style={{ fontSize: 10, color: focused ? theme.seal : theme.muted }}>{labels[i]}</Txt>
+                </Animated.View>
               </Pressable>
             );
           })}
         </View>
       </Glass>
-    </View>
+    </Animated.View>
   );
 }
 
@@ -72,11 +88,11 @@ function TabGlyph({ name, color, focused }: { name: (typeof icons)[number]; colo
   const scale = useSharedValue(1);
   const turn = useSharedValue(0);
   useEffect(() => {
-    scale.value = withSpring(focused ? 1.16 : 1, { damping: 12, stiffness: 240 });
-    turn.value = withSpring(focused ? 1 : 0, { damping: 14, stiffness: 180 });
+    scale.value = withSpring(focused ? 1.08 : 1, { damping: 20, stiffness: 360 });
+    turn.value = withSpring(focused ? 1 : 0, { damping: 20, stiffness: 360 });
   }, [focused, scale, turn]);
   const style = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }, { rotate: `${(1 - turn.value) * -8}deg` }, { translateY: (1 - turn.value) * 1 }],
+    transform: [{ scale: scale.value }],
   }));
   return (
     <Animated.View style={style}>

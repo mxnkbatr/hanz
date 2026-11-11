@@ -31,7 +31,7 @@ export type Theme = {
 
 export const lightTheme: Theme = {
   name: "light",
-  bg: "#F3F3F5",
+  bg: "#FFFFFF",
   bg2: "#EFEFF2",
   ink: "#1C1C1E",
   muted: "#8A8A8E",
