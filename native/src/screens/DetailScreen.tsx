@@ -126,11 +126,11 @@ export function DetailScreen() {
               <Pressable
                 key={i.id}
                 onPress={() => setIntakeId(i.id)}
-                style={[styles.block, { borderColor: selected ? cat.a : theme.line, backgroundColor: selected ? `${cat.a}18` : theme.card }]}
+                style={[styles.block, { borderColor: selected ? "#C81E24" : theme.line, backgroundColor: selected ? (theme.name === "dark" ? "#161618" : "#F4F4F5") : theme.card }]}
               >
                 <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                   <Txt style={{ fontFamily: type.bold }}>{i.label}</Txt>
-                  <Txt style={{ color: selected ? cat.a : theme.muted, fontFamily: type.semi }}>{selected ? "Сонгосон" : "Сонгох"}</Txt>
+                  <Txt style={{ color: selected ? "#C81E24" : theme.muted, fontFamily: type.semi }}>{selected ? "Сонгосон" : "Сонгох"}</Txt>
                 </View>
                 <Txt tone="muted">{formatRange(i.start, i.end)}</Txt>
                 <Txt tone="muted">{i.schedule}</Txt>

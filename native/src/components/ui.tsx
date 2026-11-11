@@ -64,9 +64,9 @@ export function Mesh({
     );
   }
   return (
-    <View style={[styles.fill, { backgroundColor: "#8E0F14" }, style]}>
+    <View style={[styles.fill, { backgroundColor: "#7A0C10" }, style]}>
       <LinearGradient
-        colors={["#8E0F14", "#A31318", "#C81E24"]}
+        colors={["#7A0C10", "#A3141A", "#C81E24"]}
         locations={[0, 0.55, 1]}
         style={StyleSheet.absoluteFill}
         start={{ x: 0.5, y: 0 }}
@@ -166,7 +166,7 @@ export function Glass({
       <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: veil, zIndex: 0 }]} />
       <LinearGradient
         pointerEvents="none"
-        colors={onRed ? ["rgba(255,255,255,0.14)", "rgba(255,255,255,0)"] : theme.name === "dark" ? ["rgba(255,255,255,0.12)", "rgba(255,255,255,0)"] : ["rgba(255,255,255,0.7)", "rgba(255,255,255,0)"]}
+        colors={onRed ? ["rgba(0,0,0,0)", "rgba(0,0,0,0)"] : theme.name === "dark" ? ["rgba(255,255,255,0.12)", "rgba(255,255,255,0)"] : ["rgba(255,255,255,0.7)", "rgba(255,255,255,0)"]}
         style={[styles.sheen, { zIndex: 1 }]}
       />
       <View style={face}>{children}</View>
@@ -245,7 +245,7 @@ export function SealMark({ size = 72, light = false }: { size?: number; light?: 
         width: size,
         height: size,
         borderRadius: size * 0.22,
-        backgroundColor: "#C81E24",
+        backgroundColor: "#A3141A",
         alignItems: "center",
         justifyContent: "center",
         shadowColor: "#3A080C",
@@ -282,7 +282,7 @@ export function ProgramBadges({ program }: { program: Program }) {
   const soon = deadlineSoon(program);
   return (
     <View style={styles.row}>
-      {soon ? <Badge text="Хугацаа дөхөж байна" color="rgba(200,30,36,0.88)" /> : null}
+      {soon ? <Badge text="Хугацаа дөхөж байна" color="#7A0C10" /> : null}
       {seats > 0 && seats <= 12 ? <Badge text={`${seats} суудал`} color="rgba(20,20,22,0.55)" /> : null}
     </View>
   );
@@ -453,7 +453,7 @@ export function SandboxQr({ seed, size = 196 }: { seed: string; size?: number })
   );
 }
 
-const CONFETTI = ["#8E0F14", "#C81E24", "#FFFFFF", "#A31318"];
+const CONFETTI = ["#7A0C10", "#A3141A", "#C81E24", "#FFFFFF"];
 
 export function Confetti({ show }: { show: boolean }) {
   const reduce = useReduceMotion();
@@ -507,7 +507,7 @@ export function Sheet({
   return (
     <View style={styles.sheetRoot}>
       <Pressable style={styles.backdrop} onPress={onClose} />
-      <Animated.View style={[styles.sheet, { backgroundColor: theme.name === "dark" ? "#1C1418" : "#FFF" }, style]}>
+      <Animated.View style={[styles.sheet, { backgroundColor: theme.name === "dark" ? "#161618" : "#FFFFFF" }, style]}>
         <View style={[styles.handle, { backgroundColor: theme.line }]} />
         <Text style={{ fontFamily: type.bold, fontSize: 18, color: theme.ink, marginBottom: 12 }}>{title}</Text>
         {children}
@@ -527,8 +527,8 @@ export function PrimaryButton({
   colors?: [string, string];
   disabled?: boolean;
 }) {
-  const { type, theme } = useTheme();
-  const fill = colors?.[0] ?? theme.seal;
+  const { type } = useTheme();
+  const stops = colors ?? (["#7A0C10", "#C81E24"] as [string, string]);
   const scale = useSharedValue(1);
   const anim = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
   return (
@@ -546,10 +546,9 @@ export function PrimaryButton({
           onPress();
         }}
       >
-        <View style={[styles.btn, { backgroundColor: fill }]}>
-          <LinearGradient pointerEvents="none" colors={["rgba(255,255,255,0.28)", "rgba(255,255,255,0)"]} style={styles.sheen} />
+        <LinearGradient colors={stops} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.btn}>
           <Text style={{ color: "#fff", fontFamily: type.bold, fontSize: 17, letterSpacing: -0.2 }}>{label}</Text>
-        </View>
+        </LinearGradient>
       </Pressable>
     </Animated.View>
   );
@@ -636,7 +635,7 @@ export function CategoryBar({
   const pill = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }], width: w.value }));
   return (
     <View style={{ height: 40 }}>
-      <Animated.View style={[styles.chipPill, { backgroundColor: "#C81E24" }, pill]} />
+      <Animated.View style={[styles.chipPill, { backgroundColor: "#A3141A" }, pill]} />
       <View style={{ flexDirection: "row", gap: 6 }}>
         {options.map((option) => {
           const on = option.id === value;
@@ -653,7 +652,7 @@ export function CategoryBar({
               }}
               style={styles.chipHit}
             >
-              {on ? null : <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: onRed && option.id === "course" ? "rgba(255,255,255,0.85)" : option.color, marginRight: 6 }} />}
+              {on ? null : <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: onRed && option.id === "course" ? "#FFFFFF" : option.color, marginRight: 6 }} />}
               <Text style={{ fontFamily: on ? type.bold : type.medium, fontSize: 13, color: on || onRed ? "#fff" : theme.ink }}>{option.label}</Text>
             </Pressable>
           );
@@ -694,7 +693,7 @@ const styles = StyleSheet.create({
   backdrop: { ...StyleSheet.absoluteFill, backgroundColor: "rgba(0,0,0,0.35)" },
   sheet: { borderTopLeftRadius: 28, borderTopRightRadius: 28, padding: 18, paddingBottom: 28 },
   handle: { width: 42, height: 5, borderRadius: 99, alignSelf: "center", marginBottom: 12 },
-  btn: { height: 54, borderRadius: 18, alignItems: "center", justifyContent: "center" },
+  btn: { height: 54, borderRadius: 18, alignItems: "center", justifyContent: "center", overflow: "hidden" },
   chipPill: { position: "absolute", top: 0, left: 0, height: 36, borderRadius: 999 },
   chipHit: { height: 36, paddingHorizontal: 12, alignItems: "center", justifyContent: "center", flexDirection: "row" },
 });

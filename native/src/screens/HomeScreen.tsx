@@ -96,7 +96,7 @@ export function HomeScreen() {
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => void refresh()} tintColor="#FFFFFF" colors={["#C81E24"]} />}
       >
-        <LinearGradient colors={["#8E0F14", "#A31318", "#C81E24"]} locations={[0, 0.46, 1]} style={[styles.mast, { paddingTop: insets.top + 64 }]}>
+        <LinearGradient colors={["#7A0C10", "#A3141A", "#C81E24"]} locations={[0, 0.62, 1]} style={[styles.mast, { paddingTop: insets.top + 64 }]}>
           <Animated.View style={largeTitle}>
             <Txt style={{ color: "rgba(255,255,255,0.82)", fontFamily: type.medium }}>{name ? `Сайн байна уу, ${name}` : greeting()}</Txt>
             <Txt tone="display" style={{ marginTop: 4, color: "#fff" }}>
@@ -209,7 +209,14 @@ export function HomeScreen() {
               void Linking.openURL(`tel:${academy.phones[0].raw}`);
             }}
           >
-            <View style={[styles.call, { backgroundColor: "#fff" }]}>
+            <View
+              style={[
+                styles.call,
+                theme.name === "dark"
+                  ? { backgroundColor: "#161618", borderWidth: 1, borderColor: "#C81E24" }
+                  : { backgroundColor: "#FFFFFF", borderWidth: 1, borderColor: "#7A0C10" },
+              ]}
+            >
               <Icon name="phone" color="#C81E24" size={15} />
               <Txt style={{ fontFamily: type.semi, fontSize: 14, color: "#C81E24" }}>Залгах</Txt>
             </View>

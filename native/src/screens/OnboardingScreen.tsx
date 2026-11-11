@@ -59,7 +59,7 @@ export function OnboardingScreen() {
       >
         {pages.map((p) => (
           <View key={p.kicker} style={[styles.page, { width }]}>
-            <Txt tone="zh" style={[styles.hanzi, { color: theme.seal }]}>
+            <Txt tone="zh" style={[styles.hanzi, { color: theme.ink }]}>
               {p.hanzi}
             </Txt>
             <Txt tone="label">{p.kicker}</Txt>

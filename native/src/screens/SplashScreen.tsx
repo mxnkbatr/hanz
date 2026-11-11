@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { Platform, StyleSheet, View } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import Animated, { Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import Svg, { Path } from "react-native-svg";
 import { useNavigation } from "@react-navigation/native";
@@ -27,7 +26,7 @@ function skipIntro() {
 export function SplashScreen() {
   const nav = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { onboarded, ready } = useApp();
-  const { theme, type } = useTheme();
+  const { type } = useTheme();
   const reduce = useReduceMotion();
   const enter = useSharedValue(0);
   const dash = useSharedValue(460);
@@ -60,10 +59,7 @@ export function SplashScreen() {
     <Mesh field>
       <View style={styles.center}>
         <Animated.View style={seal}>
-          <View style={styles.glow}>
-            <LinearGradient colors={["rgba(90,10,14,0)", "rgba(58,8,12,0.45)"]} style={styles.glowFill} />
-          </View>
-          <View style={{ padding: 8, borderRadius: 36, backgroundColor: "#5C0C10" }}>
+          <View style={{ padding: 8, borderRadius: 36, backgroundColor: "#7A0C10" }}>
             <SealMark size={108} />
           </View>
         </Animated.View>
@@ -105,7 +101,5 @@ export function SplashScreen() {
 
 const styles = StyleSheet.create({
   center: { flex: 1, alignItems: "center", justifyContent: "center", paddingBottom: 40 },
-  glow: { position: "absolute", width: 180, height: 180, borderRadius: 90, left: -36, top: -36, overflow: "hidden" },
-  glowFill: { flex: 1 },
   copy: { alignItems: "center", marginTop: 8 },
 });

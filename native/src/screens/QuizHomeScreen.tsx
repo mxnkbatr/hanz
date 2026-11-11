@@ -59,7 +59,7 @@ export function QuizHomeScreen() {
           return (
             <Pressable key={lesson.id} onPress={() => nav.navigate("QuizPlay", { lessonId: lesson.id })}>
               <Glass style={styles.card} intensity={36}>
-                <View style={[styles.mark, { backgroundColor: lesson.kind === "placement" ? "rgba(110,89,230,0.14)" : "rgba(200,30,36,0.1)" }]}>
+                <View style={[styles.mark, { backgroundColor: theme.name === "dark" ? "#161618" : "#F4F4F5", borderWidth: 1, borderColor: lesson.kind === "placement" ? accent.a : "#C81E24" }]}>
                   <Txt style={{ color: lesson.kind === "placement" ? accent.a : theme.seal, fontFamily: type.bold, fontSize: lesson.kind === "placement" ? 22 : 16 }}>
                     {lesson.kind === "placement" ? "测" : lesson.level.replace("HSK ", "")}
                   </Txt>
