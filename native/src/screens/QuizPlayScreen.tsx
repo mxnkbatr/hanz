@@ -226,7 +226,7 @@ function QuestionBody(props: {
             ))}
           </View>
           <Txt tone="muted">{q.caption}</Txt>
-          {!props.heard ? <PrimaryButton label={props.playing ? "Сонсож байна…" : "Долгион тоглуулах"} colors={[categoryMeta.quiz.a, categoryMeta.quiz.b]} onPress={props.onPlay} /> : null}
+          {!props.heard ? <PrimaryButton label={props.playing ? "Сонсож байна…" : "Долгион тоглуулах"} colors={[categoryMeta.quiz.a, categoryMeta.quiz.a]} onPress={props.onPlay} /> : null}
         </View>
       ) : null}
       {options.map((option, i) => {

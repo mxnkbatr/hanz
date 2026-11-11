@@ -1,10 +1,9 @@
 import { Pressable, ScrollView, StyleSheet, View } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import type { CompositeNavigationProp } from "@react-navigation/native";
 import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Mesh, ProgressRing, Tilt, Txt } from "../components/ui";
+import { Glass, Mesh, ProgressRing, Txt } from "../components/ui";
 import { lessons } from "../data/quiz";
 import type { RootStackParamList, TabParamList } from "../navigation/types";
 import { useTabClearance } from "../navigation/inset";
@@ -29,18 +28,16 @@ export function QuizHomeScreen() {
         <Txt tone="display" style={{ fontSize: 36, lineHeight: 40 }}>
           Өнөөдрийн{"\n"}ханз
         </Txt>
-        <LinearGradient colors={[accent.a, accent.b]} style={styles.hero}>
-          <View style={{ flex: 1, gap: 6 }}>
-            <Txt tone="label" style={{ color: "rgba(255,255,255,0.8)" }}>
-              Цуваа · XP
-            </Txt>
-            <Txt tone="display" style={{ color: "#fff", fontSize: 42, lineHeight: 46 }}>
+        <Glass style={styles.hero} intensity={46}>
+          <View style={{ flex: 1, gap: 4 }}>
+            <Txt tone="label">Цуваа · XP</Txt>
+            <Txt tone="display" style={{ fontSize: 40, lineHeight: 44 }}>
               {quiz.streak} өдөр
             </Txt>
-            <Txt style={{ color: "#fff" }}>{quiz.xp} XP · {quiz.hearts} зүрх</Txt>
+            <Txt tone="muted">{quiz.xp} XP · {quiz.hearts} зүрх</Txt>
           </View>
-          <ProgressRing progress={level} color="#fff" label={`${Math.round(level * 100)}%`} />
-        </LinearGradient>
+          <ProgressRing progress={level} color={accent.a} label={`${Math.round(level * 100)}%`} />
+        </Glass>
         <View style={styles.hearts}>
           {Array.from({ length: 5 }, (_, i) => (
             <Txt key={i} style={{ fontSize: 22, opacity: i < quiz.hearts ? 1 : 0.25 }}>
@@ -51,10 +48,10 @@ export function QuizHomeScreen() {
         {lessons.map((lesson) => {
           const done = quiz.completed[lesson.id];
           return (
-            <Tilt key={lesson.id} onPress={() => nav.navigate("QuizPlay", { lessonId: lesson.id })}>
-              <View style={[styles.card, { backgroundColor: theme.card, borderColor: theme.line }]}>
-                <View style={[styles.mark, { backgroundColor: lesson.kind === "placement" ? accent.a : theme.seal }]}>
-                  <Txt style={{ color: "#fff", fontFamily: type.bold, fontSize: lesson.kind === "placement" ? 22 : 16 }}>
+            <Pressable key={lesson.id} onPress={() => nav.navigate("QuizPlay", { lessonId: lesson.id })}>
+              <Glass style={styles.card} intensity={36}>
+                <View style={[styles.mark, { backgroundColor: lesson.kind === "placement" ? "rgba(110,89,230,0.14)" : "rgba(200,30,36,0.1)" }]}>
+                  <Txt style={{ color: lesson.kind === "placement" ? accent.a : theme.seal, fontFamily: type.bold, fontSize: lesson.kind === "placement" ? 22 : 16 }}>
                     {lesson.kind === "placement" ? "测" : lesson.level.replace("HSK ", "")}
                   </Txt>
                 </View>
@@ -66,8 +63,8 @@ export function QuizHomeScreen() {
                     {done ? ` · ${done.correct}/${done.total}` : ""}
                   </Txt>
                 </View>
-              </View>
-            </Tilt>
+              </Glass>
+            </Pressable>
           );
         })}
       </ScrollView>
@@ -79,6 +76,6 @@ const styles = StyleSheet.create({
   scroll: { padding: 18, paddingBottom: 130, gap: 12 },
   hero: { borderRadius: 28, padding: 18, flexDirection: "row", alignItems: "center", gap: 8 },
   hearts: { flexDirection: "row", gap: 6 },
-  card: { borderRadius: 22, borderWidth: 1, padding: 12, flexDirection: "row", gap: 12, alignItems: "center" },
+  card: { borderRadius: 22, padding: 12, flexDirection: "row", gap: 12, alignItems: "center" },
   mark: { width: 72, height: 72, borderRadius: 20, alignItems: "center", justifyContent: "center" },
 });

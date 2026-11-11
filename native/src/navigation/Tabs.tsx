@@ -45,7 +45,7 @@ function GlassTabBar({ state, navigation }: { state: { index: number; routes: { 
     <View style={[styles.wrap, { bottom: Math.max(insets.bottom, 12) }]} pointerEvents="box-none">
       <Glass style={styles.bar} intensity={40}>
         <View style={styles.track} onLayout={(e) => setWidth(e.nativeEvent.layout.width)}>
-          {width > 0 ? <Animated.View style={[styles.pill, { width: slot - 6, backgroundColor: theme.name === "dark" ? "rgba(255,255,255,0.1)" : "rgba(200,30,36,0.12)" }, pill]} /> : null}
+          {width > 0 ? <Animated.View style={[styles.pill, { width: slot - 6, backgroundColor: theme.name === "dark" ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.72)" }, pill]} /> : null}
           {state.routes.map((route, i) => {
             const focused = state.index === i;
             return (

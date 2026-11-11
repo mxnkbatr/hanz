@@ -7,7 +7,7 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { CompositeNavigationProp } from "@react-navigation/native";
 import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { Image } from "react-native";
-import { Badge, CategoryBar, Icon, Mesh, Money, ProgramBadges, ProgramCard, SealMark, Tilt, Txt } from "../components/ui";
+import { Badge, CategoryBar, Glass, Icon, Mesh, Money, ProgramBadges, ProgramCard, SealMark, Tilt, Txt } from "../components/ui";
 import { academy } from "../data/academy";
 import type { Category, Program } from "../domain/types";
 import { deadlineSoon, greeting, priceLabel, soonestIntake } from "../lib/format";
@@ -90,10 +90,11 @@ export function HomeScreen() {
               void hapticTap();
               void Linking.openURL(`tel:${academy.phones[0].raw}`);
             }}
-            style={[styles.call, { backgroundColor: theme.seal }]}
           >
-            <Icon name="phone" color="#fff" size={16} />
-            <Txt style={{ color: "#fff", fontFamily: type.bold, fontSize: 13 }}>Залгах</Txt>
+            <Glass style={styles.call} intensity={50} interactive>
+              <Icon name="phone" color={theme.seal} size={15} />
+              <Txt style={{ fontFamily: type.semi, fontSize: 14 }}>Залгах</Txt>
+            </Glass>
           </Pressable>
         </View>
 
@@ -102,8 +103,8 @@ export function HomeScreen() {
           {name ? `${name},\nөдрийг эхлүүл` : "Хятад хэлээ\nөнөөдөр эхлүүл"}
         </Txt>
 
-        <View style={[styles.search, { backgroundColor: theme.name === "dark" ? "rgba(255,255,255,0.08)" : "#fff", borderColor: theme.line }]}>
-          <Icon name="search" color={theme.seal} size={18} />
+        <Glass style={styles.search} intensity={36}>
+          <Icon name="search" color={theme.muted} size={18} />
           <TextInput
             value={q}
             onChangeText={setQ}
@@ -111,7 +112,7 @@ export function HomeScreen() {
             placeholderTextColor={theme.muted}
             style={[styles.input, { color: theme.ink, fontFamily: type.medium }]}
           />
-        </View>
+        </Glass>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingRight: 8 }}>
           <CategoryBar value={cat} onChange={setCat} />
@@ -165,21 +166,18 @@ export function HomeScreen() {
           </>
         ) : null}
 
-        <Tilt
+        <Pressable
           onPress={() => {
+            void hapticTap();
             void Linking.openURL(`tel:${academy.phones[0].raw}`);
           }}
         >
-          <LinearGradient colors={[theme.seal, "#7C5CFF"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.cta}>
-            <Txt tone="label" style={{ color: "rgba(255,255,255,0.8)" }}>
-              Шууд холбогдох
-            </Txt>
-            <Txt tone="title" style={{ color: "#fff" }}>
-              {academy.phones[0].display}
-            </Txt>
-            <Txt style={{ color: "rgba(255,255,255,0.88)" }}>{academy.phones[1].display} · {academy.hours}</Txt>
-          </LinearGradient>
-        </Tilt>
+          <Glass style={styles.cta} intensity={48}>
+            <Txt tone="label">Шууд холбогдох</Txt>
+            <Txt tone="title">{academy.phones[0].display}</Txt>
+            <Txt tone="muted">{academy.phones[1].display} · {academy.hours}</Txt>
+          </Glass>
+        </Pressable>
       </ScrollView>
     </Mesh>
   );
@@ -282,5 +280,5 @@ const styles = StyleSheet.create({
   heroBody: { flex: 1, justifyContent: "flex-end", padding: 20, gap: 8 },
   heroMeta: { marginTop: 6, gap: 2 },
   row: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
-  cta: { borderRadius: 28, padding: 20, gap: 4 },
+  cta: { borderRadius: 28, padding: 20, gap: 6 },
 });

@@ -11,6 +11,7 @@ import {
   type ViewStyle,
 } from "react-native";
 import { BlurView } from "expo-blur";
+import { GlassView, isLiquidGlassAvailable } from "expo-glass-effect";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, {
   Easing,
@@ -26,7 +27,7 @@ import Svg, { Circle, Defs, FeTurbulence, Filter, Path, Rect } from "react-nativ
 import { useEffect } from "react";
 import type { Category, Program } from "../domain/types";
 import { deadlineSoon, formatMnt, priceCaption, priceLabel, seatsLeft, soonestIntake } from "../lib/format";
-import { hapticTap } from "../lib/haptics";
+import { hapticSelect, hapticTap } from "../lib/haptics";
 import { useReduceMotion } from "../lib/motion";
 import { categoryMeta } from "../theme/tokens";
 import { useTheme } from "../theme/Theme";
@@ -51,16 +52,14 @@ export function Mesh({ children, style }: { children?: ReactNode; style?: StyleP
   const wash = theme.name === "dark"
     ? (["#161016", "#1A1218", "#12161A"] as const)
     : (["#FBF6F3", "#F7F1EC", "#F4F2F6"] as const);
-  const blobs = theme.name === "dark"
-    ? ["rgba(120,36,48,0.42)", "rgba(92,62,28,0.28)", "rgba(58,42,110,0.34)"]
-    : ["rgba(232,170,176,0.55)", "rgba(214,186,150,0.42)", "rgba(176,168,214,0.38)"];
+  const blobs = theme.blobs;
   return (
     <View style={[styles.fill, { backgroundColor: theme.bg }, style]}>
       <LinearGradient colors={wash} style={StyleSheet.absoluteFill} start={{ x: 0.1, y: 0 }} end={{ x: 0.9, y: 1 }} />
       <Animated.View style={[styles.aurora, { backgroundColor: blobs[0], top: -80, right: -40 }, a]} />
       <Animated.View style={[styles.aurora, { backgroundColor: blobs[1], width: 340, height: 340, top: 280, left: -120 }, b]} />
       <Animated.View style={[styles.aurora, { backgroundColor: blobs[2], width: 280, height: 280, bottom: -20, right: -30 }, c]} />
-      <BlurView pointerEvents="none" intensity={theme.name === "dark" ? 36 : 28} tint={theme.name === "dark" ? "dark" : "light"} style={StyleSheet.absoluteFill} />
+      <BlurView pointerEvents="none" intensity={theme.name === "dark" ? 22 : 16} tint={theme.name === "dark" ? "dark" : "light"} style={StyleSheet.absoluteFill} />
       <Svg pointerEvents="none" style={StyleSheet.absoluteFill}>
         <Defs>
           <Filter id="hanzGrain">
@@ -89,8 +88,8 @@ export function Txt({
 }) {
   const { theme, type } = useTheme();
   const map: Record<Tone, TextStyle> = {
-    display: { fontFamily: type.display, fontSize: 36, lineHeight: 40, letterSpacing: -1.1, color: theme.ink },
-    title: { fontFamily: type.bold, fontSize: 22, lineHeight: 26, letterSpacing: -0.4, color: theme.ink },
+    display: { fontFamily: type.display, fontSize: 40, lineHeight: 44, letterSpacing: -1.2, color: theme.ink },
+    title: { fontFamily: type.bold, fontSize: 22, lineHeight: 28, letterSpacing: -0.5, color: theme.ink },
     body: { fontFamily: type.body, fontSize: 15, lineHeight: 22, color: theme.ink },
     muted: { fontFamily: type.medium, fontSize: 13, lineHeight: 18, color: theme.muted },
     zh: { fontFamily: type.zh, fontSize: 28, color: theme.ink },
@@ -106,18 +105,56 @@ export function Txt({
 export function Glass({
   children,
   style,
-  intensity = 28,
+  intensity = 42,
+  interactive = false,
 }: {
   children?: ReactNode;
   style?: StyleProp<ViewStyle>;
   intensity?: number;
+  interactive?: boolean;
 }) {
   const { theme } = useTheme();
+  const flat = StyleSheet.flatten(style) ?? {};
+  const face: ViewStyle = {
+    zIndex: 2,
+    position: "relative",
+    width: "100%",
+    flexGrow: 1,
+    flexDirection: flat.flexDirection,
+    alignItems: flat.alignItems,
+    justifyContent: flat.justifyContent,
+    gap: flat.gap,
+    padding: flat.padding,
+    paddingHorizontal: flat.paddingHorizontal,
+    paddingVertical: flat.paddingVertical,
+    paddingTop: flat.paddingTop,
+    paddingBottom: flat.paddingBottom,
+    paddingLeft: flat.paddingLeft,
+    paddingRight: flat.paddingRight,
+  };
+  const liquid = Platform.OS === "ios" && isLiquidGlassAvailable();
+  if (liquid) {
+    return (
+      <GlassView
+        glassEffectStyle="regular"
+        colorScheme={theme.name}
+        isInteractive={interactive}
+        style={[{ overflow: "hidden", borderRadius: 28 }, style]}
+      >
+        {children}
+      </GlassView>
+    );
+  }
   return (
-    <View style={[styles.glassWrap, { borderColor: theme.glassBorder, shadowColor: theme.shadow }, style]}>
-      <BlurView intensity={intensity} tint={theme.name === "dark" ? "dark" : "light"} style={StyleSheet.absoluteFill} />
-      <View style={[StyleSheet.absoluteFill, { backgroundColor: theme.glass }]} />
-      {children}
+    <View style={[styles.glassWrap, { borderColor: theme.glassBorder, shadowColor: theme.shadow, backgroundColor: "transparent" }, style]}>
+      <BlurView intensity={intensity} tint={theme.name === "dark" ? "dark" : "light"} style={[StyleSheet.absoluteFill, { zIndex: 0 }]} />
+      <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: theme.glass, zIndex: 0 }]} />
+      <LinearGradient
+        pointerEvents="none"
+        colors={theme.name === "dark" ? ["rgba(255,255,255,0.16)", "rgba(255,255,255,0)"] : ["rgba(255,255,255,0.75)", "rgba(255,255,255,0)"]}
+        style={[styles.sheen, { zIndex: 1 }]}
+      />
+      <View style={face}>{children}</View>
     </View>
   );
 }
@@ -230,8 +267,8 @@ export function ProgramBadges({ program }: { program: Program }) {
   const soon = deadlineSoon(program);
   return (
     <View style={styles.row}>
-      {soon ? <Badge text="Хугацаа дөхөж байна" color="#C81E24" /> : null}
-      {seats > 0 && seats <= 12 ? <Badge text={`${seats} суудал`} color="#1A1214" /> : null}
+      {soon ? <Badge text="Хугацаа дөхөж байна" color="rgba(200,30,36,0.88)" /> : null}
+      {seats > 0 && seats <= 12 ? <Badge text={`${seats} суудал`} color="rgba(20,20,22,0.55)" /> : null}
     </View>
   );
 }
@@ -466,21 +503,31 @@ export function PrimaryButton({
   colors?: [string, string];
   disabled?: boolean;
 }) {
-  const { type } = useTheme();
-  const pair = colors ?? ["#C81E24", "#8E1218"];
+  const { type, theme } = useTheme();
+  const fill = colors?.[0] ?? theme.seal;
+  const scale = useSharedValue(1);
+  const anim = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
   return (
-    <Pressable
-      disabled={disabled}
-      onPress={() => {
-        void hapticTap();
-        onPress();
-      }}
-      style={{ opacity: disabled ? 0.5 : 1 }}
-    >
-      <LinearGradient colors={pair} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.btn}>
-        <Text style={{ color: "#fff", fontFamily: type.bold, fontSize: 16 }}>{label}</Text>
-      </LinearGradient>
-    </Pressable>
+    <Animated.View style={[anim, { opacity: disabled ? 0.5 : 1 }]}>
+      <Pressable
+        disabled={disabled}
+        onPressIn={() => {
+          scale.value = withSpring(0.97, { damping: 16, stiffness: 320 });
+        }}
+        onPressOut={() => {
+          scale.value = withSpring(1, { damping: 14, stiffness: 260 });
+        }}
+        onPress={() => {
+          void hapticTap();
+          onPress();
+        }}
+      >
+        <View style={[styles.btn, { backgroundColor: fill }]}>
+          <LinearGradient pointerEvents="none" colors={["rgba(255,255,255,0.28)", "rgba(255,255,255,0)"]} style={styles.sheen} />
+          <Text style={{ color: "#fff", fontFamily: type.bold, fontSize: 17, letterSpacing: -0.2 }}>{label}</Text>
+        </View>
+      </Pressable>
+    </Animated.View>
   );
 }
 
@@ -561,11 +608,10 @@ export function CategoryBar({
     w.value = withSpring(next.w, { damping: 18, stiffness: 220 });
   }, [box, value, w, x]);
   const pill = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }], width: w.value }));
-  const color = options.find((o) => o.id === value)?.color ?? theme.seal;
   return (
     <View style={{ height: 40 }}>
-      <Animated.View style={[styles.chipPill, { backgroundColor: color }, pill]} />
-      <View style={{ flexDirection: "row", gap: 8 }}>
+      <Animated.View style={[styles.chipPill, { backgroundColor: theme.name === "dark" ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.9)" }, pill]} />
+      <View style={{ flexDirection: "row", gap: 6 }}>
         {options.map((option) => {
           const on = option.id === value;
           return (
@@ -576,12 +622,13 @@ export function CategoryBar({
                 setBox((prev) => (prev[option.id]?.x === left && prev[option.id]?.w === width ? prev : { ...prev, [option.id]: { x: left, w: width } }));
               }}
               onPress={() => {
-                void hapticTap();
+                void hapticSelect();
                 onChange(option.id);
               }}
               style={styles.chipHit}
             >
-              <Text style={{ fontFamily: on ? type.bold : type.semi, fontSize: 13, color: on ? "#fff" : theme.ink }}>{option.label}</Text>
+              <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: option.color, marginRight: 6 }} />
+              <Text style={{ fontFamily: on ? type.bold : type.medium, fontSize: 13, color: theme.ink }}>{option.label}</Text>
             </Pressable>
           );
         })}
@@ -604,7 +651,8 @@ const styles = StyleSheet.create({
   fill: { flex: 1, overflow: "hidden" },
   aurora: { position: "absolute", width: 420, height: 420, borderRadius: 240 },
   countWrap: { alignItems: "center", width: 96 },
-  glassWrap: { overflow: "hidden", borderWidth: 1, borderRadius: 24 },
+  glassWrap: { overflow: "hidden", borderWidth: 1, borderRadius: 28, shadowOffset: { width: 0, height: 8 }, shadowOpacity: 1, shadowRadius: 18 },
+  sheen: { position: "absolute", top: 0, left: 0, right: 0, height: 22 },
   badge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 999, alignSelf: "flex-start" },
   row: { flexDirection: "row", flexWrap: "wrap", gap: 6 },
   card: { height: 230, borderRadius: 26, overflow: "hidden", borderWidth: 1 },
@@ -622,7 +670,7 @@ const styles = StyleSheet.create({
   handle: { width: 42, height: 5, borderRadius: 99, alignSelf: "center", marginBottom: 12 },
   btn: { height: 54, borderRadius: 18, alignItems: "center", justifyContent: "center" },
   chipPill: { position: "absolute", top: 0, left: 0, height: 36, borderRadius: 999 },
-  chipHit: { height: 36, paddingHorizontal: 14, alignItems: "center", justifyContent: "center" },
+  chipHit: { height: 36, paddingHorizontal: 12, alignItems: "center", justifyContent: "center", flexDirection: "row" },
 });
 
 void interpolate;

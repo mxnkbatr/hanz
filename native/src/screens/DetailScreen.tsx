@@ -145,13 +145,13 @@ export function DetailScreen() {
         </Txt>
       </Animated.View>
 
-      <View style={[styles.dock, { paddingBottom: Math.max(insets.bottom, 12), backgroundColor: theme.name === "dark" ? "#161014" : "#FFF8F6", borderColor: theme.line }]}>
+      <View style={[styles.dock, { paddingBottom: Math.max(insets.bottom, 12), backgroundColor: theme.name === "dark" ? "rgba(12,12,14,0.92)" : "rgba(243,243,245,0.92)", borderColor: theme.line }]}>
         <View style={{ flex: 1 }}>
           <Txt tone="muted">{plan?.label}</Txt>
           <Money text={priceLabel(program, plan)} />
         </View>
         <View style={{ width: 150 }}>
-          <PrimaryButton label="Елсэх" colors={[cat.a, cat.b]} onPress={() => nav.navigate("Enroll", { id: program.id, planId: plan?.id, intakeId: intake?.id })} />
+          <PrimaryButton label="Елсэх" onPress={() => nav.navigate("Enroll", { id: program.id, planId: plan?.id, intakeId: intake?.id })} />
         </View>
       </View>
     </View>

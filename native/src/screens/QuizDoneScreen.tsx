@@ -33,7 +33,7 @@ export function QuizDoneScreen() {
           <Txt style={{ textAlign: "center" }}>Танд тохирох анги: {program.title}</Txt>
           <PrimaryButton
             label="Энэ ангид элсэх"
-            colors={[categoryMeta.quiz.a, categoryMeta.quiz.b]}
+            colors={[categoryMeta.quiz.a, categoryMeta.quiz.a]}
             onPress={() => nav.replace("Detail", { id: program.id })}
           />
         </>
