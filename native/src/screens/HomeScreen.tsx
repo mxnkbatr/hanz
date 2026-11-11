@@ -117,6 +117,7 @@ function AccountHome({
             Өнөөдрийн тойм
           </Txt>
           <Txt style={{ marginTop: 8, color: "rgba(255,255,255,0.82)", fontFamily: type.medium }}>Элсэлт, төлбөр, хичээлийн хуваарь.</Txt>
+          <View style={styles.goldRule} />
         </LinearGradient>
 
         {facts.length ? (
@@ -283,9 +284,10 @@ export function HomeScreen() {
 
           <Glass style={styles.chips} intensity={28} tint="frost">
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingRight: 4 }}>
-              <CategoryBar value={cat} onChange={setCat} onRed />
-            </ScrollView>
-          </Glass>
+            <CategoryBar value={cat} onChange={setCat} onRed />
+          </ScrollView>
+        </Glass>
+          <View style={styles.goldRule} />
         </LinearGradient>
 
         <View style={styles.carouselWrap}>
@@ -325,7 +327,7 @@ export function HomeScreen() {
             [academy.partners, "их сургууль"],
           ].map(([value, label], index) => (
             <View key={label} style={[styles.stat, index > 0 ? { borderLeftWidth: 1, borderColor: theme.line } : null]}>
-              <Txt style={{ fontFamily: type.bold, fontSize: 20, lineHeight: 24, letterSpacing: -0.3, color: theme.seal }}>{value}</Txt>
+              <Txt style={{ fontFamily: type.bold, fontSize: 20, lineHeight: 24, letterSpacing: -0.3, color: theme.gold }}>{value}</Txt>
               <Txt tone="muted">{label}</Txt>
             </View>
           ))}
@@ -447,7 +449,7 @@ function Hero({
         <LinearGradient colors={["rgba(0,0,0,0.05)", "rgba(0,0,0,0.2)", "rgba(0,0,0,0.88)"]} locations={[0, 0.42, 1]} style={StyleSheet.absoluteFill} />
         <View style={styles.heroBody}>
           <View style={styles.row}>
-            <Badge text={cat.label} color={cat.a} />
+            <Badge text={cat.label} color={cat.a} textColor={cat.a === "#D4A84B" ? "#111111" : "#fff"} />
             <ProgramBadges program={program} />
           </View>
           <TextWrap family={type.display} text={program.title} />
@@ -482,6 +484,7 @@ function TextWrap({ text, family }: { text: string; family?: string }) {
 const styles = StyleSheet.create({
   scroll: { paddingHorizontal: 20, paddingBottom: 130, gap: 20 },
   mast: { marginHorizontal: -20, paddingHorizontal: 20, paddingBottom: 22, gap: 20 },
+  goldRule: { position: "absolute", left: 0, right: 0, bottom: 0, height: 1, backgroundColor: "#D4A84B" },
   nav: { position: "absolute", top: 0, left: 0, right: 0 },
   navGlass: { borderRadius: 0, borderTopWidth: 0, paddingHorizontal: 16, paddingBottom: 8, flexDirection: "row", alignItems: "center", gap: 10 },
   stats: { borderTopWidth: 1, borderBottomWidth: 1, paddingVertical: 16, flexDirection: "row" },

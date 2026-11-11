@@ -48,7 +48,7 @@ export function Mesh({
 }) {
   const { theme } = useTheme();
   const dark = theme.name === "dark";
-  const paper = dark ? "#000000" : "#FFFFFF";
+  const paper = dark ? "#111111" : "#FFFFFF";
   if (!field) {
     return (
       <View style={[styles.fill, { backgroundColor: paper }, style]}>
@@ -286,8 +286,8 @@ export function ProgramBadges({ program }: { program: Program }) {
   const soon = deadlineSoon(program);
   return (
     <View style={styles.row}>
-      {soon ? <Badge text="Хугацаа дөхөж байна" color="#7A0C10" /> : null}
-      {seats > 0 && seats <= 12 ? <Badge text={`${seats} суудал`} color="rgba(20,20,22,0.55)" /> : null}
+      {soon ? <Badge text="Хугацаа дөхөж байна" color="#D4A84B" textColor="#111111" /> : null}
+      {seats > 0 && seats <= 12 ? <Badge text={`${seats} суудал`} color="#111111" /> : null}
     </View>
   );
 }
@@ -311,7 +311,7 @@ export function ProgramCard({ program, onPress, wide }: { program: Program; onPr
         <Image source={{ uri: program.image }} style={styles.cardImg} />
         <LinearGradient colors={["transparent", "rgba(0,0,0,0.55)"]} style={styles.cardShade} />
         <View style={styles.cardTop}>
-          <Badge text={cat.label} color={cat.a} />
+          <Badge text={cat.label} color={cat.a} textColor={cat.a === "#D4A84B" ? "#111111" : "#fff"} />
           <ProgramBadges program={program} />
         </View>
         <View style={styles.cardBody}>
@@ -457,7 +457,7 @@ export function SandboxQr({ seed, size = 196 }: { seed: string; size?: number })
   );
 }
 
-const CONFETTI = ["#7A0C10", "#A3141A", "#C81E24", "#FFFFFF"];
+const CONFETTI = ["#7A0C10", "#C81E24", "#D4A84B", "#FFFFFF"];
 
 export function Confetti({ show }: { show: boolean }) {
   const reduce = useReduceMotion();

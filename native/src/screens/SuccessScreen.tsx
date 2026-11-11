@@ -41,7 +41,7 @@ export function SuccessScreen() {
         <Line k="Төлөв" v={paid ? "Төлөгдсөн" : enrollment?.payment === "none" ? "Төлбөргүй бүртгэл" : "Илгээсэн"} />
       </Glass>
       <PrimaryButton label="Миний элсэлт" onPress={() => nav.navigate("Main", { screen: "Mine" })} />
-      <PrimaryButton label="Нүүр лүү" colors={[theme.ink, "#3A2A30"]} onPress={() => nav.navigate("Main", { screen: "Home" })} />
+      <PrimaryButton label="Нүүр лүү" colors={["#111111", "#111111"]} onPress={() => nav.navigate("Main", { screen: "Home" })} />
     </View>
   );
 }

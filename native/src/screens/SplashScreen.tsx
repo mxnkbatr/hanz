@@ -65,6 +65,7 @@ export function SplashScreen() {
           <Txt style={{ textAlign: "center", marginTop: 12, color: "rgba(255,255,255,0.78)", fontFamily: type.medium }}>
             {academy.tagline}
           </Txt>
+          <View style={{ width: 48, height: 1, backgroundColor: "#D4A84B", marginTop: 16 }} />
         </Animated.View>
       </View>
     </Mesh>

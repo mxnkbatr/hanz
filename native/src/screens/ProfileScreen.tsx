@@ -63,7 +63,7 @@ export function ProfileScreen() {
           <Txt tone="label">Нэвтрэх</Txt>
           {services.auth.configured && !preview ? (
             sessionEmail ? (
-              <PrimaryButton label="Гарах" onPress={() => void signOut()} colors={[theme.ink, "#3A2A30"]} />
+              <PrimaryButton label="Гарах" onPress={() => void signOut()} colors={["#111111", "#111111"]} />
             ) : (
               <>
                 <TextInput value={email} onChangeText={setEmail} placeholder="И-мэйл" placeholderTextColor={theme.muted} autoCapitalize="none" style={[styles.input, { color: theme.ink, borderColor: theme.line, fontFamily: type.body }]} />

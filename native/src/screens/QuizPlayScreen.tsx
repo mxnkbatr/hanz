@@ -224,11 +224,11 @@ function QuestionBody(props: {
         <View style={{ gap: 8 }}>
           <View style={styles.wave}>
             {(props.playing ? [18, 34, 22, 40, 16, 30, 20] : [10, 10, 10, 10, 10, 10, 10]).map((h, i) => (
-              <View key={i} style={{ width: 6, height: h, borderRadius: 4, backgroundColor: categoryMeta.quiz.a }} />
+              <View key={i} style={{ width: 6, height: h, borderRadius: 4, backgroundColor: "#D4A84B" }} />
             ))}
           </View>
           <Txt tone="muted">{q.caption}</Txt>
-          {!props.heard ? <PrimaryButton label={props.playing ? "Сонсож байна…" : "Долгион тоглуулах"} colors={[categoryMeta.quiz.a, categoryMeta.quiz.a]} onPress={props.onPlay} /> : null}
+          {!props.heard ? <PrimaryButton label={props.playing ? "Сонсож байна…" : "Долгион тоглуулах"} onPress={props.onPlay} /> : null}
         </View>
       ) : null}
       {options.map((option, i) => {
@@ -242,8 +242,8 @@ function QuestionBody(props: {
             style={[
               styles.option,
               {
-                borderColor: good ? theme.good : bad ? theme.bad : on ? theme.seal : theme.line,
-                backgroundColor: good ? "rgba(15,159,110,0.12)" : theme.bg,
+                borderColor: good ? "#D4A84B" : bad ? theme.bad : on ? theme.seal : theme.line,
+                backgroundColor: theme.bg,
               },
             ]}
           >

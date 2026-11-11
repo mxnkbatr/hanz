@@ -84,7 +84,8 @@ export function QpayScreen() {
     );
   }
 
-  const tone = status === "paid" ? theme.good : status === "failed" ? theme.bad : theme.warn;
+  const tone = status === "paid" ? "#D4A84B" : status === "failed" ? "#C81E24" : "transparent";
+  const toneText = status === "paid" ? "#111111" : status === "failed" ? "#FFFFFF" : "#D4A84B";
   const label = status === "paid" ? "Төлөгдсөн" : status === "failed" ? "Амжилтгүй" : status === "none" ? "Нэхэмжлэхгүй" : "Хүлээгдэж буй";
 
   return (
@@ -101,8 +102,8 @@ export function QpayScreen() {
         <Txt tone="title">{formatMnt(invoice?.amount ?? enrollment.amount)}</Txt>
         <Txt>{enrollment.planLabel}</Txt>
         <Txt tone="muted">{enrollment.intakeLabel}</Txt>
-        <View style={[styles.pill, { backgroundColor: tone }]}>
-          <Txt style={{ color: "#1A1214", fontFamily: type.bold }}>{label}</Txt>
+        <View style={[styles.pill, { backgroundColor: tone, borderWidth: status === "paid" || status === "failed" ? 0 : 1, borderColor: "#D4A84B" }]}>
+          <Txt style={{ color: toneText, fontFamily: type.bold }}>{label}</Txt>
         </View>
         {invoice?.sandbox ? <Txt tone="muted">Туршилтын нэхэмжлэх. Мөнгө шилжихгүй.</Txt> : null}
       </Glass>
