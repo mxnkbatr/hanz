@@ -7,6 +7,7 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { CompositeNavigationProp } from "@react-navigation/native";
 import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { CategoryBar, Glass, Icon, Mesh, SealMark, Txt } from "../components/ui";
+import { academy } from "../data/academy";
 import type { Category, Program } from "../domain/types";
 import { formatDay, formatMnt, priceLabel, soonestIntake } from "../lib/format";
 import { hapticSelect } from "../lib/haptics";
@@ -46,8 +47,8 @@ export function HomeScreen() {
   }, [enrollments, programs, featured]);
 
   const payment = enrollments.find((e) => e.amount > 0) ?? enrollments[0];
-  const scholarship = programs.find((p) => p.category === "scholarship");
   const paid = payment?.payment === "paid";
+  const branchCount = String(academy.branches.length).padStart(2, "0");
 
   function openProgram(program: Program) {
     rememberOrigin({ x: 24, y: 280, w: 180, h: 240, image: program.image });
@@ -68,7 +69,7 @@ export function HomeScreen() {
           <Txt tone="zh" style={styles.watermark}>汉</Txt>
           <View style={styles.brandRow}>
             <SealMark size={36} light />
-            <Txt style={[styles.brand, { fontFamily: type.bold }]}>ХАНЗ АКАДЕМИ</Txt>
+            <Txt style={[styles.brand, { fontFamily: type.medium }]}>ХАНЗ АКАДЕМИ</Txt>
           </View>
           <Txt tone="display" style={styles.title}>
             Хятад хэлээ{"\n"}өнөөдөр эхлүүл
@@ -101,7 +102,7 @@ export function HomeScreen() {
           {featured ? (
             <Pressable style={styles.photo} onPress={() => openProgram(featured)}>
               <Image source={{ uri: featured.image }} style={StyleSheet.absoluteFill} />
-              <LinearGradient colors={["rgba(0,0,0,0.05)", "rgba(10,10,11,0.82)"]} style={styles.scrim} />
+              <LinearGradient colors={["rgba(28,28,30,0.08)", "rgba(10,10,11,0.18)", "rgba(10,10,11,0.9)"]} locations={[0, 0.42, 1]} style={StyleSheet.absoluteFill} />
               <View style={styles.photoCopy}>
                 <Txt tone="display" style={styles.photoTitle}>{featured.title}</Txt>
                 <Txt style={styles.photoPrice}>{priceLabel(featured)}</Txt>
@@ -114,13 +115,9 @@ export function HomeScreen() {
               style={[styles.tile, styles.graphite]}
               onPress={() => next.program && openProgram(next.program)}
             >
-              <View style={styles.tileTop}>
-                <Icon name="calendar" color="#FFFFFF" size={20} />
-                <Icon name="chevron" color="#E5E5EA" size={18} />
-              </View>
               <Txt style={styles.tileLabel}>Дараагийн хичээл</Txt>
-              <Txt style={[styles.tileValue, { fontFamily: type.bold }]}>
-                {next.intake ? formatDay(next.intake.start).slice(5).replace(".", ".") : "Нээлттэй"}
+              <Txt tone="display" style={styles.tileValue}>
+                {next.intake ? formatDay(next.intake.start).slice(5) : "—"}
               </Txt>
             </Pressable>
 
@@ -129,40 +126,29 @@ export function HomeScreen() {
               onPress={() => (payment && payment.amount > 0 ? nav.navigate("Qpay", { enrollmentId: payment.id }) : nav.navigate("Mine"))}
             >
               <View style={styles.payRow}>
-                <Icon name="check" color={paid ? theme.good : theme.warn} size={22} />
-                <View style={{ flex: 1 }}>
-                  <Txt style={{ fontFamily: type.bold, color: theme.ink }}>Төлбөр · QPay</Txt>
-                  <Txt tone="muted">{paid ? "Төлөгдсөн" : payment ? "Хүлээгдэж буй" : "Элсэлт алга"}</Txt>
-                </View>
+                <Icon name="check" color={paid ? theme.good : theme.warn} size={18} />
+                <Txt style={{ fontFamily: type.medium, color: theme.ink }}>Төлбөр · QPay</Txt>
               </View>
-              {payment && payment.amount > 0 ? <Txt style={{ fontFamily: type.bold, color: theme.ink }}>{formatMnt(payment.amount)}</Txt> : null}
+              <Txt numberOfLines={1} style={[styles.amount, { color: theme.ink, fontFamily: type.display }]}>
+                {payment && payment.amount > 0 ? formatMnt(payment.amount) : "—"}
+              </Txt>
+              <Txt tone="muted">{paid ? "Төлөгдсөн" : payment ? "Хүлээгдэж буй" : "Элсэлт алга"}</Txt>
             </Pressable>
           </View>
           </View>
 
           <View style={styles.row}>
           <Pressable style={[styles.wide, styles.white, { borderColor: theme.line }]} onPress={() => nav.navigate("Quiz")}>
-            <Icon name="flame" color="#C81E24" size={26} />
-            <View style={{ flex: 1 }}>
-              <Txt style={{ fontFamily: type.bold, color: theme.ink }}>Сорил</Txt>
-              <Txt tone="muted">{quiz.streak} өдөр · {quiz.xp} оноо</Txt>
-            </View>
+            <Txt style={{ fontFamily: type.medium, color: theme.ink }}>Сорил</Txt>
+            <Txt tone="display" style={[styles.tileValue, { color: theme.ink }]}>{quiz.streak}</Txt>
+            <Txt tone="muted">өдөр</Txt>
           </Pressable>
 
-          {scholarship ? (
-            <Pressable style={[styles.wide, styles.graphite]} onPress={() => openProgram(scholarship)}>
-              <View style={styles.tileTop}>
-                <View>
-                  <Txt style={{ fontFamily: type.bold, color: "#FFFFFF" }}>Тэтгэлэгт хөтөлбөр</Txt>
-                  <Txt style={{ color: "#E5E5EA", marginTop: 4 }}>{scholarship.city ?? scholarship.subtitle}</Txt>
-                </View>
-                <View style={styles.star}>
-                  <Icon name="star" color="#C81E24" size={16} />
-                </View>
-              </View>
-              <View style={styles.redLine} />
-            </Pressable>
-          ) : null}
+          <Pressable style={[styles.wide, styles.graphite]} onPress={() => nav.navigate("Academy")}>
+            <Txt style={styles.tileLabel}>Салбар</Txt>
+            <Txt tone="display" style={styles.tileValue}>{branchCount}</Txt>
+            <View style={styles.redLine} />
+          </Pressable>
           </View>
         </View>
       </ScrollView>
@@ -171,16 +157,16 @@ export function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  header: { paddingHorizontal: 20, paddingBottom: 28, overflow: "hidden" },
-  watermark: { position: "absolute", right: -10, top: 36, fontSize: 180, lineHeight: 190, color: "#FFFFFF", opacity: 0.14 },
+  header: { paddingHorizontal: 24, paddingBottom: 36, overflow: "hidden" },
+  watermark: { position: "absolute", right: -24, top: 8, fontSize: 240, lineHeight: 250, color: "#FFFFFF", opacity: 0.1 },
   brandRow: { flexDirection: "row", alignItems: "center", gap: 10 },
-  brand: { color: "#FFFFFF", fontSize: 13, letterSpacing: 1.4 },
-  title: { color: "#FFFFFF", fontSize: 34, lineHeight: 40, marginTop: 22 },
-  search: { marginHorizontal: 20, marginTop: -26, height: 48, borderRadius: 16, paddingHorizontal: 14, flexDirection: "row", alignItems: "center", gap: 8 },
+  brand: { color: "#FFFFFF", fontSize: 13, letterSpacing: 2.4 },
+  title: { color: "#FFFFFF", fontSize: 40, lineHeight: 44, letterSpacing: -1.2, marginTop: 28 },
+  search: { marginHorizontal: 24, marginTop: -24, height: 48, borderRadius: 16, paddingHorizontal: 14, flexDirection: "row", alignItems: "center", gap: 8 },
   input: { flex: 1, fontSize: 15, paddingVertical: 0 },
-  chips: { paddingHorizontal: 20, paddingTop: 16 },
-  bento: { paddingHorizontal: 20, paddingTop: 16, gap: 12 },
-  row: { flexDirection: "row", gap: 12 },
+  chips: { paddingHorizontal: 24, paddingTop: 24 },
+  bento: { paddingHorizontal: 24, paddingTop: 24, gap: 16 },
+  row: { flexDirection: "row", gap: 16 },
   photo: { flex: 1, height: 248, borderRadius: 24, overflow: "hidden", backgroundColor: "#1C1C1E" },
   scrim: { position: "absolute", left: 0, right: 0, bottom: 0, height: 140 },
   photoCopy: { position: "absolute", left: 14, right: 14, bottom: 14, gap: 4 },
@@ -189,10 +175,11 @@ const styles = StyleSheet.create({
   stack: { flex: 1, gap: 12 },
   tile: { borderRadius: 24, padding: 14, minHeight: 116, justifyContent: "space-between" },
   graphite: { backgroundColor: "#1C1C1E" },
-  white: { backgroundColor: "#FFFFFF", borderWidth: 1 },
+  white: { backgroundColor: "#FFFFFF", borderWidth: StyleSheet.hairlineWidth },
   tileTop: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" },
   tileLabel: { color: "#E5E5EA", fontSize: 14, marginTop: 12 },
-  tileValue: { color: "#FFFFFF", fontSize: 20, lineHeight: 26 },
+  tileValue: { color: "#FFFFFF", fontSize: 36, lineHeight: 40, letterSpacing: -1 },
+  amount: { fontSize: 22, lineHeight: 26, letterSpacing: -0.6 },
   payRow: { flexDirection: "row", alignItems: "center", gap: 10 },
   wide: { flex: 1, borderRadius: 24, padding: 14, minHeight: 104, justifyContent: "space-between" },
   star: { width: 32, height: 32, borderRadius: 16, backgroundColor: "#FFFFFF", alignItems: "center", justifyContent: "center" },

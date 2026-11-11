@@ -281,17 +281,17 @@ export function Badge({
 export function ProgramBadges({ program }: { program: Program }) {
   const seats = seatsLeft(program);
   const soon = deadlineSoon(program);
-  return (
-    <View style={styles.row}>
-      {soon ? <Badge text="Хугацаа дөхөж байна" color="#C81E24" /> : null}
-      {seats > 0 && seats <= 12 ? <Badge text={`${seats} суудал`} color="#1C1C1E" /> : null}
-    </View>
-  );
+  const cat = categoryMeta[program.category];
+  const badge = soon
+    ? { text: "Хугацаа дөхөж байна", color: "#C81E24" }
+    : seats > 0 && seats <= 12
+      ? { text: `${seats} суудал`, color: "#1C1C1E" }
+      : { text: cat.label, color: "#C81E24" };
+  return <Badge text={badge.text} color={badge.color} />;
 }
 
 export function ProgramCard({ program, onPress, wide }: { program: Program; onPress: () => void; wide?: boolean }) {
   const { theme, type } = useTheme();
-  const cat = categoryMeta[program.category];
   const intake = soonestIntake(program);
   const ref = useRef<{ measureInWindow: (cb: (x: number, y: number, w: number, h: number) => void) => void } | null>(null);
   return (
@@ -306,9 +306,8 @@ export function ProgramCard({ program, onPress, wide }: { program: Program; onPr
     >
       <View ref={ref as never} collapsable={false} style={[styles.card, { backgroundColor: theme.name === "dark" ? "#1C1C1E" : "#FFFFFF", borderColor: theme.line }]}>
         <Image source={{ uri: program.image }} style={styles.cardImg} />
-        <LinearGradient colors={["transparent", "rgba(0,0,0,0.55)"]} style={styles.cardShade} />
+        <LinearGradient colors={["rgba(28,28,30,0.12)", "rgba(10,10,11,0.2)", "rgba(10,10,11,0.88)"]} locations={[0, 0.45, 1]} style={styles.cardShade} />
         <View style={styles.cardTop}>
-          <Badge text={cat.label} color="#C81E24" />
           <ProgramBadges program={program} />
         </View>
         <View style={styles.cardBody}>
@@ -751,7 +750,7 @@ const styles = StyleSheet.create({
   row: { flexDirection: "row", flexWrap: "wrap", gap: 6 },
   card: { height: 220, borderRadius: 22, overflow: "hidden", borderWidth: 1 },
   cardImg: { ...StyleSheet.absoluteFill, width: "100%", height: "100%" },
-  cardShade: { position: "absolute", left: 0, right: 0, bottom: 0, height: 190 },
+  cardShade: StyleSheet.absoluteFill,
   cardTop: { position: "absolute", top: 12, left: 12, right: 12, gap: 8 },
   cardBody: { position: "absolute", left: 14, right: 14, bottom: 14 },
   cardTitle: { color: "#fff", fontSize: 18, lineHeight: 24, marginTop: 2 },

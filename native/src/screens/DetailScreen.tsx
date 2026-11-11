@@ -5,7 +5,7 @@ import Animated, { interpolate, useAnimatedScrollHandler, useAnimatedStyle, useS
 import { useNavigation, useRoute, type RouteProp } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Badge, Countdown, Glass, Icon, Money, PrimaryButton, ProgramBadges, Txt } from "../components/ui";
+import { Countdown, Glass, Icon, Money, PrimaryButton, ProgramBadges, Txt } from "../components/ui";
 import { consumeOrigin } from "../navigation/origin";
 import { formatDay, formatRange, priceCaption, priceLabel, soonestIntake } from "../lib/format";
 import { useReduceMotion } from "../lib/motion";
@@ -81,10 +81,7 @@ export function DetailScreen() {
           </Animated.View>
           <LinearGradient colors={["rgba(0,0,0,0.12)", "rgba(0,0,0,0.05)", "rgba(0,0,0,0.86)"]} locations={[0, 0.45, 1]} style={StyleSheet.absoluteFill} />
           <View style={[styles.coverCopy, { paddingTop: insets.top + 72 }]}>
-            <View style={styles.row}>
-              <Badge text={cat.label} color="#C81E24" />
-              <ProgramBadges program={program} />
-            </View>
+            <ProgramBadges program={program} />
             <Txt tone="display" style={{ color: "#fff", fontSize: 36, lineHeight: 40, marginTop: 8 }}>
               {program.title}
             </Txt>
