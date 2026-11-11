@@ -104,7 +104,7 @@ export function HomeScreen() {
           <Txt style={{ marginTop: 8, color: "rgba(255,255,255,0.82)", fontFamily: type.medium }}>2014 оноос HSK 1–6. Хятадын их сургуульд хүрэх зам.</Txt>
         </Animated.View>
 
-        <Glass style={styles.search} intensity={36}>
+        <Glass style={styles.search} intensity={48} tint="frost">
           <Icon name="search" color={theme.muted} size={18} />
           <TextInput
             value={q}
@@ -115,9 +115,11 @@ export function HomeScreen() {
           />
         </Glass>
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingRight: 8 }}>
-          <CategoryBar value={cat} onChange={setCat} />
-        </ScrollView>
+        <Glass style={styles.chips} intensity={48} tint="frost">
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingRight: 4 }}>
+            <CategoryBar value={cat} onChange={setCat} />
+          </ScrollView>
+        </Glass>
 
         <View style={styles.carouselWrap}>
           <Animated.ScrollView
@@ -312,7 +314,8 @@ const styles = StyleSheet.create({
   top: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
   brand: { flexDirection: "row", alignItems: "center", gap: 10 },
   call: { flexDirection: "row", alignItems: "center", gap: 6, paddingHorizontal: 12, height: 36, borderRadius: 999 },
-  search: { flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 14, height: 52, borderRadius: 18, borderWidth: 1 },
+  search: { flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 14, height: 48, borderRadius: 16 },
+  chips: { borderRadius: 20, paddingHorizontal: 6, paddingVertical: 2 },
   input: { flex: 1, fontSize: 15, paddingVertical: 0 },
   tabs: { gap: 8, paddingVertical: 2 },
   tabOn: { paddingHorizontal: 14, height: 36, borderRadius: 999, alignItems: "center", justifyContent: "center" },

@@ -79,7 +79,7 @@ export function SplashScreen() {
           />
           <AnimatedPath
             d="M18 30 C 70 14, 120 36, 200 22"
-            stroke={theme.gold}
+            stroke="rgba(255,255,255,0.55)"
             strokeWidth={2.5}
             strokeLinecap="round"
             fill="none"

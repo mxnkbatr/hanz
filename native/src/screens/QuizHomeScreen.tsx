@@ -1,4 +1,4 @@
-import { Pressable, ScrollView, StyleSheet, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import type { CompositeNavigationProp } from "@react-navigation/native";
 import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
@@ -40,7 +40,8 @@ export function QuizHomeScreen() {
           <View style={{ flex: 1, gap: 4 }}>
             <Txt tone="label">Цуваа · XP</Txt>
             <Txt tone="display" style={{ fontSize: 40, lineHeight: 44 }}>
-              {quiz.streak} өдөр
+              <Text style={{ color: "#D4A84B" }}>{quiz.streak}</Text>
+              <Text> өдөр</Text>
             </Txt>
             <Txt tone="muted">{quiz.xp} XP · {quiz.hearts} зүрх</Txt>
           </View>

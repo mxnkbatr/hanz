@@ -49,17 +49,21 @@ export function Mesh({
   const { theme } = useTheme();
   const dark = theme.name === "dark";
   const wash = field
-    ? dark
-      ? (["#4A0C10", "#8E1419", "#2A080A"] as const)
-      : (["#7A1218", "#C81E24", "#9E1820"] as const)
+    ? (["#8E0F14", "#C81E24", "#E8433A"] as const)
     : masthead
       ? dark
-        ? (["#6E1218", "#C81E24", "#140406", "#000000"] as const)
-        : (["#7A1218", "#C81E24", "#F6D5D7", "#FFFFFF"] as const)
+        ? (["#8E0F14", "#C81E24", "#2A090C", "#000000"] as const)
+        : (["#8E0F14", "#C81E24", "#E8433A", "#FFFFFF"] as const)
       : dark
         ? (["#5C1016", "#000000", "#000000"] as const)
         : (["#C81E24", "#FFFFFF", "#FFFFFF"] as const);
-  const locations = field ? ([0, 0.55, 1] as const) : masthead ? (dark ? ([0, 0.2, 0.42, 0.56] as const) : ([0, 0.18, 0.36, 0.5] as const)) : ([0, 0.14, 1] as const);
+  const locations = field
+    ? ([0, 0.48, 1] as const)
+    : masthead
+      ? dark
+        ? ([0, 0.16, 0.4, 0.58] as const)
+        : ([0, 0.14, 0.4, 0.56] as const)
+      : ([0, 0.12, 1] as const);
   return (
     <View style={[styles.fill, { backgroundColor: dark ? "#000" : "#fff" }, style]}>
       <LinearGradient
@@ -69,6 +73,13 @@ export function Mesh({
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
       />
+      {dark && !field ? (
+        <LinearGradient
+          pointerEvents="none"
+          colors={["rgba(200,30,36,0)", "rgba(200,30,36,0.2)"]}
+          style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 200 }}
+        />
+      ) : null}
       {children}
     </View>
   );
@@ -114,16 +125,20 @@ export function Glass({
   style?: StyleProp<ViewStyle>;
   intensity?: number;
   interactive?: boolean;
-  tint?: "neutral" | "brand";
+  tint?: "neutral" | "brand" | "frost";
 }) {
   const { theme } = useTheme();
   const veil = tint === "brand"
     ? theme.name === "dark"
       ? "rgba(90,12,16,0.62)"
       : "rgba(140,18,24,0.38)"
-    : theme.name === "dark"
-      ? "rgba(40,8,10,0.42)"
-      : "rgba(255,255,255,0.5)";
+    : tint === "frost"
+      ? theme.name === "dark"
+        ? "rgba(255,255,255,0.1)"
+        : "rgba(255,255,255,0.34)"
+      : theme.name === "dark"
+        ? "rgba(40,8,10,0.42)"
+        : "rgba(255,255,255,0.5)";
   const flat = StyleSheet.flatten(style) ?? {};
   const face: ViewStyle = {
     zIndex: 2,
@@ -449,7 +464,7 @@ export function SandboxQr({ seed, size = 196 }: { seed: string; size?: number })
   );
 }
 
-const CONFETTI = ["#C81E24", "#FF5C7A", "#F5A524", "#14B8A6", "#7C5CFF", "#F0C36A", "#FF3D8A"];
+const CONFETTI = ["#C81E24", "#E8433A", "#FFFFFF", "#8E0F14"];
 
 export function Confetti({ show }: { show: boolean }) {
   const reduce = useReduceMotion();
