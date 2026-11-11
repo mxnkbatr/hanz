@@ -96,7 +96,7 @@ function Stat({ value, suffix, label }: { value: number; suffix: string; label: 
   const hidden = useAnimatedStyle(() => ({ opacity: 1 }));
   return (
     <Animated.View style={[styles.stat, { backgroundColor: theme.card, borderColor: theme.line }, hidden]}>
-      <Txt style={{ fontFamily: type.display, fontSize: 22, color: theme.gold }}>
+      <Txt style={{ fontFamily: type.display, fontSize: 22, color: theme.seal }}>
         {shown}
         {suffix}
       </Txt>

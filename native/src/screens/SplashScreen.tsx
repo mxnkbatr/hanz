@@ -1,10 +1,9 @@
 import { useEffect } from "react";
 import { Platform, StyleSheet, View } from "react-native";
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Mesh, SealMark, Txt } from "../components/ui";
-import { academy } from "../data/academy";
 import { useReduceMotion } from "../lib/motion";
 import type { RootStackParamList } from "../navigation/types";
 import { useApp } from "../state/AppState";
@@ -26,53 +25,60 @@ export function SplashScreen() {
   const { type } = useTheme();
   const reduce = useReduceMotion();
   const enter = useSharedValue(0);
+  const bar = useSharedValue(0);
 
   useEffect(() => {
-    enter.value = withTiming(1, { duration: reduce ? 160 : 700, easing: Easing.out(Easing.cubic) });
-  }, [enter, reduce]);
+    enter.value = withSpring(1, { damping: 14, stiffness: 140 });
+    bar.value = withTiming(1, { duration: reduce ? 200 : 1400, easing: Easing.out(Easing.cubic) });
+  }, [bar, enter, reduce]);
 
   useEffect(() => {
     if (!ready || holdSplash()) return;
     const t = setTimeout(() => {
       if (onboarded || skipIntro()) nav.replace("Main");
       else nav.replace("Onboarding");
-    }, reduce ? 400 : 1600);
+    }, reduce ? 400 : 1700);
     return () => clearTimeout(t);
   }, [nav, onboarded, ready, reduce]);
 
-  const seal = useAnimatedStyle(() => ({
+  const mark = useAnimatedStyle(() => ({
     opacity: enter.value,
-    transform: [{ scale: 0.96 + enter.value * 0.04 }],
+    transform: [{ scale: 0.86 + enter.value * 0.14 }],
   }));
-  const word = useAnimatedStyle(() => ({
-    opacity: enter.value,
-    transform: [{ translateY: (1 - enter.value) * 8 }],
-  }));
+  const line = useAnimatedStyle(() => ({ width: `${bar.value * 100}%` }));
 
   return (
     <Mesh field>
+      <Txt tone="zh" style={styles.watermark}>汉</Txt>
       <View style={styles.center}>
-        <Animated.View style={seal}>
-          <SealMark size={88} />
+        <Animated.View style={mark}>
+          <SealMark size={112} light />
         </Animated.View>
-        <Animated.View style={[styles.copy, word]}>
-          <Txt tone="display" style={{ fontSize: 44, lineHeight: 50, textAlign: "center", color: "#fff" }}>
-            {academy.brand}
-          </Txt>
-          <Txt tone="zh" style={{ textAlign: "center", color: "rgba(255,255,255,0.92)", fontSize: 18, marginTop: 4 }}>
-            {academy.brandZh}
-          </Txt>
-          <Txt style={{ textAlign: "center", marginTop: 12, color: "rgba(255,255,255,0.78)", fontFamily: type.medium }}>
-            {academy.tagline}
-          </Txt>
-          <View style={{ width: 48, height: 1, backgroundColor: "#D4A84B", marginTop: 16 }} />
-        </Animated.View>
+        <Txt tone="display" style={[styles.word, { fontFamily: type.bold }]}>
+          ХАНЗ АКАДЕМИ
+        </Txt>
+        <Txt style={styles.sub}>Хятад хэлний академи · Улаанбаатар</Txt>
+      </View>
+      <View style={styles.track}>
+        <Animated.View style={[styles.progress, line]} />
       </View>
     </Mesh>
   );
 }
 
 const styles = StyleSheet.create({
-  center: { flex: 1, alignItems: "center", justifyContent: "center", gap: 28, paddingHorizontal: 32 },
-  copy: { alignItems: "center" },
+  watermark: {
+    position: "absolute",
+    alignSelf: "center",
+    top: "18%",
+    fontSize: 280,
+    lineHeight: 300,
+    color: "#FFFFFF",
+    opacity: 0.08,
+  },
+  center: { flex: 1, alignItems: "center", justifyContent: "center", paddingHorizontal: 32, gap: 16 },
+  word: { color: "#FFFFFF", fontSize: 22, lineHeight: 28, letterSpacing: 3.2, textAlign: "center" },
+  sub: { color: "rgba(255,255,255,0.88)", fontSize: 14, lineHeight: 20, textAlign: "center" },
+  track: { position: "absolute", left: 64, right: 64, bottom: 72, height: 2, borderRadius: 1, backgroundColor: "rgba(255,255,255,0.28)", overflow: "hidden" },
+  progress: { height: 2, backgroundColor: "#FFFFFF", borderRadius: 1 },
 });

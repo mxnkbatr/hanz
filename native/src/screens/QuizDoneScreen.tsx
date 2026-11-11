@@ -38,7 +38,7 @@ export function QuizDoneScreen() {
           />
         </>
       ) : null}
-      <PrimaryButton label="Сорил руу" colors={["#111111", "#111111"]} onPress={() => nav.popToTop()} />
+      <PrimaryButton label="Сорил руу" colors={["#1C1C1E", "#1C1C1E"]} onPress={() => nav.popToTop()} />
     </View>
   );
 }

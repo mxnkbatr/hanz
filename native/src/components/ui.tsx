@@ -48,17 +48,10 @@ export function Mesh({
 }) {
   const { theme } = useTheme();
   const dark = theme.name === "dark";
-  const paper = dark ? "#111111" : "#FFFFFF";
+  const paper = dark ? "#0A0A0B" : "#F5F5F7";
   if (!field) {
     return (
       <View style={[styles.fill, { backgroundColor: paper }, style]}>
-        {dark && !masthead ? (
-          <LinearGradient
-            pointerEvents="none"
-            colors={["rgba(62,8,10,0.55)", "rgba(0,0,0,0)"]}
-            style={{ position: "absolute", top: 0, left: 0, right: 0, height: 160 }}
-          />
-        ) : null}
         {children}
       </View>
     );
@@ -66,7 +59,7 @@ export function Mesh({
   return (
     <View style={[styles.fill, { backgroundColor: "#7A0C10" }, style]}>
       <LinearGradient
-        colors={["#7A0C10", "#A3141A", "#C81E24"]}
+        colors={["#C81E24", "#A3141A", "#7A0C10"]}
         locations={[0, 0.55, 1]}
         style={StyleSheet.absoluteFill}
         start={{ x: 0.5, y: 0 }}
@@ -117,7 +110,7 @@ export function Glass({
   style?: StyleProp<ViewStyle>;
   intensity?: number;
   interactive?: boolean;
-  tint?: "neutral" | "brand" | "frost" | "bar";
+  tint?: "neutral" | "brand" | "frost" | "bar" | "sheet";
 }) {
   const { theme } = useTheme();
   const onRed = tint === "brand" || tint === "frost";
@@ -125,10 +118,14 @@ export function Glass({
     ? "rgba(74,8,12,0.94)"
     : tint === "frost"
       ? "rgba(62,8,12,0.82)"
+      : tint === "sheet"
+        ? theme.name === "dark"
+          ? "rgba(28,28,30,0.88)"
+          : "rgba(255,255,255,0.92)"
       : tint === "bar"
         ? theme.name === "dark"
-          ? "rgba(16,16,18,0.94)"
-          : "rgba(255,255,255,0.94)"
+          ? "rgba(28,28,30,0.42)"
+          : "rgba(255,255,255,0.42)"
         : theme.name === "dark"
           ? "rgba(18,18,20,0.72)"
           : "rgba(255,255,255,0.86)";
@@ -249,16 +246,16 @@ export function SealMark({ size = 72, light = false }: { size?: number; light?: 
         width: size,
         height: size,
         borderRadius: size * 0.22,
-        backgroundColor: "#A3141A",
+        backgroundColor: light ? "#FFFFFF" : "#C81E24",
         alignItems: "center",
         justifyContent: "center",
-        shadowColor: "#3A080C",
-        shadowOpacity: 0.28,
-        shadowRadius: 18,
-        shadowOffset: { width: 0, height: 10 },
+        shadowColor: "#000",
+        shadowOpacity: light ? 0.18 : 0.2,
+        shadowRadius: light ? 16 : 10,
+        shadowOffset: { width: 0, height: 8 },
       }}
     >
-      <Text style={{ fontFamily: type.zh, color: "#fff", fontSize: size * 0.46, marginTop: -2 }}>汉</Text>
+      <Text style={{ fontFamily: type.zh, color: light ? "#C81E24" : "#fff", fontSize: size * 0.52, marginTop: -2 }}>汉</Text>
       {light ? null : null}
     </View>
   );
@@ -286,8 +283,8 @@ export function ProgramBadges({ program }: { program: Program }) {
   const soon = deadlineSoon(program);
   return (
     <View style={styles.row}>
-      {soon ? <Badge text="Хугацаа дөхөж байна" color="#D4A84B" textColor="#111111" /> : null}
-      {seats > 0 && seats <= 12 ? <Badge text={`${seats} суудал`} color="#111111" /> : null}
+      {soon ? <Badge text="Хугацаа дөхөж байна" color="#C81E24" /> : null}
+      {seats > 0 && seats <= 12 ? <Badge text={`${seats} суудал`} color="#1C1C1E" /> : null}
     </View>
   );
 }
@@ -307,11 +304,11 @@ export function ProgramCard({ program, onPress, wide }: { program: Program; onPr
       }}
       style={{ width: wide ? "100%" : 236 }}
     >
-      <View ref={ref as never} collapsable={false} style={[styles.card, { backgroundColor: theme.card, borderColor: theme.line }]}>
+      <View ref={ref as never} collapsable={false} style={[styles.card, { backgroundColor: theme.name === "dark" ? "#1C1C1E" : "#FFFFFF", borderColor: theme.line }]}>
         <Image source={{ uri: program.image }} style={styles.cardImg} />
         <LinearGradient colors={["transparent", "rgba(0,0,0,0.55)"]} style={styles.cardShade} />
         <View style={styles.cardTop}>
-          <Badge text={cat.label} color={cat.a} textColor={cat.a === "#D4A84B" ? "#111111" : "#fff"} />
+          <Badge text={cat.label} color="#C81E24" />
           <ProgramBadges program={program} />
         </View>
         <View style={styles.cardBody}>
@@ -457,7 +454,7 @@ export function SandboxQr({ seed, size = 196 }: { seed: string; size?: number })
   );
 }
 
-const CONFETTI = ["#7A0C10", "#C81E24", "#D4A84B", "#FFFFFF"];
+const CONFETTI = ["#7A0C10", "#C81E24", "#FFFFFF", "#1C1C1E"];
 
 export function Confetti({ show }: { show: boolean }) {
   const reduce = useReduceMotion();
@@ -558,7 +555,7 @@ export function PrimaryButton({
   );
 }
 
-export type IconName = "home" | "search" | "quiz" | "ticket" | "user" | "phone" | "back" | "calendar" | "card" | "clock" | "building";
+export type IconName = "home" | "search" | "quiz" | "ticket" | "user" | "phone" | "back" | "calendar" | "card" | "clock" | "building" | "flame" | "star" | "chevron" | "check";
 
 export function Icon({ name, color, size = 22 }: { name: IconName; color: string; size?: number }) {
   const common = { width: size, height: size, viewBox: "0 0 24 24" };
@@ -635,6 +632,35 @@ export function Icon({ name, color, size = 22 }: { name: IconName; color: string
       </Svg>
     );
   }
+  if (name === "flame") {
+    return (
+      <Svg {...common}>
+        <Path d="M12 3.5c1.2 2.4.4 4.2-.4 5.4 1.6-.4 3.2.2 4 1.6 1.6 2.6.4 6.2-3.2 7.4-4.2 1.4-7.2-1.2-6.6-4.8.2-1.2.8-2.2 1.2-3 .2 1.6 1.4 2.4 2.2 2.2-.6-1.6-.2-3.4.4-4.6C10.2 6.4 11 4.8 12 3.5Z" {...pen} />
+      </Svg>
+    );
+  }
+  if (name === "star") {
+    return (
+      <Svg {...common}>
+        <Path d="m12 4 1.8 4.2L18.4 9l-3.2 3 .9 4.6L12 14.6 7.9 16.6l.9-4.6L5.6 9l4.6-.8L12 4Z" {...pen} />
+      </Svg>
+    );
+  }
+  if (name === "chevron") {
+    return (
+      <Svg {...common}>
+        <Path d="m9 6 6 6-6 6" {...pen} />
+      </Svg>
+    );
+  }
+  if (name === "check") {
+    return (
+      <Svg {...common}>
+        <Circle cx="12" cy="12" r="8" {...pen} />
+        <Path d="m8.5 12.2 2.4 2.4 4.6-5" {...pen} />
+      </Svg>
+    );
+  }
   if (name === "building") {
     return (
       <Svg {...common}>
@@ -679,7 +705,7 @@ export function CategoryBar({
   const pill = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }], width: w.value }));
   return (
     <View style={{ height: 40 }}>
-      <Animated.View style={[styles.chipPill, { backgroundColor: "#A3141A" }, pill]} />
+      <Animated.View style={[styles.chipPill, { backgroundColor: onRed ? "#FFFFFF" : "#1C1C1E" }, pill]} />
       <View style={{ flexDirection: "row", gap: 6 }}>
         {options.map((option) => {
           const on = option.id === value;
@@ -696,7 +722,7 @@ export function CategoryBar({
               }}
               style={styles.chipHit}
             >
-              <Text style={{ fontFamily: on ? type.bold : type.medium, fontSize: 13, color: on || onRed ? "#fff" : theme.ink }}>{option.label}</Text>
+              <Text style={{ fontFamily: on ? type.bold : type.medium, fontSize: 13, color: on ? (onRed ? "#1C1C1E" : "#fff") : onRed ? "#fff" : theme.ink }}>{option.label}</Text>
             </Pressable>
           );
         })}

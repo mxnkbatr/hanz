@@ -82,7 +82,7 @@ export function DetailScreen() {
           <LinearGradient colors={["rgba(0,0,0,0.12)", "rgba(0,0,0,0.05)", "rgba(0,0,0,0.86)"]} locations={[0, 0.45, 1]} style={StyleSheet.absoluteFill} />
           <View style={[styles.coverCopy, { paddingTop: insets.top + 72 }]}>
             <View style={styles.row}>
-              <Badge text={cat.label} color={cat.a} textColor={cat.a === "#D4A84B" ? "#111111" : "#fff"} />
+              <Badge text={cat.label} color="#C81E24" />
               <ProgramBadges program={program} />
             </View>
             <Txt tone="display" style={{ color: "#fff", fontSize: 36, lineHeight: 40, marginTop: 8 }}>
@@ -126,7 +126,7 @@ export function DetailScreen() {
               <Pressable
                 key={i.id}
                 onPress={() => setIntakeId(i.id)}
-                style={[styles.block, { borderColor: selected ? "#C81E24" : theme.line, backgroundColor: selected ? (theme.name === "dark" ? "#161618" : "#F4F4F5") : theme.card }]}
+                style={[styles.block, { borderColor: selected ? "#C81E24" : theme.line, backgroundColor: selected ? (theme.name === "dark" ? "#1C1C20" : "#FFFFFF") : theme.card }]}
               >
                 <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                   <Txt style={{ fontFamily: type.bold }}>{i.label}</Txt>

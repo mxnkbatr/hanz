@@ -36,16 +36,16 @@ export function QuizHomeScreen() {
         <Txt tone="display" style={{ fontSize: 34, lineHeight: 40 }}>
           Өнөөдрийн даалгавар
         </Txt>
-        <View style={[styles.hero, { borderColor: theme.line, backgroundColor: theme.name === "dark" ? "#121214" : "#FFFFFF" }]}>
+        <View style={[styles.hero, { borderColor: theme.line, backgroundColor: theme.name === "dark" ? "#1C1C20" : "#FFFFFF" }]}>
           <View style={{ flex: 1, gap: 4 }}>
             <Txt tone="label">Үргэлжилсэн өдөр</Txt>
             <Txt tone="display" style={{ fontSize: 36, lineHeight: 42 }}>
-              <Text style={{ color: "#D4A84B" }}>{quiz.streak}</Text>
+              <Text style={{ color: theme.seal }}>{quiz.streak}</Text>
               <Text> өдөр</Text>
             </Txt>
-            <Txt tone="muted"><Text style={{ color: "#D4A84B" }}>{quiz.xp}</Text> оноо · {quiz.hearts} оролдлого</Txt>
+            <Txt tone="muted"><Text style={{ color: theme.seal }}>{quiz.xp}</Text> оноо · {quiz.hearts} оролдлого</Txt>
           </View>
-          <ProgressRing progress={level} color="#D4A84B" label={`${Math.round(level * 100)}%`} />
+          <ProgressRing progress={level} color="#C81E24" label={`${Math.round(level * 100)}%`} />
         </View>
         <View style={styles.hearts}>
           {Array.from({ length: 5 }, (_, i) => (
@@ -57,9 +57,9 @@ export function QuizHomeScreen() {
           const done = quiz.completed[lesson.id];
           return (
             <Pressable key={lesson.id} onPress={() => nav.navigate("QuizPlay", { lessonId: lesson.id })}>
-              <View style={[styles.card, { borderColor: theme.line, backgroundColor: theme.name === "dark" ? "#121214" : "#FFFFFF" }]}>
-                <View style={[styles.mark, { borderColor: "#D4A84B" }]}>
-                  <Txt style={{ color: "#D4A84B", fontFamily: type.bold, fontSize: 15 }}>
+              <View style={[styles.card, { borderColor: theme.line, backgroundColor: theme.name === "dark" ? "#1C1C20" : "#FFFFFF" }]}>
+                <View style={[styles.mark, { borderColor: "#C81E24" }]}>
+                  <Txt style={{ color: theme.seal, fontFamily: type.bold, fontSize: 15 }}>
                     {lesson.kind === "placement" ? "Түв" : lesson.level.replace("HSK ", "")}
                   </Txt>
                 </View>
@@ -67,7 +67,7 @@ export function QuizHomeScreen() {
                   <Txt style={{ fontFamily: type.bold, fontSize: 17 }}>{lesson.title}</Txt>
                   <Txt tone="muted">{lesson.subtitle}</Txt>
                   <Txt tone="muted">
-                    {lesson.minutes} мин · <Text style={{ color: "#D4A84B" }}>{lesson.xp}</Text> оноо
+                    {lesson.minutes} мин · <Text style={{ color: theme.seal }}>{lesson.xp}</Text> оноо
                     {done ? ` · ${done.correct}/${done.total}` : ""}
                   </Txt>
                 </View>
