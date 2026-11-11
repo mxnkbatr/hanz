@@ -59,7 +59,7 @@ function GlassTabBar({ state, navigation }: { state: { index: number; routes: { 
     <Animated.View style={[styles.wrap, { bottom: Math.max(insets.bottom, 10) }, shell]} pointerEvents="box-none">
       <Glass style={styles.bar} intensity={55} interactive>
         <View style={styles.track} onLayout={(e) => setWidth(e.nativeEvent.layout.width)}>
-          {width > 0 ? <Animated.View style={[styles.pill, { width: slot - 6, backgroundColor: theme.name === "dark" ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.72)" }, pill]} /> : null}
+          {width > 0 ? <Animated.View style={[styles.pill, { width: slot - 6, backgroundColor: "#C81E24" }, pill]} /> : null}
           {state.routes.map((route, i) => {
             const focused = state.index === i;
             return (
@@ -71,9 +71,9 @@ function GlassTabBar({ state, navigation }: { state: { index: number; routes: { 
                   navigation.navigate(route.name);
                 }}
               >
-                <TabGlyph name={icons[i] ?? "home"} color={focused ? theme.seal : theme.muted} focused={focused} />
+                <TabGlyph name={icons[i] ?? "home"} color={focused ? "#fff" : theme.muted} focused={focused} />
                 <Animated.View style={labelStyle}>
-                  <Txt style={{ fontSize: 10, color: focused ? theme.seal : theme.muted }}>{labels[i]}</Txt>
+                  <Txt style={{ fontSize: 10, color: focused ? "#fff" : theme.muted }}>{labels[i]}</Txt>
                 </Animated.View>
               </Pressable>
             );

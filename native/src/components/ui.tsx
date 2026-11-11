@@ -33,22 +33,41 @@ import { rememberOrigin } from "../navigation/origin";
 import { categoryMeta } from "../theme/tokens";
 import { useTheme } from "../theme/Theme";
 
-export function Mesh({ children, style }: { children?: ReactNode; style?: StyleProp<ViewStyle> }) {
+export function Mesh({
+  children,
+  style,
+  field = false,
+  masthead = false,
+}: {
+  children?: ReactNode;
+  style?: StyleProp<ViewStyle>;
+  /** Full deep-red field, used by the splash. */
+  field?: boolean;
+  /** Home: red holds through the large title, then paper. */
+  masthead?: boolean;
+}) {
   const { theme } = useTheme();
-  const wash = theme.name === "dark" ? (["#000000", "#0A0A0A"] as const) : (["#FFFFFF", "#F6F6F7"] as const);
+  const dark = theme.name === "dark";
+  const wash = field
+    ? dark
+      ? (["#4A0C10", "#8E1419", "#2A080A"] as const)
+      : (["#7A1218", "#C81E24", "#9E1820"] as const)
+    : masthead
+      ? dark
+        ? (["#6E1218", "#C81E24", "#140406", "#000000"] as const)
+        : (["#7A1218", "#C81E24", "#F6D5D7", "#FFFFFF"] as const)
+      : dark
+        ? (["#5C1016", "#000000", "#000000"] as const)
+        : (["#C81E24", "#FFFFFF", "#FFFFFF"] as const);
+  const locations = field ? ([0, 0.55, 1] as const) : masthead ? (dark ? ([0, 0.2, 0.42, 0.56] as const) : ([0, 0.18, 0.36, 0.5] as const)) : ([0, 0.14, 1] as const);
   return (
-    <View style={[styles.fill, { backgroundColor: theme.name === "dark" ? "#000" : "#fff" }, style]}>
-      <LinearGradient colors={wash} style={StyleSheet.absoluteFill} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }} />
-      <View
-        pointerEvents="none"
-        style={{
-          position: "absolute",
-          top: -40,
-          left: 0,
-          right: 0,
-          height: 180,
-          backgroundColor: theme.name === "dark" ? "rgba(200,30,36,0.05)" : "rgba(200,30,36,0.035)",
-        }}
+    <View style={[styles.fill, { backgroundColor: dark ? "#000" : "#fff" }, style]}>
+      <LinearGradient
+        colors={wash}
+        locations={locations}
+        style={StyleSheet.absoluteFill}
+        start={{ x: 0.5, y: 0 }}
+        end={{ x: 0.5, y: 1 }}
       />
       {children}
     </View>
@@ -89,13 +108,22 @@ export function Glass({
   style,
   intensity = 42,
   interactive = false,
+  tint = "neutral",
 }: {
   children?: ReactNode;
   style?: StyleProp<ViewStyle>;
   intensity?: number;
   interactive?: boolean;
+  tint?: "neutral" | "brand";
 }) {
   const { theme } = useTheme();
+  const veil = tint === "brand"
+    ? theme.name === "dark"
+      ? "rgba(90,12,16,0.62)"
+      : "rgba(140,18,24,0.38)"
+    : theme.name === "dark"
+      ? "rgba(40,8,10,0.42)"
+      : "rgba(255,255,255,0.5)";
   const flat = StyleSheet.flatten(style) ?? {};
   const face: ViewStyle = {
     zIndex: 2,
@@ -120,6 +148,7 @@ export function Glass({
       <GlassView
         glassEffectStyle="regular"
         colorScheme={theme.name}
+        tintColor={tint === "brand" ? "#C81E24" : "rgba(200,30,36,0.18)"}
         isInteractive={interactive}
         style={[{ overflow: "hidden", borderRadius: 28 }, style]}
       >
@@ -130,7 +159,7 @@ export function Glass({
   return (
     <View style={[styles.glassWrap, { borderColor: theme.glassBorder, shadowColor: theme.shadow, backgroundColor: "transparent" }, style]}>
       <BlurView intensity={intensity} tint={theme.name === "dark" ? "dark" : "light"} style={[StyleSheet.absoluteFill, { zIndex: 0 }]} />
-      <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: theme.glass, zIndex: 0 }]} />
+      <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: veil, zIndex: 0 }]} />
       <LinearGradient
         pointerEvents="none"
         colors={theme.name === "dark" ? ["rgba(255,255,255,0.16)", "rgba(255,255,255,0)"] : ["rgba(255,255,255,0.75)", "rgba(255,255,255,0)"]}
@@ -601,7 +630,7 @@ export function CategoryBar({
   const pill = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }], width: w.value }));
   return (
     <View style={{ height: 40 }}>
-      <Animated.View style={[styles.chipPill, { backgroundColor: theme.name === "dark" ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.9)" }, pill]} />
+      <Animated.View style={[styles.chipPill, { backgroundColor: "#C81E24" }, pill]} />
       <View style={{ flexDirection: "row", gap: 6 }}>
         {options.map((option) => {
           const on = option.id === value;
@@ -618,8 +647,8 @@ export function CategoryBar({
               }}
               style={styles.chipHit}
             >
-              <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: option.color, marginRight: 6 }} />
-              <Text style={{ fontFamily: on ? type.bold : type.medium, fontSize: 13, color: theme.ink }}>{option.label}</Text>
+              {on ? null : <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: option.color, marginRight: 6 }} />}
+              <Text style={{ fontFamily: on ? type.bold : type.medium, fontSize: 13, color: on ? "#fff" : theme.ink }}>{option.label}</Text>
             </Pressable>
           );
         })}

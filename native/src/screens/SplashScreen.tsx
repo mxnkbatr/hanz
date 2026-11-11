@@ -27,7 +27,7 @@ function skipIntro() {
 export function SplashScreen() {
   const nav = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { onboarded, ready } = useApp();
-  const { theme } = useTheme();
+  const { theme, type } = useTheme();
   const reduce = useReduceMotion();
   const enter = useSharedValue(0);
   const dash = useSharedValue(460);
@@ -57,18 +57,20 @@ export function SplashScreen() {
   const brush = useAnimatedProps(() => ({ strokeDashoffset: dash.value }));
 
   return (
-    <Mesh>
+    <Mesh field>
       <View style={styles.center}>
         <Animated.View style={seal}>
           <View style={styles.glow}>
             <LinearGradient colors={["rgba(200,30,36,0.0)", "rgba(200,30,36,0.35)"]} style={styles.glowFill} />
           </View>
-          <SealMark size={108} />
+          <View style={{ padding: 8, borderRadius: 36, backgroundColor: "rgba(255,255,255,0.16)" }}>
+            <SealMark size={108} />
+          </View>
         </Animated.View>
         <Svg width={280} height={46} style={{ marginTop: 8 }}>
           <AnimatedPath
             d="M8 28 C 50 6, 90 42, 140 24 S 230 8, 272 26"
-            stroke={theme.seal}
+            stroke="#fff"
             strokeWidth={7}
             strokeLinecap="round"
             fill="none"
@@ -86,13 +88,13 @@ export function SplashScreen() {
           />
         </Svg>
         <Animated.View style={[styles.copy, word]}>
-          <Txt tone="display" style={{ fontSize: 56, lineHeight: 60, textAlign: "center" }}>
+          <Txt tone="display" style={{ fontSize: 56, lineHeight: 60, textAlign: "center", color: "#fff" }}>
             {academy.brand}
           </Txt>
-          <Txt tone="zh" style={{ textAlign: "center", color: theme.seal, fontSize: 22 }}>
+          <Txt tone="zh" style={{ textAlign: "center", color: "rgba(255,255,255,0.92)", fontSize: 22 }}>
             {academy.brandZh}
           </Txt>
-          <Txt tone="muted" style={{ textAlign: "center", marginTop: 6, letterSpacing: 2 }}>
+          <Txt style={{ textAlign: "center", marginTop: 6, letterSpacing: 2, color: "rgba(255,255,255,0.78)", fontFamily: type.medium }}>
             {academy.tagline.toUpperCase()}
           </Txt>
         </Animated.View>

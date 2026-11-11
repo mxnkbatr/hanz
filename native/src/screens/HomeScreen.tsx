@@ -88,7 +88,7 @@ export function HomeScreen() {
   }, [reduce, slides.length, stride]);
 
   return (
-    <Mesh>
+    <Mesh masthead>
       <Animated.ScrollView
         onScroll={onPage}
         scrollEventThrottle={16}
@@ -97,11 +97,11 @@ export function HomeScreen() {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => void refresh()} tintColor={theme.seal} colors={[theme.seal]} />}
       >
         <Animated.View style={largeTitle}>
-          <Txt tone="muted">{name ? `Сайн байна уу, ${name}` : greeting()}</Txt>
-          <Txt tone="display" style={{ marginTop: 4 }}>
+          <Txt style={{ color: "rgba(255,255,255,0.82)", fontFamily: type.medium }}>{name ? `Сайн байна уу, ${name}` : greeting()}</Txt>
+          <Txt tone="display" style={{ marginTop: 4, color: "#fff" }}>
             Хятад хэл.{"\n"}Тэтгэлэг. Хятад.
           </Txt>
-          <Txt tone="muted" style={{ marginTop: 8 }}>2014 оноос HSK 1–6. Хятадын их сургуульд хүрэх зам.</Txt>
+          <Txt style={{ marginTop: 8, color: "rgba(255,255,255,0.82)", fontFamily: type.medium }}>2014 оноос HSK 1–6. Хятадын их сургуульд хүрэх зам.</Txt>
         </Animated.View>
 
         <Glass style={styles.search} intensity={36}>
@@ -156,7 +156,7 @@ export function HomeScreen() {
             [academy.partners, "их сургууль"],
           ].map(([value, label]) => (
             <View key={label} style={styles.stat}>
-              <Txt style={{ fontFamily: type.bold, fontSize: 18, letterSpacing: -0.3 }}>{value}</Txt>
+              <Txt style={{ fontFamily: type.bold, fontSize: 18, letterSpacing: -0.3, color: theme.seal }}>{value}</Txt>
               <Txt tone="muted">{label}</Txt>
             </View>
           ))}
@@ -194,10 +194,10 @@ export function HomeScreen() {
         </Pressable>
       </Animated.ScrollView>
       <View pointerEvents="box-none" style={[styles.nav, { paddingTop: insets.top }]}>
-        <Glass style={styles.navGlass} intensity={60}>
+        <Glass style={styles.navGlass} intensity={64} tint="brand">
           <SealMark size={32} />
           <Animated.View style={[{ flex: 1 }, inlineTitle]}>
-            <Txt numberOfLines={1} style={{ fontFamily: type.bold, fontSize: 17 }}>ХАНЗ</Txt>
+            <Txt numberOfLines={1} style={{ fontFamily: type.bold, fontSize: 17, color: "#fff" }}>ХАНЗ</Txt>
           </Animated.View>
           <Pressable
             onPress={() => {
@@ -205,9 +205,9 @@ export function HomeScreen() {
               void Linking.openURL(`tel:${academy.phones[0].raw}`);
             }}
           >
-            <View style={styles.call}>
-              <Icon name="phone" color={theme.seal} size={15} />
-              <Txt style={{ fontFamily: type.semi, fontSize: 14 }}>Залгах</Txt>
+            <View style={[styles.call, { backgroundColor: "#fff" }]}>
+              <Icon name="phone" color="#C81E24" size={15} />
+              <Txt style={{ fontFamily: type.semi, fontSize: 14, color: "#C81E24" }}>Залгах</Txt>
             </View>
           </Pressable>
         </Glass>
