@@ -13,6 +13,13 @@ export const academy = {
   partners: "300+",
   partnersValue: 300,
   colleges: "70+",
+  /** content.ts academy.tianjinStudents */
+  tianjin: "250+",
+  /** siteCopy about_body2 — partnership rights, not a campus count we operate. */
+  polandUnis: "35",
+  polandNote: "2026.07.22-нд Польш улсын 35 их сургуультай хамтран ажиллах эрх.",
+  /** siteCopy about_body2 */
+  scg: "Хятадын SCG (Study in China Global)-ийн албан ёсны эрх бүхий байгууллага.",
   phones: [
     { display: "9990-7748", raw: "99907748" },
     { display: "9999-1573", raw: "99991573" },

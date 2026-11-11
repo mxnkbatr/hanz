@@ -23,11 +23,17 @@ export function AcademyScreen() {
           {academy.brand}
         </Txt>
         <Txt>{academy.about}</Txt>
+        <Txt tone="muted">{academy.scg}</Txt>
+        <Txt tone="muted">{academy.polandNote}</Txt>
         <View style={styles.stats}>
           <Stat value={academy.graduatesValue} suffix="+" label="суралцагч" />
           <Stat value={academy.scholarshipValue} suffix="+" label="тэтгэлэг" />
-          <Stat value={12} suffix="" label="жил" />
+          <Stat value={Number(academy.years)} suffix="" label="жил" />
           <Stat value={academy.partnersValue} suffix="+" label="их сургууль" />
+          <Stat value={70} suffix="+" label="коллеж" />
+          <Stat value={250} suffix="+" label="Тяньжин" />
+          <Stat value={35} suffix="" label="Польш, эрх" />
+          <Stat value={academy.branches.length} suffix="" label="салбар" />
         </View>
         <Glass style={styles.card}>
           <Txt tone="label">Хаяг</Txt>

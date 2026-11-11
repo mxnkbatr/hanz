@@ -98,10 +98,11 @@ export function HomeScreen() {
           </Pressable>
         </View>
 
-        <Txt tone="muted">{greeting()}</Txt>
-        <Txt tone="display" style={{ fontSize: 40, lineHeight: 44, marginTop: 2 }}>
-          {name ? `${name},\nөдрийг эхлүүл` : "Хятад хэлээ\nөнөөдөр эхлүүл"}
+        <Txt tone="muted">{name ? `Сайн байна уу, ${name}` : greeting()}</Txt>
+        <Txt tone="display" style={{ fontSize: 36, lineHeight: 40, marginTop: 4 }}>
+          Хятад хэл.{"\n"}Тэтгэлэг. Хятад.
         </Txt>
+        <Txt tone="muted">2014 оноос HSK 1–6. Хятадын их сургуульд хүрэх зам.</Txt>
 
         <Glass style={styles.search} intensity={36}>
           <Icon name="search" color={theme.muted} size={18} />
@@ -147,6 +148,24 @@ export function HomeScreen() {
             ))}
           </View>
         </View>
+
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.trustRow}>
+          {[
+            [academy.founded, "он"],
+            [`${academy.years} жил`, "туршлага"],
+            [academy.graduates, "суралцагч"],
+            [academy.scholarshipStudents, "тэтгэлэг"],
+            [academy.partners, "их сургууль"],
+            [academy.colleges, "коллеж"],
+            [academy.polandUnis, "Польш, эрх"],
+          ].map(([value, label]) => (
+            <View key={label} style={[styles.trust, { borderColor: theme.line, backgroundColor: theme.card }]}>
+              <Txt style={{ fontFamily: type.bold, fontSize: 16 }}>{value}</Txt>
+              <Txt tone="muted">{label}</Txt>
+            </View>
+          ))}
+        </ScrollView>
+        <Txt tone="muted">{academy.scg}</Txt>
 
         <Section title="Нээлттэй элсэлт" action="Бүгд" onAction={() => nav.navigate("Catalog", cat === "all" ? undefined : { category: cat })} />
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12 }}>
@@ -262,7 +281,9 @@ function TextWrap({ text, family }: { text: string; family?: string }) {
 }
 
 const styles = StyleSheet.create({
-  scroll: { padding: 18, paddingTop: 16, paddingBottom: 130, gap: 16 },
+  scroll: { padding: 20, paddingTop: 18, paddingBottom: 130, gap: 20 },
+  trustRow: { gap: 8, paddingRight: 8 },
+  trust: { borderWidth: 1, borderRadius: 16, paddingHorizontal: 14, paddingVertical: 10, minWidth: 92 },
   top: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
   brand: { flexDirection: "row", alignItems: "center", gap: 10 },
   call: { flexDirection: "row", alignItems: "center", gap: 6, paddingHorizontal: 12, height: 36, borderRadius: 999 },
@@ -275,7 +296,7 @@ const styles = StyleSheet.create({
   carouselWrap: { marginRight: -18, gap: 10 },
   dots: { flexDirection: "row", gap: 6, paddingLeft: 4 },
   dot: { height: 6, borderRadius: 99 },
-  hero: { height: 312, borderRadius: 32, overflow: "hidden" },
+  hero: { height: 280, borderRadius: 28, overflow: "hidden" },
   heroImg: { width: "100%", height: "100%" },
   heroBody: { flex: 1, justifyContent: "flex-end", padding: 20, gap: 8 },
   heroMeta: { marginTop: 6, gap: 2 },

@@ -3,7 +3,7 @@ import { media } from "../lib/format";
 
 const img = {
   hsk1: media("/courses/image15.webp"),
-  hsk2: media("/courses/image14.webp"),
+  hsk2: media("/images/unis/renmin-university.webp"),
   hsk3: media("/courses/image8.webp"),
   hsk4: media("/images/unis/beijing-language-and-culture-university.webp"),
   hsk5: media("/images/unis/tsinghua-university.webp"),
