@@ -1,11 +1,10 @@
 import { Pressable, StyleSheet, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Animated, { Extrapolation, interpolate, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 import { useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Glass, Icon, Txt } from "../components/ui";
 import { hapticSelect } from "../lib/haptics";
-import { useScrollY } from "./scroll";
 import { CatalogScreen } from "../screens/CatalogScreen";
 import { HomeScreen } from "../screens/HomeScreen";
 import { MineScreen } from "../screens/MineScreen";
@@ -38,16 +37,12 @@ export function Tabs() {
 function GlassTabBar({ state, navigation }: { state: { index: number; routes: { key: string; name: string }[] }; navigation: { navigate: (name: string) => void } }) {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
-  const y = useScrollY();
   const index = useSharedValue(state.index);
   const [width, setWidth] = useState(0);
   useEffect(() => {
     index.value = withSpring(state.index, { damping: 22, stiffness: 340 });
   }, [index, state.index]);
-  const shell = useAnimatedStyle(() => {
-    const t = y ? interpolate(y.value, [0, 48], [0, 1], Extrapolation.CLAMP) : 0;
-    return { transform: [{ scale: 1 - t * 0.045 }], marginHorizontal: t * 16 };
-  });
+  const shell = useAnimatedStyle(() => ({ transform: [{ scale: 1 }] }));
   const labelStyle = useAnimatedStyle(() => ({ opacity: 1 }));
   const inner = Math.max(0, width - 8);
   const slot = inner / Math.max(1, state.routes.length);
@@ -85,7 +80,7 @@ function TabGlyph({ name, color, focused }: { name: (typeof icons)[number]; colo
   const scale = useSharedValue(1);
   const turn = useSharedValue(0);
   useEffect(() => {
-    scale.value = withSpring(focused ? 1.08 : 1, { damping: 20, stiffness: 360 });
+    scale.value = withSpring(1, { damping: 20, stiffness: 360 });
     turn.value = withSpring(focused ? 1 : 0, { damping: 20, stiffness: 360 });
   }, [focused, scale, turn]);
   const style = useAnimatedStyle(() => ({

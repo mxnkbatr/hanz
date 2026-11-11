@@ -4,13 +4,12 @@ import type { CompositeNavigationProp } from "@react-navigation/native";
 import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Glass, Mesh, ProgressRing, Txt } from "../components/ui";
+import { Mesh, ProgressRing, Txt } from "../components/ui";
 import { lessons } from "../data/quiz";
 import type { RootStackParamList, TabParamList } from "../navigation/types";
 import { useTabClearance } from "../navigation/inset";
 import { useScrollY } from "../navigation/scroll";
 import { useApp } from "../state/AppState";
-import { categoryMeta } from "../theme/tokens";
 import { useTheme } from "../theme/Theme";
 
 type Nav = CompositeNavigationProp<BottomTabNavigationProp<TabParamList, "Quiz">, NativeStackNavigationProp<RootStackParamList>>;
@@ -22,7 +21,6 @@ export function QuizHomeScreen() {
   const clearance = useTabClearance();
   const insets = useSafeAreaInsets();
   const scrollY = useScrollY();
-  const accent = categoryMeta.quiz;
   const level = Math.min(1, quiz.xp / 200);
 
   return (
@@ -34,45 +32,46 @@ export function QuizHomeScreen() {
           if (scrollY) scrollY.value = e.nativeEvent.contentOffset.y;
         }}
       >
-        <Txt tone="label">Сорил</Txt>
+        <Txt tone="label">Дасгал</Txt>
         <Txt tone="display" style={{ fontSize: 34, lineHeight: 40 }}>
-          Өнөөдрийн сорил
+          Өнөөдрийн даалгавар
         </Txt>
-        <Glass style={styles.hero} intensity={46}>
+        <View style={[styles.hero, { borderColor: theme.line, backgroundColor: theme.name === "dark" ? "#121214" : "#FFFFFF" }]}>
           <View style={{ flex: 1, gap: 4 }}>
-            <Txt tone="label">Цуваа · XP</Txt>
-            <Txt tone="display" style={{ fontSize: 40, lineHeight: 44 }}>
+            <Txt tone="label">Үргэлжилсэн өдөр</Txt>
+            <Txt tone="display" style={{ fontSize: 36, lineHeight: 42 }}>
               <Text style={{ color: "#D4A84B" }}>{quiz.streak}</Text>
               <Text> өдөр</Text>
             </Txt>
-            <Txt tone="muted">{quiz.xp} XP · {quiz.hearts} зүрх</Txt>
+            <Txt tone="muted">{quiz.xp} оноо · {quiz.hearts} оролдлого</Txt>
           </View>
-          <ProgressRing progress={level} color={accent.a} label={`${Math.round(level * 100)}%`} />
-        </Glass>
+          <ProgressRing progress={level} color="#C81E24" label={`${Math.round(level * 100)}%`} />
+        </View>
         <View style={styles.hearts}>
           {Array.from({ length: 5 }, (_, i) => (
-            <View key={i} style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: i < quiz.hearts ? "#C81E24" : theme.line }} />
+            <View key={i} style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: i < quiz.hearts ? "#C81E24" : theme.line }} />
           ))}
+          <Txt tone="muted">Үлдсэн оролдлого</Txt>
         </View>
         {lessons.map((lesson) => {
           const done = quiz.completed[lesson.id];
           return (
             <Pressable key={lesson.id} onPress={() => nav.navigate("QuizPlay", { lessonId: lesson.id })}>
-              <Glass style={styles.card} intensity={36}>
-                <View style={[styles.mark, { backgroundColor: theme.name === "dark" ? "#161618" : "#F4F4F5", borderWidth: 1, borderColor: lesson.kind === "placement" ? accent.a : "#C81E24" }]}>
-                  <Txt style={{ color: lesson.kind === "placement" ? accent.a : theme.seal, fontFamily: type.bold, fontSize: lesson.kind === "placement" ? 22 : 16 }}>
-                    {lesson.kind === "placement" ? "测" : lesson.level.replace("HSK ", "")}
+              <View style={[styles.card, { borderColor: theme.line, backgroundColor: theme.name === "dark" ? "#121214" : "#FFFFFF" }]}>
+                <View style={[styles.mark, { borderColor: "#C81E24" }]}>
+                  <Txt style={{ color: theme.seal, fontFamily: type.bold, fontSize: 15 }}>
+                    {lesson.kind === "placement" ? "Түв" : lesson.level.replace("HSK ", "")}
                   </Txt>
                 </View>
                 <View style={{ flex: 1 }}>
                   <Txt style={{ fontFamily: type.bold, fontSize: 17 }}>{lesson.title}</Txt>
                   <Txt tone="muted">{lesson.subtitle}</Txt>
                   <Txt tone="muted">
-                    {lesson.minutes} мин · {lesson.xp} XP
+                    {lesson.minutes} мин · {lesson.xp} оноо
                     {done ? ` · ${done.correct}/${done.total}` : ""}
                   </Txt>
                 </View>
-              </Glass>
+              </View>
             </Pressable>
           );
         })}
@@ -83,8 +82,8 @@ export function QuizHomeScreen() {
 
 const styles = StyleSheet.create({
   scroll: { padding: 18, paddingBottom: 130, gap: 12 },
-  hero: { borderRadius: 28, padding: 18, flexDirection: "row", alignItems: "center", gap: 8 },
-  hearts: { flexDirection: "row", gap: 6 },
-  card: { borderRadius: 22, padding: 12, flexDirection: "row", gap: 12, alignItems: "center" },
-  mark: { width: 72, height: 72, borderRadius: 20, alignItems: "center", justifyContent: "center" },
+  hero: { borderWidth: 1, borderRadius: 16, padding: 16, flexDirection: "row", alignItems: "center", gap: 12 },
+  hearts: { flexDirection: "row", alignItems: "center", gap: 6 },
+  card: { borderWidth: 1, borderRadius: 16, padding: 14, flexDirection: "row", gap: 12, alignItems: "center" },
+  mark: { width: 64, height: 64, borderRadius: 12, borderWidth: 1, alignItems: "center", justifyContent: "center" },
 });

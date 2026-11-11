@@ -161,7 +161,7 @@ export const lessons: Lesson[] = [
     kind: "placement",
     level: "Байршуулалт",
     title: "Түвшин тогтоох",
-    subtitle: "HSK 1–2 дээрх богино сорил. Тохирох анги руу нээнэ.",
+    subtitle: "HSK 1–2. Тохирох ангийг санал болгоно.",
     minutes: 4,
     xp: 40,
     suggest: { below40: "hsk1", below75: "hsk2", else: "hsk3" },

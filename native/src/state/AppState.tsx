@@ -96,11 +96,20 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       } catch {
         if (alive) setSourceLabel("fixture");
       }
+      const previewAccount =
+        Platform.OS === "web" && typeof window !== "undefined" && new URLSearchParams(window.location.search).get("account") === "1";
+      if (previewAccount) {
+        setProfileState({
+          name: stored.profile.name || "Бат-Эрдэнэ",
+          phone: stored.profile.phone || "99112233",
+          email: stored.profile.email || "bat@example.com",
+        });
+      }
       try {
         const email = await services.auth.getSessionEmail();
-        if (alive) setSessionEmail(email);
+        if (alive) setSessionEmail(previewAccount ? "bat@example.com" : email);
       } catch {
-        /* guest */
+        if (alive && previewAccount) setSessionEmail("bat@example.com");
       }
       if (alive) setReady(true);
     })();

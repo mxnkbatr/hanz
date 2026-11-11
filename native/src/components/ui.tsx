@@ -558,55 +558,95 @@ export function PrimaryButton({
   );
 }
 
-export function Icon({ name, color, size = 22 }: { name: "home" | "search" | "quiz" | "ticket" | "user" | "phone" | "back"; color: string; size?: number }) {
+export type IconName = "home" | "search" | "quiz" | "ticket" | "user" | "phone" | "back" | "calendar" | "card" | "clock" | "building";
+
+export function Icon({ name, color, size = 22 }: { name: IconName; color: string; size?: number }) {
   const common = { width: size, height: size, viewBox: "0 0 24 24" };
+  const pen = { stroke: color, strokeWidth: 1.75, fill: "none" as const, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
   if (name === "home") {
     return (
       <Svg {...common}>
-        <Path d="M4 11.5 12 4l8 7.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-8.5Z" fill={color} />
+        <Path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-9.5Z" {...pen} />
       </Svg>
     );
   }
   if (name === "search") {
     return (
       <Svg {...common}>
-        <Circle cx="11" cy="11" r="6.5" stroke={color} strokeWidth={2} fill="none" />
-        <Path d="M16 16.5 20 20.5" stroke={color} strokeWidth={2} strokeLinecap="round" />
+        <Circle cx="11" cy="11" r="6.25" {...pen} />
+        <Path d="M16 16.5 20 20.5" {...pen} />
       </Svg>
     );
   }
   if (name === "quiz") {
     return (
       <Svg {...common}>
-        <Path d="M12 3 14.2 8.6 20 9.2 15.6 13.2 16.9 19 12 16.1 7.1 19 8.4 13.2 4 9.2 9.8 8.6 12 3Z" fill={color} />
+        <Path d="M14.5 4.5 19 9l-9.5 9.5H5V14L14.5 4.5Z" {...pen} />
+        <Path d="M12.5 6.5 17 11" {...pen} />
       </Svg>
     );
   }
   if (name === "ticket") {
     return (
       <Svg {...common}>
-        <Path d="M4 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2.2a2 2 0 0 0 0 3.6V16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2.2a2 2 0 0 0 0-3.6V8Z" fill={color} />
+        <Path d="M8 4h8" {...pen} />
+        <Path d="M9 3.25h6a1 1 0 0 1 1 1V6.25H8V4.25a1 1 0 0 1 1-1Z" {...pen} />
+        <Path d="M6.5 6.25h11A1.5 1.5 0 0 1 19 7.75v11A1.5 1.5 0 0 1 17.5 20.25h-11A1.5 1.5 0 0 1 5 18.75v-11A1.5 1.5 0 0 1 6.5 6.25Z" {...pen} />
+        <Path d="M8.5 11.5h7M8.5 15h5" {...pen} />
       </Svg>
     );
   }
   if (name === "phone") {
     return (
       <Svg {...common}>
-        <Path d="M8 3.5h2.2l1.2 3-1.7 1a11 11 0 0 0 5.8 5.8l1-1.7 3 1.2V20a1.5 1.5 0 0 1-1.6 1.5A15.5 15.5 0 0 1 3.5 6.1 1.5 1.5 0 0 1 5 4.5" fill={color} />
+        <Path d="M8 3.75h8A1.75 1.75 0 0 1 17.75 5.5v13A1.75 1.75 0 0 1 16 20.25H8A1.75 1.75 0 0 1 6.25 18.5v-13A1.75 1.75 0 0 1 8 3.75Z" {...pen} />
+        <Path d="M10.5 17.25h3" {...pen} />
       </Svg>
     );
   }
   if (name === "back") {
     return (
       <Svg {...common}>
-        <Path d="M14.5 5.5 8 12l6.5 6.5" stroke={color} strokeWidth={2.2} fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        <Path d="M14.5 5.5 8 12l6.5 6.5" {...pen} />
+      </Svg>
+    );
+  }
+  if (name === "calendar") {
+    return (
+      <Svg {...common}>
+        <Path d="M5 5.5h14A1.5 1.5 0 0 1 20.5 7v12A1.5 1.5 0 0 1 19 20.5H5A1.5 1.5 0 0 1 3.5 19V7A1.5 1.5 0 0 1 5 5.5Z" {...pen} />
+        <Path d="M3.5 9.5h17M8 3.5v4M16 3.5v4" {...pen} />
+      </Svg>
+    );
+  }
+  if (name === "card") {
+    return (
+      <Svg {...common}>
+        <Path d="M4 6.5h16A1.5 1.5 0 0 1 21.5 8v8A1.5 1.5 0 0 1 20 17.5H4A1.5 1.5 0 0 1 2.5 16V8A1.5 1.5 0 0 1 4 6.5Z" {...pen} />
+        <Path d="M2.5 10.5h19" {...pen} />
+      </Svg>
+    );
+  }
+  if (name === "clock") {
+    return (
+      <Svg {...common}>
+        <Circle cx="12" cy="12" r="8" {...pen} />
+        <Path d="M12 8v4.5l3 2" {...pen} />
+      </Svg>
+    );
+  }
+  if (name === "building") {
+    return (
+      <Svg {...common}>
+        <Path d="M5 20.5V5.5A1 1 0 0 1 6 4.5h7a1 1 0 0 1 1 1V20.5M14 9.5h4a1 1 0 0 1 1 1V20.5M3.5 20.5h17" {...pen} />
+        <Path d="M8 8h2M8 12h2M8 16h2" {...pen} />
       </Svg>
     );
   }
   return (
     <Svg {...common}>
-      <Circle cx="12" cy="9" r="3.2" fill={color} />
-      <Path d="M6.2 19.2c1.2-2.6 3.2-3.8 5.8-3.8s4.6 1.2 5.8 3.8" stroke={color} strokeWidth={2} fill="none" strokeLinecap="round" />
+      <Circle cx="12" cy="8.5" r="3.25" {...pen} />
+      <Path d="M5.5 19.5c1.2-2.8 3.4-4 6.5-4s5.3 1.2 6.5 4" {...pen} />
     </Svg>
   );
 }
