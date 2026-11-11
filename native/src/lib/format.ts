@@ -23,7 +23,7 @@ export function priceLabel(program: Program, plan?: Plan) {
 export function priceCaption(program: Program) {
   if (program.priceSource === "official") return "Албан ёсны төлбөр";
   if (program.priceSource === "covered") return "Сургалт, байр үнэгүй";
-  return "Жишиг үнэ · вэб дээр тоо байхгүй";
+  return "Жишиг үнэ";
 }
 
 export function daysUntil(iso: string, now = Date.now()) {

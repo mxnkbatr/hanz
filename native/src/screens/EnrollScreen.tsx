@@ -132,18 +132,17 @@ export function EnrollScreen() {
 
         {step === 2 ? (
           <View style={{ gap: 10 }}>
-            <Txt tone="muted">Файл серверт хадгалагдахгүй. Бэлэн эсэхээ тэмдэглэнэ — энэ алхам загвар.</Txt>
+            <Txt tone="muted">Бэлэн материалаа тэмдэглэнэ үү. Файл академи дээр хүлээн авна.</Txt>
             {DOCS.map((doc) => {
               const on = docs.includes(doc);
               return (
                 <Pressable
                   key={doc}
                   onPress={() => setDocs((prev) => (on ? prev.filter((d) => d !== doc) : [...prev, doc]))}
-                  style={[styles.doc, { borderColor: on ? theme.seal : theme.line }]}
+                  style={[styles.doc, { borderColor: on ? theme.seal : theme.line, flexDirection: "row", alignItems: "center", gap: 12 }]}
                 >
-                  <Txt style={{ fontFamily: type.bold }}>{on ? "Бэлэн" : "Хавсаргах"}</Txt>
-                  <Txt>{doc}</Txt>
-                  <Txt tone="muted">Файл сонгох товч дараагийн хувилбарт холбогдоно.</Txt>
+                  <View style={{ width: 22, height: 22, borderRadius: 6, borderWidth: 1.5, borderColor: on ? theme.seal : theme.line, backgroundColor: on ? theme.seal : "transparent" }} />
+                  <Txt style={{ fontFamily: type.semi, flex: 1 }}>{doc}</Txt>
                 </Pressable>
               );
             })}
@@ -226,7 +225,7 @@ const styles = StyleSheet.create({
   steps: { flexDirection: "row", gap: 6, height: 6 },
   step: { borderRadius: 99 },
   choice: { borderWidth: 1.5, borderRadius: 18, padding: 14, gap: 2 },
-  doc: { borderWidth: 1.5, borderStyle: "dashed", borderRadius: 18, padding: 14, gap: 4 },
+  doc: { borderWidth: 1, borderRadius: 16, padding: 14 },
   review: { padding: 16, borderRadius: 22 },
   input: { borderWidth: 1, borderRadius: 16, paddingHorizontal: 14, fontSize: 16 },
   dock: { padding: 16 },

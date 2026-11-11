@@ -117,7 +117,7 @@ export function Glass({
   style?: StyleProp<ViewStyle>;
   intensity?: number;
   interactive?: boolean;
-  tint?: "neutral" | "brand" | "frost";
+  tint?: "neutral" | "brand" | "frost" | "bar";
 }) {
   const { theme } = useTheme();
   const onRed = tint === "brand" || tint === "frost";
@@ -125,9 +125,13 @@ export function Glass({
     ? "rgba(74,8,12,0.94)"
     : tint === "frost"
       ? "rgba(62,8,12,0.82)"
-      : theme.name === "dark"
-        ? "rgba(18,18,20,0.55)"
-        : "rgba(255,255,255,0.62)";
+      : tint === "bar"
+        ? theme.name === "dark"
+          ? "rgba(16,16,18,0.94)"
+          : "rgba(255,255,255,0.94)"
+        : theme.name === "dark"
+          ? "rgba(18,18,20,0.72)"
+          : "rgba(255,255,255,0.86)";
   const flat = StyleSheet.flatten(style) ?? {};
   const face: ViewStyle = {
     zIndex: 2,
@@ -356,7 +360,7 @@ export function Money({ text, style, light }: { text: string; style?: StyleProp<
   return (
     <Text style={[{ fontFamily: type.bold, color, fontSize: 18 }, style]}>
       {amount}
-      <Text style={{ fontFamily: Platform.OS === "ios" ? "Georgia" : "serif" }}>₮</Text>
+      <Text style={{ fontFamily: type.currency }}>₮</Text>
     </Text>
   );
 }
@@ -652,7 +656,6 @@ export function CategoryBar({
               }}
               style={styles.chipHit}
             >
-              {on ? null : <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: onRed && option.id === "course" ? "#FFFFFF" : option.color, marginRight: 6 }} />}
               <Text style={{ fontFamily: on ? type.bold : type.medium, fontSize: 13, color: on || onRed ? "#fff" : theme.ink }}>{option.label}</Text>
             </Pressable>
           );
@@ -685,7 +688,7 @@ const styles = StyleSheet.create({
   cardShade: { position: "absolute", left: 0, right: 0, bottom: 0, height: 190 },
   cardTop: { position: "absolute", top: 12, left: 12, right: 12, gap: 8 },
   cardBody: { position: "absolute", left: 14, right: 14, bottom: 14 },
-  cardTitle: { color: "#fff", fontSize: 18, lineHeight: 22, marginTop: 2 },
+  cardTitle: { color: "#fff", fontSize: 18, lineHeight: 24, marginTop: 2 },
   count: { minWidth: 92, borderRadius: 20, borderWidth: 1, padding: 12, alignItems: "flex-start" },
   ringLabel: { ...StyleSheet.absoluteFill, alignItems: "center", justifyContent: "center" },
   bit: { position: "absolute", top: 0, width: 8, height: 14, borderRadius: 2 },

@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Platform, StyleSheet, View } from "react-native";
-import Animated, { Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
-import Svg, { Path } from "react-native-svg";
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Mesh, SealMark, Txt } from "../components/ui";
@@ -10,8 +9,6 @@ import { useReduceMotion } from "../lib/motion";
 import type { RootStackParamList } from "../navigation/types";
 import { useApp } from "../state/AppState";
 import { useTheme } from "../theme/Theme";
-
-const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 function holdSplash() {
   if (Platform.OS !== "web" || typeof window === "undefined") return false;
@@ -29,69 +26,44 @@ export function SplashScreen() {
   const { type } = useTheme();
   const reduce = useReduceMotion();
   const enter = useSharedValue(0);
-  const dash = useSharedValue(460);
 
   useEffect(() => {
-    enter.value = withTiming(1, { duration: reduce ? 200 : 900, easing: Easing.out(Easing.cubic) });
-    dash.value = withTiming(0, { duration: reduce ? 0 : 1400, easing: Easing.out(Easing.cubic) });
-  }, [dash, enter, reduce]);
+    enter.value = withTiming(1, { duration: reduce ? 160 : 700, easing: Easing.out(Easing.cubic) });
+  }, [enter, reduce]);
 
   useEffect(() => {
     if (!ready || holdSplash()) return;
     const t = setTimeout(() => {
       if (onboarded || skipIntro()) nav.replace("Main");
       else nav.replace("Onboarding");
-    }, reduce ? 500 : 2600);
+    }, reduce ? 400 : 1600);
     return () => clearTimeout(t);
   }, [nav, onboarded, ready, reduce]);
 
   const seal = useAnimatedStyle(() => ({
     opacity: enter.value,
-    transform: [{ scale: 0.82 + enter.value * 0.18 }, { translateY: (1 - enter.value) * 16 }],
+    transform: [{ scale: 0.96 + enter.value * 0.04 }],
   }));
   const word = useAnimatedStyle(() => ({
-    opacity: Math.max(0, (enter.value - 0.35) / 0.65),
-    transform: [{ translateY: (1 - enter.value) * 18 }],
+    opacity: enter.value,
+    transform: [{ translateY: (1 - enter.value) * 8 }],
   }));
-  const brush = useAnimatedProps(() => ({ strokeDashoffset: dash.value }));
 
   return (
     <Mesh field>
       <View style={styles.center}>
         <Animated.View style={seal}>
-          <View style={{ padding: 8, borderRadius: 36, backgroundColor: "#7A0C10" }}>
-            <SealMark size={108} />
-          </View>
+          <SealMark size={88} />
         </Animated.View>
-        <Svg width={280} height={46} style={{ marginTop: 8 }}>
-          <AnimatedPath
-            d="M8 28 C 50 6, 90 42, 140 24 S 230 8, 272 26"
-            stroke="#fff"
-            strokeWidth={7}
-            strokeLinecap="round"
-            fill="none"
-            strokeDasharray="460"
-            animatedProps={brush}
-          />
-          <AnimatedPath
-            d="M18 30 C 70 14, 120 36, 200 22"
-            stroke="rgba(255,255,255,0.55)"
-            strokeWidth={2.5}
-            strokeLinecap="round"
-            fill="none"
-            strokeDasharray="460"
-            animatedProps={brush}
-          />
-        </Svg>
         <Animated.View style={[styles.copy, word]}>
-          <Txt tone="display" style={{ fontSize: 56, lineHeight: 60, textAlign: "center", color: "#fff" }}>
+          <Txt tone="display" style={{ fontSize: 44, lineHeight: 50, textAlign: "center", color: "#fff" }}>
             {academy.brand}
           </Txt>
-          <Txt tone="zh" style={{ textAlign: "center", color: "rgba(255,255,255,0.92)", fontSize: 22 }}>
+          <Txt tone="zh" style={{ textAlign: "center", color: "rgba(255,255,255,0.92)", fontSize: 18, marginTop: 4 }}>
             {academy.brandZh}
           </Txt>
-          <Txt style={{ textAlign: "center", marginTop: 6, letterSpacing: 2, color: "rgba(255,255,255,0.78)", fontFamily: type.medium }}>
-            {academy.tagline.toUpperCase()}
+          <Txt style={{ textAlign: "center", marginTop: 12, color: "rgba(255,255,255,0.78)", fontFamily: type.medium }}>
+            {academy.tagline}
           </Txt>
         </Animated.View>
       </View>
@@ -100,6 +72,6 @@ export function SplashScreen() {
 }
 
 const styles = StyleSheet.create({
-  center: { flex: 1, alignItems: "center", justifyContent: "center", paddingBottom: 40 },
-  copy: { alignItems: "center", marginTop: 8 },
+  center: { flex: 1, alignItems: "center", justifyContent: "center", gap: 28, paddingHorizontal: 32 },
+  copy: { alignItems: "center" },
 });

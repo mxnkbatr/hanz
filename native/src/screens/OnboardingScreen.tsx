@@ -59,9 +59,6 @@ export function OnboardingScreen() {
       >
         {pages.map((p) => (
           <View key={p.kicker} style={[styles.page, { width }]}>
-            <Txt tone="zh" style={[styles.hanzi, { color: theme.ink }]}>
-              {p.hanzi}
-            </Txt>
             <Txt tone="label">{p.kicker}</Txt>
             <Txt tone="display" style={styles.title}>
               {p.title}
@@ -96,9 +93,8 @@ export function OnboardingScreen() {
 }
 
 const styles = StyleSheet.create({
-  page: { flex: 1, padding: 28, paddingTop: 110, justifyContent: "flex-end", paddingBottom: 160 },
-  hanzi: { position: "absolute", top: 90, right: 24, fontSize: 120, opacity: 0.12 },
-  title: { fontSize: 48, lineHeight: 52, marginTop: 10 },
+  page: { flex: 1, padding: 28, paddingTop: 72, justifyContent: "center", paddingBottom: 160 },
+  title: { fontSize: 40, lineHeight: 46, marginTop: 8 },
   body: { fontSize: 17, lineHeight: 24, marginTop: 14, maxWidth: 340 },
   footer: { position: "absolute", left: 20, right: 20, bottom: 28, gap: 14 },
   dots: { flexDirection: "row", gap: 6 },

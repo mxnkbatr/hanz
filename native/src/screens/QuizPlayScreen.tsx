@@ -121,9 +121,11 @@ export function QuizPlayScreen() {
         <Pressable onPress={() => nav.goBack()}>
           <Txt tone="muted">Гарах</Txt>
         </Pressable>
-        <Txt>
-          {Array.from({ length: 5 }, (_, i) => (i < quiz.hearts ? "♥" : "♡")).join(" ")}
-        </Txt>
+        <View style={{ flexDirection: "row", gap: 5 }}>
+          {Array.from({ length: 5 }, (_, i) => (
+            <View key={i} style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: i < quiz.hearts ? "#C81E24" : theme.line }} />
+          ))}
+        </View>
       </View>
       <View style={[styles.track, { backgroundColor: theme.line }]}>
         <View style={[styles.fill, { width: `${Math.max(6, progress * 100)}%`, backgroundColor: accent.a }]} />

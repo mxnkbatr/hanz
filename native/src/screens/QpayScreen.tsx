@@ -104,9 +104,7 @@ export function QpayScreen() {
         <View style={[styles.pill, { backgroundColor: tone }]}>
           <Txt style={{ color: "#1A1214", fontFamily: type.bold }}>{label}</Txt>
         </View>
-        {invoice?.sandbox ? (
-          <Txt tone="muted">SANDBOX · бодит QPay нэхэмжлэх биш. Мөнгө шилжихгүй.</Txt>
-        ) : null}
+        {invoice?.sandbox ? <Txt tone="muted">Туршилтын нэхэмжлэх. Мөнгө шилжихгүй.</Txt> : null}
       </Glass>
 
       {invoice ? (
@@ -117,7 +115,7 @@ export function QpayScreen() {
             <SandboxQr seed={invoice.invoiceId} />
           )}
           <Txt tone="muted" style={{ textAlign: "center" }}>
-            {invoice.sandbox ? "Энэ дүрс уншигдах QR биш." : "Аппаараа уншуулна уу."}
+            {invoice.sandbox ? "Туршилтын дүрс. Банкны апп уншихгүй." : "Банкны аппаараа уншуулна уу."}
           </Txt>
         </View>
       ) : (
@@ -135,7 +133,7 @@ export function QpayScreen() {
             <Pressable
               key={u.link}
               onPress={() => {
-                void Linking.openURL(u.link).catch(() => setNote("Апп нээгдсэнгүй. Sandbox холбоос бодит төлбөр биш."));
+                void Linking.openURL(u.link).catch(() => setNote("Апп нээгдсэнгүй."));
               }}
               style={[styles.bank, { borderColor: theme.line, backgroundColor: theme.card }]}
             >
@@ -144,9 +142,7 @@ export function QpayScreen() {
               </View>
               <View style={{ flex: 1 }}>
                 <Txt style={{ fontFamily: type.bold }}>{u.name}</Txt>
-                <Txt tone="muted" numberOfLines={1}>
-                  {u.link}
-                </Txt>
+                <Txt tone="muted">Апп нээх</Txt>
               </View>
             </Pressable>
           ))}
@@ -156,10 +152,13 @@ export function QpayScreen() {
       {invoice ? <PrimaryButton label="Төлбөр шалгах" onPress={() => void check()} /> : <PrimaryButton label="Хүсэлт хадгалсан" onPress={() => nav.replace("Success", { enrollmentId: enrollment.id })} />}
 
       {invoice?.sandbox ? (
-        <View style={{ gap: 8 }}>
-          <PrimaryButton label="Sandbox: төлсөн гэж тэмдэглэх" colors={["#0F9F6E", "#047857"]} onPress={() => void settle("paid")} />
+        <View style={{ gap: 4, paddingTop: 4 }}>
+          <Txt tone="label">Туршилтын касс</Txt>
+          <Pressable onPress={() => void settle("paid")} style={styles.fail}>
+            <Txt style={{ color: theme.ink, fontFamily: type.semi }}>Төлөгдсөн гэж шалгах</Txt>
+          </Pressable>
           <Pressable onPress={() => void settle("failed")} style={styles.fail}>
-            <Txt style={{ color: theme.bad, fontFamily: type.semi }}>Sandbox: амжилтгүй</Txt>
+            <Txt style={{ color: theme.muted, fontFamily: type.semi }}>Амжилтгүй гэж шалгах</Txt>
           </Pressable>
         </View>
       ) : null}

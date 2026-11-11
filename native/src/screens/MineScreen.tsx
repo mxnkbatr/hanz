@@ -3,6 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 import type { CompositeNavigationProp } from "@react-navigation/native";
 import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Glass, Mesh, Txt } from "../components/ui";
 import type { LocalEnrollment } from "../domain/types";
 import { formatMnt } from "../lib/format";
@@ -31,10 +32,11 @@ export function MineScreen() {
   const nav = useNavigation<Nav>();
   const { theme, type } = useTheme();
   const clearance = useTabClearance();
+  const insets = useSafeAreaInsets();
 
   return (
     <Mesh>
-      <ScrollView contentContainerStyle={[styles.scroll, { paddingBottom: clearance + 24 }]}>
+      <ScrollView contentContainerStyle={[styles.scroll, { paddingTop: insets.top + 20, paddingBottom: clearance + 24 }]}>
         <Txt tone="label">Бүртгэл</Txt>
         <Txt tone="display" style={{ fontSize: 34, lineHeight: 38 }}>
           Миний элсэлтүүд

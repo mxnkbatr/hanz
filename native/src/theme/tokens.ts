@@ -1,6 +1,6 @@
 export const categoryMeta = {
   course: { label: "Сургалт", a: "#A3141A", b: "#7A0C10", ink: "#3B1020" },
-  scholarship: { label: "Тэтгэлэгт хөтөлбөр", a: "#1A8F7A", b: "#B7E4DA", ink: "#042E2A" },
+  scholarship: { label: "Тэтгэлэг", a: "#1A8F7A", b: "#B7E4DA", ink: "#042E2A" },
   tour: { label: "Аялал", a: "#C4842A", b: "#F0D7B0", ink: "#3A2504" },
   quiz: { label: "Сорил", a: "#6E59E6", b: "#D4CCF8", ink: "#1E1040" },
 } as const;

@@ -48,16 +48,13 @@ function GlassTabBar({ state, navigation }: { state: { index: number; routes: { 
     const t = y ? interpolate(y.value, [0, 48], [0, 1], Extrapolation.CLAMP) : 0;
     return { transform: [{ scale: 1 - t * 0.045 }], marginHorizontal: t * 16 };
   });
-  const labelStyle = useAnimatedStyle(() => {
-    const t = y ? interpolate(y.value, [0, 28], [0, 1], Extrapolation.CLAMP) : 0;
-    return { opacity: 1 - t, height: 14 - t * 14 };
-  });
+  const labelStyle = useAnimatedStyle(() => ({ opacity: 1 }));
   const inner = Math.max(0, width - 8);
   const slot = inner / Math.max(1, state.routes.length);
   const pill = useAnimatedStyle(() => ({ transform: [{ translateX: index.value * slot }] }));
   return (
     <Animated.View style={[styles.wrap, { bottom: Math.max(insets.bottom, 10) }, shell]} pointerEvents="box-none">
-      <Glass style={styles.bar} intensity={55} interactive>
+      <Glass style={styles.bar} intensity={55} tint="bar" interactive>
         <View style={styles.track} onLayout={(e) => setWidth(e.nativeEvent.layout.width)}>
           {width > 0 ? <Animated.View style={[styles.pill, { width: slot - 6, backgroundColor: "#C81E24" }, pill]} /> : null}
           {state.routes.map((route, i) => {
@@ -73,7 +70,7 @@ function GlassTabBar({ state, navigation }: { state: { index: number; routes: { 
               >
                 <TabGlyph name={icons[i] ?? "home"} color={focused ? "#fff" : theme.muted} focused={focused} />
                 <Animated.View style={labelStyle}>
-                  <Txt style={{ fontSize: 10, color: focused ? "#fff" : theme.muted }}>{labels[i]}</Txt>
+                  <Txt style={{ fontSize: 11, lineHeight: 14, color: focused ? "#fff" : theme.muted }}>{labels[i]}</Txt>
                 </Animated.View>
               </Pressable>
             );

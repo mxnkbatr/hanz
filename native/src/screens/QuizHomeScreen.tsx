@@ -3,6 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 import type { CompositeNavigationProp } from "@react-navigation/native";
 import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Glass, Mesh, ProgressRing, Txt } from "../components/ui";
 import { lessons } from "../data/quiz";
 import type { RootStackParamList, TabParamList } from "../navigation/types";
@@ -19,6 +20,7 @@ export function QuizHomeScreen() {
   const { quiz } = useApp();
   const { theme, type } = useTheme();
   const clearance = useTabClearance();
+  const insets = useSafeAreaInsets();
   const scrollY = useScrollY();
   const accent = categoryMeta.quiz;
   const level = Math.min(1, quiz.xp / 200);
@@ -26,15 +28,15 @@ export function QuizHomeScreen() {
   return (
     <Mesh>
       <ScrollView
-        contentContainerStyle={[styles.scroll, { paddingBottom: clearance + 24 }]}
+        contentContainerStyle={[styles.scroll, { paddingTop: insets.top + 20, paddingBottom: clearance + 24 }]}
         scrollEventThrottle={16}
         onScroll={(e) => {
           if (scrollY) scrollY.value = e.nativeEvent.contentOffset.y;
         }}
       >
         <Txt tone="label">Сорил</Txt>
-        <Txt tone="display" style={{ fontSize: 36, lineHeight: 40 }}>
-          Өнөөдрийн{"\n"}ханз
+        <Txt tone="display" style={{ fontSize: 34, lineHeight: 40 }}>
+          Өнөөдрийн сорил
         </Txt>
         <Glass style={styles.hero} intensity={46}>
           <View style={{ flex: 1, gap: 4 }}>
@@ -49,9 +51,7 @@ export function QuizHomeScreen() {
         </Glass>
         <View style={styles.hearts}>
           {Array.from({ length: 5 }, (_, i) => (
-            <Txt key={i} style={{ fontSize: 22, opacity: i < quiz.hearts ? 1 : 0.25 }}>
-              ♥
-            </Txt>
+            <View key={i} style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: i < quiz.hearts ? "#C81E24" : theme.line }} />
           ))}
         </View>
         {lessons.map((lesson) => {

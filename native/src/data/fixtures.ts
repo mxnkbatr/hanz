@@ -2,9 +2,9 @@ import type { LocalEnrollment, Program } from "../domain/types";
 import { media } from "../lib/format";
 
 const img = {
-  hsk1: media("/courses/image15.webp"),
+  hsk1: media("/courses/image8.webp"),
   hsk2: media("/images/unis/renmin-university.webp"),
-  hsk3: media("/courses/image8.webp"),
+  hsk3: media("/images/unis/beijing-normal-university.webp"),
   hsk4: media("/images/unis/beijing-language-and-culture-university.webp"),
   hsk5: media("/images/unis/tsinghua-university.webp"),
   hsk6: media("/images/unis/fudan-university.webp"),
@@ -15,8 +15,8 @@ const img = {
   sc: media("/images/unis/sichuan-university.webp"),
   tianjin: media("/images/unis/tianjin-university.webp"),
   peking: media("/images/unis/peking-university.webp"),
-  wall: media("/images/hero-wall.webp"),
-  tour: media("/courses/image16.webp"),
+  wall: media("/courses/image16.webp"),
+  tour: media("/images/unis/tianjin-university.webp"),
 };
 
 const intensiveSchedule = "Даваа–Бямба · 10:00–18:00 · өдөрт 8 цаг";

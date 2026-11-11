@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { useNavigation, useRoute, type RouteProp } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Confetti, Glass, PrimaryButton, SealMark, Txt } from "../components/ui";
+import { Glass, PrimaryButton, SealMark, Txt } from "../components/ui";
 import { formatMnt, receiptNo } from "../lib/format";
 import { hapticSuccess } from "../lib/haptics";
 import type { RootStackParamList } from "../navigation/types";
@@ -24,13 +24,12 @@ export function SuccessScreen() {
 
   return (
     <View style={[styles.page, { backgroundColor: theme.bg }]}>
-      <Confetti show />
-      <SealMark size={84} />
+      <SealMark size={72} />
       <Txt tone="display" style={{ textAlign: "center", fontSize: 40, lineHeight: 44 }}>
         {paid ? "Төлбөр\nбаталгаажлаа" : "Хүсэлт\nбүртгэгдлээ"}
       </Txt>
       <Txt tone="muted" style={{ textAlign: "center" }}>
-        {enrollment?.sandbox ? "Sandbox баримт. Бодит мөнгө шилжээгүй." : "ХАНЗ тантай холбогдоно."}
+        {enrollment?.sandbox ? "Туршилтын баримт. Мөнгө шилжээгүй." : "ХАНЗ тантай холбогдоно."}
       </Txt>
       <Glass style={styles.receipt}>
         <Txt tone="label">Баримт</Txt>

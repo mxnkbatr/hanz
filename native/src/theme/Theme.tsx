@@ -13,6 +13,7 @@ import {
   NotoSansSC_700Bold,
   useFonts as useScFonts,
 } from "@expo-google-fonts/noto-sans-sc";
+import { NotoSans_700Bold, useFonts as useSans } from "@expo-google-fonts/noto-sans";
 import {
   Onest_400Regular,
   Onest_500Medium,
@@ -37,6 +38,7 @@ type Ctx = {
     bold: string | undefined;
     display: string | undefined;
     zh: string | undefined;
+    currency: string | undefined;
   };
 };
 
@@ -59,7 +61,8 @@ export function ThemeProvider({
     Onest_800ExtraBold,
   });
   const [scLoaded] = useScFonts({ NotoSansSC_500Medium, NotoSansSC_700Bold });
-  const fontsReady = Boolean(onestLoaded && scLoaded);
+  const [sansLoaded] = useSans({ NotoSans_700Bold });
+  const fontsReady = Boolean(onestLoaded && scLoaded && sansLoaded);
   const name: ThemeName = mode === "system" ? (scheme === "dark" ? "dark" : "light") : mode;
   const theme = name === "dark" ? darkTheme : lightTheme;
 
@@ -71,6 +74,7 @@ export function ThemeProvider({
       bold: fontsReady ? "Onest_700Bold" : undefined,
       display: fontsReady ? "Onest_800ExtraBold" : undefined,
       zh: fontsReady ? "NotoSansSC_700Bold" : undefined,
+      currency: fontsReady ? "NotoSans_700Bold" : undefined,
     }),
     [fontsReady],
   );

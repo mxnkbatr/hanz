@@ -37,7 +37,7 @@ export function HomeScreen() {
   const { programs, profile, refresh, refreshing } = useApp();
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<(typeof cats)[number]>("all");
-  const cardW = Math.min(width - 78, 420);
+  const cardW = Math.min(width - 40, 440);
   const stride = cardW + 12;
   const scrollX = useSharedValue(0);
   const scroller = useRef<ScrollViewInstance>(null);
@@ -56,9 +56,6 @@ export function HomeScreen() {
   const largeTitle = useAnimatedStyle(() => ({
     opacity: scrollY ? interpolate(scrollY.value, [0, 36], [1, 0], Extrapolation.CLAMP) : 1,
     transform: [{ translateY: scrollY ? interpolate(scrollY.value, [0, 36], [0, -6], Extrapolation.CLAMP) : 0 }],
-  }));
-  const inlineTitle = useAnimatedStyle(() => ({
-    opacity: scrollY ? interpolate(scrollY.value, [20, 48], [0, 1], Extrapolation.CLAMP) : 0,
   }));
 
   const filtered = useMemo(() => {
@@ -98,11 +95,11 @@ export function HomeScreen() {
       >
         <LinearGradient colors={["#7A0C10", "#A3141A", "#C81E24"]} locations={[0, 0.62, 1]} style={[styles.mast, { paddingTop: insets.top + 64 }]}>
           <Animated.View style={largeTitle}>
-            <Txt style={{ color: "rgba(255,255,255,0.82)", fontFamily: type.medium }}>{name ? `Сайн байна уу, ${name}` : greeting()}</Txt>
-            <Txt tone="display" style={{ marginTop: 4, color: "#fff" }}>
-              Хятад хэл.{"\n"}Тэтгэлэг. Хятад.
+            <Txt style={{ color: "rgba(255,255,255,0.78)", fontFamily: type.medium }}>{name ? `Сайн байна уу, ${name}` : greeting()}</Txt>
+            <Txt tone="display" style={{ marginTop: 6, color: "#fff", fontSize: 40, lineHeight: 46 }}>
+              Нээлттэй{"\n"}элсэлт
             </Txt>
-            <Txt style={{ marginTop: 8, color: "rgba(255,255,255,0.82)", fontFamily: type.medium }}>2014 оноос HSK 1–6. Хятадын их сургуульд хүрэх зам.</Txt>
+            <Txt style={{ marginTop: 10, color: "rgba(255,255,255,0.82)", fontFamily: type.medium }}>HSK 1–6, тэтгэлэг, Хятад дахь аялал.</Txt>
           </Animated.View>
 
           <Glass style={styles.search} intensity={28} tint="frost">
@@ -153,18 +150,18 @@ export function HomeScreen() {
           </View>
         </View>
 
-        <Glass style={styles.stats} intensity={40}>
+        <View style={[styles.stats, { borderColor: theme.line }]}>
           {[
             [academy.graduates, "суралцагч"],
             [`${academy.years} жил`, "туршлага"],
             [academy.partners, "их сургууль"],
-          ].map(([value, label]) => (
-            <View key={label} style={styles.stat}>
-              <Txt style={{ fontFamily: type.bold, fontSize: 18, letterSpacing: -0.3, color: theme.seal }}>{value}</Txt>
+          ].map(([value, label], index) => (
+            <View key={label} style={[styles.stat, index > 0 ? { borderLeftWidth: 1, borderColor: theme.line } : null]}>
+              <Txt style={{ fontFamily: type.bold, fontSize: 20, lineHeight: 24, letterSpacing: -0.3, color: theme.seal }}>{value}</Txt>
               <Txt tone="muted">{label}</Txt>
             </View>
           ))}
-        </Glass>
+        </View>
 
         <Section title="Нээлттэй элсэлт" action="Бүгд" onAction={() => nav.navigate("Catalog", cat === "all" ? undefined : { category: cat })} />
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12 }}>
@@ -200,9 +197,9 @@ export function HomeScreen() {
       <View pointerEvents="box-none" style={[styles.nav, { paddingTop: insets.top }]}>
         <Glass style={styles.navGlass} intensity={64} tint="brand">
           <SealMark size={32} />
-          <Animated.View style={[{ flex: 1 }, inlineTitle]}>
-            <Txt numberOfLines={1} style={{ fontFamily: type.bold, fontSize: 17, color: "#fff" }}>ХАНЗ</Txt>
-          </Animated.View>
+          <View style={{ flex: 1 }}>
+            <Txt numberOfLines={1} style={{ fontFamily: type.bold, fontSize: 17, lineHeight: 22, color: "#fff" }}>ХАНЗ</Txt>
+          </View>
           <Pressable
             onPress={() => {
               void hapticTap();
@@ -308,7 +305,7 @@ function Dot({ index, scrollX, stride }: { index: number; scrollX: SharedValue<n
 
 function TextWrap({ text, family }: { text: string; family?: string }) {
   return (
-    <Txt tone="display" style={{ color: "#fff", fontSize: 34, lineHeight: 36, fontFamily: family }}>
+    <Txt tone="display" style={{ color: "#fff", fontSize: 32, lineHeight: 38, fontFamily: family }}>
       {text}
     </Txt>
   );
@@ -319,7 +316,7 @@ const styles = StyleSheet.create({
   mast: { marginHorizontal: -20, paddingHorizontal: 20, paddingBottom: 22, gap: 20 },
   nav: { position: "absolute", top: 0, left: 0, right: 0 },
   navGlass: { borderRadius: 0, borderTopWidth: 0, paddingHorizontal: 16, paddingBottom: 8, flexDirection: "row", alignItems: "center", gap: 10 },
-  stats: { borderRadius: 22, paddingVertical: 14, paddingHorizontal: 8, flexDirection: "row" },
+  stats: { borderTopWidth: 1, borderBottomWidth: 1, paddingVertical: 16, flexDirection: "row" },
   stat: { flex: 1, alignItems: "center", gap: 2 },
   top: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
   brand: { flexDirection: "row", alignItems: "center", gap: 10 },
@@ -331,7 +328,7 @@ const styles = StyleSheet.create({
   tabOn: { paddingHorizontal: 14, height: 36, borderRadius: 999, alignItems: "center", justifyContent: "center" },
   tabOff: { paddingHorizontal: 14, height: 36, borderRadius: 999, borderWidth: 1, alignItems: "center", justifyContent: "center" },
   section: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end", marginTop: 6 },
-  carouselWrap: { marginRight: -20, gap: 10 },
+  carouselWrap: { gap: 10 },
   dots: { flexDirection: "row", gap: 6, paddingLeft: 4 },
   dot: { height: 6, borderRadius: 99 },
   hero: { height: 248, borderRadius: 22, overflow: "hidden" },

@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import type { CompositeNavigationProp } from "@react-navigation/native";
 import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Glass, Mesh, PrimaryButton, SealMark, Txt } from "../components/ui";
 import { academy } from "../data/academy";
 import type { RootStackParamList, TabParamList } from "../navigation/types";
@@ -19,13 +20,14 @@ export function ProfileScreen() {
   const { profile, setProfile, sessionEmail, signIn, signOut, preview, themeMode, setThemeMode, sourceLabel } = useApp();
   const { theme, type } = useTheme();
   const clearance = useTabClearance();
+  const insets = useSafeAreaInsets();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState("");
 
   return (
     <Mesh>
-      <ScrollView contentContainerStyle={[styles.scroll, { paddingBottom: clearance + 24 }]}>
+      <ScrollView contentContainerStyle={[styles.scroll, { paddingTop: insets.top + 20, paddingBottom: clearance + 24 }]}>
         <View style={styles.head}>
           <SealMark size={64} />
           <View style={{ flex: 1 }}>
@@ -34,8 +36,8 @@ export function ProfileScreen() {
           </View>
         </View>
         <Txt tone="muted">
-          {preview ? "Preview горим · fixture каталог, sandbox QPay." : `Шууд холболт · ${sourceLabel}.`}
-          {sessionEmail ? ` Нэвтэрсэн: ${sessionEmail}` : " Вэб дээрх бүртгэл нь имэйл/нууц үг. Элсэлт зочноор явна."}
+          {preview ? "Каталог урьдчилсан харагдацтай. Төлбөр туршилтын горимд." : sourceLabel}
+          {sessionEmail ? ` Нэвтэрсэн: ${sessionEmail}` : " Элсэлт бүртгэлгүйгээр илгээнэ."}
         </Txt>
 
         <Txt tone="label">Өнгө</Txt>

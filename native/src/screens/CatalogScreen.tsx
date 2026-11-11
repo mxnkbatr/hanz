@@ -4,6 +4,7 @@ import { useNavigation, useRoute, type RouteProp } from "@react-navigation/nativ
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { CompositeNavigationProp } from "@react-navigation/native";
 import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CategoryBar, Glass, Icon, Mesh, PrimaryButton, ProgramCard, Sheet, Txt } from "../components/ui";
 import type { Category, Stage } from "../domain/types";
 import { deadlineSoon, seatsLeft } from "../lib/format";
@@ -21,6 +22,7 @@ export function CatalogScreen() {
   const { programs } = useApp();
   const { theme, type } = useTheme();
   const clearance = useTabClearance();
+  const insets = useSafeAreaInsets();
   const scrollY = useScrollY();
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<Category | "all">(route.params?.category ?? "all");
@@ -44,7 +46,7 @@ export function CatalogScreen() {
   return (
     <Mesh>
       <ScrollView
-        contentContainerStyle={[styles.scroll, { paddingBottom: clearance + 24 }]}
+        contentContainerStyle={[styles.scroll, { paddingTop: insets.top + 20, paddingBottom: clearance + 24 }]}
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
         onScroll={(e) => {
@@ -65,13 +67,13 @@ export function CatalogScreen() {
             style={{ flex: 1, color: theme.ink, fontFamily: type.medium, fontSize: 15 }}
           />
         </Glass>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-          <CategoryBar value={cat} onChange={setCat} />
+        <CategoryBar value={cat} onChange={setCat} />
+        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+          <Txt tone="muted">{list.length} хөтөлбөр</Txt>
           <Pressable onPress={() => setSheet(true)} style={[styles.chip, { borderColor: theme.seal, backgroundColor: theme.card }]}>
             <Txt style={{ color: theme.seal, fontFamily: type.bold, fontSize: 13 }}>Шүүлтүүр</Txt>
           </Pressable>
         </View>
-        <Txt tone="muted">{list.length} хөтөлбөр</Txt>
         <View style={{ gap: 12 }}>
           {list.map((p) => (
             <ProgramCard key={p.id} program={p} wide onPress={() => nav.navigate("Detail", { id: p.id })} />
@@ -91,10 +93,10 @@ export function CatalogScreen() {
           ))}
         </View>
         <Pressable onPress={() => setOnlySoon((v) => !v)} style={styles.check}>
-          <Txt>{onlySoon ? "●" : "○"} Хугацаа дөхсөн</Txt>
+          <Txt>{onlySoon ? "Сонгосон · " : ""}Хугацаа дөхсөн</Txt>
         </Pressable>
         <Pressable onPress={() => setOnlySeats((v) => !v)} style={styles.check}>
-          <Txt>{onlySeats ? "●" : "○"} 12-оос цөөн суудал</Txt>
+          <Txt>{onlySeats ? "Сонгосон · " : ""}12-оос цөөн суудал</Txt>
         </Pressable>
         <PrimaryButton label="Харах" onPress={() => setSheet(false)} />
       </Sheet>
