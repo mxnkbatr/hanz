@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "ХАНЗ",
+    "slug": "hanz-academy",
+    "scheme": "hanz",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "icon": "./assets/icon.png",
+    "backgroundColor": "#140C0E",
+    "splash": {
+      "image": "./assets/icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#140C0E"
+    },
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/icon.png",
+      "name": "ХАНЗ",
+      "backgroundColor": "#140C0E"
+    },
+    "plugins": []
+  }
+}
