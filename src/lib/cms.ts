@@ -45,6 +45,8 @@ export type EnrollmentRow = {
   plan?: string | null;
   plan_price?: number | null;
   child_name?: string | null;
+  /** enrollments-anket.sql — full student form JSON when filled online. */
+  anket?: Record<string, unknown> | null;
 };
 
 export type ProductOverride = {

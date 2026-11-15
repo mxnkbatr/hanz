@@ -89,15 +89,16 @@ export function EnrollWizard({
   const planMeta = plans.length === 1 ? plans[0] : plans.find((p) => p.id === plan);
   const label = (c: Choice) => (c.labelKey.startsWith("HSK") ? c.labelKey : t(c.labelKey));
 
+  // Deep links (?interest=…) skip the programme picker so the count starts at 1.
   const steps: Step[] = [
-    "program",
+    ...(startProgram ? [] : (["program"] as Step[])),
     ...(isCourse ? (["details"] as Step[]) : []),
     "you",
     ...(useAnket ? (["anket"] as Step[]) : []),
     ...(plans.length ? (["pay"] as Step[]) : []),
     "confirm",
   ];
-  const index = steps.indexOf(step);
+  const index = Math.max(0, steps.indexOf(step));
 
   /** What still blocks "Continue" on this screen (empty = ready). */
   const missing = (() => {
