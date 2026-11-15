@@ -31,86 +31,91 @@ export function NewsDetail() {
 
   return (
     <PageShell className="page-detail page-news is-app ios-app">
-      <Reveal>
-        <Link to="/medee" className="text-link back-link">
-          ← {t("back")}
-        </Link>
-      </Reveal>
-
-      <PhotoGlow src={item.image} />
-      <article className="desk-article">
+      <div className="news-desk-shell">
         <Reveal>
-          <div className="desk-article-hero">
-            <SharedMedia
-              id={`news-${item.id}`}
-              src={item.image}
-              alt={title}
-              loading="eager"
-            />
-          </div>
+          <Link to="/medee" className="text-link back-link app-mobile">
+            ← {t("back")}
+          </Link>
         </Reveal>
 
-        <Reveal delay={0.05}>
-          <div className="desk-article-body">
-            <p className="app-pill">
-              {tag} ·{" "}
-              <time dateTime={toDateTime(item.date)}>{item.date}</time>
-            </p>
-            <h1 className="h1">{title}</h1>
-            <p className="app-sub desk-article-lead">{excerpt}</p>
-            <div className="desk-article-copy">
-              {paragraphs.map((p) => (
-                <p key={p.slice(0, 28)}>{p}</p>
-              ))}
-            </div>
-          </div>
-        </Reveal>
-      </article>
-
-      {related.length > 0 && (
-        <section className="section tight section-last related-block">
+        <PhotoGlow src={item.image} />
+        <article className="desk-article">
           <Reveal>
-            <h2 className="app-section-title">{t("related")}</h2>
+            <div className="desk-article-hero">
+              <SharedMedia
+                id={`news-${item.id}`}
+                src={item.image}
+                alt={title}
+                loading="eager"
+              />
+              <Link to="/medee" className="cd-back detail-desk-back" aria-label={t("back")}>
+                ←
+              </Link>
+            </div>
           </Reveal>
-          <Stagger className="app-list app-mobile">
-            {related.map((n) => (
-              <StaggerItem key={n.id}>
-                <Link to={`/medee/${n.id}`} className="app-row app-row-media">
-                  <span className="app-row-thumb">
-                    <SafeImage src={n.image} alt="" />
-                  </span>
-                  <span className="app-row-body">
-                    <strong>{loc(lang, t, n.title, n.titleKey)}</strong>
-                    <em>{loc(lang, t, n.tag, n.tagKey)}</em>
-                  </span>
-                  <span className="app-row-chevron" aria-hidden>
-                    ›
-                  </span>
-                </Link>
-              </StaggerItem>
-            ))}
-          </Stagger>
 
-          <Stagger className="news-grid desk-only">
-            {related.map((n) => (
-              <StaggerItem key={n.id}>
-                <Link to={`/medee/${n.id}`} className="news-card">
-                  <div className="news-card-media">
-                    <SafeImage src={n.image} alt={loc(lang, t, n.title, n.titleKey)} />
-                  </div>
-                  <div className="news-card-body">
-                    <div className="news-meta">
-                      <span>{loc(lang, t, n.tag, n.tagKey)}</span>
-                      <time dateTime={toDateTime(n.date)}>{n.date}</time>
+          <Reveal delay={0.05}>
+            <div className="desk-article-body">
+              <p className="app-pill">
+                {tag} ·{" "}
+                <time dateTime={toDateTime(item.date)}>{item.date}</time>
+              </p>
+              <h1 className="h1">{title}</h1>
+              {excerpt ? <p className="app-sub desk-article-lead">{excerpt}</p> : null}
+              <div className="desk-article-copy">
+                {paragraphs.map((p) => (
+                  <p key={p.slice(0, 28)}>{p}</p>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+        </article>
+
+        {related.length > 0 && (
+          <section className="section tight section-last related-block">
+            <Reveal>
+              <h2 className="desk-detail-label">{t("related")}</h2>
+            </Reveal>
+            <Stagger className="app-list app-mobile">
+              {related.map((n) => (
+                <StaggerItem key={n.id}>
+                  <Link to={`/medee/${n.id}`} className="app-row app-row-media">
+                    <span className="app-row-thumb">
+                      <SafeImage src={n.image} alt="" />
+                    </span>
+                    <span className="app-row-body">
+                      <strong>{loc(lang, t, n.title, n.titleKey)}</strong>
+                      <em>{loc(lang, t, n.tag, n.tagKey)}</em>
+                    </span>
+                    <span className="app-row-chevron" aria-hidden>
+                      ›
+                    </span>
+                  </Link>
+                </StaggerItem>
+              ))}
+            </Stagger>
+
+            <Stagger className="news-grid desk-only">
+              {related.map((n) => (
+                <StaggerItem key={n.id}>
+                  <Link to={`/medee/${n.id}`} className="news-card">
+                    <div className="news-card-media">
+                      <SafeImage src={n.image} alt={loc(lang, t, n.title, n.titleKey)} />
                     </div>
-                    <h3>{loc(lang, t, n.title, n.titleKey)}</h3>
-                  </div>
-                </Link>
-              </StaggerItem>
-            ))}
-          </Stagger>
-        </section>
-      )}
+                    <div className="news-card-body">
+                      <div className="news-meta">
+                        <span>{loc(lang, t, n.tag, n.tagKey)}</span>
+                        <time dateTime={toDateTime(n.date)}>{n.date}</time>
+                      </div>
+                      <h3>{loc(lang, t, n.title, n.titleKey)}</h3>
+                    </div>
+                  </Link>
+                </StaggerItem>
+              ))}
+            </Stagger>
+          </section>
+        )}
+      </div>
     </PageShell>
   );
 }

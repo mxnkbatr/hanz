@@ -55,12 +55,13 @@ export function ProductDetail() {
 
   const related = productsLive.filter((x) => x.id !== p.id).slice(0, 3);
   const title = loc(lang, t, p.title, p.titleKey);
-  const desc = loc(lang, t, p.body, p.descKey);
+  const desc = loc(lang, t, null, p.descKey);
   const bodyText = loc(lang, t, p.body, p.bodyKey || p.descKey);
   const paragraphs = bodyText
     .split("\n")
     .map((line) => line.trim())
     .filter(Boolean);
+  const showLead = Boolean(desc && desc !== bodyText);
   const specs = p.specs ?? [];
   const catLabel =
     p.cat === "books"
@@ -143,7 +144,7 @@ export function ProductDetail() {
   return (
     <PageShell className="page-detail page-shop is-app ios-app">
       <Reveal>
-        <Link to="/shop" className="text-link back-link">
+        <Link to="/shop" className="text-link back-link app-mobile">
           ← {t("back")}
         </Link>
       </Reveal>
@@ -158,6 +159,9 @@ export function ProductDetail() {
               alt={title}
               loading="eager"
             />
+            <Link to="/shop" className="cd-back detail-desk-back" aria-label={t("back")}>
+              ←
+            </Link>
           </div>
         </Reveal>
 
@@ -184,7 +188,7 @@ export function ProductDetail() {
           >
             {formatPrice(p.price, lang)}
           </motion.p>
-          <p className="app-sub">{desc}</p>
+          {showLead ? <p className="app-sub">{desc}</p> : null}
 
           <div className="desk-article-copy">
             {paragraphs.map((para) => (
@@ -232,7 +236,7 @@ export function ProductDetail() {
       {related.length > 0 && phase === "idle" && (
         <section className="section tight section-last related-block">
           <Reveal>
-            <h2 className="app-section-title">{t("related")}</h2>
+            <h2 className="desk-detail-label">{t("related")}</h2>
           </Reveal>
 
           <Stagger className="app-list app-mobile">
