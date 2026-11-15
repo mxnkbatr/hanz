@@ -89,6 +89,8 @@ export function EnrollWizard({
   const planMeta = plans.length === 1 ? plans[0] : plans.find((p) => p.id === plan);
   const label = (c: Choice) => (c.labelKey.startsWith("HSK") ? c.labelKey : t(c.labelKey));
 
+  // Short leads (travel / consult): just the contact form — no confirm screen.
+  const needsConfirm = useAnket || plans.length > 0;
   // Deep links (?interest=…) skip the programme picker so the count starts at 1.
   const steps: Step[] = [
     ...(startProgram ? [] : (["program"] as Step[])),
@@ -96,9 +98,10 @@ export function EnrollWizard({
     "you",
     ...(useAnket ? (["anket"] as Step[]) : []),
     ...(plans.length ? (["pay"] as Step[]) : []),
-    "confirm",
+    ...(needsConfirm ? (["confirm"] as Step[]) : []),
   ];
   const index = Math.max(0, steps.indexOf(step));
+  const isLast = index >= steps.length - 1;
 
   /** What still blocks "Continue" on this screen (empty = ready). */
   const missing = (() => {
@@ -259,16 +262,18 @@ export function EnrollWizard({
   /* ── The five screens ── */
   return (
     <section className="wz enroll-form">
-      <header className="wz-head">
-        <ol className="wz-progress" aria-label={`${index + 1} / ${steps.length}`}>
-          {steps.map((s, i) => (
-            <li key={s} className={i <= index ? "is-on" : undefined} />
-          ))}
-        </ol>
-        <p className="wz-count">
-          {index + 1} / {steps.length} · {t(`wz_step_${step}`)}
-        </p>
-      </header>
+      {steps.length > 1 && (
+        <header className="wz-head">
+          <ol className="wz-progress" aria-label={`${index + 1} / ${steps.length}`}>
+            {steps.map((s, i) => (
+              <li key={s} className={i <= index ? "is-on" : undefined} />
+            ))}
+          </ol>
+          <p className="wz-count">
+            {index + 1} / {steps.length} · {t(`wz_step_${step}`)}
+          </p>
+        </header>
+      )}
 
       {step === "program" && (
         <div className="wz-programs">
@@ -359,8 +364,12 @@ export function EnrollWizard({
 
       {step === "anket" && <AnketQuestions value={anket} onChange={setAnket} isCourse={isCourse} />}
 
-      {step === "you" && !useAnket && (
+      {step === "you" && !useAnket && program && (
         <div className="wz-fields consult-form">
+          <p className="enroll-fixed">
+            <span>{t("enroll_program")}</span>
+            <strong>{t(program.labelKey)}</strong>
+          </p>
           <label>
             <span>{isKids ? t("kids_form_parent") : t("form_name")}</span>
             <input
@@ -498,8 +507,19 @@ export function EnrollWizard({
             <strong>{formatPrice(planMeta.amount)}</strong>
           </p>
         )}
-        {step === "confirm" ? (
-          <button type="button" className="btn btn-seal" disabled={phase === "sending"} onClick={() => void submit()}>
+        {isLast || step === "confirm" ? (
+          <button
+            type="button"
+            className="btn btn-seal"
+            disabled={phase === "sending"}
+            onClick={() => {
+              if (missing) {
+                setError(missing);
+                return;
+              }
+              void submit();
+            }}
+          >
             <span>
               {phase === "sending" ? t("form_sending") : planMeta ? t("wz_submit_pay") : t("wz_submit")}
             </span>
