@@ -587,12 +587,39 @@ html.site .app-shell .home-finale-mark {
 .route-layer {
   grid-area: 1 / 1;
   min-width: 0;
+  /* Safari: keep the layer on its own compositor; avoids blank white after tab fades. */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 /* While two pages overlap, each one needs an opaque sheet so they don't bleed through. */
 .route-layer:not(:only-child) {
-  min-height: 100lvh;
+  min-height: 100vh;
+  min-height: 100dvh;
   background: var(--bg);
+}
+
+/* Lazy route chunk while it loads — never a blank white hole. */
+.page-loading {
+  min-height: 40vh;
+  display: grid;
+  place-items: center;
+}
+
+.page-loading::after {
+  content: "";
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2.5px solid color-mix(in srgb, var(--seal) 25%, transparent);
+  border-top-color: var(--seal);
+  animation: page-loading-spin 0.7s linear infinite;
+}
+
+@keyframes page-loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ─── Rotating seal badge (RotatingSeal) ─── */
