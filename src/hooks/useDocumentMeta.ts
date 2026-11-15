@@ -22,6 +22,7 @@ const routeMetaKey: Record<string, string> = {
   "/": "meta_home",
   "/about": "meta_about",
   "/courses": "meta_courses",
+  "/courses/match": "cmatch_title",
   "/enroll": "meta_enroll",
   "/medee": "meta_news",
   "/university": "meta_uni",
@@ -86,7 +87,7 @@ export function useDocumentMeta() {
     const travelMatch = matchPath("/travel/:id", pathname);
     const courseMatch = matchPath("/courses/:id", pathname);
 
-    if (courseMatch?.params.id) {
+    if (courseMatch?.params.id && courseMatch.params.id !== "match") {
       const id = courseMatch.params.id;
       const item = (coursesLive.find((c) => c.id === id) ??
         getCourseById(id)) as CourseLive | undefined;

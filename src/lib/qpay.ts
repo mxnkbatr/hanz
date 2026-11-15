@@ -1,5 +1,7 @@
 import { getSupabase } from "./supabase";
 
+export type QpayKind = "enroll" | "shop";
+
 export type QpayInvoice = {
   amount: number;
   /** Base64 PNG of the QR code. */
@@ -9,25 +11,61 @@ export type QpayInvoice = {
   urls: { name: string; logo: string; link: string }[];
 };
 
+type InvokeFail = { invoice: null; error: string };
+type InvokeOk = { invoice: QpayInvoice; error: null };
+
 /**
- * Calls the `qpay` edge function (supabase/functions/qpay). Returns null when
- * QPay is not set up yet or fails, so the enroll flow can finish without it.
+ * Calls the `qpay` edge function (supabase/functions/qpay).
+ * Returns a structured result so enroll/shop can show retry instead of a fake “saved” screen.
  */
-export async function createQpayInvoice(id: string): Promise<QpayInvoice | null> {
+export async function requestQpayInvoice(
+  id: string,
+  kind: QpayKind = "enroll",
+): Promise<InvokeOk | InvokeFail> {
   try {
     const supabase = await getSupabase();
-    const { data, error } = await supabase.functions.invoke("qpay", { body: { action: "create", id } });
-    if (error || !data?.qr_image) return null;
-    return data as QpayInvoice;
-  } catch {
-    return null;
+    const { data, error } = await supabase.functions.invoke("qpay", {
+      body: { action: "create", id, kind },
+    });
+    if (error) {
+      console.error("[qpay create]", error.message, data);
+      return { invoice: null, error: error.message || "qpay" };
+    }
+    if (data?.paid) {
+      return {
+        invoice: null,
+        error: "already_paid",
+      };
+    }
+    if (!data?.qr_image) {
+      console.error("[qpay create]", data?.error ?? "no qr", data);
+      return { invoice: null, error: String(data?.error ?? "no_payment") };
+    }
+    return { invoice: data as QpayInvoice, error: null };
+  } catch (e) {
+    console.error("[qpay create]", e);
+    return { invoice: null, error: "network" };
   }
 }
 
-export async function checkQpayPaid(id: string): Promise<boolean> {
+/** @deprecated Prefer requestQpayInvoice — kept for call sites that only need the QR. */
+export async function createQpayInvoice(
+  id: string,
+  kind: QpayKind = "enroll",
+): Promise<QpayInvoice | null> {
+  const r = await requestQpayInvoice(id, kind);
+  return r.invoice;
+}
+
+export async function checkQpayPaid(
+  id: string,
+  kind: QpayKind = "enroll",
+): Promise<boolean> {
   try {
     const supabase = await getSupabase();
-    const { data } = await supabase.functions.invoke("qpay", { body: { action: "check", id } });
+    const { data } = await supabase.functions.invoke("qpay", {
+      body: { action: "check", id, kind },
+    });
     return Boolean(data?.paid);
   } catch {
     return false;

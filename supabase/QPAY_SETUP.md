@@ -1,9 +1,12 @@
 # QPay online payment — one-time setup
 
-The enroll flow (/enroll) creates the lead first, then asks the `qpay` edge
-function for an invoice. Until QPay is set up the flow still finishes: the
-applicant sees "we will send you the payment link" and the lead is in
-Admin → Хүсэлтүүд as usual.
+Used by:
+
+- **Enrol** (`/enroll`) — course plans (HSK month / 6-month)
+- **Shop** (`/shop/:id` → Худалдан авах) — book orders (`shop_orders`)
+
+Both create a row first, then ask the `qpay` edge function for an invoice.
+Until QPay is set up the flow still finishes without a QR.
 
 ## What you need from QPay
 
@@ -16,21 +19,29 @@ Sign a merchant contract with QPay (qpay.mn). They give you:
 
 ## Steps
 
-1. Run `supabase/enrollments-v2.sql` in the Supabase SQL Editor (adds the
-   payment columns and the guard that stops anyone posting a lead as "paid").
-2. Deploy and configure the function (from the project folder):
+1. Run (once) in SQL Editor or via scripts:
+   - `supabase/enrollments-v2.sql`
+   - `supabase/shop_orders.sql`
+   - optional: `node scripts/set-qpay-secrets-sql.mjs` (stores creds in
+     `public.qpay_secrets` for the function to read if env secrets are empty)
+2. Create an access token: Supabase → Account → Access Tokens, then:
 
    ```bash
-   npx supabase functions deploy qpay --no-verify-jwt
-   npx supabase secrets set QPAY_CLIENT_ID=<id> QPAY_CLIENT_SECRET=<secret> QPAY_INVOICE_CODE=<code> QPAY_BASE_URL=https://merchant-sandbox.qpay.mn
+   set SUPABASE_ACCESS_TOKEN=sbp_...
+   # put QPAY_CLIENT_ID / QPAY_CLIENT_SECRET / QPAY_INVOICE_CODE / QPAY_BASE_URL in .env.local
+   node scripts/deploy-qpay.mjs
    ```
 
-   (`SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are provided to the function
-   automatically.)
-3. Test with the sandbox: enrol in the intensive or kids class, pay the QR in
-   the QPay sandbox app, and watch the lead turn "Төлбөр төлсөн" in admin.
-4. Switch to production: set `QPAY_BASE_URL=https://merchant.qpay.mn` and the
-   production credentials.
+   Or manually:
+
+   ```bash
+   npx supabase secrets set QPAY_CLIENT_ID=... QPAY_CLIENT_SECRET=... QPAY_INVOICE_CODE=... QPAY_BASE_URL=https://merchant.qpay.mn --project-ref <ref>
+   npx supabase functions deploy qpay --no-verify-jwt --project-ref <ref>
+   ```
+
+   (`SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are injected automatically.)
+3. Test: buy a book in `/shop` or enrol with a paid plan — QR should appear;
+   after payment the row status becomes `paid`.
 
 ## How payment is confirmed
 

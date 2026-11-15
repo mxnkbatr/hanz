@@ -1,0 +1,380 @@
+/* ═════════════════════════════════════════════════════════════════════
+   Apple-clean pass (phones). Loaded last.
+   Rule of thumb from iOS itself: glass belongs to bars and controls that float
+   over content; content sits on calm, solid cards over the system grey.
+   One accent (the brand red), system type, hairlines instead of heavy shadows.
+   ═════════════════════════════════════════════════════════════════════ */
+@media (max-width: 899px) {
+  /* ─── System palette ─── */
+  html.site:not([data-theme="dark"]) {
+    --page: #f2f2f7; /* systemGroupedBackground */
+    --surface-1: #ffffff; /* secondarySystemGroupedBackground */
+    --text: #1c1c1e;
+    --ios-secondary: rgba(60, 60, 67, 0.62);
+    --ios-tertiary: rgba(60, 60, 67, 0.32);
+    --ios-hairline: rgba(60, 60, 67, 0.13);
+    --card-bg: #ffffff;
+    --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 6px 20px -12px rgba(0, 0, 0, 0.12);
+    --glass-bg: rgba(255, 255, 255, 0.72);
+    --glass-bg-strong: rgba(250, 250, 252, 0.8);
+    --glass-border: rgba(0, 0, 0, 0.06);
+    --glass-edge: inset 0 0.5px 0 rgba(255, 255, 255, 0.9);
+    --glass-shadow: var(--card-shadow);
+  }
+
+  html.site[data-theme="dark"] {
+    --page: #000000;
+    --surface-1: #1c1c1e;
+    --text: #f5f5f7;
+    --ios-secondary: rgba(235, 235, 245, 0.6);
+    --ios-tertiary: rgba(235, 235, 245, 0.3);
+    --ios-hairline: rgba(84, 84, 88, 0.6);
+    --card-bg: #1c1c1e;
+    --card-shadow: none;
+    --glass-bg: rgba(44, 44, 46, 0.72);
+    --glass-bg-strong: rgba(30, 30, 32, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-edge: inset 0 0.5px 0 rgba(255, 255, 255, 0.08);
+    --glass-shadow: none;
+  }
+
+  /* ─── Background: flat system grey with one faint warm glow at the top ─── */
+  html.site body::before,
+  html.site .ambient-wash {
+    background:
+      radial-gradient(60% 26% at 50% -4%, color-mix(in srgb, var(--seal) 13%, transparent), transparent 72%),
+      var(--page) !important;
+    filter: none;
+  }
+
+  html.site[data-theme="dark"] body::before,
+  html.site[data-theme="dark"] .ambient-wash {
+    background:
+      radial-gradient(60% 26% at 50% -4%, color-mix(in srgb, var(--seal) 20%, transparent), transparent 72%),
+      var(--page) !important;
+  }
+
+  .ck {
+    background: var(--page) !important;
+  }
+
+  /* ─── Content cards: solid, quiet, continuous corners ─── */
+  html.site .app-shell :is(
+      .m-group,
+      .cd-card,
+      .course-product-grid,
+      .course-match-compact-row,
+      .uni-az-list,
+      .sl-list,
+      .ios-card,
+      .pf-card,
+      .shop-card,
+      .app-list,
+      .m-cta,
+      .m-program,
+      .m-story
+    ),
+  .ck :is(.ck-item, .ck-fields, .ck-pay-block) {
+    background: var(--card-bg) !important;
+    border: 0 !important;
+    border-radius: 20px;
+    box-shadow: var(--card-shadow) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Search fields: the iOS filled style (tertiary fill, no border). */
+  html.site .app-shell :is(.m-search, .ios-search) {
+    min-height: 44px;
+    background: color-mix(in srgb, var(--text) 7%, transparent) !important;
+    border: 0 !important;
+    border-radius: 14px !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Hairlines inside cards */
+  .m-group li + li .m-group-row::before {
+    background: var(--ios-hairline);
+  }
+  .cd-sched-row + .cd-sched-row,
+  .cd-syllabus li + li,
+  .ck-fields label + label {
+    border-color: var(--ios-hairline);
+  }
+
+  /* ─── Type: system face everywhere, calmer weights ─── */
+  html.site .app-shell :is(.m-section-head h2, .cd-title, .h1, .m-title) {
+    letter-spacing: -0.022em;
+  }
+
+  html.site .app-shell .m-hello {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--ios-secondary);
+  }
+
+  html.site .app-shell .m-section {
+    margin-top: 30px;
+  }
+
+  html.site .app-shell .m-section-head {
+    margin-bottom: 10px;
+  }
+
+  html.site .app-shell .m-section-head a {
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--seal);
+  }
+
+  html.site .app-shell :is(.cd-label, .cf-label) {
+    font-family: var(--ios-font);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: -0.005em;
+    text-transform: uppercase;
+    color: var(--ios-secondary);
+  }
+
+  /* ─── Quick tiles: white cards, tinted squircle marks (no gradients, no emoji) ─── */
+  html.site .app-shell .m-tiles {
+    gap: 10px;
+    margin: 18px 0 0;
+  }
+
+  html.site .app-shell .m-tile {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    min-height: 72px;
+    padding: 12px 14px;
+    border: 0;
+    border-radius: 20px;
+    color: var(--text);
+    background: var(--card-bg) !important;
+    box-shadow: var(--card-shadow);
+  }
+
+  html.site .app-shell .m-tile-text {
+    display: grid;
+    gap: 1px;
+    min-width: 0;
+  }
+
+  html.site .app-shell .m-tile strong {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--text);
+  }
+
+  html.site .app-shell .m-tile em {
+    font-size: 12px;
+    font-style: normal;
+    color: var(--ios-secondary);
+  }
+
+  html.site .app-shell .m-tile-glyph {
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 12px;
+    font-size: 21px;
+    color: #fff;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  html.site .app-shell .m-tile.is-cn .m-tile-glyph { background: linear-gradient(180deg, #ff5b52, #e3262b); }
+  html.site .app-shell .m-tile.is-cn-soft .m-tile-glyph { background: linear-gradient(180deg, #ffb340, #ff9500); }
+  html.site .app-shell .m-tile.is-pl .m-tile-glyph { background: linear-gradient(180deg, #ff6482, #dc143c); color: #fff; }
+  html.site .app-shell .m-tile.is-pl-soft .m-tile-glyph {
+    background: linear-gradient(180deg, #5ac8fa, #0a84ff);
+    font-family: var(--ios-font);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  /* ─── Lists ─── */
+  html.site .app-shell .m-group-row {
+    min-height: 76px;
+    padding: 10px 14px 10px 12px;
+  }
+
+  html.site .app-shell .m-group-thumb {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+  }
+
+  .m-group li + li .m-group-row::before {
+    left: 80px;
+  }
+
+  html.site .app-shell .m-group-body strong {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  html.site .app-shell .m-group-chev,
+  html.site .app-shell .course-product-card > :last-child:is(span, i) {
+    color: var(--ios-tertiary);
+  }
+
+  /* ─── Chips: grey fills; the selected one is the only colour ─── */
+  html.site .app-shell :is(.cf-chip, .ios26-filter-chip:not(.is-active)) {
+    min-height: 34px;
+    background: color-mix(in srgb, var(--text) 7%, transparent) !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    font-weight: 500;
+  }
+
+  html.site .app-shell .cf-chip.is-on {
+    color: #fff;
+    background: var(--seal) !important;
+    box-shadow: none !important;
+  }
+
+  html.site .app-shell .cp-chips i {
+    background: color-mix(in srgb, var(--text) 6%, transparent);
+    color: var(--ios-secondary);
+    font-weight: 600;
+  }
+
+  html.site .app-shell .cp-line {
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* ─── Buttons: flat filled, 14pt corners, no glow ─── */
+  html.site .app-shell .btn-seal,
+  .ck-bar .btn-seal,
+  .cd-bar .btn-seal,
+  .ck .btn-seal {
+    background: var(--seal) !important;
+    box-shadow: none !important;
+    border-radius: 14px !important;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  html.site .app-shell .btn-seal:active,
+  .ck-bar .btn-seal:active,
+  .cd-bar .btn-seal:active,
+  .ck .btn-seal:active {
+    filter: brightness(0.9);
+  }
+
+  /* ─── Floating bars keep the glass (this is where iOS uses it) ─── */
+  .ck-bar,
+  html.site .cd-bar,
+  .ck .ck-foot {
+    background: var(--glass-bg-strong) !important;
+    border: 0.5px solid var(--glass-border) !important;
+    box-shadow: var(--glass-edge), 0 8px 30px -12px rgba(0, 0, 0, 0.22) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(1.8);
+    backdrop-filter: blur(28px) saturate(1.8);
+  }
+
+  .ck .ck-foot {
+    border-width: 0.5px 0 0 !important;
+    box-shadow: none !important;
+  }
+
+  html.site .cd-bar .cd-bar-price strong,
+  .ck-bar .ck-bar-price strong {
+    font-family: var(--ios-font);
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  /* ─── Course page ─── */
+  html.site .app-shell .cd-sched-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+  }
+
+  html.site .app-shell .cd-sched-row {
+    grid-template-columns: 30px auto 1fr;
+    min-height: 48px;
+  }
+
+  html.site .app-shell .cd-sched-label {
+    color: var(--text);
+  }
+
+  html.site .app-shell .cd-sched-value {
+    font-weight: 400;
+    color: var(--ios-secondary);
+  }
+
+  html.site .app-shell strong.cd-sched-value {
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* ─── Banner: clean card, caption on a soft scrim ─── */
+  .m-banner-track,
+  .m-banner {
+    border-radius: 20px;
+  }
+
+  .m-banner-copy {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 28px 16px 14px;
+    border: 0;
+    border-radius: 0;
+    background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.62));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  /* ─── Badges: one quiet style ─── */
+  .m-live {
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    color: #248a3d;
+  }
+
+  html.site[data-theme="dark"] .m-live {
+    color: #30d158;
+  }
+
+  /* ─── CTA card: calm, no oversized mark ─── */
+  html.site .app-shell .m-cta {
+    margin-top: 30px;
+  }
+
+  /* Subtitles are secondary grey, upright; red italics are kept for the brand word only. */
+  html.site .app-shell :is(.course-match-compact-copy, .app-row-body, .sl-row, .uni-az-list, .pf-card) em {
+    font-family: var(--ios-font);
+    font-style: normal;
+    font-weight: 400;
+    color: var(--ios-secondary);
+  }
+
+  html.site body .app-shell .m-home .m-search {
+    background: color-mix(in srgb, var(--text) 7%, transparent) !important;
+    border: 0 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+  }
+  html.site body .app-shell .m-home .m-search input {
+    background: transparent !important;
+  }
+}

@@ -1,34 +1,12 @@
 import { useMemo, useState } from "react";
 import { AppLink } from "../components/AppLink";
-import { CITY_LABELS, cityLabel, featuredUniversities, universities, type University } from "../data/universities";
+import { CITY_LABELS, cityLabel, universities, type University } from "../data/universities";
 import { IosFilterBar } from "../components/IosFilterBar";
 import { useDesktop } from "../hooks/useDesktop";
 import { PageShell, Reveal, Stagger, StaggerItem } from "../components/PageShell";
-import { UniversityCard, UniversityFeature, UniversityRow } from "../components/UniversityCard";
+import { UniversityCard } from "../components/UniversityCard";
 import { useI18n } from "../i18n/I18nContext";
-
-const steps = [
-  ["step1", "step1_d"],
-  ["step2", "step2_d"],
-  ["step3", "step3_d"],
-  ["step4", "step4_d"],
-] as const;
-
-const faqs = [
-  ["faq1_q", "faq1_a"],
-  ["faq2_q", "faq2_a"],
-  ["faq3_q", "faq3_a"],
-  ["faq4_q", "faq4_a"],
-] as const;
-
-const compareRows = [
-  ["cmp_lang", "cmp_c1", "cmp_p1"],
-  ["cmp_cost", "cmp_c2", "cmp_p2"],
-  ["cmp_visa", "cmp_c3", "cmp_p3"],
-  ["cmp_degree", "cmp_c4", "cmp_p4"],
-] as const;
-
-const FEATURED = featuredUniversities;
+import { AbroadMobile } from "../components/AbroadMobile";
 
 /** City chips: every city with at least three schools, biggest first. */
 const CITY_CHIPS = Object.entries(
@@ -40,68 +18,65 @@ const CITY_CHIPS = Object.entries(
   .filter(([, n]) => n >= 3)
   .sort((a, b) => b[1] - a[1]);
 
+/** Phones get the app's "Зуучлал" tab; desktop keeps the full page. */
 export function University() {
-  const { t, lang } = useI18n();
   const desktop = useDesktop();
+  return desktop ? <UniversityDesktop /> : <AbroadMobile />;
+}
+
+function UniversityDesktop() {
+  const { t, lang } = useI18n();
   const [q, setQ] = useState("");
   const [city, setCity] = useState("all");
 
-  // English name, Chinese name or city (any language) all match.
   const listed = useMemo(() => {
     const query = q.trim().toLowerCase();
-    const inCity = desktop || city === "all" ? universities : universities.filter((u) => u.city === city);
+    const inCity = city === "all" ? universities : universities.filter((u) => u.city === city);
     if (!query) return inCity;
     return inCity.filter((u) => {
       const names = u.city ? Object.values(CITY_LABELS[u.city] ?? {}).join(" ") : "";
       return `${u.name} ${u.zh ?? ""} ${u.city ?? ""} ${names}`.toLowerCase().includes(query);
     });
-  }, [q, city, desktop]);
-
-  // A–Z sections for the phone list, like Contacts.
-  const groups = useMemo(() => {
-    const map = new Map<string, University[]>();
-    for (const u of listed) {
-      const letter = u.name.charAt(0).toUpperCase();
-      map.set(letter, [...(map.get(letter) ?? []), u]);
-    }
-    return [...map.entries()];
-  }, [listed]);
+  }, [q, city]);
 
   const hasQuery = q.trim().length > 0;
-  const showFeatured = !desktop && !hasQuery && city === "all" && FEATURED.length > 0;
 
   return (
     <PageShell className="page-uni is-app ios-app">
       <header className="page-head app-head">
         <Reveal>
-          <h1 className="h1">{t("nav_uni")}</h1>
-          <p className="lead desk-only">{t("uni_lead")}</p>
+          <h1 className="h1">{t("ab_title")}</h1>
           <div className="uni-head-actions">
-            <AppLink to="/enroll?interest=university" className="btn btn-seal">
-              <span>{t("uni_enroll_cta")}</span>
+            <AppLink to="/university/china" className="text-link">
+              {t("country_cn")} <i aria-hidden>→</i>
             </AppLink>
             <AppLink to="/university/poland" className="text-link">
-              {t("poland_title")} <i aria-hidden>→</i>
+              {t("country_pl")} <i aria-hidden>→</i>
             </AppLink>
           </div>
         </Reveal>
       </header>
 
-      {showFeatured && (
-        <section className="section tight uni-featured-section">
-          <div className="ios-section-head">
-            <h2>{t("uni_featured")}</h2>
-          </div>
-          <div className="uni-feature-rail">
-            {FEATURED.map((u) => (
-              <UniversityFeature key={u.slug} u={u} />
-            ))}
-          </div>
-        </section>
-      )}
+      <Reveal>
+        <AppLink
+          to="/enroll?interest=university"
+          className="course-match glass-panel course-match-compact is-intro uni-desk-cta"
+        >
+          <span className="course-match-compact-row">
+            <span className="course-match-mark" aria-hidden>
+              咨
+            </span>
+            <span className="course-match-compact-copy">
+              <strong>{t("ab_help")}</strong>
+            </span>
+            <span className="btn btn-seal course-match-start-mini">
+              <span>{t("ab_book_t")}</span>
+            </span>
+          </span>
+        </AppLink>
+      </Reveal>
 
-      {/* The academy's universities: a grid on desktop, an A–Z list on phones. */}
-      <section className="section tight uni-schools-section">
+      <section className="section tight uni-schools-section section-last">
         <Reveal>
           <div className="ios-toolbar">
             <label className="ios-search">
@@ -124,46 +99,30 @@ export function University() {
                 </button>
               )}
             </label>
-            {!desktop && (
-              <IosFilterBar
-                options={[
-                  { id: "all", label: t("filter_all") },
-                  ...CITY_CHIPS.map(([id]) => ({
-                    id,
-                    label: cityLabel({ city: id } as University, lang),
-                  })),
-                ]}
-                value={city}
-                onChange={setCity}
-                ariaLabel={t("uni_city")}
-                layoutId="uni-city-pill"
-              />
-            )}
+            <IosFilterBar
+              options={[
+                { id: "all", label: t("filter_all") },
+                ...CITY_CHIPS.map(([id]) => ({
+                  id,
+                  label: cityLabel({ city: id } as University, lang),
+                })),
+              ]}
+              value={city}
+              onChange={setCity}
+              ariaLabel={t("uni_city")}
+              layoutId="uni-city-pill"
+            />
           </div>
         </Reveal>
 
         <Reveal>
           <div className="ios-section-head">
-            <h2>{desktop ? t("uni_list_title") : t("uni_all")}</h2>
+            <h2>{t("ab_unis")}</h2>
           </div>
-          {desktop && <p className="uni-list-lead">{t("uni_list_lead")}</p>}
         </Reveal>
 
         {listed.length === 0 ? (
           <p className="ios-empty">{t("uni_list_empty")}</p>
-        ) : !desktop ? (
-          <div className="uni-az">
-            {groups.map(([letter, list]) => (
-              <section key={letter} className="uni-az-group" aria-label={letter}>
-                <h3 className="uni-az-letter">{letter}</h3>
-                <div className="uni-az-list">
-                  {list.map((u) => (
-                    <UniversityRow key={u.slug} u={u} />
-                  ))}
-                </div>
-              </section>
-            ))}
-          </div>
         ) : (
           <Stagger className="uni-tiles">
             {listed.map((u) => (
@@ -173,83 +132,6 @@ export function University() {
             ))}
           </Stagger>
         )}
-      </section>
-
-      <section className="section tight app-mobile">
-        <Reveal>
-          <AppLink to="/university/china" className="uni-enroll-teaser">
-            <div>
-              <strong>{t("uni_enroll_title")}</strong>
-              <em>
-                {t("uni_enroll_now")} · {t("uni_status_open")}
-              </em>
-            </div>
-            <span aria-hidden>›</span>
-          </AppLink>
-        </Reveal>
-      </section>
-
-      <section className="section tight section-last app-mobile">
-        <Reveal>
-          <AppLink to="/enroll?interest=university" className="ios-cta">
-            {t("uni_enroll_cta")}
-          </AppLink>
-        </Reveal>
-      </section>
-
-      <section className="section desk-only">
-        <Reveal>
-          <h2 className="h2">{t("steps_title")}</h2>
-        </Reveal>
-        <Stagger className="steps-grid">
-          {steps.map(([title, desc], i) => (
-            <StaggerItem key={title}>
-              <div className="step-card">
-                <span className="step-num">0{i + 1}</span>
-                <h3>{t(title)}</h3>
-                <p>{t(desc)}</p>
-              </div>
-            </StaggerItem>
-          ))}
-        </Stagger>
-      </section>
-
-      <section className="section desk-only">
-        <Reveal>
-          <h2 className="h2">{t("compare_title")}</h2>
-        </Reveal>
-        <Reveal delay={0.05}>
-          <div className="compare-table" role="table">
-            <div className="compare-row compare-head" role="row">
-              <span role="columnheader" />
-              <span role="columnheader">{t("china")}</span>
-              <span role="columnheader">{t("poland")}</span>
-            </div>
-            {compareRows.map(([label, c, p]) => (
-              <div key={label} className="compare-row" role="row">
-                <span role="rowheader">{t(label)}</span>
-                <span role="cell">{t(c)}</span>
-                <span role="cell">{t(p)}</span>
-              </div>
-            ))}
-          </div>
-        </Reveal>
-      </section>
-
-      <section className="section desk-only">
-        <Reveal>
-          <h2 className="h2">{t("faq_title")}</h2>
-        </Reveal>
-        <Stagger className="faq-list">
-          {faqs.map(([qKey, a]) => (
-            <StaggerItem key={qKey}>
-              <details className="faq-item">
-                <summary>{t(qKey)}</summary>
-                <p>{t(a)}</p>
-              </details>
-            </StaggerItem>
-          ))}
-        </Stagger>
       </section>
     </PageShell>
   );

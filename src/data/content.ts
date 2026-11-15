@@ -98,7 +98,14 @@ export const hskFees = { month: 1_800_000, sixMonth: 4_800_000 } as const;
 export type HskStage = "beginner" | "intermediate" | "advanced";
 
 /** `drop`: point numbers the academy took off the page, kept in the copy files. */
-function hskCourse(level: number, filter: HskStage, image: string, points: number, drop: number[] = []) {
+function hskCourse(
+  level: number,
+  filter: HskStage,
+  image: string,
+  points: number,
+  drop: number[] = [],
+  seats: { total: number; left: number; discount?: number } = { total: 20, left: 8 },
+) {
   return {
     id: `hsk${level}`,
     level,
@@ -123,17 +130,25 @@ function hskCourse(level: number, filter: HskStage, image: string, points: numbe
       .map((m) => m.id),
     /** HSK6 is not part of the 6-month HSK1–5 class. */
     sixMonth: level <= 5,
+    seatsTotal: seats.total,
+    seatsLeft: seats.left,
+    /** Percent off the listed fee; omit when there is no promo. */
+    discountPercent: seats.discount,
   };
 }
 
 /** HSK1–6, one course page per level (khanz_mn_huudasnii_tekst.docx). */
 export const coursesMeta = [
-  hskCourse(1, "beginner", "/courses/image12.webp", 7),
-  hskCourse(2, "beginner", "/courses/image14.webp", 6, [2]),
-  hskCourse(3, "intermediate", "/courses/image8.webp", 10, [2, 3, 4, 5, 6, 7, 8]),
-  hskCourse(4, "intermediate", "/courses/image15.webp", 8, [5, 6, 7, 8]),
-  hskCourse(5, "advanced", "/courses/image4.webp", 8, [5, 6, 7]),
-  hskCourse(6, "advanced", "/courses/image11.webp", 9, [7, 8, 9]),
+  hskCourse(1, "beginner", "/courses/image12.webp", 7, [], { total: 20, left: 5, discount: 10 }),
+  hskCourse(2, "beginner", "/courses/image14.webp", 6, [2], { total: 18, left: 8 }),
+  hskCourse(3, "intermediate", "/courses/image8.webp", 10, [2, 3, 4, 5, 6, 7, 8], {
+    total: 16,
+    left: 3,
+    discount: 10,
+  }),
+  hskCourse(4, "intermediate", "/courses/image15.webp", 8, [5, 6, 7, 8], { total: 16, left: 12 }),
+  hskCourse(5, "advanced", "/courses/image4.webp", 8, [5, 6, 7], { total: 14, left: 2, discount: 15 }),
+  hskCourse(6, "advanced", "/courses/image11.webp", 9, [7, 8, 9], { total: 12, left: 7 }),
 ];
 
 export type CourseProgram = (typeof coursesMeta)[number];

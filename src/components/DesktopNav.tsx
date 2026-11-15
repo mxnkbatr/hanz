@@ -159,7 +159,7 @@ export function DesktopNav() {
                         </span>
                       </Link>
                     </div>
-                    <Link to={COURSES} className="mega-feature">
+                    <Link to="/courses/match" className="mega-feature">
                       <span className="mega-feature-glyph" aria-hidden>
                         测
                       </span>

@@ -7,21 +7,24 @@ import { hapticLight } from "../lib/native";
 import { lockBodyScroll, unlockBodyScroll } from "../lib/scrollLock";
 import { ease, sheetEase } from "../lib/motion";
 import { IconClose, IconPhone, NavIcon } from "./Icons";
-import { DarkModeRow, Group, LanguageRow, Row } from "./SettingsList";
+import { DarkModeRow, Group, LanguageRow, Row, type Tone } from "./SettingsList";
 
 type Props = { open: boolean; onClose: () => void };
 
 const glyph = (g: string) => <span className="sl-glyph">{g}</span>;
 
 /** Pages the tab bar doesn't already cover. */
-const PAGES: { to: string; key: string; icon: ReactNode }[] = [
-  { to: "/pricing", key: "nav_pricing", icon: glyph("₮") },
-  { to: "/hsk", key: "nav_hsk", icon: glyph("考") },
-  { to: "/university/poland", key: "poland_title", icon: <NavIcon name="uni" /> },
-  { to: "/medee", key: "nav_news", icon: <NavIcon name="news" /> },
-  { to: "/shop", key: "nav_shop", icon: <NavIcon name="bag" /> },
-  { to: "/translation", key: "nav_translation", icon: glyph("译") },
-  { to: "/about", key: "nav_about", icon: <NavIcon name="about" /> },
+const LEARN: { to: string; key: string; icon: ReactNode; tone: Tone }[] = [
+  { to: "/quiz", key: "nav_quiz", icon: <NavIcon name="quiz" />, tone: "purple" },
+  { to: "/hsk", key: "nav_hsk", icon: glyph("考"), tone: "red" },
+  { to: "/pricing", key: "nav_pricing", icon: glyph("₮"), tone: "green" },
+];
+const MORE: { to: string; key: string; icon: ReactNode; tone: Tone }[] = [
+  { to: "/medee", key: "nav_news", icon: <NavIcon name="news" />, tone: "orange" },
+  { to: "/travel", key: "nav_travel", icon: <NavIcon name="travel" />, tone: "teal" },
+  { to: "/translation", key: "nav_translation", icon: glyph("译"), tone: "indigo" },
+  { to: "/about", key: "nav_about", icon: <NavIcon name="about" />, tone: "gray" },
+  { to: "/contact", key: "nav_contact", icon: <IconPhone />, tone: "blue" },
 ];
 
 /**
@@ -117,9 +120,14 @@ export function MobileMenuSheet({ open, onClose }: Props) {
               </motion.div>
 
               <motion.div {...rise(2)}>
+                <Group title={t("mm_learn")}>
+                  {LEARN.map((p) => (
+                    <Row key={p.to} to={p.to} icon={p.icon} tone={p.tone} label={t(p.key)} onGo={onClose} />
+                  ))}
+                </Group>
                 <Group title={t("mm_explore")}>
-                  {PAGES.map((p) => (
-                    <Row key={p.to} to={p.to} icon={p.icon} label={t(p.key)} onGo={onClose} />
+                  {MORE.map((p) => (
+                    <Row key={p.to} to={p.to} icon={p.icon} tone={p.tone} label={t(p.key)} onGo={onClose} />
                   ))}
                 </Group>
               </motion.div>

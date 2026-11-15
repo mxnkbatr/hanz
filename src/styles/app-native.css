@@ -1,0 +1,140 @@
+/* ─── Native iOS details (phones): Settings tiles, profile, FAQ, shop cards ─── */
+
+/* Settings icon tiles in system colours (white glyph) */
+html.site .sl-tile[class*="is-"] {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  color: #fff !important;
+}
+html.site .sl-tile[class*="is-"] :is(svg, .sl-glyph) { color: #fff !important; width: 18px; height: 18px; font-size: 15px; line-height: 1; }
+html.site .sl-tile.is-red { background: #ff3b30 !important; }
+html.site .sl-tile.is-orange { background: #ff9500 !important; }
+html.site .sl-tile.is-yellow { background: #ffcc00 !important; }
+html.site .sl-tile.is-green { background: #34c759 !important; }
+html.site .sl-tile.is-teal { background: #30b0c7 !important; }
+html.site .sl-tile.is-blue { background: #007aff !important; }
+html.site .sl-tile.is-indigo { background: #5856d6 !important; }
+html.site .sl-tile.is-purple { background: #af52de !important; }
+html.site .sl-tile.is-pink { background: #ff2d55 !important; }
+html.site .sl-tile.is-gray { background: #8e8e93 !important; }
+html.site .sl-tile.is-black { background: #1c1c1e !important; }
+
+@media (max-width: 899px) {
+  /* Rows: 44pt+, press highlight like a table cell */
+  html.site :is(.sl-row) {
+    min-height: 48px;
+    transition: background-color 0.12s ease;
+  }
+  html.site a.sl-row:active,
+  html.site button.sl-row:active {
+    background: color-mix(in srgb, var(--text) 8%, transparent);
+  }
+  html.site .sl-group-title {
+    font-family: var(--ios-font);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    color: var(--ios-secondary);
+    padding-left: 16px;
+  }
+
+  /* FAQ rows open in place */
+  .sl-faq-q {
+    width: 100%;
+    border: 0;
+    font: inherit;
+    text-align: left;
+    color: inherit;
+    background: transparent;
+    cursor: pointer;
+  }
+  .sl-faq.is-open .sl-chevron { transform: rotate(90deg); }
+  .sl-chevron { transition: transform 0.2s ease; }
+  .sl-faq + .sl-faq { border-top: 1px solid var(--ios-hairline); }
+  .sl-faq-a {
+    margin: 0;
+    padding: 0 16px 14px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ios-secondary);
+    animation: sl-faq-in 0.22s ease;
+  }
+  @keyframes sl-faq-in { from { opacity: 0; transform: translateY(-4px); } }
+
+  /* Profile: guest card */
+  .pf-guest { text-align: center; }
+  .pf-avatar.is-guest {
+    display: grid;
+    place-items: center;
+    color: #fff;
+    background: linear-gradient(180deg, #ff4a57, #d9111f);
+  }
+  .pf-avatar.is-guest svg { width: 30px; height: 30px; }
+  .pf-guest-actions {
+    display: grid;
+    gap: 6px;
+    width: 100%;
+    margin-top: 10px;
+  }
+  .pf-guest-actions .btn { min-height: 50px; justify-content: center; }
+  html.site .app-shell .pf-guest-link {
+    min-height: 44px;
+    display: grid;
+    place-items: center;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--seal);
+    text-decoration: none;
+  }
+
+  /* Shop cards: one badge (stock) only, clean photo, price as the anchor */
+  html.site .app-shell .shop-card .shop-media .tag { display: none !important; }
+  html.site .app-shell .shop-card .badge-stock {
+    top: 10px !important;
+    right: 10px !important;
+    left: auto !important;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+    color: #fff !important;
+    background: rgba(20, 18, 20, 0.45) !important;
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+  html.site .app-shell .shop-card {
+    overflow: hidden;
+    padding: 0 !important;
+  }
+  html.site .app-shell .shop-card .shop-media {
+    aspect-ratio: 1;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+  html.site .app-shell .shop-card .shop-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  html.site .app-shell .shop-card .shop-body { padding: 10px 12px 12px !important; }
+  html.site .app-shell .shop-card .shop-cat { display: none; }
+  html.site .app-shell .shop-card h3 { font-size: 15px; font-weight: 600; line-height: 1.25; margin: 0 0 4px; }
+  html.site .app-shell .shop-card .muted { display: none; }
+  html.site .app-shell .shop-card .price {
+    margin: 0;
+    font-family: var(--ios-font);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--seal);
+  }
+  html.site .app-shell .shop-card .card-cta { display: none; }
+  html.site .app-shell .shop-card:active { transform: scale(0.97); }
+  html.site .app-shell .shop-grid { gap: 12px !important; }
+}

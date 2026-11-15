@@ -1720,6 +1720,16 @@
   margin-bottom: 0.75rem;
 }
 
+a.course-match {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+a.course-match .course-match-start-mini {
+  pointer-events: none;
+}
+
 .course-match-compact-row {
   display: grid;
   grid-template-columns: auto 1fr auto;
@@ -2026,10 +2036,21 @@
   display: block;
 }
 
-.course-product-tag {
+.course-product-badges {
   position: absolute;
+  z-index: 1;
   left: 0.55rem;
   top: 0.55rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  max-width: calc(100% - 1.1rem);
+}
+
+.course-product-tag {
+  position: relative;
+  left: auto;
+  top: auto;
   z-index: 1;
   min-height: 24px;
   padding: 0.2rem 0.55rem;
@@ -2039,6 +2060,36 @@
   color: #141311;
   font-size: 0.68rem;
   font-weight: 760;
+}
+
+.course-product-sale {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: var(--seal);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 760;
+}
+
+.course-product-seats {
+  position: absolute;
+  z-index: 1;
+  right: 0.55rem;
+  bottom: 0.55rem;
+  max-width: calc(100% - 1.1rem);
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #1f7a40;
+  font-size: 0.65rem;
+  font-weight: 740;
+}
+
+.course-product-seats.is-low {
+  color: #b5121b;
 }
 
 .course-product-body {

@@ -13,7 +13,7 @@ import {
 import { useI18n } from "../i18n/I18nContext";
 import type { CourseLive, TeamMemberCms } from "../lib/cms";
 import { loc } from "../lib/i18nText";
-import { checkQpayPaid, createQpayInvoice, type QpayInvoice } from "../lib/qpay";
+import { checkQpayPaid, requestQpayInvoice, type QpayInvoice } from "../lib/qpay";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { getSupabase } from "../lib/supabase";
 import { hapticLight } from "../lib/native";
@@ -22,7 +22,7 @@ import { SafeImage } from "./SafeImage";
 import { MemberAvatar } from "./TeachersSection";
 
 type Step = "program" | "details" | "you" | "anket" | "pay" | "confirm";
-type Phase = "form" | "sending" | "paying" | "paid" | "done";
+type Phase = "form" | "sending" | "paying" | "pay_fail" | "paid" | "done";
 
 /** Columns from supabase/enrollments-v2.sql; dropped on retry if the DB doesn't have them yet. */
 const V2_COLUMNS = ["hsk_level", "schedule", "plan", "plan_price", "child_name", "anket"] as const;
@@ -67,6 +67,7 @@ export function EnrollWizard({
   const [error, setError] = useState("");
   const [invoice, setInvoice] = useState<QpayInvoice | null>(null);
   const [leadId, setLeadId] = useState("");
+  const [payBusy, setPayBusy] = useState(false);
 
   const program = programs.find((p) => p.id === programId);
   const isKids = program?.levels === "kids";
@@ -87,17 +88,26 @@ export function EnrollWizard({
         ? schedule
         : "";
   const planMeta = plans.length === 1 ? plans[0] : plans.find((p) => p.id === plan);
+  const discount =
+    course?.discountPercent != null && course.discountPercent > 0 ? course.discountPercent : 0;
+  const chargeOf = (amount: number) =>
+    discount > 0 ? Math.round(amount * (1 - discount / 100)) : amount;
+  const charge = planMeta ? chargeOf(planMeta.amount) : 0;
   const label = (c: Choice) => (c.labelKey.startsWith("HSK") ? c.labelKey : t(c.labelKey));
 
+  // Short leads (travel / consult): just the contact form — no confirm screen.
+  const needsConfirm = useAnket || plans.length > 0;
+  // Deep links (?interest=…) skip the programme picker so the count starts at 1.
   const steps: Step[] = [
-    "program",
+    ...(startProgram ? [] : (["program"] as Step[])),
     ...(isCourse ? (["details"] as Step[]) : []),
     "you",
     ...(useAnket ? (["anket"] as Step[]) : []),
     ...(plans.length ? (["pay"] as Step[]) : []),
-    "confirm",
+    ...(needsConfirm ? (["confirm"] as Step[]) : []),
   ];
-  const index = steps.indexOf(step);
+  const index = Math.max(0, steps.indexOf(step));
+  const isLast = index >= steps.length - 1;
 
   /** What still blocks "Continue" on this screen (empty = ready). */
   const missing = (() => {
@@ -132,7 +142,7 @@ export function EnrollWizard({
   useEffect(() => {
     if (phase !== "paying" || !leadId) return;
     const timer = window.setInterval(async () => {
-      if (await checkQpayPaid(leadId)) setPhase("paid");
+      if (await checkQpayPaid(leadId, "enroll")) setPhase("paid");
     }, 5000);
     return () => window.clearInterval(timer);
   }, [phase, leadId]);
@@ -150,7 +160,11 @@ export function EnrollWizard({
       isKids ? `${t("kids_form_child")}: ${you.childName.trim()} (${you.childAge.trim()})` : "",
       levelLabel ? `${t("enroll_level")}: ${label(levelLabel)}` : "",
       scheduleLabel ? `${t("enroll_schedule")}: ${t(scheduleLabel.labelKey)}` : "",
-      planMeta ? `${t("enroll_plan")}: ${t(planMeta.labelKey)} · ${formatPrice(planMeta.amount)}` : "",
+      planMeta
+        ? `${t("enroll_plan")}: ${t(planMeta.labelKey)} · ${formatPrice(charge)}${
+            discount > 0 ? ` (−${discount}%)` : ""
+          }`
+        : "",
       ...(useAnket ? anketLines(anket, t, isCourse) : []),
       useAnket ? "" : you.note.trim(),
     ]
@@ -170,15 +184,22 @@ export function EnrollWizard({
       hsk_level: levelId || null,
       schedule: (useAnket && isCourse ? anket.schedule : scheduleId) || null,
       plan: planMeta?.id ?? null,
-      plan_price: planMeta?.amount ?? null,
+      plan_price: charge > 0 ? charge : null,
       child_name: isKids ? you.childName.trim() || null : null,
       anket: useAnket ? anket : null,
     };
 
     const supabase = await getSupabase();
     let { error: err } = await supabase.from("enrollments").insert({ ...base, ...structured });
+    // Older DBs may lack `anket` / some v2 columns — keep plan + price so QPay still works.
     if (err && V2_COLUMNS.some((c) => err!.message.includes(c))) {
-      ({ error: err } = await supabase.from("enrollments").insert(base));
+      const { anket: _a, ...withoutAnket } = structured;
+      ({ error: err } = await supabase.from("enrollments").insert({ ...base, ...withoutAnket }));
+    }
+    if (err && V2_COLUMNS.some((c) => err!.message.includes(c))) {
+      ({ error: err } = await supabase
+        .from("enrollments")
+        .insert({ ...base, plan: structured.plan, plan_price: structured.plan_price }));
     }
     if (err) {
       console.error("[enroll]", err);
@@ -189,46 +210,100 @@ export function EnrollWizard({
     setLeadId(id);
     void hapticLight();
 
-    if (!planMeta) {
+    if (!planMeta || charge <= 0) {
       setPhase("done");
       return;
     }
-    const inv = await createQpayInvoice(id);
-    if (inv) {
-      setInvoice(inv);
-      setPhase("paying");
-    } else {
-      setPhase("done");
+    await openQpay(id);
+  }
+
+  async function openQpay(id: string) {
+    setError("");
+    setPayBusy(true);
+    try {
+      const { invoice: inv, error: qerr } = await requestQpayInvoice(id, "enroll");
+      if (qerr === "already_paid") {
+        setPhase("paid");
+        return;
+      }
+      if (inv) {
+        setInvoice(inv);
+        setPhase("paying");
+        return;
+      }
+      console.error("[enroll qpay]", qerr);
+      setError(t("wz_pay_fail"));
+      setPhase("pay_fail");
+    } finally {
+      setPayBusy(false);
     }
   }
 
   /* ── After sending ── */
+  if (phase === "pay_fail" && leadId) {
+    return (
+      <section className="wz wz-pay">
+        <h2 className="wz-title">{t("wz_pay_title")}</h2>
+        <p className="wz-lead">{t("wz_pay_fail")}</p>
+        {charge > 0 && <p className="wz-amount">{formatPrice(charge)}</p>}
+        {error && <p className="form-err">{error}</p>}
+        <div className="wz-actions">
+          <button
+            type="button"
+            className="btn btn-seal"
+            disabled={payBusy}
+            onClick={() => void openQpay(leadId)}
+          >
+            <span>{payBusy ? t("form_sending") : t("wz_pay_retry")}</span>
+          </button>
+          <button type="button" className="btn hsk-btn-ghost" onClick={() => setPhase("done")}>
+            <span>{t("wz_pay_later")}</span>
+          </button>
+        </div>
+      </section>
+    );
+  }
+
   if (phase === "paying" && invoice) {
     return (
       <section className="wz wz-pay">
         <h2 className="wz-title">{t("wz_pay_title")}</h2>
         <p className="wz-lead">{t("wz_pay_lead")}</p>
         <p className="wz-amount">{formatPrice(invoice.amount)}</p>
-        <img className="wz-qr" src={`data:image/png;base64,${invoice.qr_image}`} alt="QPay QR" />
+
         {invoice.urls.length > 0 && (
-          <ul className="wz-banks">
-            {invoice.urls.map((u) => (
-              <li key={u.link}>
-                <a href={u.link}>
-                  <img src={u.logo} alt="" loading="lazy" />
-                  <span>{u.name}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
+          <div className="ck-pay-block">
+            <h3>{t("ck_pay_app")}</h3>
+            <p>{t("ck_pay_app_d")}</p>
+            <ul className="wz-banks ck-banks">
+              {invoice.urls.map((u) => (
+                <li key={u.link}>
+                  <a href={u.link}>
+                    <img src={u.logo} alt="" loading="lazy" />
+                    <span>{u.name}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
-        <p className="wz-waiting">{t("wz_pay_waiting")}</p>
+
+        <div className="ck-pay-block">
+          <h3>{t("ck_pay_qr")}</h3>
+          <p>{t("ck_pay_qr_d")}</p>
+          <img className="wz-qr ck-qr" src={`data:image/png;base64,${invoice.qr_image}`} alt="QPay QR" />
+        </div>
+
+        <p className="wz-waiting ck-waiting" role="status">
+          <span className="ck-spinner" aria-hidden />
+          {t("ck_auto")}
+        </p>
         <div className="wz-actions">
           <button
             type="button"
             className="btn btn-seal"
             onClick={async () => {
-              if (await checkQpayPaid(leadId)) setPhase("paid");
+              if (await checkQpayPaid(leadId, "enroll")) setPhase("paid");
             }}
           >
             <span>{t("wz_pay_check")}</span>
@@ -249,8 +324,19 @@ export function EnrollWizard({
         </span>
         <h2 className="wz-title">{phase === "paid" ? t("wz_paid_title") : t("form_success_title")}</h2>
         <p className="wz-lead">
-          {phase === "paid" ? t("wz_paid_msg") : planMeta ? t("wz_nopay_msg") : t("wz_done_msg")}
+          {phase === "paid"
+            ? t("wz_paid_msg")
+            : planMeta
+              ? t("wz_nopay_msg")
+              : t("wz_done_msg")}
         </p>
+        {phase === "done" && planMeta && leadId && (
+          <div className="wz-actions">
+            <button type="button" className="btn btn-seal" onClick={() => void openQpay(leadId)}>
+              <span>{t("wz_pay_retry")}</span>
+            </button>
+          </div>
+        )}
       </section>
     );
   }
@@ -258,16 +344,18 @@ export function EnrollWizard({
   /* ── The five screens ── */
   return (
     <section className="wz enroll-form">
-      <header className="wz-head">
-        <ol className="wz-progress" aria-label={`${index + 1} / ${steps.length}`}>
-          {steps.map((s, i) => (
-            <li key={s} className={i <= index ? "is-on" : undefined} />
-          ))}
-        </ol>
-        <p className="wz-count">
-          {index + 1} / {steps.length} · {t(`wz_step_${step}`)}
-        </p>
-      </header>
+      {steps.length > 1 && (
+        <header className="wz-head">
+          <ol className="wz-progress" aria-label={`${index + 1} / ${steps.length}`}>
+            {steps.map((s, i) => (
+              <li key={s} className={i <= index ? "is-on" : undefined} />
+            ))}
+          </ol>
+          <p className="wz-count">
+            {index + 1} / {steps.length} · {t(`wz_step_${step}`)}
+          </p>
+        </header>
+      )}
 
       {step === "program" && (
         <div className="wz-programs">
@@ -358,8 +446,12 @@ export function EnrollWizard({
 
       {step === "anket" && <AnketQuestions value={anket} onChange={setAnket} isCourse={isCourse} />}
 
-      {step === "you" && !useAnket && (
+      {step === "you" && !useAnket && program && (
         <div className="wz-fields consult-form">
+          <p className="enroll-fixed">
+            <span>{t("enroll_program")}</span>
+            <strong>{t(program.labelKey)}</strong>
+          </p>
           <label>
             <span>{isKids ? t("kids_form_parent") : t("form_name")}</span>
             <input
@@ -418,13 +510,25 @@ export function EnrollWizard({
         <div className="wz-plans">
           <fieldset className="enroll-choices enroll-plans">
             <legend>{t("enroll_plan")}</legend>
-            {plans.map((p) => (
-              <label key={p.id} className={`enroll-plan${planMeta?.id === p.id ? " is-on" : ""}`}>
-                <input type="radio" name="plan" checked={planMeta?.id === p.id} onChange={() => setPlan(p.id)} />
-                <span>{t(p.labelKey)}</span>
-                <strong>{formatPrice(p.amount)}</strong>
-              </label>
-            ))}
+            {plans.map((p) => {
+              const sale = chargeOf(p.amount);
+              return (
+                <label key={p.id} className={`enroll-plan${planMeta?.id === p.id ? " is-on" : ""}`}>
+                  <input type="radio" name="plan" checked={planMeta?.id === p.id} onChange={() => setPlan(p.id)} />
+                  <span>{t(p.labelKey)}</span>
+                  <strong className={sale < p.amount ? "cd-price-sale" : undefined}>
+                    {sale < p.amount ? (
+                      <>
+                        <s>{formatPrice(p.amount)}</s>
+                        {formatPrice(sale)}
+                      </>
+                    ) : (
+                      formatPrice(p.amount)
+                    )}
+                  </strong>
+                </label>
+              );
+            })}
           </fieldset>
           <p className="wz-note">{t("wz_qpay_note")}</p>
         </div>
@@ -473,7 +577,17 @@ export function EnrollWizard({
             <div>
               <dt>{t("enroll_plan")}</dt>
               <dd>
-                {t(planMeta.labelKey)} · <strong>{formatPrice(planMeta.amount)}</strong>
+                {t(planMeta.labelKey)} ·{" "}
+                <strong className={charge < planMeta.amount ? "cd-price-sale" : undefined}>
+                  {charge < planMeta.amount ? (
+                    <>
+                      <s>{formatPrice(planMeta.amount)}</s>
+                      {formatPrice(charge)}
+                    </>
+                  ) : (
+                    formatPrice(charge)
+                  )}
+                </strong>
               </dd>
             </div>
           )}
@@ -494,13 +608,28 @@ export function EnrollWizard({
         {planMeta && step !== "program" && (
           <p className="wz-foot-total">
             <span>{t("enroll_total")}</span>
-            <strong>{formatPrice(planMeta.amount)}</strong>
+            <strong>{formatPrice(charge)}</strong>
           </p>
         )}
-        {step === "confirm" ? (
-          <button type="button" className="btn btn-seal" disabled={phase === "sending"} onClick={() => void submit()}>
+        {isLast || step === "confirm" ? (
+          <button
+            type="button"
+            className="btn btn-seal"
+            disabled={phase === "sending" || payBusy}
+            onClick={() => {
+              if (missing) {
+                setError(missing);
+                return;
+              }
+              void submit();
+            }}
+          >
             <span>
-              {phase === "sending" ? t("form_sending") : planMeta ? t("wz_submit_pay") : t("wz_submit")}
+              {phase === "sending" || payBusy
+                ? t("form_sending")
+                : planMeta
+                  ? t("wz_submit_pay")
+                  : t("wz_submit")}
             </span>
           </button>
         ) : (

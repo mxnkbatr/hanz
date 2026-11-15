@@ -349,7 +349,11 @@ export function AdminLeads() {
                 {r.schedule && (
                   <div>
                     <dt>{t("admin_lead_schedule")}</dt>
-                    <dd>{t(`sch_${r.schedule}`)}</dd>
+                    <dd>
+                      {/^(\d|other)/.test(r.schedule)
+                        ? t(`ak_sch_${r.schedule}`)
+                        : t(`sch_${r.schedule}`)}
+                    </dd>
                   </div>
                 )}
                 {r.plan && (

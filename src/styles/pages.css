@@ -1478,6 +1478,120 @@
   font-size: 1.2rem;
   color: #fff;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  z-index: 2;
+}
+
+.cd-media-badges {
+  position: absolute;
+  z-index: 1;
+  left: 0.9rem;
+  right: 0.9rem;
+  bottom: 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  pointer-events: none;
+}
+
+.cd-media-seats {
+  position: absolute;
+  z-index: 1;
+  top: 0.9rem;
+  right: 0.9rem;
+  max-width: min(52%, 11rem);
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  color: #1f7a40;
+  font-size: 0.72rem;
+  font-weight: 720;
+  line-height: 1.2;
+}
+
+.cd-media-seats.is-low {
+  color: #b5121b;
+}
+
+.cd-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #141311;
+  font-size: 0.72rem;
+  font-weight: 720;
+}
+
+.cd-pill.is-sale {
+  background: var(--seal);
+  color: #fff;
+}
+
+.cd-pill.is-seats {
+  background: rgba(48, 177, 88, 0.14);
+  color: #1f7a40;
+}
+
+.cd-pill.is-seats.is-low {
+  background: rgba(227, 38, 43, 0.12);
+  color: #b5121b;
+}
+
+.cd-pill.is-price {
+  background: rgba(18, 17, 15, 0.06);
+  color: var(--seal);
+  font-weight: 760;
+}
+
+.cd-pill.is-price s {
+  margin-right: 0.35rem;
+  color: rgba(20, 19, 17, 0.45);
+  font-weight: 550;
+}
+
+.cd-head-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.15rem;
+}
+
+.cd-price-sale {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.1rem;
+}
+
+.cd-sched-value.cd-price-sale {
+  justify-self: end;
+}
+
+.cd-price-sale s {
+  color: rgba(20, 19, 17, 0.4);
+  font-size: 0.85em;
+  font-weight: 550;
+}
+
+.cd-bar-was {
+  display: block;
+  font-style: normal;
+  font-size: 0.72rem;
+  font-weight: 550;
+  color: rgba(20, 19, 17, 0.45);
+  text-decoration: line-through;
+}
+
+.cd-bar-seats {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.7rem;
+  font-weight: 650;
+  color: var(--ios-secondary, rgba(20, 19, 17, 0.55));
 }
 
 .cd-body {
@@ -1931,4 +2045,424 @@ html.site .app-shell h2.cd-label {
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--ash);
+}
+
+/* ─── Desktop polish: Courses + University list hubs ─── */
+@media (min-width: 900px) {
+  .app-shell .page-courses .page-head,
+  .app-shell .page-uni .page-head {
+    margin-bottom: 0.35rem;
+  }
+
+  .app-shell .page-courses .page-head .h1,
+  .app-shell .page-uni .page-head .h1 {
+    font-size: clamp(2.2rem, 3.2vw, 2.85rem);
+    letter-spacing: -0.035em;
+  }
+
+  .app-shell .page-uni .uni-head-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+    margin-top: 0.35rem;
+  }
+
+  .app-shell .page-courses .course-match-compact,
+  .app-shell .page-uni .uni-desk-cta {
+    margin: 0.85rem 0 1rem;
+  }
+
+  .app-shell .page-courses .course-toolbar,
+  .app-shell .page-uni .ios-toolbar {
+    display: grid;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .app-shell .page-courses .ios-search,
+  .app-shell .page-uni .ios-search {
+    max-width: none;
+    width: 100%;
+  }
+
+  /* Courses: same product cards as phone, wider grid */
+  .app-shell .page-courses .course-product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .app-shell .page-courses .course-product-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    overflow: hidden;
+    border-radius: 20px;
+    background: var(--surface-1, var(--paper));
+    box-shadow: var(--ios-card-shadow, var(--shadow-soft));
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .app-shell .page-courses .course-product-card::before,
+  .app-shell .page-courses .course-product-card::after {
+    content: none;
+  }
+
+  .app-shell .page-courses .course-product-media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+
+  .app-shell .page-courses .course-product-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .app-shell .page-courses .course-product-badges {
+    position: absolute;
+    z-index: 1;
+    left: 0.55rem;
+    top: 0.55rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    max-width: calc(100% - 1.1rem);
+  }
+
+  .app-shell .page-courses .course-product-tag,
+  .app-shell .page-courses .course-product-sale {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 720;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .app-shell .page-courses .course-product-tag {
+    background: rgba(255, 255, 255, 0.92);
+    color: #141311;
+    border: 0;
+  }
+
+  .app-shell .page-courses .course-product-sale {
+    background: var(--seal);
+    color: #fff;
+    border: 0;
+  }
+
+  .app-shell .page-courses .course-product-seats {
+    position: absolute;
+    z-index: 1;
+    right: 0.55rem;
+    bottom: 0.55rem;
+    max-width: calc(100% - 1.1rem);
+    padding: 0.25rem 0.55rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #1f7a40;
+    font-size: 0.68rem;
+    font-weight: 720;
+  }
+
+  .app-shell .page-courses .course-product-seats.is-low {
+    color: #b5121b;
+  }
+
+  .app-shell .page-courses .course-product-body {
+    display: grid;
+    gap: 0.35rem;
+    padding: 0.85rem 0.9rem 1rem;
+  }
+
+  .app-shell .page-courses .course-product-body h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.25;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .app-shell .page-courses .course-product-body p {
+    display: none;
+  }
+
+  .app-shell .page-courses .cp-chips {
+    display: none;
+  }
+
+  .app-shell .page-courses .cp-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.35rem 0.75rem;
+  }
+
+  .app-shell .page-courses .cp-duration {
+    font-style: normal;
+    font-size: 0.78rem;
+    color: var(--ios-secondary, var(--ash));
+  }
+
+  .app-shell .page-courses .cp-price {
+    font-size: 0.95rem;
+    font-weight: 750;
+    color: var(--seal);
+  }
+
+  /* University tiles: photo-first, city badge */
+  .app-shell .page-uni .uni-tiles {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .app-shell .page-uni .uni-tile {
+    border: 0;
+    border-radius: 20px;
+    box-shadow: var(--ios-card-shadow, var(--shadow-soft));
+  }
+
+  .app-shell .page-uni .uni-tile-media-wrap {
+    position: relative;
+    display: block;
+  }
+
+  .app-shell .page-uni .uni-tile-media {
+    aspect-ratio: 4 / 3;
+  }
+
+  .app-shell .page-uni .uni-tile-tag {
+    position: absolute;
+    left: 0.55rem;
+    bottom: 0.55rem;
+    z-index: 1;
+    max-width: calc(100% - 1.1rem);
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #141311;
+    font-size: 0.7rem;
+    font-weight: 720;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .app-shell .page-uni .uni-tile-body {
+    gap: 0.15rem;
+    padding: 0.8rem 0.9rem 0.95rem;
+  }
+
+  .app-shell .page-uni .uni-tile-body strong {
+    font-size: 0.95rem;
+    font-weight: 700;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .app-shell .page-uni .uni-tile-body small {
+    font-size: 0.78rem;
+  }
+
+  .app-shell .page-uni .ios-section-head {
+    margin: 0.35rem 0 0.75rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .app-shell .page-courses .course-product-grid,
+  .app-shell .page-uni .uni-tiles {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* ─── Desktop: Shop · Travel · Quiz hubs ─── */
+@media (min-width: 900px) {
+  .app-shell .page-shop .page-head .h1,
+  .app-shell .page-travel .page-head .h1,
+  .app-shell .page-quiz .page-head .h1 {
+    font-size: clamp(2.2rem, 3.2vw, 2.85rem);
+    letter-spacing: -0.035em;
+  }
+
+  .app-shell .page-shop .ios-toolbar,
+  .app-shell .page-travel .ios-toolbar {
+    display: grid;
+    gap: 0.75rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .app-shell .page-shop .shop-banner {
+    display: none !important;
+  }
+
+  .app-shell .page-shop .shop-grid {
+    max-width: none;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+
+  .app-shell .page-shop .shop-card {
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .app-shell .page-shop .shop-media {
+    aspect-ratio: 4 / 3;
+  }
+
+  .app-shell .page-shop .shop-body h3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .app-shell .page-shop .shop-body .muted,
+  .app-shell .page-shop .card-cta {
+    display: none;
+  }
+
+  /* Travel: photo cards, no essay text */
+  .app-shell .page-travel .travel-desk-grid,
+  .app-shell .page-travel .ios-feed {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .app-shell .page-travel .ios-travel-card {
+    border: 0;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--ios-card-shadow, var(--shadow-soft));
+  }
+
+  .app-shell .page-travel .ios-travel-media {
+    aspect-ratio: 4 / 3;
+  }
+
+  .app-shell .page-travel .ios-card-desc,
+  .app-shell .page-travel .ios-card-points,
+  .app-shell .page-travel .ios-card-cta {
+    display: none !important;
+  }
+
+  .app-shell .page-travel .ios-card-body {
+    padding: 0.85rem 0.95rem 1rem;
+  }
+
+  .app-shell .page-travel .ios-card-body h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Quiz: real cards, not a stretched phone list */
+  .app-shell .page-quiz .quiz-shell {
+    width: min(1100px, 100%);
+  }
+
+  .app-shell .page-quiz .quiz-pick-hero {
+    display: none;
+  }
+
+  .app-shell .page-quiz .quiz-pick-group {
+    background: transparent;
+    box-shadow: none;
+    border: 0;
+    padding: 0;
+    margin-bottom: 1.5rem;
+  }
+
+  .app-shell .page-quiz .quiz-pick-group-head {
+    margin-bottom: 0.75rem;
+  }
+
+  .app-shell .page-quiz .quiz-pick-group-head h2 {
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+  }
+
+  .app-shell .page-quiz .quiz-pick-group-head p {
+    display: none;
+  }
+
+  .app-shell .page-quiz .quiz-levels {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.85rem;
+    background: transparent;
+    box-shadow: none;
+    border: 0;
+    overflow: visible;
+  }
+
+  .app-shell .page-quiz .quiz-levels.quiz-tests-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .app-shell .page-quiz .quiz-level-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    gap: 0.35rem 0.75rem;
+    align-items: center;
+    min-height: 0;
+    padding: 1rem 1.05rem;
+    border: 0 !important;
+    border-radius: 18px;
+    background: var(--surface-1, var(--paper));
+    box-shadow: var(--ios-card-shadow, var(--shadow-soft));
+    text-align: left;
+  }
+
+  .app-shell .page-quiz .quiz-level-card:last-child {
+    border: 0 !important;
+  }
+
+  .app-shell .page-quiz .quiz-level-glyph {
+    grid-row: 1 / span 2;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    font-size: 1.25rem;
+  }
+
+  .app-shell .page-quiz .quiz-level-body {
+    grid-column: 2;
+    min-width: 0;
+  }
+
+  .app-shell .page-quiz .quiz-level-body em {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .app-shell .page-quiz .quiz-level-trail {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .app-shell .page-quiz .quiz-level-chevron {
+    display: none;
+  }
 }

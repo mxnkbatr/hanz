@@ -10,6 +10,9 @@ const About = lazy(() =>
 const Courses = lazy(() =>
   import("./pages/Courses").then((m) => ({ default: m.Courses })),
 );
+const CourseMatch = lazy(() =>
+  import("./pages/CourseMatch").then((m) => ({ default: m.CourseMatch })),
+);
 const CourseDetail = lazy(() =>
   import("./pages/CourseDetail").then((m) => ({ default: m.CourseDetail })),
 );
@@ -124,6 +127,12 @@ const AdminQuizCms = lazy(() =>
 const AdminStaff = lazy(() =>
   import("./pages/admin/AdminStaff").then((m) => ({ default: m.AdminStaff })),
 );
+const AdminAbroad = lazy(() =>
+  import("./pages/admin/AdminAbroad").then((m) => ({ default: m.AdminAbroad })),
+);
+const AdminHome = lazy(() =>
+  import("./pages/admin/AdminHome").then((m) => ({ default: m.AdminHome })),
+);
 const AdminMedia = lazy(() =>
   import("./pages/admin/AdminMedia").then((m) => ({ default: m.AdminMedia })),
 );
@@ -220,6 +229,8 @@ export default function App() {
             <Route path="pages/:section" element={<AdminPageSection />} />
             <Route path="settings" element={<AdminSettings />} />
             <Route path="branches" element={<AdminBranches />} />
+            <Route path="home" element={<AdminHome />} />
+            <Route path="abroad" element={<AdminAbroad />} />
             <Route path="windows" element={<AdminWindows />} />
             <Route path="translation" element={<AdminTranslationCms />} />
             <Route path="team" element={<AdminTeam />} />
@@ -233,6 +244,7 @@ export default function App() {
             <Route index element={<Home />} />
             <Route path="about" element={<About />} />
             <Route path="courses" element={<Courses />} />
+            <Route path="courses/match" element={<CourseMatch />} />
             <Route path="courses/:id" element={<CourseDetail />} />
             <Route path="hsk" element={<Hsk />} />
             <Route path="pricing" element={<Pricing />} />

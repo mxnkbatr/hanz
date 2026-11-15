@@ -64,10 +64,20 @@
     <meta name="format-detection" content="telephone=no" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Web fonts load without blocking first paint: phones render in the system
+         face (SF Pro / Roboto) straight away and swap the brand fonts in after. -->
     <link
+      rel="preload"
+      as="style"
       href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Onest:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;700&family=Noto+Serif+SC:wght@700&display=swap"
-      rel="stylesheet"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Onest:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;700&family=Noto+Serif+SC:wght@700&display=swap"
+      />
+    </noscript>
     <title>Ханз Академи · Hanz Academy Mongolia</title>
     <script>
       // Apply the site theme before first paint, so the header never flashes the

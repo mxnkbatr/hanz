@@ -17,12 +17,13 @@ export function Group({ title, children }: { title: string; children: ReactNode 
   );
 }
 
-type RowBody = { icon: ReactNode; label: string; detail?: string };
+export type Tone = "red" | "orange" | "yellow" | "green" | "teal" | "blue" | "indigo" | "purple" | "pink" | "gray" | "black";
+type RowBody = { icon: ReactNode; label: string; detail?: string; tone?: Tone };
 
-function RowInner({ icon, label, detail }: RowBody) {
+function RowInner({ icon, label, detail, tone }: RowBody) {
   return (
     <>
-      <span className="sl-tile" aria-hidden>
+      <span className={`sl-tile${tone ? ` is-${tone}` : ""}`} aria-hidden>
         {icon}
       </span>
       <span className="sl-label">

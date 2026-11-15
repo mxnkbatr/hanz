@@ -1,0 +1,565 @@
+/* ═════════════════════════════════════════════════════════════════════
+   App home sections, course filters, course facts (loaded after app-ios.css)
+   ═════════════════════════════════════════════════════════════════════ */
+
+/* ─── Banner slider (the one sideways swipe, with dots) ─── */
+.m-banners {
+  margin: 18px 0 4px;
+}
+
+.m-banner-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  border-radius: 22px;
+  overscroll-behavior-x: contain;
+}
+
+.m-banner-track::-webkit-scrollbar {
+  display: none;
+}
+
+.m-banner {
+  position: relative;
+  flex: 0 0 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 22px;
+  scroll-snap-align: center;
+  color: #fff;
+  text-decoration: none;
+}
+
+.m-banner img,
+.m-banner .img-fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.m-banner-copy {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  display: grid;
+  gap: 2px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: rgba(20, 16, 18, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  -webkit-backdrop-filter: blur(18px) saturate(1.6);
+  backdrop-filter: blur(18px) saturate(1.6);
+}
+
+.m-banner-copy strong {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+html.site .app-shell .m-banner-copy em,
+.m-banner-copy em {
+  font-size: 13px;
+  font-style: normal;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.m-banner-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.m-banner-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--text) 22%, transparent);
+  transition: width 0.25s ease, background-color 0.25s ease;
+}
+
+.m-banner-dots span.is-on {
+  width: 18px;
+  background: var(--seal);
+}
+
+/* ─── Four big shortcuts ─── */
+.m-tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 20px 0 6px;
+}
+
+.m-tiles.is-three .m-tile:first-child {
+  grid-column: 1 / -1;
+}
+
+html.site .app-shell .m-tile,
+.m-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 104px;
+  padding: 14px 16px;
+  overflow: hidden;
+  border-radius: 22px;
+  color: #fff;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 12px 26px -14px rgba(120, 20, 20, 0.45);
+  transition: transform 0.15s ease;
+}
+
+.m-tile:active {
+  transform: scale(0.97);
+}
+
+html.site .app-shell .m-tile strong {
+  position: relative;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+
+.m-tile-glyph {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  font-family: "Noto Serif SC", serif;
+  font-size: 22px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.24);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+/* China: red → amber. Poland: white over red (the flag). */
+.m-tile.is-cn {
+  background: linear-gradient(140deg, #ff5a4e 0%, #e3262b 55%, #b5121b 100%);
+}
+
+.m-tile.is-cn-soft {
+  background: linear-gradient(140deg, #ffb340 0%, #ff7a3d 60%, #e3262b 100%);
+}
+
+.m-tile.is-pl {
+  background: linear-gradient(180deg, #ffffff 0%, #ffffff 52%, #e8243c 52%, #c8102e 100%);
+}
+
+.m-tile.is-pl .m-tile-glyph {
+  color: #c8102e;
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(200, 16, 46, 0.25);
+}
+
+.m-tile.is-pl-soft {
+  background: linear-gradient(140deg, #ff6b8b 0%, #dc143c 60%, #9b0f2c 100%);
+}
+
+/* ─── Featured rows: live badge and seats ─── */
+.m-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  width: fit-content;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #1f9d4c;
+}
+
+.m-live::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 22%, transparent);
+}
+
+.m-seats {
+  width: fit-content;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #1f7a40;
+  background: rgba(48, 177, 88, 0.14);
+}
+
+.m-seats.is-low {
+  color: #b5121b;
+  background: rgba(227, 38, 43, 0.12);
+}
+
+/* ─── Study-abroad programme cards ─── */
+.m-programs {
+  display: grid;
+  gap: 12px;
+}
+
+.m-program {
+  display: flex;
+  overflow: hidden;
+  border-radius: 20px;
+  color: inherit;
+  text-decoration: none;
+  background: var(--glass-bg, var(--surface-1));
+  border: 1px solid var(--glass-border, transparent);
+  box-shadow: var(--glass-edge, none), var(--glass-shadow, var(--ios-card-shadow));
+  -webkit-backdrop-filter: var(--glass-blur, none);
+  backdrop-filter: var(--glass-blur, none);
+}
+
+.m-program-media {
+  flex: 0 0 104px;
+  min-height: 112px;
+}
+
+.m-program-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.m-program-body {
+  display: grid;
+  align-content: center;
+  gap: 5px;
+  min-width: 0;
+  padding: 12px 14px;
+}
+
+.m-program-body strong {
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.m-program-text {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--ios-secondary, color-mix(in srgb, var(--text) 60%, transparent));
+}
+
+.m-program-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+html.site .app-shell .m-badge {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 650;
+  color: #0a64d6;
+  background: rgba(10, 132, 255, 0.12);
+}
+
+html.site .app-shell .m-badge.is-scholarship { color: #a35b00; background: rgba(255, 159, 10, 0.16); }
+html.site .app-shell .m-badge.is-master { color: #4b3fd1; background: rgba(94, 92, 230, 0.14); }
+html.site .app-shell .m-badge.is-language { color: #1f7a40; background: rgba(48, 177, 88, 0.14); }
+html.site .app-shell .m-badge.is-country { color: var(--text); background: color-mix(in srgb, var(--text) 8%, transparent); }
+
+/* ─── Success stories ─── */
+.m-stories {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.m-story {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 20px;
+  background: var(--glass-bg, var(--surface-1));
+  border: 1px solid var(--glass-border, transparent);
+  box-shadow: var(--glass-edge, none), var(--glass-shadow, var(--ios-card-shadow));
+  -webkit-backdrop-filter: var(--glass-blur, none);
+  backdrop-filter: var(--glass-blur, none);
+}
+
+.m-story blockquote {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.m-story-who {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.m-story-who > span:last-child {
+  display: grid;
+  gap: 1px;
+}
+
+.m-story-who strong {
+  font-size: 15px;
+  font-weight: 650;
+}
+
+html.site .app-shell .m-story-who em {
+  font-size: 12px;
+  font-style: normal;
+  color: var(--ios-secondary, color-mix(in srgb, var(--text) 60%, transparent));
+}
+
+.m-story-photo {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  overflow: hidden;
+  border-radius: 50%;
+  font-weight: 700;
+  color: #fff;
+  background: var(--seal);
+}
+
+.m-story-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ─── Course filters: labelled chip rows, wrapping ─── */
+.cf {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.cf-row {
+  display: grid;
+  gap: 6px;
+}
+
+.cf-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ios-secondary, color-mix(in srgb, var(--text) 60%, transparent));
+}
+
+.cf-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cf-chip {
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 550;
+  color: var(--text);
+  cursor: pointer;
+  background: var(--glass-bg, var(--surface-1));
+  border: 1px solid var(--glass-border, color-mix(in srgb, var(--text) 10%, transparent));
+  box-shadow: var(--glass-edge, none);
+  -webkit-backdrop-filter: var(--glass-blur, none);
+  backdrop-filter: var(--glass-blur, none);
+  transition: background-color 0.15s ease, color 0.15s ease, transform 0.12s ease;
+}
+
+.cf-chip:active {
+  transform: scale(0.95);
+}
+
+.cf-chip.is-on {
+  color: #fff;
+  background: var(--seal);
+  border-color: transparent;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 6px 14px -8px var(--seal);
+}
+
+.cf-clear {
+  justify-self: start;
+  min-height: 36px;
+  padding: 0 4px;
+  border: 0;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--seal);
+  background: transparent;
+  cursor: pointer;
+}
+
+/* ─── Course cards: facts line ─── */
+.cp-facts {
+  display: grid;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.cp-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+html.site .app-shell .cp-chips i {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 650;
+  color: var(--text);
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+}
+
+html.site .app-shell .cp-chips i.cp-seats {
+  color: #1f7a40;
+  background: rgba(48, 177, 88, 0.14);
+}
+
+html.site .app-shell .cp-chips i.cp-seats.is-low {
+  color: #b5121b;
+  background: rgba(227, 38, 43, 0.12);
+}
+
+html.site .app-shell .cp-line {
+  font-family: var(--ios-font, inherit);
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--seal);
+}
+
+html.site .app-shell .cp-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.3rem 0.5rem;
+}
+
+html.site .app-shell .cp-duration {
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 550;
+  color: color-mix(in srgb, var(--text) 55%, transparent);
+}
+
+html.site .app-shell .cp-price {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--seal);
+}
+
+/* ─── Course page: seats bar, syllabus, more icons ─── */
+.cd-sched-row.is-start .cd-sched-icon { background: #30b158; }
+.cd-sched-row.is-format .cd-sched-icon { background: #32ade6; }
+.cd-sched-row.is-seats .cd-sched-icon { background: #ff375f; }
+
+.cd-sched-row.is-seats {
+  row-gap: 8px;
+}
+
+.cd-seats-bar {
+  grid-column: 2 / -1;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+}
+
+.cd-seats-bar i {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: #30b158;
+}
+
+.cd-seats-bar i.is-low {
+  background: var(--seal);
+}
+
+.cd-syllabus {
+  margin: 0;
+  padding: 6px 0 !important;
+  list-style: none;
+}
+
+.cd-syllabus li {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  align-items: start;
+  gap: 12px;
+  padding: 10px 16px;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.cd-syllabus li + li {
+  border-top: 1px solid var(--ios-hairline, color-mix(in srgb, var(--text) 9%, transparent));
+}
+
+.cd-syl-n {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--seal);
+  background: color-mix(in srgb, var(--seal) 12%, transparent);
+}
+
+/* ─── Course page enrol bar: glass capsule, replaces the tab bar ─── */
+@media (max-width: 899px) {
+  html.site body:has(.cd-bar) .tabbar {
+    display: none !important;
+  }
+
+  html.site body:has(.cd-bar) .page-course-detail {
+    padding-bottom: calc(110px + env(safe-area-inset-bottom));
+  }
+
+  html.site .cd-bar {
+    bottom: calc(env(safe-area-inset-bottom) + 10px) !important;
+    width: calc(100vw - 24px);
+    border-radius: 26px;
+    background: var(--glass-bg-strong) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: var(--glass-edge), 0 18px 40px -16px rgba(0, 0, 0, 0.35) !important;
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+  }
+
+  html.site .cd-bar .btn {
+    border-radius: 18px;
+  }
+}

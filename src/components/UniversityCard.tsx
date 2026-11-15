@@ -85,17 +85,14 @@ export function UniversityCard({ name, university }: { name?: string; university
 
   return (
     <Link to={`/university/${u.slug}`} className="uni-tile">
-      <UniversityMedia u={u} className="uni-tile-media" />
+      <span className="uni-tile-media-wrap">
+        <UniversityMedia u={u} className="uni-tile-media" />
+        {city && <span className="uni-tile-tag">{city}</span>}
+      </span>
       <span className="uni-tile-body">
         <strong>{u.name}</strong>
         {u.zh && <small lang="zh">{u.zh}</small>}
-        {(city || u.founded) && (
-          <em>
-            {city}
-            {city && u.founded ? " · " : ""}
-            {u.founded ?? ""}
-          </em>
-        )}
+        {u.founded && <em>{u.founded}</em>}
       </span>
     </Link>
   );
