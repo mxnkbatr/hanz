@@ -1,0 +1,151 @@
+/* ═════════════════════════════════════════════════════════════════════
+   White glass (phones, light mode) — white · red · black.
+   Same structure as the dark noir theme: pearl-white canvas with soft red
+   light, frosted white glass cards, black type, black pill for the selected
+   chip, red glowing primary buttons. Loaded last.
+   ═════════════════════════════════════════════════════════════════════ */
+@media (max-width: 899px) {
+  html.site:not([data-theme="dark"]):is(html) {
+    --page: #f6f4f4;
+    --surface-1: rgba(255, 255, 255, 0.62);
+    --text: #0d0c0e;
+    --seal: #e8192c;
+    --ios-secondary: rgba(13, 12, 14, 0.55);
+    --ios-tertiary: rgba(13, 12, 14, 0.3);
+    --ios-hairline: rgba(13, 12, 14, 0.08);
+    --card-bg: rgba(255, 255, 255, 0.62);
+    --card-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.7),
+      0 14px 34px -18px rgba(120, 20, 30, 0.28);
+    --glass-bg: rgba(255, 255, 255, 0.6);
+    --glass-bg-strong: rgba(255, 255, 255, 0.72);
+    --glass-border: rgba(255, 255, 255, 0.8);
+    --glass-edge: inset 0 1px 0 rgba(255, 255, 255, 0.95);
+    --glass-shadow: 0 14px 34px -18px rgba(120, 20, 30, 0.28);
+    --ios-card-shadow: var(--card-shadow);
+    background: #f6f4f4 !important;
+  }
+
+  /* Canvas: pearl white with red light top-right and a blush pool left. */
+  html.site:not([data-theme="dark"]) body::before,
+  html.site:not([data-theme="dark"]) .ambient-wash {
+    background:
+      radial-gradient(55% 30% at 95% 2%, rgba(255, 45, 61, 0.3), transparent 70%),
+      radial-gradient(50% 28% at 0% 44%, rgba(255, 110, 120, 0.22), transparent 70%),
+      radial-gradient(60% 28% at 85% 96%, rgba(255, 45, 61, 0.16), transparent 70%),
+      #f6f4f4 !important;
+  }
+
+  /* Frosted white glass cards */
+  html.site:not([data-theme="dark"]) .app-shell :is(
+      .m-group, .cd-card, .course-product-grid, .course-match-compact-row, .uni-az-list,
+      .sl-list, .ios-card, .pf-card, .shop-card, .app-list, .m-cta, .m-program, .m-story,
+      .m-tile, .m-kind, .m-stats, .ab-help, .cf-empty
+    ),
+  html.site:not([data-theme="dark"]) .ck :is(.ck-item, .ck-fields, .ck-pay-block) {
+    background: var(--glass-bg) !important;
+    border: 0 !important;
+    box-shadow: var(--card-shadow) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(1.8) !important;
+    backdrop-filter: blur(24px) saturate(1.8) !important;
+    border-radius: 22px;
+  }
+
+  /* Search: white glass pill */
+  html.site:not([data-theme="dark"]) .app-shell :is(.m-search, .ios-search),
+  html.site:not([data-theme="dark"]) body .app-shell .m-home .m-search {
+    background: rgba(255, 255, 255, 0.66) !important;
+    box-shadow: inset 0 1px 0 #fff, 0 0 0 1px rgba(255, 255, 255, 0.8), 0 8px 20px -14px rgba(120, 20, 30, 0.3) !important;
+    border-radius: 999px !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    backdrop-filter: blur(20px) !important;
+  }
+
+  /* Chips & segmented: white glass; selected = black pill, white text */
+  html.site:not([data-theme="dark"]) .app-shell :is(.cf-chip, .ios26-filter-chip:not(.is-active)),
+  html.site:not([data-theme="dark"]) .ck .cf-chip {
+    color: var(--text) !important;
+    background: rgba(255, 255, 255, 0.66) !important;
+    box-shadow: inset 0 1px 0 #fff, 0 0 0 1px rgba(13, 12, 14, 0.06) !important;
+  }
+  html.site:not([data-theme="dark"]) .app-shell .cf-chip.is-on,
+  html.site:not([data-theme="dark"]) .ck .cf-chip.is-on {
+    color: #fff !important;
+    background: #0d0c0e !important;
+    box-shadow: 0 6px 14px -8px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  html.site:not([data-theme="dark"]) :is(.ab-seg, .bk-seg) {
+    background: rgba(255, 255, 255, 0.55) !important;
+    box-shadow: inset 0 0 0 1px rgba(13, 12, 14, 0.06);
+    border-radius: 999px !important;
+  }
+  html.site:not([data-theme="dark"]) :is(.ab-seg, .bk-seg) button { border-radius: 999px !important; color: var(--ios-secondary) !important; }
+  html.site:not([data-theme="dark"]) :is(.ab-seg, .bk-seg) button.is-on { color: #fff !important; background: #0d0c0e !important; }
+
+  /* Primary buttons: red with a soft glow */
+  html.site:not([data-theme="dark"]) .app-shell .btn-seal,
+  html.site:not([data-theme="dark"]) .ck-bar .btn-seal,
+  html.site:not([data-theme="dark"]) .cd-bar .btn-seal,
+  html.site:not([data-theme="dark"]) .ck .btn-seal {
+    color: #fff !important;
+    border-radius: 999px !important;
+    background: linear-gradient(180deg, #ff3d4c, #d9111f) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 10px 24px -10px rgba(232, 25, 44, 0.65) !important;
+  }
+
+  /* Floating bars: bright frosted capsules */
+  html.site:not([data-theme="dark"]) body .app-shell .tabbar,
+  html.site:not([data-theme="dark"]) .ck-bar,
+  html.site:not([data-theme="dark"]) .cd-bar,
+  html.site:not([data-theme="dark"]) .app-shell .topbar-stack > *:first-child {
+    background: rgba(255, 255, 255, 0.7) !important;
+    box-shadow: inset 0 1px 0 #fff, 0 0 0 1px rgba(255, 255, 255, 0.8), 0 18px 36px -16px rgba(120, 20, 30, 0.3) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(1.8) !important;
+    backdrop-filter: blur(28px) saturate(1.8) !important;
+    border: 0 !important;
+  }
+  html.site:not([data-theme="dark"]) body .app-shell .tabbar :is(a, span, svg) { color: rgba(13, 12, 14, 0.5) !important; }
+  html.site:not([data-theme="dark"]) body .app-shell .tabbar :is(.is-active, [aria-current="page"]),
+  html.site:not([data-theme="dark"]) body .app-shell .tabbar :is(.is-active, [aria-current="page"]) :is(span, svg) { color: #fff !important; }
+  html.site:not([data-theme="dark"]) body .app-shell .tabbar :is(.tabbar-pill, .tab-pill, [class*="indicator"]) {
+    background: linear-gradient(180deg, #ff3d4c, #d9111f) !important;
+  }
+
+  html.site:not([data-theme="dark"]) .ck { background: #f6f4f4 !important; }
+  html.site:not([data-theme="dark"]) .ck .ck-foot { background: rgba(255, 255, 255, 0.72) !important; }
+  html.site:not([data-theme="dark"]) .ck .ck-close { background: rgba(255, 255, 255, 0.8); box-shadow: 0 0 0 1px rgba(13, 12, 14, 0.06); }
+
+  /* Marks: red glass squircles, alternating with black ones */
+  html.site:not([data-theme="dark"]) .app-shell :is(.m-tile-glyph, .m-kind-glyph) {
+    color: #fff !important;
+    background: linear-gradient(180deg, #ff3d4c, #c80f1e) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 8px 16px -8px rgba(232, 25, 44, 0.7);
+  }
+  html.site:not([data-theme="dark"]) .app-shell :is(.m-tile.is-cn-soft, .m-kind.is-bachelor, .m-kind.is-master) :is(.m-tile-glyph, .m-kind-glyph) {
+    background: linear-gradient(180deg, #2a2729, #0d0c0e) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 8px 16px -8px rgba(0, 0, 0, 0.5);
+  }
+  html.site:not([data-theme="dark"]) .app-shell .m-tile.is-pl-soft .m-tile-glyph {
+    color: #c8102e !important;
+    background: linear-gradient(180deg, #fff 50%, #ffd6db 50%) !important;
+    box-shadow: 0 0 0 1px rgba(200, 16, 46, 0.2), 0 8px 16px -8px rgba(232, 25, 44, 0.4);
+  }
+
+  /* Info icons: black glass squircles; red for price and seats */
+  html.site:not([data-theme="dark"]) .app-shell .cd-sched-icon {
+    color: #fff !important;
+    background: #0d0c0e !important;
+  }
+  html.site:not([data-theme="dark"]) .app-shell :is(.is-price, .is-seats) .cd-sched-icon { background: var(--seal) !important; }
+
+  /* Accents */
+  html.site:not([data-theme="dark"]) .app-shell :is(.cp-line, strong.cd-sched-value, .ab-info, .m-section-head a, .ab-more, .ab-help-link, .cf-clear, .m-stats strong) {
+    color: var(--seal) !important;
+  }
+  html.site:not([data-theme="dark"]) .app-shell :is(.cp-chips i, .ab-partners li) {
+    color: var(--ios-secondary);
+    background: rgba(13, 12, 14, 0.06);
+  }
+  html.site:not([data-theme="dark"]) .m-live { color: var(--seal); }
+  html.site:not([data-theme="dark"]) .app-shell .ab-open { background: rgba(232, 25, 44, 0.9) !important; color: #fff; }
+}

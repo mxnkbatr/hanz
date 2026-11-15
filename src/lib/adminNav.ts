@@ -118,6 +118,20 @@ export const ADMIN_HUB_GROUPS: AdminHubGroup[] = [
         preview: "/contact",
       },
       {
+        id: "abroad",
+        to: "/admin/abroad",
+        key: "admin_abroad_app",
+        ico: "留",
+        preview: "/university",
+      },
+      {
+        id: "home",
+        to: "/admin/home",
+        key: "admin_home_app",
+        ico: "⌂",
+        preview: "/",
+      },
+      {
         id: "branches",
         to: "/admin/branches",
         key: "admin_branches",

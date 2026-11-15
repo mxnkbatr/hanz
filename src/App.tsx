@@ -124,6 +124,12 @@ const AdminQuizCms = lazy(() =>
 const AdminStaff = lazy(() =>
   import("./pages/admin/AdminStaff").then((m) => ({ default: m.AdminStaff })),
 );
+const AdminAbroad = lazy(() =>
+  import("./pages/admin/AdminAbroad").then((m) => ({ default: m.AdminAbroad })),
+);
+const AdminHome = lazy(() =>
+  import("./pages/admin/AdminHome").then((m) => ({ default: m.AdminHome })),
+);
 const AdminMedia = lazy(() =>
   import("./pages/admin/AdminMedia").then((m) => ({ default: m.AdminMedia })),
 );
@@ -220,6 +226,8 @@ export default function App() {
             <Route path="pages/:section" element={<AdminPageSection />} />
             <Route path="settings" element={<AdminSettings />} />
             <Route path="branches" element={<AdminBranches />} />
+            <Route path="home" element={<AdminHome />} />
+            <Route path="abroad" element={<AdminAbroad />} />
             <Route path="windows" element={<AdminWindows />} />
             <Route path="translation" element={<AdminTranslationCms />} />
             <Route path="team" element={<AdminTeam />} />

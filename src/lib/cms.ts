@@ -182,6 +182,67 @@ export type SiteBundle = {
   kidsLevels?: KidsLevelCms[];
   kidsSchedules?: KidsScheduleCms[];
   quizQuestions?: QuizQuestionCms[];
+  /** Phone home: promo banners, study-abroad programme cards, student stories. */
+  banners?: HomeBannerCms[];
+  abroadPrograms?: AbroadProgramCms[];
+  stories?: SuccessStoryCms[];
+  /** Study abroad tab: country guide rows (replace the built-in ones when set). */
+  guideCn?: GuideRowCms[];
+  guidePl?: GuideRowCms[];
+  /** Per-university tuition, dormitory, deadline and majors; id = university slug. */
+  uniInfo?: UniInfoCms[];
+};
+
+export type GuideRowCms = {
+  id: string;
+  label: I18nText;
+  value: I18nText;
+  hidden?: boolean;
+};
+
+export type UniInfoCms = {
+  /** University slug, e.g. "peking-university", or a Polish school's name. */
+  id: string;
+  tuition: I18nText;
+  dorm: I18nText;
+  deadline: I18nText;
+  /** Majors, comma separated: "Business, Medicine, Engineering". */
+  majors: string;
+  hidden?: boolean;
+};
+
+export type HomeBannerCms = {
+  id: string;
+  image: string;
+  title: I18nText;
+  subtitle: I18nText;
+  /** Where a tap goes, e.g. /courses/hsk1 or /university/poland. */
+  href: string;
+  hidden?: boolean;
+};
+
+export type AbroadKind = "language" | "bachelor" | "master" | "scholarship";
+
+export type AbroadProgramCms = {
+  id: string;
+  kind: AbroadKind;
+  country: "cn" | "pl";
+  title: I18nText;
+  body: I18nText;
+  image: string;
+  href: string;
+  hidden?: boolean;
+};
+
+export type SuccessStoryCms = {
+  id: string;
+  name: string;
+  photo: string;
+  country: "cn" | "pl";
+  /** University and programme, e.g. "Warsaw University · Bachelor". */
+  school: I18nText;
+  quote: I18nText;
+  hidden?: boolean;
 };
 
 export const emptyBundle = (): SiteBundle => ({
@@ -255,6 +316,19 @@ export type CourseLive = {
   highlights?: readonly string[];
   /** Team member ids who teach this course. */
   teacherIds?: readonly string[];
+  /** Language taught. Missing = Chinese. */
+  language?: "zh" | "pl";
+  /** Missing = classroom. */
+  format?: "classroom" | "online";
+  timeOfDay?: "morning" | "day" | "evening";
+  /** CEFR level for Polish courses (A1–B2). */
+  cefr?: string;
+  /** Next class start, YYYY-MM-DD. */
+  startDate?: string;
+  seatsTotal?: number;
+  seatsLeft?: number;
+  /** Syllabus: one line per week / topic. */
+  syllabus?: readonly string[];
   /** Course poster (portrait flyer); shown instead of the photo when set. */
   poster?: string;
   title?: I18nText;
@@ -534,6 +608,44 @@ export function mergeProducts(
     .filter((p) => !("hidden" in p && p.hidden));
 }
 
+const num = (v: unknown) => (typeof v === "number" && Number.isFinite(v) ? v : undefined);
+const str = (v: unknown) => (typeof v === "string" && v.trim() ? v.trim() : undefined);
+
+/** The course fields kept in courses.meta (set in the admin course form). */
+function courseExtras(meta: Record<string, unknown> | undefined): Partial<CourseLive> {
+  const m = meta ?? {};
+  const language = m.language === "pl" ? "pl" : m.language === "zh" ? "zh" : undefined;
+  const format = m.format === "online" ? "online" : m.format === "classroom" ? "classroom" : undefined;
+  const timeOfDay =
+    m.timeOfDay === "morning" || m.timeOfDay === "day" || m.timeOfDay === "evening"
+      ? m.timeOfDay
+      : undefined;
+  const syllabus = Array.isArray(m.syllabus)
+    ? (m.syllabus as unknown[]).map((x) => String(x).trim()).filter(Boolean)
+    : undefined;
+  return {
+    language,
+    format,
+    timeOfDay,
+    cefr: str(m.cefr),
+    startDate: str(m.startDate),
+    seatsTotal: num(m.seatsTotal),
+    seatsLeft: num(m.seatsLeft),
+    syllabus: syllabus?.length ? syllabus : undefined,
+  };
+}
+
+/** Visible home lists: drop hidden entries and ones missing their essentials. */
+export function liveBanners(bundle: SiteBundle) {
+  return (bundle.banners ?? []).filter((b) => !b.hidden && b.image);
+}
+export function liveAbroadPrograms(bundle: SiteBundle) {
+  return (bundle.abroadPrograms ?? []).filter((p) => !p.hidden && (p.title.mn || p.title.en));
+}
+export function liveStories(bundle: SiteBundle) {
+  return (bundle.stories ?? []).filter((x) => !x.hidden && x.name && (x.quote.mn || x.quote.en));
+}
+
 export function mergeCourses(
   bundle: SiteBundle,
   dbRows: CmsRow[] = [],
@@ -565,6 +677,7 @@ export function mergeCourses(
             metaTeachers ??
             ("teacherIds" in base ? (base.teacherIds as readonly string[]) : undefined),
           poster: metaPoster || undefined,
+          ...courseExtras(r.meta),
           fromDb: true,
         };
       });

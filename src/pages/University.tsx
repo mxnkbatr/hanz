@@ -6,6 +6,7 @@ import { useDesktop } from "../hooks/useDesktop";
 import { PageShell, Reveal, Stagger, StaggerItem } from "../components/PageShell";
 import { UniversityCard, UniversityFeature, UniversityRow } from "../components/UniversityCard";
 import { useI18n } from "../i18n/I18nContext";
+import { AbroadMobile } from "../components/AbroadMobile";
 
 const steps = [
   ["step1", "step1_d"],
@@ -40,7 +41,13 @@ const CITY_CHIPS = Object.entries(
   .filter(([, n]) => n >= 3)
   .sort((a, b) => b[1] - a[1]);
 
+/** Phones get the app's "Зуучлал" tab; desktop keeps the full page. */
 export function University() {
+  const desktop = useDesktop();
+  return desktop ? <UniversityDesktop /> : <AbroadMobile />;
+}
+
+function UniversityDesktop() {
   const { t, lang } = useI18n();
   const desktop = useDesktop();
   const [q, setQ] = useState("");

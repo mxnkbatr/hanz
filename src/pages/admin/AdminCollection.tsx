@@ -50,6 +50,15 @@ type Draft = {
   /** Courses: poster image and the team members who teach it. */
   poster: string;
   teacherIds: string[];
+  /** Courses: language, format, time of day, CEFR, start date, seats, syllabus. */
+  language: "zh" | "pl";
+  format: "classroom" | "online";
+  timeOfDay: "" | "morning" | "day" | "evening";
+  cefr: string;
+  startDate: string;
+  seatsTotal: string;
+  seatsLeft: string;
+  syllabus: string;
   in_stock: boolean;
   hidden: boolean;
   sort_order: number;
@@ -81,6 +90,14 @@ function blankDraft(): Draft {
     highlights: "",
     poster: "",
     teacherIds: [],
+    language: "zh",
+    format: "classroom",
+    timeOfDay: "",
+    cefr: "",
+    startDate: "",
+    seatsTotal: "",
+    seatsLeft: "",
+    syllabus: "",
     in_stock: true,
     hidden: false,
     sort_order: 0,
@@ -95,6 +112,14 @@ function rowToDraft(r: CmsRow, collection: CollectionKey = "news"): Draft {
     cityKey?: string;
     poster?: string;
     teacherIds?: string[];
+    language?: string;
+    format?: string;
+    timeOfDay?: string;
+    cefr?: string;
+    startDate?: string;
+    seatsTotal?: number;
+    seatsLeft?: number;
+    syllabus?: string[];
   };
   const fallbackFilter =
     collection === "products"
@@ -124,6 +149,17 @@ function rowToDraft(r: CmsRow, collection: CollectionKey = "news"): Draft {
         : "",
     poster: meta.poster || "",
     teacherIds: Array.isArray(meta.teacherIds) ? meta.teacherIds : [],
+    language: meta.language === "pl" ? "pl" : "zh",
+    format: meta.format === "online" ? "online" : "classroom",
+    timeOfDay:
+      meta.timeOfDay === "morning" || meta.timeOfDay === "day" || meta.timeOfDay === "evening"
+        ? meta.timeOfDay
+        : "",
+    cefr: meta.cefr || "",
+    startDate: meta.startDate || "",
+    seatsTotal: meta.seatsTotal != null ? String(meta.seatsTotal) : "",
+    seatsLeft: meta.seatsLeft != null ? String(meta.seatsLeft) : "",
+    syllabus: Array.isArray(meta.syllabus) ? meta.syllabus.join("\n") : "",
     in_stock: r.in_stock ?? true,
     hidden: r.hidden,
     sort_order: r.sort_order ?? 0,
@@ -254,6 +290,17 @@ export function AdminCollection({
             .filter(Boolean),
           poster: draft.poster || undefined,
           teacherIds: draft.teacherIds,
+          language: draft.language,
+          format: draft.format,
+          timeOfDay: draft.timeOfDay || undefined,
+          cefr: draft.language === "pl" ? draft.cefr.trim() || undefined : undefined,
+          startDate: draft.startDate || undefined,
+          seatsTotal: draft.seatsTotal.trim() ? Number(draft.seatsTotal) : undefined,
+          seatsLeft: draft.seatsLeft.trim() ? Number(draft.seatsLeft) : undefined,
+          syllabus: draft.syllabus
+            .split("\n")
+            .map((x) => x.trim())
+            .filter(Boolean),
         },
       });
     }
@@ -526,6 +573,79 @@ export function AdminCollection({
                     onChange={(e) =>
                       setDraft({ ...draft, highlights: e.target.value })
                     }
+                  />
+                </label>
+                <label className="admin-field">
+                  <span>Хэл / Language</span>
+                  <select
+                    value={draft.language}
+                    onChange={(e) => setDraft({ ...draft, language: e.target.value as Draft["language"] })}
+                  >
+                    <option value="zh">Хятад хэл</option>
+                    <option value="pl">Польш хэл</option>
+                  </select>
+                </label>
+                {draft.language === "pl" && (
+                  <label className="admin-field">
+                    <span>Түвшин (A1, A2, B1, B2)</span>
+                    <input value={draft.cefr} onChange={(e) => setDraft({ ...draft, cefr: e.target.value })} />
+                  </label>
+                )}
+                <label className="admin-field">
+                  <span>Хэлбэр / Format</span>
+                  <select
+                    value={draft.format}
+                    onChange={(e) => setDraft({ ...draft, format: e.target.value as Draft["format"] })}
+                  >
+                    <option value="classroom">Танхим</option>
+                    <option value="online">Онлайн</option>
+                  </select>
+                </label>
+                <label className="admin-field">
+                  <span>Цагийн хуваарь / Time of day</span>
+                  <select
+                    value={draft.timeOfDay}
+                    onChange={(e) => setDraft({ ...draft, timeOfDay: e.target.value as Draft["timeOfDay"] })}
+                  >
+                    <option value="">—</option>
+                    <option value="morning">Өглөө</option>
+                    <option value="day">Өдөр (бүтэн өдөр)</option>
+                    <option value="evening">Орой</option>
+                  </select>
+                </label>
+                <label className="admin-field">
+                  <span>Анги эхлэх огноо / Start date</span>
+                  <input
+                    type="date"
+                    value={draft.startDate}
+                    onChange={(e) => setDraft({ ...draft, startDate: e.target.value })}
+                  />
+                </label>
+                <label className="admin-field">
+                  <span>Нийт суудал / Seats total</span>
+                  <input
+                    type="number"
+                    min={0}
+                    value={draft.seatsTotal}
+                    onChange={(e) => setDraft({ ...draft, seatsTotal: e.target.value })}
+                  />
+                </label>
+                <label className="admin-field">
+                  <span>Үлдсэн суудал / Seats left</span>
+                  <input
+                    type="number"
+                    min={0}
+                    value={draft.seatsLeft}
+                    onChange={(e) => setDraft({ ...draft, seatsLeft: e.target.value })}
+                  />
+                </label>
+                <label className="admin-field">
+                  <span>Хичээлийн хөтөлбөр (мөр бүр нэг сэдэв) / Syllabus</span>
+                  <textarea
+                    rows={5}
+                    value={draft.syllabus}
+                    onChange={(e) => setDraft({ ...draft, syllabus: e.target.value })}
+                    placeholder={"1-р долоо хоног: Дуудлага, пиньинь\n2-р долоо хоног: Мэндчилгээ"}
                   />
                 </label>
                 <div className="admin-field">

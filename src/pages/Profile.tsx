@@ -1,10 +1,9 @@
-import { Navigate } from "react-router-dom";
 import { PageShell, Reveal } from "../components/PageShell";
 import { AppLink } from "../components/AppLink";
-import { IconCourses, IconPhone, IconQuiz, NavIcon } from "../components/Icons";
-import { DarkModeRow, Group, LanguageRow, LinkRow, Row } from "../components/SettingsList";
+import { IconCourses, IconQuiz, NavIcon } from "../components/Icons";
+import { DarkModeRow, Group, LanguageRow, Row } from "../components/SettingsList";
+import { HelpGroups } from "../components/HelpGroups";
 import { useAuth } from "../lib/AuthContext";
-import { useSiteContent } from "../lib/SiteContentContext";
 import { useI18n } from "../i18n/I18nContext";
 import { hapticLight } from "../lib/native";
 
@@ -17,8 +16,7 @@ const LOCALE = { mn: "mn-MN", en: "en-GB", zh: "zh-CN" } as const;
  */
 export function Profile() {
   const { t, lang } = useI18n();
-  const { user, loading, signOut, isAdmin } = useAuth();
-  const { academyLive: academy } = useSiteContent();
+  const { user, loading, signOut, isAdmin } = useAuth();
 
   if (loading) {
     return (
@@ -28,9 +26,7 @@ export function Profile() {
     );
   }
 
-  if (!user) {
-    return <Navigate to="/auth?mode=login" replace />;
-  }
+  if (!user) return <GuestProfile />;
 
   const email = user.email ?? "";
   const initial = (email.trim()[0] ?? "H").toUpperCase();
@@ -115,20 +111,47 @@ export function Profile() {
             </Group>
           )}
 
-          <Group title={t("profile_explore")}>
-            <Row to="/courses" icon={<NavIcon name="courses" />} label={t("nav_courses")} />
-            <Row to="/university" icon={<NavIcon name="uni" />} label={t("nav_uni")} />
-            <Row to="/shop" icon={<NavIcon name="bag" />} label={t("nav_shop")} />
-            <Row to="/translation" icon={<span className="sl-glyph">译</span>} label={t("nav_translation")} />
-            <Row to="/about" icon={<NavIcon name="about" />} label={t("nav_about")} />
-          </Group>
+          <HelpGroups />
 
-          <Group title={t("footer_contact")}>
-            <LinkRow href={`tel:${academy.phoneRaw[0]}`} icon={<IconPhone />} label={academy.phone[0]} detail={t("call")} />
-            <LinkRow href={academy.messenger} external icon={<span className="sl-glyph">m</span>} label="Messenger" />
-            <LinkRow href={`mailto:${academy.email}`} icon={<span className="sl-glyph">@</span>} label={academy.email} />
-          </Group>
+          <p className="pf-version">
+            {t("brand")} · {t("profile_version")} 1.0
+          </p>
+        </div>
+      </div>
+    </PageShell>
+  );
+}
 
+/** Not signed in: the tab still works — sign-in card, settings, help, contact. */
+function GuestProfile() {
+  const { t } = useI18n();
+  return (
+    <PageShell className="page-profile pf">
+      <h1 className="pf-title">{t("profile_title")}</h1>
+      <div className="pf-grid">
+        <div className="pf-side">
+          <section className="pf-card pf-guest">
+            <span className="pf-avatar is-guest" aria-hidden>
+              <NavIcon name="profile" />
+            </span>
+            <strong className="pf-email">{t("pf_guest_t")}</strong>
+            <span className="pf-meta">{t("pf_guest_d")}</span>
+            <div className="pf-guest-actions">
+              <AppLink to="/auth?mode=login" className="btn btn-seal">
+                <span>{t("auth_login")}</span>
+              </AppLink>
+              <AppLink to="/auth?mode=signup" className="pf-guest-link">
+                {t("pf_guest_signup")}
+              </AppLink>
+            </div>
+          </section>
+        </div>
+        <div className="pf-main">
+          <Group title={t("mm_settings")}>
+            <LanguageRow id="pf-lang" />
+            <DarkModeRow />
+          </Group>
+          <HelpGroups />
           <p className="pf-version">
             {t("brand")} · {t("profile_version")} 1.0
           </p>

@@ -1,0 +1,154 @@
+/* ─── Phone home: the five sections, in order ───
+   1 banner · 2 "what are you looking for" tiles · 3 featured courses ·
+   4 study-abroad programme types · 5 success (numbers + stories). */
+
+.m-section-head-first {
+  margin-top: 26px;
+}
+
+/* 2 · Four tiles, always 2 × 2 */
+html.site .app-shell .m-tiles {
+  grid-template-columns: 1fr 1fr;
+  margin-top: 0;
+}
+
+/* 4 · Programme types: 2 × 2 cards with a hanzi mark */
+.m-kinds {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.m-kinds + .m-programs {
+  margin-top: 12px;
+}
+
+html.site .app-shell .m-kind,
+.m-kind {
+  display: grid;
+  align-content: start;
+  gap: 3px;
+  min-height: 118px;
+  padding: 14px;
+  border-radius: 20px;
+  color: var(--text);
+  text-decoration: none;
+  background: var(--card-bg, var(--surface-1));
+  box-shadow: var(--card-shadow, 0 6px 20px -12px rgba(0, 0, 0, 0.14));
+  transition: transform 0.15s ease;
+}
+
+.m-kind:active {
+  transform: scale(0.97);
+}
+
+.m-kind-glyph {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  margin-bottom: 8px;
+  border-radius: 11px;
+  font-family: "Noto Serif SC", "Songti SC", serif;
+  font-size: 19px;
+  font-weight: 700;
+  color: #fff;
+  background: #34c759;
+}
+
+.m-kind.is-bachelor .m-kind-glyph { background: #0a84ff; }
+.m-kind.is-master .m-kind-glyph { background: #5e5ce6; }
+.m-kind.is-scholarship .m-kind-glyph { background: #ff9f0a; }
+
+html.site .app-shell .m-kind strong {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--text);
+}
+
+html.site .app-shell .m-kind em {
+  font-family: var(--ios-font, inherit);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.35;
+  color: var(--ios-secondary, color-mix(in srgb, var(--text) 60%, transparent));
+}
+
+/* 5 · The academy's numbers */
+.m-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 0;
+  padding: 16px 6px;
+  list-style: none;
+  border-radius: 20px;
+  background: var(--card-bg, var(--surface-1));
+  box-shadow: var(--card-shadow, 0 6px 20px -12px rgba(0, 0, 0, 0.14));
+}
+
+.m-stats li {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 0 6px;
+  text-align: center;
+}
+
+.m-stats li + li {
+  border-left: 1px solid var(--ios-hairline, color-mix(in srgb, var(--text) 10%, transparent));
+}
+
+.m-stats strong {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--seal);
+}
+
+.m-stats span {
+  font-size: 12px;
+  line-height: 1.25;
+  color: var(--ios-secondary, color-mix(in srgb, var(--text) 60%, transparent));
+}
+
+.m-stats + .m-stories {
+  margin-top: 12px;
+}
+
+/* Courses: empty state for a language with no classes yet */
+.cf-empty {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: 28px 20px;
+  border-radius: 20px;
+  text-align: center;
+  background: var(--card-bg, var(--surface-1));
+  box-shadow: var(--card-shadow, none);
+}
+
+.cf-empty p {
+  margin: 0;
+  max-width: 32ch;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--ios-secondary, color-mix(in srgb, var(--text) 60%, transparent));
+}
+
+.cf-empty .cf-clear {
+  justify-self: center;
+}
+
+.cf-empty-mark {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  font-size: 26px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(180deg, #ff6482, #dc143c);
+}

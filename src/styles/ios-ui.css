@@ -1012,17 +1012,8 @@ html.site .app-shell .uni-enroll-row-main em {
   font-size: 14px;
 }
 
-/* No enrol buttons anywhere on the public site (the academy's request, 2026-11-06):
-   every link into /enroll is hidden, and the bars that only carried one go with it.
-   The /enroll page itself still works by its address. Delete this block to bring
-   the buttons back. */
-html.site a[href^="/enroll"] {
-  display: none !important;
-}
-
-html.site :is(.cd-bar, .app-enroll-dock) {
-  display: none !important;
-}
+/* Enrol buttons are back (2026-11-15): the 2026-11-06 rule that hid every link into
+   /enroll and the course/travel action bars has been removed. */
 
 /* ─── Quiz: 50-question tests (sentences instead of one big character) ─── */
 .page-quiz .quiz-passage {
@@ -1208,5 +1199,71 @@ html.site[data-theme="dark"] .page-quiz .quiz-prompt.is-text small {
   }
   html.site body .app-shell .topbar.is-on-film .topnav-dot {
     background: rgba(255, 255, 255, 0.18);
+  }
+}
+
+/* ─── Phone ergonomics (Apple HIG): 44pt touch targets, no focus zoom,
+   readable minimum type, native-feeling touch, cheaper off-screen work ─── */
+@media (max-width: 899px) {
+  /* iOS Safari zooms the whole page into any field under 16px. */
+  html.site .app-shell :is(input:not([type="checkbox"], [type="radio"], [type="range"]), textarea, select) {
+    font-size: max(16px, 1em);
+  }
+
+  /* "See all" links: same look, a 44pt hit area. */
+  html.site .app-shell .m-section-head a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 0 0 16px;
+    margin: -10px 0 -10px -16px;
+  }
+
+  /* Small text buttons (show password, mode switches) get a full-height hit area. */
+  html.site .app-shell :is(.auth-pass-toggle, .auth-switch button, .auth-mode button) {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Caption 2 (11pt) is the smallest text iOS uses for content. */
+  html.site .app-shell :is(.tag, .badge-stock, .quiz-level-badge, .quiz-level-play) {
+    font-size: max(11px, 1em);
+  }
+
+  /* App feel: no grey tap flash, no long-press link/image callout, no text
+     selection on controls; content text stays selectable. */
+  html.site .app-shell :is(a, button, [role="button"], .tabbar, .topbar, img) {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+  }
+  html.site .app-shell :is(button, [role="button"], .tabbar, .m-tall, .m-square, .m-row) {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  html.site .app-shell :is(a, button, input, select, textarea, label) {
+    touch-action: manipulation;
+  }
+
+  /* Rails scroll like native carousels: momentum, snap, no page bounce sideways. */
+  html.site .app-shell :is(.m-rail, .uni-feature-rail) {
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Below-the-fold home blocks skip layout/paint until they scroll near. */
+  html.site .app-shell .m-home :is(.m-cta, .m-section:nth-of-type(n + 3)) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 320px;
+  }
+}
+
+@media (max-width: 899px) and (prefers-reduced-motion: reduce) {
+  html.site .app-shell *,
+  html.site .app-shell *::before,
+  html.site .app-shell *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

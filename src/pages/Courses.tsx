@@ -1,16 +1,14 @@
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  courseFilters,
-  filterKeyLabel,
   matchLevels,
   resolveMatch,
-  type CourseFilter,
   type MatchLevel,
   type MatchResult,
 } from "../data/courseMatch";
-import { IosFilterBar } from "../components/IosFilterBar";
+import { courseFacts, isEnrolling, shortDate } from "../data/courseFacts";
+import type { CourseLive } from "../lib/cms";
 import { PageShell, Reveal, Stagger, StaggerItem } from "../components/PageShell";
 import { SafeImage } from "../components/SafeImage";
 import { useI18n } from "../i18n/I18nContext";
@@ -26,45 +24,71 @@ export function Courses() {
   const { coursesLive } = useSiteContent();
 
   const [q, setQ] = useState("");
-  const [filter, setFilter] = useState<CourseFilter>("all");
+  // Filters: language (also from ?lang= on the home shortcuts), level, format, time.
+  const [params, setParams] = useSearchParams();
+  const langFilter = params.get("lang") || "all";
+  const [level, setLevel] = useState("all");
+  const [format, setFormat] = useState("all");
+  const [time, setTime] = useState("all");
 
   const [matchPhase, setMatchPhase] = useState<MatchPhase>("intro");
   const [matchResult, setMatchResult] = useState<MatchResult | null>(null);
 
-  const counts = useMemo(() => {
-    const map: Record<string, number> = { all: coursesLive.length };
-    for (const c of coursesLive) {
-      map[c.filter] = (map[c.filter] || 0) + 1;
-    }
-    return map;
-  }, [coursesLive]);
+  const rows = useMemo(
+    () => coursesLive.map((c) => ({ course: c, facts: courseFacts(c, t) })),
+    [coursesLive, t],
+  );
+
+  // A filter row only appears when it has more than one real choice.
+  const dims = useMemo(() => {
+    const uniq = (xs: (string | undefined)[]) => [...new Set(xs.filter((x): x is string => Boolean(x)))];
+    const levelOrder = (a: string, b: string) => a.localeCompare(b, "en", { numeric: true });
+    return {
+      lang: uniq(rows.map((r) => r.facts.language)),
+      level: uniq(
+        rows
+          .filter((r) => langFilter === "all" || r.facts.language === langFilter)
+          .map((r) => r.facts.levelLabel),
+      ).sort(levelOrder),
+      format: uniq(rows.map((r) => r.facts.format)),
+      time: uniq(rows.map((r) => r.facts.timeOfDay)),
+    };
+  }, [rows, langFilter]);
 
   const list = useMemo(() => {
-    const base =
-      filter === "all"
-        ? coursesLive
-        : coursesLive.filter((c) => c.filter === filter);
     const query = q.trim().toLowerCase();
-    if (!query) return base;
-    return base.filter((c) => {
-      const hay =
-        `${loc(lang, t, c.title, c.titleKey)} ${loc(lang, t, c.body, c.descKey)} ${loc(lang, t, c.tag, c.tagKey)} ${c.unitKey ? t(c.unitKey) : ""}`.toLowerCase();
-      return hay.includes(query);
-    });
-  }, [coursesLive, filter, q, t, lang]);
+    return rows
+      .filter(({ course: c, facts: f }) => {
+        if (langFilter !== "all" && f.language !== langFilter) return false;
+        if (level !== "all" && f.levelLabel !== level) return false;
+        if (format !== "all" && f.format !== format) return false;
+        if (time !== "all" && f.timeOfDay !== time) return false;
+        if (!query) return true;
+        const hay =
+          `${loc(lang, t, c.title, c.titleKey)} ${loc(lang, t, c.body, c.descKey)} ${loc(lang, t, c.tag, c.tagKey)} ${f.levelLabel}`.toLowerCase();
+        return hay.includes(query);
+      })
+      .map((r) => r.course);
+  }, [rows, langFilter, level, format, time, q, t, lang]);
 
   const hasQuery = q.trim().length > 0;
-  const isFiltered = filter !== "all" || hasQuery;
+  const isFiltered = langFilter !== "all" || level !== "all" || format !== "all" || time !== "all" || hasQuery;
 
-  const filterOptions = useMemo(
-    () =>
-      courseFilters.map((f) => ({
-        id: f,
-        label: t(filterKeyLabel(f)),
-        count: counts[f] ?? 0,
-      })),
-    [counts, t],
-  );
+  function setLang(v: string) {
+    const next = new URLSearchParams(params);
+    if (v === "all") next.delete("lang");
+    else next.set("lang", v);
+    setParams(next, { replace: true });
+    setLevel("all");
+  }
+
+  function clearAll() {
+    setLang("all");
+    setLevel("all");
+    setFormat("all");
+    setTime("all");
+    setQ("");
+  }
 
   function startMatch() {
     setMatchPhase("ask");
@@ -226,25 +250,66 @@ export function Courses() {
             )}
           </label>
 
-          <IosFilterBar
-            options={filterOptions}
-            value={filter}
-            onChange={(id) => setFilter(id as CourseFilter)}
-            ariaLabel={t("cmatch_filter_label")}
-            layoutId="course-filter-pill"
-            showClear={isFiltered}
-            clearLabel={t("news_clear")}
-            onClear={() => {
-              setFilter("all");
-              setQ("");
-            }}
-          />
+          <div className="cf">
+            {dims.lang.length > 1 && (
+              <FilterRow
+                label={t("f_lang")}
+                value={langFilter}
+                onChange={setLang}
+                options={dims.lang.map((x) => ({ id: x, label: t(`lang_${x}`) }))}
+              />
+            )}
+            {dims.level.length > 1 && (
+              <FilterRow
+                label={t("f_level")}
+                value={level}
+                onChange={setLevel}
+                options={dims.level.map((x) => ({ id: x, label: x }))}
+              />
+            )}
+            {dims.format.length > 1 && (
+              <FilterRow
+                label={t("f_format")}
+                value={format}
+                onChange={setFormat}
+                options={dims.format.map((x) => ({ id: x, label: t(`fmt_${x}`) }))}
+              />
+            )}
+            {dims.time.length > 1 && (
+              <FilterRow
+                label={t("f_time")}
+                value={time}
+                onChange={setTime}
+                options={dims.time.map((x) => ({ id: x, label: t(`tod_${x}`) }))}
+              />
+            )}
+            {isFiltered && (
+              <button type="button" className="cf-clear" onClick={clearAll}>
+                {t("news_clear")}
+              </button>
+            )}
+          </div>
         </div>
       </Reveal>
 
       <section className="section tight section-last">
         {list.length === 0 ? (
-          <p className="ios-empty">{t("cmatch_empty")}</p>
+          langFilter === "pl" && !rows.some((r) => r.facts.language === "pl") ? (
+            <div className="cf-empty">
+              <span className="cf-empty-mark" aria-hidden>
+                Ą
+              </span>
+              <p>{t("courses_pl_empty")}</p>
+              <Link to="/contact" className="btn btn-seal">
+                <span>{t("courses_contact")}</span>
+              </Link>
+              <button type="button" className="cf-clear" onClick={clearAll}>
+                {t("mh_quick_zh")} →
+              </button>
+            </div>
+          ) : (
+            <p className="ios-empty">{isFiltered ? t("courses_empty_filter") : t("cmatch_empty")}</p>
+          )
         ) : (
           <Stagger className="course-product-grid">
             {list.map((c) => (
@@ -264,9 +329,7 @@ export function Courses() {
                   <div className="course-product-body">
                     <h3>{loc(lang, t, c.title, c.titleKey)}</h3>
                     <p>{c.sumKey ? t(c.sumKey) : loc(lang, t, c.body, c.descKey)}</p>
-                    <em>
-                      {t("view_detail")} <i aria-hidden>→</i>
-                    </em>
+                    <CourseFactsLine course={c} />
                   </div>
                 </Link>
               </StaggerItem>
@@ -275,5 +338,66 @@ export function Courses() {
         )}
       </section>
     </PageShell>
+  );
+}
+
+function FilterRow({
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  options: { id: string; label: string }[];
+}) {
+  const { t } = useI18n();
+  return (
+    <div className="cf-row" role="group" aria-label={label}>
+      <span className="cf-label">{label}</span>
+      <div className="cf-chips">
+        {[{ id: "all", label: t("f_all") }, ...options].map((o) => (
+          <button
+            key={o.id}
+            type="button"
+            className={`cf-chip${value === o.id ? " is-on" : ""}`}
+            aria-pressed={value === o.id}
+            onClick={() => {
+              onChange(o.id);
+              void hapticLight();
+            }}
+          >
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Start date · length · price, plus seats left — the facts people choose by. */
+function CourseFactsLine({ course }: { course: CourseLive }) {
+  const { t, lang } = useI18n();
+  const f = courseFacts(course, t);
+  const start = course.startDate && isEnrolling(course) ? t("mh_starts").replace("{d}", shortDate(course.startDate, lang)) : "";
+  const chips = [f.levelLabel, f.format === "online" ? t("fmt_online") : "", f.timeOfDay ? t(`tod_${f.timeOfDay}`) : ""].filter(Boolean);
+  const line = [start, f.duration, f.priceText].filter(Boolean).join(" · ");
+  return (
+    <span className="cp-facts">
+      {chips.length > 0 && (
+        <span className="cp-chips">
+          {chips.map((c) => (
+            <i key={c}>{c}</i>
+          ))}
+          {course.seatsLeft != null && (
+            <i className={`cp-seats${course.seatsLeft <= 3 ? " is-low" : ""}`}>
+              {course.seatsLeft <= 0 ? t("mh_full") : t("mh_seats_left").replace("{n}", String(course.seatsLeft))}
+            </i>
+          )}
+        </span>
+      )}
+      {line && <strong className="cp-line">{line}</strong>}
+    </span>
   );
 }

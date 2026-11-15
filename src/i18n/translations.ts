@@ -795,7 +795,7 @@ export const navKeys = [
   {
     to: "/university",
     key: "nav_uni",
-    tabKey: "nav_uni_short",
+    tabKey: "nav_abroad",
     icon: "uni" as const,
     top: true,
     tab: true,
@@ -808,8 +808,8 @@ export const navKeys = [
     key: "nav_quiz",
     icon: "quiz" as const,
     top: true,
-    tab: true,
-    menu: false,
+    tab: false,
+    menu: true,
   },
   { to: "/about", key: "nav_about", icon: "about" as const, top: true, tab: false, menu: true },
   {
@@ -822,6 +822,6 @@ export const navKeys = [
   },
   { to: "/contact", key: "nav_contact", icon: "about" as const, top: false, tab: false, menu: true },
   { to: "/enroll", key: "register_cta", icon: "courses" as const, top: false, tab: false, menu: true },
-  { to: "/profile", key: "nav_profile", icon: "profile" as const, top: false, tab: false, menu: true },
+  { to: "/profile", key: "nav_profile", icon: "profile" as const, top: false, tab: true, menu: false },
   { to: "/auth", key: "auth_login", icon: "profile" as const, top: false, tab: false, menu: true },
 ];

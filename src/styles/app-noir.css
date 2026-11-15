@@ -1,0 +1,173 @@
+/* ═════════════════════════════════════════════════════════════════════
+   Noir glass (phones) — red · white · black. Loaded last.
+   Deep black canvas with soft red light, frosted glass cards (white at low
+   opacity + hairline edge), white type, white pill controls, red accents.
+   ═════════════════════════════════════════════════════════════════════ */
+@media (max-width: 899px) {
+  html.site[data-theme="dark"]:is(html) {
+    color-scheme: dark;
+    --page: #0b0a0c;
+    --surface-1: rgba(255, 255, 255, 0.06);
+    --text: #f7f5f5;
+    --seal: #ff2d3d;
+    --ios-secondary: rgba(255, 255, 255, 0.6);
+    --ios-tertiary: rgba(255, 255, 255, 0.32);
+    --ios-hairline: rgba(255, 255, 255, 0.09);
+    --card-bg: rgba(255, 255, 255, 0.06);
+    --card-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.07), 0 18px 40px -20px rgba(0, 0, 0, 0.8);
+    --glass-bg: rgba(255, 255, 255, 0.07);
+    --glass-bg-strong: rgba(22, 20, 24, 0.66);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-edge: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 18px 40px -20px rgba(0, 0, 0, 0.8);
+    --ios-card-shadow: var(--card-shadow);
+    background: #0b0a0c !important;
+  }
+
+  /* Canvas: black with red light (top-right) and a deep crimson pool (left). */
+  html.site[data-theme="dark"] body::before,
+  html.site[data-theme="dark"] .ambient-wash {
+    background:
+      radial-gradient(55% 32% at 92% 4%, rgba(255, 45, 61, 0.42), transparent 70%),
+      radial-gradient(50% 30% at 0% 46%, rgba(160, 10, 30, 0.38), transparent 70%),
+      radial-gradient(60% 30% at 80% 96%, rgba(255, 45, 61, 0.22), transparent 70%),
+      #0b0a0c !important;
+  }
+
+  html.site[data-theme="dark"] .app-shell,
+  html.site[data-theme="dark"] .app-shell :is(h1, h2, h3, strong, p, label, li) {
+    color: var(--text);
+  }
+
+  /* Glass cards everywhere content sits */
+  html.site[data-theme="dark"] .app-shell :is(
+      .m-group, .cd-card, .course-product-grid, .course-match-compact-row, .uni-az-list,
+      .sl-list, .ios-card, .pf-card, .shop-card, .app-list, .m-cta, .m-program, .m-story,
+      .m-tile, .m-kind, .m-stats, .ab-help, .cf-empty
+    ),
+  html.site[data-theme="dark"] .ck :is(.ck-item, .ck-fields, .ck-pay-block) {
+    background: var(--glass-bg) !important;
+    border: 0 !important;
+    box-shadow: var(--card-shadow) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(1.6) !important;
+    backdrop-filter: blur(24px) saturate(1.6) !important;
+    border-radius: 22px;
+  }
+
+  /* Search, chips, segmented: dark glass pills; selected = white pill, black text */
+  html.site[data-theme="dark"] .app-shell :is(.m-search, .ios-search),
+  html.site[data-theme="dark"] .app-shell .m-home .m-search {
+    background: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+    border-radius: 999px !important;
+  }
+  html.site[data-theme="dark"] .app-shell :is(.m-search, .ios-search) input { color: var(--text); }
+  html.site[data-theme="dark"] .app-shell :is(.m-search, .ios-search) input::placeholder { color: var(--ios-tertiary); }
+
+  html.site[data-theme="dark"] .app-shell :is(.cf-chip, .ios26-filter-chip:not(.is-active)) {
+    color: var(--text) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+  }
+  html.site[data-theme="dark"] .app-shell .cf-chip.is-on,
+  html.site[data-theme="dark"] .ck .cf-chip.is-on {
+    color: #0b0a0c !important;
+    background: #fff !important;
+  }
+
+  html.site[data-theme="dark"] :is(.ab-seg, .bk-seg) {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-radius: 999px !important;
+  }
+  html.site[data-theme="dark"] :is(.ab-seg, .bk-seg) button { border-radius: 999px !important; color: var(--ios-secondary) !important; }
+  html.site[data-theme="dark"] :is(.ab-seg, .bk-seg) button.is-on { color: #0b0a0c !important; background: #fff !important; }
+
+  /* Buttons: red glow primary, white secondary */
+  html.site[data-theme="dark"] .app-shell .btn-seal,
+  html.site[data-theme="dark"] .ck-bar .btn-seal,
+  html.site[data-theme="dark"] .cd-bar .btn-seal,
+  html.site[data-theme="dark"] .ck .btn-seal {
+    color: #fff !important;
+    border-radius: 999px !important;
+    background: linear-gradient(180deg, #ff4a57, #e0142a) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 10px 28px -8px rgba(255, 45, 61, 0.7) !important;
+  }
+
+  /* Floating bars: smoky glass capsules */
+  html.site[data-theme="dark"] .tabbar,
+  html.site[data-theme="dark"] .ck-bar,
+  html.site[data-theme="dark"] .cd-bar,
+  html.site[data-theme="dark"] .app-shell .topbar-stack > *:first-child {
+    background: rgba(24, 22, 26, 0.6) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.08), 0 20px 40px -18px rgba(0, 0, 0, 0.9) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(1.8) !important;
+    backdrop-filter: blur(28px) saturate(1.8) !important;
+    border: 0 !important;
+  }
+  html.site[data-theme="dark"] .tabbar :is(a, span) { color: var(--ios-secondary); }
+  html.site[data-theme="dark"] .tabbar a[aria-current="page"],
+  html.site[data-theme="dark"] .tabbar a.active,
+  html.site[data-theme="dark"] .tabbar a.active span { color: #fff !important; }
+
+  html.site[data-theme="dark"] .ck { background: #0b0a0c !important; color: var(--text); }
+  html.site[data-theme="dark"] .ck .ck-foot { background: rgba(11, 10, 12, 0.7) !important; }
+  html.site[data-theme="dark"] .ck .ck-close { color: #fff; background: rgba(255, 255, 255, 0.1); }
+  html.site[data-theme="dark"] .ck-steps li:not(.is-on):not(.is-done) .ck-step-dot { background: rgba(255, 255, 255, 0.1); }
+  html.site[data-theme="dark"] .ck-fields :is(input, textarea) { color: var(--text); }
+  html.site[data-theme="dark"] .ck-fields :is(input, textarea)::placeholder { color: var(--ios-tertiary); }
+  html.site[data-theme="dark"] .ck-fields input[type="date"] { color-scheme: dark; }
+
+  /* Tile marks: white glass squircles with red glyph; Poland keeps its flag hint */
+  html.site[data-theme="dark"] .app-shell .m-tile-glyph,
+  html.site[data-theme="dark"] .app-shell .m-kind-glyph {
+    color: #fff !important;
+    background: linear-gradient(180deg, #ff4a57, #b80f22) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 8px 18px -8px rgba(255, 45, 61, 0.8);
+  }
+  html.site[data-theme="dark"] .app-shell :is(.m-tile.is-cn-soft, .m-kind.is-bachelor, .m-kind.is-master) :is(.m-tile-glyph, .m-kind-glyph) {
+    color: #0b0a0c !important;
+    background: #fff !important;
+    box-shadow: 0 8px 18px -8px rgba(255, 255, 255, 0.4);
+  }
+  html.site[data-theme="dark"] .app-shell .m-tile.is-pl-soft .m-tile-glyph {
+    color: #c8102e !important;
+    background: linear-gradient(180deg, #fff 50%, #ffd6db 50%) !important;
+  }
+
+  /* Course/guide icons: monochrome glass, red only for price */
+  html.site[data-theme="dark"] .app-shell :is(.cd-sched-icon) {
+    color: #fff !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+  }
+  html.site[data-theme="dark"] .app-shell .is-price .cd-sched-icon,
+  html.site[data-theme="dark"] .app-shell .is-seats .cd-sched-icon { background: var(--seal) !important; }
+
+  /* Accents */
+  html.site[data-theme="dark"] .app-shell :is(.m-stats strong, .cp-line, strong.cd-sched-value, .ab-info, .m-section-head a, .ab-more, .ab-help-link, .cf-clear) {
+    color: var(--seal) !important;
+  }
+  html.site[data-theme="dark"] .app-shell .m-stats strong { color: #fff !important; }
+  html.site[data-theme="dark"] .app-shell .m-title em { color: var(--seal); }
+  html.site[data-theme="dark"] .app-shell .cp-chips i,
+  html.site[data-theme="dark"] .app-shell .ab-partners li { color: var(--ios-secondary); background: rgba(255, 255, 255, 0.08); }
+  html.site[data-theme="dark"] .m-live, html.site[data-theme="dark"] .app-shell .ab-open { color: #fff !important; }
+  html.site[data-theme="dark"] .m-live::before { background: var(--seal); box-shadow: 0 0 0 3px rgba(255, 45, 61, 0.3); }
+  html.site[data-theme="dark"] .app-shell .ab-open { background: rgba(255, 45, 61, 0.85) !important; }
+
+  /* Imagery: soft dark fade so photos sit in the scene */
+  html.site[data-theme="dark"] .m-group-thumb, .m-grid2-media { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08); }
+  html.site[data-theme="dark"] .m-banner-copy { background: linear-gradient(180deg, transparent, rgba(11, 10, 12, 0.85)) !important; }
+
+  html.site[data-theme="dark"] body .app-shell .tabbar,
+  html.site[data-theme="dark"] body .app-shell .tabbar :is(.tabbar-inner, nav, ul) {
+    background: rgba(24, 22, 26, 0.62) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(1.8) !important;
+    backdrop-filter: blur(28px) saturate(1.8) !important;
+  }
+  html.site[data-theme="dark"] body .app-shell .tabbar :is(a, span, svg) { color: rgba(255, 255, 255, 0.55) !important; }
+  html.site[data-theme="dark"] body .app-shell .tabbar :is(.is-active, [aria-current="page"]),
+  html.site[data-theme="dark"] body .app-shell .tabbar :is(.is-active, [aria-current="page"]) :is(span, svg) { color: #fff !important; }
+  html.site[data-theme="dark"] body .app-shell .tabbar :is(.tabbar-pill, .tab-pill, [class*="indicator"]) {
+    background: rgba(255, 45, 61, 0.9) !important;
+  }
+}

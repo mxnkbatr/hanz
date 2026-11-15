@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import { formatPrice, getProductById } from "../data/content";
@@ -15,6 +16,7 @@ import { hapticLight } from "../lib/native";
 import { PhotoGlow } from "../components/PhotoGlow";
 import { checkQpayPaid, createQpayInvoice, type QpayInvoice } from "../lib/qpay";
 import { getSupabase } from "../lib/supabase";
+import { lockBodyScroll, unlockBodyScroll } from "../lib/scrollLock";
 
 type Phase = "idle" | "form" | "sending" | "paying" | "paid" | "done";
 
@@ -42,6 +44,13 @@ export function ProductDetail() {
     return () => window.clearInterval(timer);
   }, [phase, orderId]);
 
+  const sheetOpen = phase !== "idle";
+  useEffect(() => {
+    if (!sheetOpen) return;
+    lockBodyScroll();
+    return () => unlockBodyScroll();
+  }, [sheetOpen]);
+
   if (!p) return <Navigate to="/shop" replace />;
 
   const related = productsLive.filter((x) => x.id !== p.id).slice(0, 3);
@@ -60,6 +69,32 @@ export function ProductDetail() {
         ? t("cat_porcelain")
         : loc(lang, t, p.tag, p.tagKey) || t("nav_shop");
   const canBuy = p.inStock && p.price > 0;
+  // Checkout step: 0 details · 1 payment · 2 confirmation (-1 = closed).
+  const step =
+    phase === "form" || phase === "sending"
+      ? 0
+      : phase === "paying" && invoice
+        ? 1
+        : phase === "paid" || phase === "done"
+          ? 2
+          : -1;
+
+  function openCheckout() {
+    setError("");
+    setPhase("form");
+    void hapticLight();
+  }
+
+  function closeCheckout() {
+    if (phase === "sending") return;
+    // Closing mid-payment keeps the order: it is saved and payable later.
+    if (phase === "paying") {
+      setPhase("done");
+      return;
+    }
+    setPhase("idle");
+    setError("");
+  }
 
   async function startPay() {
     if (!p) return;
@@ -97,67 +132,6 @@ export function ProductDetail() {
     } else {
       setPhase("done");
     }
-  }
-
-  if (phase === "paying" && invoice) {
-    return (
-      <PageShell className="page-detail page-shop is-app ios-app">
-        <section className="wz wz-pay">
-          <h2 className="wz-title">{t("wz_pay_title")}</h2>
-          <p className="wz-lead">{t("wz_pay_lead")}</p>
-          <p className="wz-amount">{formatPrice(invoice.amount, lang)}</p>
-          <img className="wz-qr" src={`data:image/png;base64,${invoice.qr_image}`} alt="QPay QR" />
-          {invoice.urls.length > 0 && (
-            <ul className="wz-banks">
-              {invoice.urls.map((u) => (
-                <li key={u.link}>
-                  <a href={u.link}>
-                    <img src={u.logo} alt="" loading="lazy" />
-                    <span>{u.name}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          )}
-          <p className="wz-waiting">{t("wz_pay_waiting")}</p>
-          <div className="wz-actions">
-            <button
-              type="button"
-              className="btn btn-seal"
-              onClick={async () => {
-                if (await checkQpayPaid(orderId, "shop")) setPhase("paid");
-              }}
-            >
-              <span>{t("wz_pay_check")}</span>
-            </button>
-            <button type="button" className="btn hsk-btn-ghost" onClick={() => setPhase("done")}>
-              <span>{t("wz_pay_later")}</span>
-            </button>
-          </div>
-        </section>
-      </PageShell>
-    );
-  }
-
-  if (phase === "paid" || phase === "done") {
-    return (
-      <PageShell className="page-detail page-shop is-app ios-app">
-        <section className="wz wz-done">
-          <span className="wz-done-mark" aria-hidden>
-            ✓
-          </span>
-          <h2 className="wz-title">
-            {phase === "paid" ? t("shop_paid_title") : t("shop_order_saved")}
-          </h2>
-          <p className="wz-lead">
-            {phase === "paid" ? t("shop_paid_msg") : t("shop_order_saved_msg")}
-          </p>
-          <Link to="/shop" className="btn btn-seal">
-            <span>{t("nav_shop")}</span>
-          </Link>
-        </section>
-      </PageShell>
-    );
   }
 
   return (
@@ -234,95 +208,18 @@ export function ProductDetail() {
             </>
           )}
 
-          {phase === "form" || phase === "sending" ? (
-            <div className="wz-fields consult-form shop-checkout">
-              <p className="enroll-fixed">
-                <span>{t("shop_checkout_for")}</span>
-                <strong>
-                  {title} · {formatPrice(p.price, lang)}
-                </strong>
-              </p>
-              <label>
-                <span>{t("form_name")}</span>
-                <input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  autoComplete="name"
-                  maxLength={80}
-                  disabled={phase === "sending"}
-                />
-              </label>
-              <label>
-                <span>{t("form_phone")}</span>
-                <input
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  type="tel"
-                  inputMode="tel"
-                  autoComplete="tel"
-                  maxLength={20}
-                  disabled={phase === "sending"}
-                />
-              </label>
-              <label>
-                <span>
-                  {t("shop_delivery_note")} <small>{t("shop_optional")}</small>
-                </span>
-                <textarea
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
-                  rows={2}
-                  maxLength={300}
-                  placeholder={t("shop_delivery_ph")}
-                  disabled={phase === "sending"}
-                />
-              </label>
-              {error && <p className="form-err">{error}</p>}
-              <div className="product-cta-row desk-detail-actions">
-                <button
-                  type="button"
-                  className="btn hsk-btn-ghost"
-                  disabled={phase === "sending"}
-                  onClick={() => {
-                    setPhase("idle");
-                    setError("");
-                  }}
-                >
-                  <span>{t("back")}</span>
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-seal"
-                  disabled={phase === "sending"}
-                  onClick={() => void startPay()}
-                >
-                  <span>{phase === "sending" ? t("form_sending") : t("shop_pay_qpay")}</span>
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="app-sticky-actions desk-detail-actions product-cta-row">
-              {canBuy ? (
-                <motion.button
-                  type="button"
-                  className="btn btn-seal"
-                  onClick={() => {
-                    setPhase("form");
-                    void hapticLight();
-                  }}
-                  whileHover={reduce ? undefined : { y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ type: "spring", stiffness: 420, damping: 28 }}
-                >
-                  <span>{t("buy")}</span>
-                </motion.button>
-              ) : (
-                <span className="btn btn-ink is-disabled" aria-disabled>
-                  <span>{t("out_stock")}</span>
-                </span>
-              )}
-            </div>
-          )}
+          {/* Desktop keeps its inline button; phones get the bottom bar instead. */}
+          <div className="desk-only desk-detail-actions product-cta-row">
+            {canBuy ? (
+              <button type="button" className="btn btn-seal" onClick={openCheckout}>
+                <span>{t("buy")}</span>
+              </button>
+            ) : (
+              <span className="btn btn-ink is-disabled" aria-disabled>
+                <span>{t("out_stock")}</span>
+              </span>
+            )}
+          </div>
         </Reveal>
       </article>
 
@@ -360,6 +257,203 @@ export function ProductDetail() {
           </Stagger>
         </section>
       )}
+
+      {/* Phone: price and one Buy button, always in reach. */}
+      {phase === "idle" &&
+        createPortal(
+          <div className="ck-bar">
+            <div className="ck-bar-price">
+              <span>{t("ck_total")}</span>
+              <strong>{formatPrice(p.price, lang)}</strong>
+            </div>
+            {canBuy ? (
+              <button type="button" className="btn btn-seal" onClick={openCheckout}>
+                <span>{t("buy")}</span>
+              </button>
+            ) : (
+              <span className="btn btn-ink is-disabled" aria-disabled>
+                <span>{t("out_stock")}</span>
+              </span>
+            )}
+          </div>,
+          document.body,
+        )}
+
+      {/* Checkout: one full-screen sheet, three numbered steps. */}
+      {step >= 0 &&
+        createPortal(
+          <div className="ck" role="dialog" aria-modal="true" aria-label={t("shop_checkout_for")}>
+            <header className="ck-head">
+              <button type="button" className="ck-close" onClick={closeCheckout} aria-label={t("back")}>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+                  <path d="M6 6l12 12M18 6 6 18" />
+                </svg>
+              </button>
+              <strong>{t("shop_checkout_for")}</strong>
+              <span className="ck-head-spacer" />
+            </header>
+
+            <ol className="ck-steps">
+              {[t("ck_step_info"), t("ck_step_pay"), t("ck_step_done")].map((label, n) => (
+                <li
+                  key={label}
+                  className={n < step ? "is-done" : n === step ? "is-on" : ""}
+                  aria-current={n === step ? "step" : undefined}
+                >
+                  <span className="ck-step-dot">{n < step ? "✓" : n + 1}</span>
+                  <span className="ck-step-label">{label}</span>
+                </li>
+              ))}
+            </ol>
+
+            <div className="ck-body">
+              {/* What is being bought, on every step */}
+              <div className="ck-item">
+                <span className="ck-item-thumb">
+                  <SafeImage src={p.image} alt="" />
+                </span>
+                <span className="ck-item-body">
+                  <strong>{title}</strong>
+                  <em>{catLabel}</em>
+                </span>
+                <strong className="ck-item-price">{formatPrice(p.price, lang)}</strong>
+              </div>
+
+              {step === 0 && (
+                <form
+                  id="ck-form"
+                  className="ck-form"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    void startPay();
+                  }}
+                >
+                  <div className="ck-fields">
+                    <label>
+                      <span>{t("form_name")}</span>
+                      <input
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        autoComplete="name"
+                        maxLength={80}
+                        disabled={phase === "sending"}
+                      />
+                    </label>
+                    <label>
+                      <span>{t("form_phone")}</span>
+                      <input
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        type="tel"
+                        inputMode="tel"
+                        autoComplete="tel"
+                        maxLength={20}
+                        placeholder="9999 9999"
+                        disabled={phase === "sending"}
+                      />
+                    </label>
+                    <label>
+                      <span>
+                        {t("shop_delivery_note")} <small>{t("shop_optional")}</small>
+                      </span>
+                      <textarea
+                        value={note}
+                        onChange={(e) => setNote(e.target.value)}
+                        rows={2}
+                        maxLength={300}
+                        placeholder={t("shop_delivery_ph")}
+                        disabled={phase === "sending"}
+                      />
+                    </label>
+                  </div>
+                  <p className="ck-hint">{t("ck_info_lead")}</p>
+                  {error && <p className="form-err">{error}</p>}
+                </form>
+              )}
+
+              {step === 1 && invoice && (
+                <div className="ck-pay">
+                  <p className="ck-amount">
+                    <span>{t("ck_total")}</span>
+                    <strong>{formatPrice(invoice.amount, lang)}</strong>
+                  </p>
+
+                  {invoice.urls.length > 0 && (
+                    <section className="ck-pay-block">
+                      <h3>{t("ck_pay_app")}</h3>
+                      <p>{t("ck_pay_app_d")}</p>
+                      <ul className="ck-banks">
+                        {invoice.urls.map((u) => (
+                          <li key={u.link}>
+                            <a href={u.link}>
+                              <img src={u.logo} alt="" loading="lazy" />
+                              <span>{u.name}</span>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                  )}
+
+                  <section className="ck-pay-block">
+                    <h3>{t("ck_pay_qr")}</h3>
+                    <p>{t("ck_pay_qr_d")}</p>
+                    <img className="ck-qr" src={`data:image/png;base64,${invoice.qr_image}`} alt="QPay QR" />
+                  </section>
+
+                  <p className="ck-waiting" role="status">
+                    <span className="ck-spinner" aria-hidden />
+                    {t("ck_auto")}
+                  </p>
+                </div>
+              )}
+
+              {step === 2 && (
+                <div className="ck-done">
+                  <span className="ck-done-mark" aria-hidden>
+                    ✓
+                  </span>
+                  <h2>{phase === "paid" ? t("shop_paid_title") : t("shop_order_saved")}</h2>
+                  <p>{phase === "paid" ? t("shop_paid_msg") : t("shop_order_saved_msg")}</p>
+                </div>
+              )}
+            </div>
+
+            <footer className="ck-foot">
+              {step === 0 && (
+                <button type="submit" form="ck-form" className="btn btn-seal" disabled={phase === "sending"}>
+                  <span>
+                    {phase === "sending"
+                      ? t("form_sending")
+                      : `${t("shop_pay_qpay")} · ${formatPrice(p.price, lang)}`}
+                  </span>
+                </button>
+              )}
+              {step === 1 && (
+                <>
+                  <button
+                    type="button"
+                    className="btn btn-seal"
+                    onClick={async () => {
+                      if (await checkQpayPaid(orderId, "shop")) setPhase("paid");
+                    }}
+                  >
+                    <span>{t("wz_pay_check")}</span>
+                  </button>
+                  <button type="button" className="ck-link" onClick={() => setPhase("done")}>
+                    {t("wz_pay_later")}
+                  </button>
+                </>
+              )}
+              {step === 2 && (
+                <Link to="/shop" className="btn btn-seal" onClick={closeCheckout}>
+                  <span>{t("nav_shop")}</span>
+                </Link>
+              )}
+            </footer>
+          </div>,
+          document.body,
+        )}
     </PageShell>
   );
 }

@@ -1,0 +1,158 @@
+/* ─── Phone "Зуучлал" tab ─── */
+.ab-seg,
+.bk-seg {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+}
+
+.ab-seg { margin: 4px 0 16px; }
+
+.ab-seg button,
+.bk-seg button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px;
+  border: 0;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  background: transparent;
+  cursor: pointer;
+}
+
+.ab-seg button.is-on,
+.bk-seg button.is-on {
+  background: var(--card-bg, #fff);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.bk-flag {
+  width: 20px;
+  height: 14px;
+  border-radius: 3px;
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.2);
+}
+.bk-flag.is-cn { background: #de2910; }
+.bk-flag.is-pl { background: linear-gradient(180deg, #fff 50%, #dc143c 50%); }
+
+html.site .app-shell .ab-hero {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 20px;
+  color: #fff;
+  text-decoration: none;
+}
+.ab-hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.ab-hero-shade { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 35%, rgba(0, 0, 0, 0.7)); }
+.ab-hero-body { position: absolute; left: 16px; right: 16px; bottom: 14px; display: grid; gap: 3px; }
+.ab-hero-body strong { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+.ab-hero-body > span { font-size: 14px; opacity: 0.9; }
+html.site .app-shell .ab-open {
+  width: fit-content;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(52, 199, 89, 0.9);
+}
+
+.ab-guide { list-style: none; margin: 0; padding: 0; }
+.ab-guide-row {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 12px 14px;
+}
+.ab-guide li + li { border-top: 1px solid var(--ios-hairline); }
+.ab-guide-row .cd-sched-icon { width: 30px; height: 30px; border-radius: 8px; color: #fff; display: grid; place-items: center; background: #0a84ff; }
+.ab-guide-row.is-tuition .cd-sched-icon { background: #34c759; }
+.ab-guide-row.is-living .cd-sched-icon { background: #ff9f0a; }
+.ab-guide-row.is-visa .cd-sched-icon { background: #5e5ce6; }
+.ab-guide-row.is-work .cd-sched-icon { background: #ff375f; }
+.ab-guide-row.is-intake .cd-sched-icon { background: #32ade6; }
+.ab-guide-row.is-degree .cd-sched-icon { background: #af52de; }
+.ab-guide-text { display: grid; gap: 2px; min-width: 0; }
+html.site .app-shell .ab-guide-text em { font-size: 13px; font-style: normal; color: var(--ios-secondary); }
+.ab-guide-text strong { font-size: 15px; font-weight: 500; line-height: 1.4; }
+
+html.site .app-shell .ab-more {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  padding: 0 16px;
+  border: 0;
+  font: inherit;
+  font-size: 15px;
+  color: var(--seal);
+  background: transparent;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.ab-help {
+  display: grid;
+  gap: 10px;
+  margin-top: 24px;
+  padding: 18px;
+  border-radius: 20px;
+  text-align: center;
+  background: var(--card-bg, #fff);
+  box-shadow: var(--card-shadow);
+}
+.ab-help strong { font-size: 18px; font-weight: 700; }
+.ab-help p { margin: 0 0 4px; font-size: 14px; color: var(--ios-secondary); }
+.ab-help .btn { min-height: 50px; justify-content: center; }
+.ab-help-link {
+  min-height: 44px;
+  border: 0;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--seal);
+  background: transparent;
+  cursor: pointer;
+}
+
+.ab .ios-search { margin-bottom: 4px; }
+.ab-list { margin-top: 12px !important; list-style: none; padding: 0; }
+html.site .app-shell .ab-info {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--seal);
+}
+.ab-initial { display: grid; place-items: center; width: 100%; height: 100%; font-weight: 700; color: #fff; background: #dc143c; }
+
+.ab-partners {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ab-partners li {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+}
+
+/* Booking sheet */
+.bk-country { display: flex; align-items: center; gap: 8px; margin: 0; font-weight: 600; }
+.bk-choice { display: grid; gap: 8px; }
