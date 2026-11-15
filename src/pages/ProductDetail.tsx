@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import { formatPrice, getProductById } from "../data/content";
@@ -10,7 +11,12 @@ import { useSiteContent } from "../lib/SiteContentContext";
 import type { ProductLive } from "../lib/cms";
 import { loc } from "../lib/i18nText";
 import { ease } from "../lib/motion";
+import { hapticLight } from "../lib/native";
 import { PhotoGlow } from "../components/PhotoGlow";
+import { checkQpayPaid, createQpayInvoice, type QpayInvoice } from "../lib/qpay";
+import { getSupabase } from "../lib/supabase";
+
+type Phase = "idle" | "form" | "sending" | "paying" | "paid" | "done";
 
 export function ProductDetail() {
   const { id = "" } = useParams();
@@ -19,6 +25,22 @@ export function ProductDetail() {
   const reduce = useReducedMotion();
   const p = (productsLive.find((x) => x.id === id) ??
     getProductById(id)) as ProductLive | undefined;
+
+  const [phase, setPhase] = useState<Phase>("idle");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [note, setNote] = useState("");
+  const [error, setError] = useState("");
+  const [orderId, setOrderId] = useState("");
+  const [invoice, setInvoice] = useState<QpayInvoice | null>(null);
+
+  useEffect(() => {
+    if (phase !== "paying" || !orderId) return;
+    const timer = window.setInterval(async () => {
+      if (await checkQpayPaid(orderId, "shop")) setPhase("paid");
+    }, 5000);
+    return () => window.clearInterval(timer);
+  }, [phase, orderId]);
 
   if (!p) return <Navigate to="/shop" replace />;
 
@@ -37,6 +59,106 @@ export function ProductDetail() {
       : p.cat === "porcelain"
         ? t("cat_porcelain")
         : loc(lang, t, p.tag, p.tagKey) || t("nav_shop");
+  const canBuy = p.inStock && p.price > 0;
+
+  async function startPay() {
+    if (!p) return;
+    const n = name.trim();
+    const ph = phone.trim();
+    if (!n || ph.replace(/\D/g, "").length < 8) {
+      setError(t("shop_pay_fill"));
+      return;
+    }
+    setPhase("sending");
+    setError("");
+    const id = crypto.randomUUID();
+    const supabase = await getSupabase();
+    const { error: err } = await supabase.from("shop_orders").insert({
+      id,
+      product_id: p.id,
+      product_title: title,
+      amount: Math.round(p.price),
+      name: n,
+      phone: ph,
+      note: note.trim() || null,
+    });
+    if (err) {
+      console.error("[shop]", err);
+      setError(t("form_err"));
+      setPhase("form");
+      return;
+    }
+    setOrderId(id);
+    void hapticLight();
+    const inv = await createQpayInvoice(id, "shop");
+    if (inv) {
+      setInvoice(inv);
+      setPhase("paying");
+    } else {
+      setPhase("done");
+    }
+  }
+
+  if (phase === "paying" && invoice) {
+    return (
+      <PageShell className="page-detail page-shop is-app ios-app">
+        <section className="wz wz-pay">
+          <h2 className="wz-title">{t("wz_pay_title")}</h2>
+          <p className="wz-lead">{t("wz_pay_lead")}</p>
+          <p className="wz-amount">{formatPrice(invoice.amount, lang)}</p>
+          <img className="wz-qr" src={`data:image/png;base64,${invoice.qr_image}`} alt="QPay QR" />
+          {invoice.urls.length > 0 && (
+            <ul className="wz-banks">
+              {invoice.urls.map((u) => (
+                <li key={u.link}>
+                  <a href={u.link}>
+                    <img src={u.logo} alt="" loading="lazy" />
+                    <span>{u.name}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+          <p className="wz-waiting">{t("wz_pay_waiting")}</p>
+          <div className="wz-actions">
+            <button
+              type="button"
+              className="btn btn-seal"
+              onClick={async () => {
+                if (await checkQpayPaid(orderId, "shop")) setPhase("paid");
+              }}
+            >
+              <span>{t("wz_pay_check")}</span>
+            </button>
+            <button type="button" className="btn hsk-btn-ghost" onClick={() => setPhase("done")}>
+              <span>{t("wz_pay_later")}</span>
+            </button>
+          </div>
+        </section>
+      </PageShell>
+    );
+  }
+
+  if (phase === "paid" || phase === "done") {
+    return (
+      <PageShell className="page-detail page-shop is-app ios-app">
+        <section className="wz wz-done">
+          <span className="wz-done-mark" aria-hidden>
+            ✓
+          </span>
+          <h2 className="wz-title">
+            {phase === "paid" ? t("shop_paid_title") : t("shop_order_saved")}
+          </h2>
+          <p className="wz-lead">
+            {phase === "paid" ? t("shop_paid_msg") : t("shop_order_saved_msg")}
+          </p>
+          <Link to="/shop" className="btn btn-seal">
+            <span>{t("nav_shop")}</span>
+          </Link>
+        </section>
+      </PageShell>
+    );
+  }
 
   return (
     <PageShell className="page-detail page-shop is-app ios-app">
@@ -112,35 +234,99 @@ export function ProductDetail() {
             </>
           )}
 
-          <div className="app-sticky-actions desk-detail-actions product-cta-row">
-            {p.href && (
-              <motion.a
-                href={p.href}
-                className="btn btn-seal"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={reduce ? undefined : { y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: "spring", stiffness: 420, damping: 28 }}
-              >
-                <span>{t("buy")}</span>
-              </motion.a>
-            )}
-            <motion.div
-              whileHover={reduce ? undefined : { y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ type: "spring", stiffness: 420, damping: 28 }}
-            >
-              <Link to="/contact" className="btn btn-ink">
-                <span className="desk-only">{t("ask_product")}</span>
-                <span className="app-mobile">{t("ask_product_short")}</span>
-              </Link>
-            </motion.div>
-          </div>
+          {phase === "form" || phase === "sending" ? (
+            <div className="wz-fields consult-form shop-checkout">
+              <p className="enroll-fixed">
+                <span>{t("shop_checkout_for")}</span>
+                <strong>
+                  {title} · {formatPrice(p.price, lang)}
+                </strong>
+              </p>
+              <label>
+                <span>{t("form_name")}</span>
+                <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  autoComplete="name"
+                  maxLength={80}
+                  disabled={phase === "sending"}
+                />
+              </label>
+              <label>
+                <span>{t("form_phone")}</span>
+                <input
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  type="tel"
+                  inputMode="tel"
+                  autoComplete="tel"
+                  maxLength={20}
+                  disabled={phase === "sending"}
+                />
+              </label>
+              <label>
+                <span>
+                  {t("shop_delivery_note")} <small>{t("shop_optional")}</small>
+                </span>
+                <textarea
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                  rows={2}
+                  maxLength={300}
+                  placeholder={t("shop_delivery_ph")}
+                  disabled={phase === "sending"}
+                />
+              </label>
+              {error && <p className="form-err">{error}</p>}
+              <div className="product-cta-row desk-detail-actions">
+                <button
+                  type="button"
+                  className="btn hsk-btn-ghost"
+                  disabled={phase === "sending"}
+                  onClick={() => {
+                    setPhase("idle");
+                    setError("");
+                  }}
+                >
+                  <span>{t("back")}</span>
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-seal"
+                  disabled={phase === "sending"}
+                  onClick={() => void startPay()}
+                >
+                  <span>{phase === "sending" ? t("form_sending") : t("shop_pay_qpay")}</span>
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="app-sticky-actions desk-detail-actions product-cta-row">
+              {canBuy ? (
+                <motion.button
+                  type="button"
+                  className="btn btn-seal"
+                  onClick={() => {
+                    setPhase("form");
+                    void hapticLight();
+                  }}
+                  whileHover={reduce ? undefined : { y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 420, damping: 28 }}
+                >
+                  <span>{t("buy")}</span>
+                </motion.button>
+              ) : (
+                <span className="btn btn-ink is-disabled" aria-disabled>
+                  <span>{t("out_stock")}</span>
+                </span>
+              )}
+            </div>
+          )}
         </Reveal>
       </article>
 
-      {related.length > 0 && (
+      {related.length > 0 && phase === "idle" && (
         <section className="section tight section-last related-block">
           <Reveal>
             <h2 className="app-section-title">{t("related")}</h2>

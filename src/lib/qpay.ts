@@ -1,5 +1,7 @@
 import { getSupabase } from "./supabase";
 
+export type QpayKind = "enroll" | "shop";
+
 export type QpayInvoice = {
   amount: number;
   /** Base64 PNG of the QR code. */
@@ -11,12 +13,17 @@ export type QpayInvoice = {
 
 /**
  * Calls the `qpay` edge function (supabase/functions/qpay). Returns null when
- * QPay is not set up yet or fails, so the enroll flow can finish without it.
+ * QPay is not set up yet or fails, so the flow can finish without it.
  */
-export async function createQpayInvoice(id: string): Promise<QpayInvoice | null> {
+export async function createQpayInvoice(
+  id: string,
+  kind: QpayKind = "enroll",
+): Promise<QpayInvoice | null> {
   try {
     const supabase = await getSupabase();
-    const { data, error } = await supabase.functions.invoke("qpay", { body: { action: "create", id } });
+    const { data, error } = await supabase.functions.invoke("qpay", {
+      body: { action: "create", id, kind },
+    });
     if (error || !data?.qr_image) return null;
     return data as QpayInvoice;
   } catch {
@@ -24,10 +31,15 @@ export async function createQpayInvoice(id: string): Promise<QpayInvoice | null>
   }
 }
 
-export async function checkQpayPaid(id: string): Promise<boolean> {
+export async function checkQpayPaid(
+  id: string,
+  kind: QpayKind = "enroll",
+): Promise<boolean> {
   try {
     const supabase = await getSupabase();
-    const { data } = await supabase.functions.invoke("qpay", { body: { action: "check", id } });
+    const { data } = await supabase.functions.invoke("qpay", {
+      body: { action: "check", id, kind },
+    });
     return Boolean(data?.paid);
   } catch {
     return false;
