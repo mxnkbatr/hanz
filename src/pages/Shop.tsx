@@ -4,7 +4,6 @@ import { type ShopCat } from "../data/content";
 import { IosFilterBar } from "../components/IosFilterBar";
 import { PageShell, Reveal, Stagger, StaggerItem } from "../components/PageShell";
 import { ProductCard } from "../components/ProductCard";
-import { SafeImage } from "../components/SafeImage";
 import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { loc } from "../lib/i18nText";
@@ -65,26 +64,11 @@ export function Shop() {
     <PageShell className="page-shop is-app ios-app">
       <header className="page-head app-head">
         <Reveal>
-          <p className="eyebrow desk-only">{t("nav_shop")}</p>
           <h1 className="h1">{t("shop_page")}</h1>
-          <p className="lead desk-only">{t("shop_lead")}</p>
         </Reveal>
       </header>
 
-      <Reveal className="desk-only">
-        <div className="shop-banner">
-          <div className="shop-banner-media">
-            <SafeImage src="/images/shop-hero.webp" alt={t("shop_hero_t")} />
-          </div>
-          <div className="shop-banner-copy">
-            <p className="eyebrow light">{t("shop_featured")}</p>
-            <h2>{t("shop_hero_t")}</h2>
-            <p>{t("shop_hero_d")}</p>
-          </div>
-        </div>
-      </Reveal>
-
-      <Reveal delay={0.05}>
+      <Reveal>
         <div className="ios-toolbar">
           <label className="ios-search">
             <span aria-hidden>⌕</span>
@@ -121,9 +105,6 @@ export function Shop() {
             }}
           />
 
-          <p className="ios-result-meta desk-only">
-            {t("results_count")}: <strong>{list.length}</strong>
-          </p>
         </div>
       </Reveal>
 
@@ -131,10 +112,10 @@ export function Shop() {
         <AnimatePresence mode="wait">
           <motion.div
             key={`${cat}:${q}`}
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.32, ease }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.16, ease }}
           >
             {list.length === 0 ? (
               <p className="ios-empty">{t("empty_shop")}</p>

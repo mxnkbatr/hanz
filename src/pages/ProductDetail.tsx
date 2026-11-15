@@ -14,7 +14,7 @@ import { loc } from "../lib/i18nText";
 import { ease } from "../lib/motion";
 import { hapticLight } from "../lib/native";
 import { PhotoGlow } from "../components/PhotoGlow";
-import { checkQpayPaid, createQpayInvoice, type QpayInvoice } from "../lib/qpay";
+import { checkQpayPaid, requestQpayInvoice, type QpayInvoice } from "../lib/qpay";
 import { getSupabase } from "../lib/supabase";
 import { lockBodyScroll, unlockBodyScroll } from "../lib/scrollLock";
 
@@ -125,13 +125,19 @@ export function ProductDetail() {
     }
     setOrderId(id);
     void hapticLight();
-    const inv = await createQpayInvoice(id, "shop");
+    const { invoice: inv, error: qerr } = await requestQpayInvoice(id, "shop");
+    if (qerr === "already_paid") {
+      setPhase("paid");
+      return;
+    }
     if (inv) {
       setInvoice(inv);
       setPhase("paying");
-    } else {
-      setPhase("done");
+      return;
     }
+    console.error("[shop qpay]", qerr);
+    setError(t("shop_pay_unavailable"));
+    setPhase("done");
   }
 
   return (

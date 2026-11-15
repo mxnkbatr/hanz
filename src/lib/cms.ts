@@ -327,6 +327,8 @@ export type CourseLive = {
   startDate?: string;
   seatsTotal?: number;
   seatsLeft?: number;
+  /** Promo off the listed fee, e.g. 10 → «10% хямдрал». */
+  discountPercent?: number;
   /** Syllabus: one line per week / topic. */
   syllabus?: readonly string[];
   /** Course poster (portrait flyer); shown instead of the photo when set. */
@@ -614,25 +616,27 @@ const str = (v: unknown) => (typeof v === "string" && v.trim() ? v.trim() : unde
 /** The course fields kept in courses.meta (set in the admin course form). */
 function courseExtras(meta: Record<string, unknown> | undefined): Partial<CourseLive> {
   const m = meta ?? {};
-  const language = m.language === "pl" ? "pl" : m.language === "zh" ? "zh" : undefined;
-  const format = m.format === "online" ? "online" : m.format === "classroom" ? "classroom" : undefined;
-  const timeOfDay =
-    m.timeOfDay === "morning" || m.timeOfDay === "day" || m.timeOfDay === "evening"
-      ? m.timeOfDay
-      : undefined;
-  const syllabus = Array.isArray(m.syllabus)
-    ? (m.syllabus as unknown[]).map((x) => String(x).trim()).filter(Boolean)
-    : undefined;
-  return {
-    language,
-    format,
-    timeOfDay,
-    cefr: str(m.cefr),
-    startDate: str(m.startDate),
-    seatsTotal: num(m.seatsTotal),
-    seatsLeft: num(m.seatsLeft),
-    syllabus: syllabus?.length ? syllabus : undefined,
-  };
+  const out: Partial<CourseLive> = {};
+  if (m.language === "pl" || m.language === "zh") out.language = m.language;
+  if (m.format === "online" || m.format === "classroom") out.format = m.format;
+  if (m.timeOfDay === "morning" || m.timeOfDay === "day" || m.timeOfDay === "evening") {
+    out.timeOfDay = m.timeOfDay;
+  }
+  const cefr = str(m.cefr);
+  if (cefr) out.cefr = cefr;
+  const startDate = str(m.startDate);
+  if (startDate) out.startDate = startDate;
+  const seatsTotal = num(m.seatsTotal);
+  if (seatsTotal != null) out.seatsTotal = seatsTotal;
+  const seatsLeft = num(m.seatsLeft);
+  if (seatsLeft != null) out.seatsLeft = seatsLeft;
+  const discountPercent = num(m.discountPercent);
+  if (discountPercent != null) out.discountPercent = discountPercent;
+  if (Array.isArray(m.syllabus)) {
+    const syllabus = (m.syllabus as unknown[]).map((x) => String(x).trim()).filter(Boolean);
+    if (syllabus.length) out.syllabus = syllabus;
+  }
+  return out;
 }
 
 /** Visible home lists: drop hidden entries and ones missing their essentials. */

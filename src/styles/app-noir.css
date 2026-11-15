@@ -41,9 +41,9 @@
 
   /* Glass cards everywhere content sits */
   html.site[data-theme="dark"] .app-shell :is(
-      .m-group, .cd-card, .course-product-grid, .course-match-compact-row, .uni-az-list,
+      .m-group, .cd-card, .course-product-grid, .ab-product-grid, .course-match-compact-row, .uni-az-list,
       .sl-list, .ios-card, .pf-card, .shop-card, .app-list, .m-cta, .m-program, .m-story,
-      .m-tile, .m-kind, .m-stats, .ab-help, .cf-empty
+      .m-tile, .m-kind, .m-stats, .ab-facts, .cf-empty
     ),
   html.site[data-theme="dark"] .ck :is(.ck-item, .ck-fields, .ck-pay-block) {
     background: var(--glass-bg) !important;

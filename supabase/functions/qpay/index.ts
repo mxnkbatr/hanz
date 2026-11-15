@@ -182,10 +182,17 @@ async function createInvoice(target: Target) {
   let description = "";
   if (target.kind === "enroll") {
     const r = target.row;
-    amount =
-      (r.plan_price && r.plan_price > 0
-        ? r.plan_price
-        : PRICES[r.interest]?.[r.plan ?? ""]) ?? 0;
+    const catalog = PRICES[r.interest]?.[r.plan ?? ""] ?? 0;
+    const stored = r.plan_price && r.plan_price > 0 ? Math.round(r.plan_price) : 0;
+    // Prefer the saved plan_price when it matches the catalogue or a fair discount
+    // (up to 50% off) so course sale prices from the site still charge correctly.
+    if (catalog > 0 && stored > 0 && stored <= catalog && stored >= Math.round(catalog * 0.5)) {
+      amount = stored;
+    } else if (catalog > 0) {
+      amount = catalog;
+    } else {
+      amount = stored;
+    }
     description = `Hanz Academy · ${r.interest} · ${r.plan} · ${r.name}`;
   } else {
     const r = target.row;

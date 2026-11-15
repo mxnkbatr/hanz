@@ -128,7 +128,6 @@ export function AbroadMobile() {
         <h1 className="h1">{t("ab_title")}</h1>
       </header>
 
-      {/* Country switch */}
       <div className="ab-seg" role="tablist" aria-label={t("form_country")}>
         {(["cn", "pl"] as const).map((c) => (
           <button
@@ -145,60 +144,56 @@ export function AbroadMobile() {
         ))}
       </div>
 
-      {/* Country card */}
-      <Link to={`/university/${track.id}`} className="ab-hero">
+      <Link to={`/university/${track.id}`} className="ab-hero" onClick={() => void hapticLight()}>
         <SafeImage src={track.image} alt="" priority />
         <span className="ab-hero-shade" aria-hidden />
         <span className="ab-hero-body">
-          {open ? (
-            <em className="ab-open">
-              {t("mh_enrolling")}
-            </em>
-          ) : null}
+          {open ? <em className="ab-open">{t("mh_enrolling")}</em> : null}
           <strong>{t(track.titleKey)}</strong>
-          <span>{t(track.descKey)}</span>
         </span>
       </Link>
 
-      {/* Guide */}
-      <section className="m-section">
-        <div className="m-section-head">
-          <h2>{t("ab_guide")}</h2>
+      {/* Actions → sheet / country page (like Courses match CTA) */}
+      <div className="ab-actions">
+        <button
+          type="button"
+          className="course-match glass-panel course-match-compact is-intro ab-action"
+          onClick={() => {
+            setBooking("consult");
+            void hapticLight();
+          }}
+        >
+          <span className="course-match-compact-row">
+            <span className="course-match-mark" aria-hidden>
+              咨
+            </span>
+            <span className="course-match-compact-copy">
+              <strong>{t("ab_help")}</strong>
+            </span>
+            <span className="btn btn-seal course-match-start-mini">
+              <span>{t("ab_book_t")}</span>
+            </span>
+          </span>
+        </button>
+        <div className="ab-action-links">
+          <Link to={`/university/${track.id}`} className="text-link" onClick={() => void hapticLight()}>
+            {t("ab_guide_more")} <i aria-hidden>→</i>
+          </Link>
+          <button type="button" className="ab-help-link" onClick={() => setBooking("contract")}>
+            {t("ab_contract_t")}
+          </button>
         </div>
-        <ul className="m-group ab-guide">
-          {guide.map((r) => (
-            <li key={r.label} className={`ab-guide-row is-${r.icon}`}>
-              <span className="cd-sched-icon" aria-hidden>
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-                  {ICONS[r.icon] ?? ICONS.info}
-                </svg>
-              </span>
-              <span className="ab-guide-text">
-                <em>{r.label}</em>
-                <strong>{r.value}</strong>
-              </span>
-            </li>
-          ))}
-          <li>
-            <Link to={`/university/${track.id}`} className="ab-more">
-              {t("ab_guide_more")}
-              <span aria-hidden>›</span>
-            </Link>
-          </li>
-        </ul>
-      </section>
+      </div>
 
-      {/* Help: the two requests */}
-      <section className="ab-help">
-        <strong>{t("ab_help")}</strong>
-        <p>{t("ab_help_d")}</p>
-        <button type="button" className="btn btn-seal" onClick={() => setBooking("consult")}>
-          <span>{t("ab_book")}</span>
-        </button>
-        <button type="button" className="ab-help-link" onClick={() => setBooking("contract")}>
-          {t("ab_contract")}
-        </button>
-      </section>
+      {/* Compact facts — full guide lives on the country page */}
+      <ul className="ab-facts" aria-label={t("ab_guide")}>
+        {guide.slice(0, 3).map((r) => (
+          <li key={r.label}>
+            <em>{r.label}</em>
+            <strong>{r.value}</strong>
+          </li>
+        ))}
+      </ul>
 
       {country === "cn" ? <ChinaSchools /> : <PolandSchools />}
 
@@ -244,15 +239,14 @@ function Chips({
   );
 }
 
-function InfoLine({ info }: { info?: UniInfoCms }) {
+/** Short meta under a school card title — tuition or deadline only. */
+function SchoolMeta({ info }: { info?: UniInfoCms }) {
   const { t, lang } = useI18n();
   if (!info) return null;
-  const parts = [
-    loc(lang, t, info.tuition) && `${t("ab_tuition")}: ${loc(lang, t, info.tuition)}`,
-    loc(lang, t, info.deadline) && `${t("ab_deadline")}: ${loc(lang, t, info.deadline)}`,
-    loc(lang, t, info.dorm) && `${t("ab_dorm")}: ${loc(lang, t, info.dorm)}`,
-  ].filter(Boolean);
-  return parts.length ? <span className="ab-info">{parts.join(" · ")}</span> : null;
+  const tuition = loc(lang, t, info.tuition);
+  const deadline = loc(lang, t, info.deadline);
+  const line = tuition || deadline;
+  return line ? <em className="ab-card-meta">{line}</em> : null;
 }
 
 const FIRST = 8;
@@ -318,33 +312,39 @@ function ChinaSchools() {
       {shown.length === 0 ? (
         <p className="ios-empty">{t("uni_list_empty")}</p>
       ) : (
-        <ul className="m-group ab-list">
-          {shown.map((u) => (
-            <li key={u.slug}>
-              <Link to={`/university/${u.slug}`} className="m-group-row">
-                <span className="m-group-thumb">
-                  <SafeImage src={u.photo?.src ?? ""} alt="" />
-                </span>
-                <span className="m-group-body">
-                  <strong>{u.name}</strong>
-                  <em>{[u.zh, cityLabel(u, lang)].filter(Boolean).join(" · ")}</em>
-                  <InfoLine info={uniInfoFor(bundle, u.slug)} />
-                </span>
-                <span className="m-group-chev" aria-hidden>
-                  ›
-                </span>
-              </Link>
-            </li>
-          ))}
+        <>
+          <ul className="ab-product-grid">
+            {shown.map((u) => {
+              const info = uniInfoFor(bundle, u.slug);
+              const city = cityLabel(u, lang);
+              return (
+                <li key={u.slug}>
+                  <Link
+                    to={`/university/${u.slug}`}
+                    className="ab-product-card"
+                    onClick={() => void hapticLight()}
+                  >
+                    <div className="ab-product-media">
+                      <SafeImage src={u.photo?.src ?? ""} alt="" loading="lazy" />
+                      {city && <span className="ab-product-tag">{city}</span>}
+                    </div>
+                    <div className="ab-product-body">
+                      <h3>{u.name}</h3>
+                      {u.zh && <em className="ab-card-zh">{u.zh}</em>}
+                      <SchoolMeta info={info} />
+                    </div>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
           {!filtered && list.length > FIRST && (
-            <li>
-              <button type="button" className="ab-more" onClick={() => setAll((v) => !v)}>
-                {all ? t("ab_unis_less") : t("ab_unis_more").replace("{n}", String(list.length))}
-                <span aria-hidden>{all ? "‹" : "›"}</span>
-              </button>
-            </li>
+            <button type="button" className="ab-more is-grid" onClick={() => setAll((v) => !v)}>
+              {all ? t("ab_unis_less") : t("ab_unis_more").replace("{n}", String(list.length))}
+              <span aria-hidden>{all ? "‹" : "›"}</span>
+            </button>
           )}
-        </ul>
+        </>
       )}
     </section>
   );
@@ -376,24 +376,34 @@ function PolandSchools() {
         <div className="cf">
           <Chips label={t("ab_f_major")} value={major} onChange={setMajor} options={majors} />
         </div>
-        <ul className="m-group ab-list">
-          {top.map((u) => (
-            <li key={u.name}>
-              <Link to="/university/poland" className="m-group-row">
-                <span className="m-group-thumb">
-                  {u.image ? <SafeImage src={u.image} alt="" /> : <span className="ab-initial">{u.name.charAt(0)}</span>}
-                </span>
-                <span className="m-group-body">
-                  <strong>{u.name}</strong>
-                  <em>{txt(u.programs, lang)}</em>
-                  <InfoLine info={uniInfoFor(bundle, u.name)} />
-                </span>
-                <span className="m-group-chev" aria-hidden>
-                  ›
-                </span>
-              </Link>
-            </li>
-          ))}
+        <ul className="ab-product-grid">
+          {top.map((u) => {
+            const info = uniInfoFor(bundle, u.name);
+            const programs = txt(u.programs, lang);
+            return (
+              <li key={u.name}>
+                <Link
+                  to="/university/poland"
+                  className="ab-product-card"
+                  onClick={() => void hapticLight()}
+                >
+                  <div className="ab-product-media">
+                    {u.image ? (
+                      <SafeImage src={u.image} alt="" loading="lazy" />
+                    ) : (
+                      <span className="ab-initial">{u.name.charAt(0)}</span>
+                    )}
+                    <span className="ab-product-tag">{t("country_pl")}</span>
+                  </div>
+                  <div className="ab-product-body">
+                    <h3>{u.name}</h3>
+                    {programs && <em className="ab-card-zh">{programs}</em>}
+                    <SchoolMeta info={info} />
+                  </div>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </section>
 

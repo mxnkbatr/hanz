@@ -54,6 +54,10 @@ export function CourseDetail() {
     (p) => p.id !== "m1",
   );
   const fromPrice = plans.length ? Math.min(...plans.map((p) => p.amount)) : 0;
+  const discount =
+    course.discountPercent != null && course.discountPercent > 0 ? course.discountPercent : 0;
+  const salePrice =
+    fromPrice > 0 && discount > 0 ? Math.round(fromPrice * (1 - discount / 100)) : 0;
   const facts = courseFacts(course, t);
   const levelText = course.language === "pl"
     ? course.cefr ?? ""
@@ -64,9 +68,17 @@ export function CourseDetail() {
       : program?.levels === "kids"
         ? kidsLevelsLive.map((l) => loc(lang, t, l.label, l.labelKey)).join(" · ")
         : "";
+  const seatsLabel =
+    course.seatsLeft != null
+      ? course.seatsLeft <= 0
+        ? t("mh_full")
+        : t("mh_seats_left").replace("{n}", String(course.seatsLeft))
+      : "";
   const enrollTo = `/enroll?interest=${course.id}`;
   // The HSK intensive runs on one fixed timetable (Mon–Sat, 10:00–18:00).
   const isIntensive = program?.id === "intensive";
+  const priceLabel = (amount: number) =>
+    plans.length > 1 ? t("wz_from").replace("{p}", formatPrice(amount)) : formatPrice(amount);
 
   function onComment(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -96,6 +108,19 @@ export function CourseDetail() {
             <Link to="/courses" className="cd-back" aria-label={t("back")}>
               ←
             </Link>
+            <div className="cd-media-badges">
+              {levelText && <span className="cd-pill">{levelText}</span>}
+              {discount > 0 && (
+                <span className="cd-pill is-sale">
+                  {t("course_discount").replace("{n}", String(discount))}
+                </span>
+              )}
+            </div>
+            {seatsLabel && (
+              <span className={`cd-media-seats${course.seatsLeft != null && course.seatsLeft <= 3 ? " is-low" : ""}`}>
+                {seatsLabel}
+              </span>
+            )}
           </div>
         </Reveal>
 
@@ -104,6 +129,24 @@ export function CourseDetail() {
             <header className="cd-head">
               <h1 className="cd-title">{title}</h1>
               {unit && <p className="cd-unit">{unit}</p>}
+              {fromPrice > 0 && (
+                <div className="cd-head-pills">
+                  <span className="cd-pill is-price">
+                    {salePrice > 0 ? (
+                      <>
+                        <s>{formatPrice(fromPrice)}</s> {formatPrice(salePrice)}
+                      </>
+                    ) : (
+                      priceLabel(fromPrice)
+                    )}
+                  </span>
+                  {discount > 0 && (
+                    <span className="cd-pill is-sale">
+                      {t("course_discount").replace("{n}", String(discount))}
+                    </span>
+                  )}
+                </div>
+              )}
             </header>
           </Reveal>
 
@@ -168,16 +211,24 @@ export function CourseDetail() {
                     </li>
                   )}
                   {fromPrice > 0 && (
-                    <SchedRow
-                      icon="price"
-                      label={t("cd_price")}
-                      value={
-                        plans.length > 1
-                          ? t("wz_from").replace("{p}", formatPrice(fromPrice))
-                          : formatPrice(fromPrice)
-                      }
-                      strong
-                    />
+                    <li className="cd-sched-row is-price">
+                      <span className="cd-sched-icon" aria-hidden>
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                          {SCHED_ICONS.price}
+                        </svg>
+                      </span>
+                      <span className="cd-sched-label">{t("cd_price")}</span>
+                      <strong className={`cd-sched-value${salePrice > 0 ? " cd-price-sale" : ""}`}>
+                        {salePrice > 0 ? (
+                          <>
+                            <s>{formatPrice(fromPrice)}</s>
+                            {formatPrice(salePrice)}
+                          </>
+                        ) : (
+                          priceLabel(fromPrice)
+                        )}
+                      </strong>
+                    </li>
                   )}
                 </ul>
               </section>
@@ -249,12 +300,25 @@ export function CourseDetail() {
               <section className="cd-group">
                 <h2 className="cd-label">{course.level ? t("course_fees_title") : t("enroll_plan")}</h2>
                 <ul className="cd-card cd-list">
-                  {plans.map((p) => (
-                    <li key={p.id} className="cd-row">
-                      <span>{t(p.labelKey)}</span>
-                      <strong>{formatPrice(p.amount)}</strong>
-                    </li>
-                  ))}
+                  {plans.map((p) => {
+                    const cut =
+                      discount > 0 ? Math.round(p.amount * (1 - discount / 100)) : 0;
+                    return (
+                      <li key={p.id} className="cd-row">
+                        <span>{t(p.labelKey)}</span>
+                        <strong className={cut > 0 ? "cd-price-sale" : undefined}>
+                          {cut > 0 ? (
+                            <>
+                              <s>{formatPrice(p.amount)}</s>
+                              {formatPrice(cut)}
+                            </>
+                          ) : (
+                            formatPrice(p.amount)
+                          )}
+                        </strong>
+                      </li>
+                    );
+                  })}
                   {program && program.schedules.length > 1 &&
                     program.schedules.map((s) => (
                       <li key={s.id} className="cd-row is-muted">
@@ -318,9 +382,9 @@ export function CourseDetail() {
         <div className="cd-bar-price">
           {fromPrice > 0 ? (
             <>
-              <strong>
-                {plans.length > 1 ? t("wz_from").replace("{p}", formatPrice(fromPrice)) : formatPrice(fromPrice)}
-              </strong>
+              {salePrice > 0 && <em className="cd-bar-was">{formatPrice(fromPrice)}</em>}
+              <strong>{priceLabel(salePrice > 0 ? salePrice : fromPrice)}</strong>
+              {seatsLabel && <span className="cd-bar-seats">{seatsLabel}</span>}
             </>
           ) : (
             <strong>{title}</strong>

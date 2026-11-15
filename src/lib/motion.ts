@@ -13,17 +13,16 @@ export const navSpring = {
  * Clean page switch — soft fade + light lift.
  * Exit is short so wait-mode feels snappy; enter is slightly longer.
  */
-// Calm and quick: a short fade with a small rise. No blur (it smears text while it runs).
+// Desktop route change: short fade only — a rising slide felt odd between pages.
 export const pageTransition = {
-  initial: { opacity: 0, y: 8 },
+  initial: { opacity: 0 },
   animate: {
     opacity: 1,
-    y: 0,
-    transition: { duration: 0.26, ease: easeOut },
+    transition: { duration: 0.16, ease: easeOut },
   },
   exit: {
     opacity: 0,
-    transition: { duration: 0.12, ease },
+    transition: { duration: 0.1, ease },
   },
 };
 

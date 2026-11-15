@@ -208,7 +208,7 @@
   }
 
   /* ─── Cards: one recipe ─── */
-  html.site .app-shell :is(.course-product-card, .ios-card, .uni-tile, .m-square, .m-promo) {
+  html.site .app-shell :is(.course-product-card, .ab-product-card, .ios-card, .uni-tile, .m-square, .m-promo) {
     overflow: hidden;
     border: 0;
     border-radius: 22px;
@@ -217,11 +217,11 @@
     transition: box-shadow 0.2s ease;
   }
 
-  html.site .app-shell :is(.course-product-media, .ios-card-media, .uni-tile-media) {
+  html.site .app-shell :is(.course-product-media, .ab-product-media, .ios-card-media, .uni-tile-media) {
     border-radius: 0;
   }
 
-  html.site .app-shell :is(.course-product-body, .ios-card-body, .uni-tile-body) {
+  html.site .app-shell :is(.course-product-body, .ab-product-body, .ios-card-body, .uni-tile-body) {
     display: grid;
     gap: 4px;
     padding: 12px 14px 14px;
@@ -789,54 +789,45 @@ html.site .app-shell .ios26-filter-chip.is-active .ios26-filter-label {
     display: none;
   }
 
-  /* Courses as an App Store-style list: thumbnail, title, one line, chevron. */
+  /* Courses: real product cards — image on top, 2-up grid. */
   html.site .app-shell .page-courses .course-product-grid {
-    grid-template-columns: 1fr;
-    gap: 0;
-    overflow: hidden;
-    border-radius: 20px;
-    background: var(--surface-1);
-    box-shadow: var(--ios-card-shadow);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    overflow: visible;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
   }
 
   html.site .app-shell .page-courses .course-product-card {
     position: relative;
-    display: grid;
-    grid-template-columns: 76px minmax(0, 1fr) 14px;
-    align-items: center;
-    gap: 14px;
-    padding: 12px 14px;
-    border-radius: 0;
-    background: none;
-    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0;
+    border-radius: 18px;
+    background: var(--surface-1);
+    box-shadow: var(--ios-card-shadow);
+    overflow: hidden;
   }
 
   html.site .app-shell .page-courses .course-product-card + .course-product-card::before,
   html.site .app-shell .page-courses .stagger-item + .stagger-item .course-product-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 104px;
-    height: 0.5px;
-    background: var(--ios-hairline);
+    content: none;
   }
 
   html.site .app-shell .page-courses .course-product-card::after {
-    content: "›";
-    grid-column: 3;
-    grid-row: 1;
-    color: var(--ios-tertiary);
-    font-size: 22px;
-    line-height: 1;
+    content: none;
   }
 
   html.site .app-shell .page-courses .course-product-media {
-    width: 76px;
-    height: 76px;
-    aspect-ratio: auto;
+    position: relative;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
     overflow: hidden;
-    border-radius: 16px;
+    border-radius: 0;
   }
 
   html.site .app-shell .page-courses .course-product-media img {
@@ -845,23 +836,164 @@ html.site .app-shell .ios26-filter-chip.is-active .ios26-filter-label {
     object-fit: cover;
   }
 
-  /* The stage reads as a small line above the title instead of a badge on the photo. */
+  html.site .app-shell .page-courses .course-product-badges {
+    position: absolute;
+    z-index: 1;
+    left: 8px;
+    top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    max-width: calc(100% - 16px);
+  }
+
   html.site .app-shell .page-courses .course-product-tag {
-    display: none;
+    position: static;
+    display: inline-flex;
+    align-items: center;
+    min-height: 22px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  html.site .app-shell .page-courses .course-product-sale {
+    display: inline-flex;
+    align-items: center;
+    min-height: 22px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--seal);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  html.site .app-shell .page-courses .course-product-seats {
+    position: absolute;
+    z-index: 1;
+    right: 8px;
+    bottom: 8px;
+    left: auto;
+    top: auto;
+    max-width: calc(100% - 16px);
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    color: #1f7a40;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  html.site .app-shell .page-courses .course-product-seats.is-low {
+    color: #b5121b;
+    background: rgba(255, 245, 245, 0.95);
   }
 
   html.site .app-shell .page-courses .course-product-body {
-    padding: 0;
-    gap: 3px;
+    padding: 10px 10px 12px;
+    gap: 6px;
+    min-width: 0;
   }
 
   html.site .app-shell .page-courses .course-product-body h3 {
-    font-size: 17px;
+    font-size: 14px;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   html.site .app-shell .page-courses .course-product-body p {
-    -webkit-line-clamp: 2;
-    font-size: 14px;
+    display: none;
+  }
+
+  html.site .app-shell .page-courses .cp-facts {
+    margin-top: 0;
+    gap: 4px;
+  }
+
+  html.site .app-shell .page-courses .cp-chips {
+    display: none;
+  }
+
+  html.site .app-shell .page-courses .cp-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  html.site .app-shell .page-courses .cp-duration {
+    font-style: normal;
+    font-size: 11px;
+    font-weight: 550;
+    color: var(--ios-secondary);
+  }
+
+  html.site .app-shell .page-courses .cp-price {
+    font-size: 13px;
+    font-weight: 750;
+    letter-spacing: -0.02em;
+    color: var(--seal);
+  }
+
+  /* Filter strip: one horizontal scroll, seal selected. */
+  html.site .app-shell .page-courses .cf-bar {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+
+  html.site .app-shell .page-courses .cf-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  html.site .app-shell .page-courses .cf-bar .cf-row {
+    display: contents;
+  }
+
+  html.site .app-shell .page-courses .cf-bar .cf-chips {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+
+  html.site .app-shell .page-courses .cf-bar .cf-chip {
+    flex: 0 0 auto;
+    min-height: 34px;
+    padding: 0 14px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  html.site .app-shell .page-courses .cf-bar .cf-clear {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  html.site:not([data-theme="dark"]) .app-shell .page-courses .cf-chip.is-on {
+    color: #fff !important;
+    background: var(--seal) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 6px 14px -8px var(--seal) !important;
+  }
+
+  html.site[data-theme="dark"] .app-shell .page-courses .cf-chip.is-on {
+    color: #fff !important;
+    background: var(--seal) !important;
+    border-color: transparent !important;
   }
 
   /* University: room between the head buttons and the featured rail. */

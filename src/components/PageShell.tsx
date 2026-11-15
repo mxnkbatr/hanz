@@ -44,7 +44,7 @@ export function Reveal({
   children,
   delay = 0,
   className = "",
-  y = 24,
+  y = 10,
 }: {
   children: ReactNode;
   delay?: number;
@@ -57,12 +57,12 @@ export function Reveal({
   return (
     <motion.div
       className={`reveal-block ${className}`}
-      initial={reduce ? false : { opacity: 0, y: Math.min(y, 14) }}
+      initial={reduce ? false : { opacity: 0, y: Math.min(y, 8) }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.12, margin: "0px 0px 80px 0px" }}
       transition={{
         delay: reduce ? 0 : delay,
-        duration: 0.35,
+        duration: 0.22,
         ease,
       }}
     >

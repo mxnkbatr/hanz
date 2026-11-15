@@ -58,6 +58,7 @@ type Draft = {
   startDate: string;
   seatsTotal: string;
   seatsLeft: string;
+  discountPercent: string;
   syllabus: string;
   in_stock: boolean;
   hidden: boolean;
@@ -97,6 +98,7 @@ function blankDraft(): Draft {
     startDate: "",
     seatsTotal: "",
     seatsLeft: "",
+    discountPercent: "",
     syllabus: "",
     in_stock: true,
     hidden: false,
@@ -119,6 +121,7 @@ function rowToDraft(r: CmsRow, collection: CollectionKey = "news"): Draft {
     startDate?: string;
     seatsTotal?: number;
     seatsLeft?: number;
+    discountPercent?: number;
     syllabus?: string[];
   };
   const fallbackFilter =
@@ -159,6 +162,7 @@ function rowToDraft(r: CmsRow, collection: CollectionKey = "news"): Draft {
     startDate: meta.startDate || "",
     seatsTotal: meta.seatsTotal != null ? String(meta.seatsTotal) : "",
     seatsLeft: meta.seatsLeft != null ? String(meta.seatsLeft) : "",
+    discountPercent: meta.discountPercent != null ? String(meta.discountPercent) : "",
     syllabus: Array.isArray(meta.syllabus) ? meta.syllabus.join("\n") : "",
     in_stock: r.in_stock ?? true,
     hidden: r.hidden,
@@ -297,6 +301,9 @@ export function AdminCollection({
           startDate: draft.startDate || undefined,
           seatsTotal: draft.seatsTotal.trim() ? Number(draft.seatsTotal) : undefined,
           seatsLeft: draft.seatsLeft.trim() ? Number(draft.seatsLeft) : undefined,
+          discountPercent: draft.discountPercent.trim()
+            ? Number(draft.discountPercent)
+            : undefined,
           syllabus: draft.syllabus
             .split("\n")
             .map((x) => x.trim())
@@ -637,6 +644,17 @@ export function AdminCollection({
                     min={0}
                     value={draft.seatsLeft}
                     onChange={(e) => setDraft({ ...draft, seatsLeft: e.target.value })}
+                  />
+                </label>
+                <label className="admin-field">
+                  <span>Хямдрал % / Discount %</span>
+                  <input
+                    type="number"
+                    min={0}
+                    max={100}
+                    value={draft.discountPercent}
+                    onChange={(e) => setDraft({ ...draft, discountPercent: e.target.value })}
+                    placeholder="10"
                   />
                 </label>
                 <label className="admin-field">

@@ -219,9 +219,7 @@ export function Quiz() {
       {phase === "pick" && (
         <header className="page-head app-head quiz-game-head">
           <Reveal>
-            <p className="eyebrow desk-only">{t("nav_quiz")}</p>
             <h1 className="h1">{t("quiz_title")}</h1>
-            <p className="lead desk-only">{t("quiz_lead")}</p>
           </Reveal>
         </header>
       )}
@@ -281,21 +279,9 @@ export function Quiz() {
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.28, ease }}
             >
-              <div className="quiz-pick-hero">
-                <div className="quiz-brand" aria-hidden>
-                  <span>汉</span>
-                </div>
-                <div className="quiz-pick-meta">
-                  <span>{t("quiz_xp")} +10</span>
-                  <span>♥ ×{HEARTS_MAX}</span>
-                  <span>{t("quiz_streak")}</span>
-                </div>
-              </div>
-
               <section className="quiz-pick-group">
                 <header className="quiz-pick-group-head">
                   <h2>{t("quiz_pick_t")}</h2>
-                  <p>{t("quiz_pick_d")}</p>
                 </header>
 
                 <div className="quiz-levels">
@@ -306,9 +292,9 @@ export function Quiz() {
                       className={`quiz-level-card quiz-level-${lvl.id}`}
                       onClick={() => startLevel(lvl.id)}
                       whileTap={{ scale: 0.985 }}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.05 * i, duration: 0.26, ease }}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.03 * i, duration: 0.18, ease }}
                     >
                       <span className="quiz-level-glyph" aria-hidden>
                         {LEVEL_GLYPH[lvl.id]}
@@ -332,10 +318,9 @@ export function Quiz() {
               <section className="quiz-pick-group">
                 <header className="quiz-pick-group-head">
                   <h2>{t("quiz_tests_t")}</h2>
-                  <p>{t("quiz_tests_d")}</p>
                 </header>
 
-                <div className="quiz-levels">
+                <div className="quiz-levels quiz-tests-grid">
                   {TESTS.map((x, i) => (
                     <motion.button
                       key={x.id}
@@ -343,9 +328,9 @@ export function Quiz() {
                       className={`quiz-level-card quiz-test-card quiz-test-${x.id}`}
                       onClick={() => startTest(x.id)}
                       whileTap={{ scale: 0.985 }}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.04 * i, duration: 0.26, ease }}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.03 * i, duration: 0.18, ease }}
                     >
                       <span className="quiz-level-glyph" aria-hidden>
                         {x.glyph}

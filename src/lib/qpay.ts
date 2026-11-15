@@ -11,24 +11,50 @@ export type QpayInvoice = {
   urls: { name: string; logo: string; link: string }[];
 };
 
+type InvokeFail = { invoice: null; error: string };
+type InvokeOk = { invoice: QpayInvoice; error: null };
+
 /**
- * Calls the `qpay` edge function (supabase/functions/qpay). Returns null when
- * QPay is not set up yet or fails, so the flow can finish without it.
+ * Calls the `qpay` edge function (supabase/functions/qpay).
+ * Returns a structured result so enroll/shop can show retry instead of a fake “saved” screen.
  */
-export async function createQpayInvoice(
+export async function requestQpayInvoice(
   id: string,
   kind: QpayKind = "enroll",
-): Promise<QpayInvoice | null> {
+): Promise<InvokeOk | InvokeFail> {
   try {
     const supabase = await getSupabase();
     const { data, error } = await supabase.functions.invoke("qpay", {
       body: { action: "create", id, kind },
     });
-    if (error || !data?.qr_image) return null;
-    return data as QpayInvoice;
-  } catch {
-    return null;
+    if (error) {
+      console.error("[qpay create]", error.message, data);
+      return { invoice: null, error: error.message || "qpay" };
+    }
+    if (data?.paid) {
+      return {
+        invoice: null,
+        error: "already_paid",
+      };
+    }
+    if (!data?.qr_image) {
+      console.error("[qpay create]", data?.error ?? "no qr", data);
+      return { invoice: null, error: String(data?.error ?? "no_payment") };
+    }
+    return { invoice: data as QpayInvoice, error: null };
+  } catch (e) {
+    console.error("[qpay create]", e);
+    return { invoice: null, error: "network" };
   }
+}
+
+/** @deprecated Prefer requestQpayInvoice — kept for call sites that only need the QR. */
+export async function createQpayInvoice(
+  id: string,
+  kind: QpayKind = "enroll",
+): Promise<QpayInvoice | null> {
+  const r = await requestQpayInvoice(id, kind);
+  return r.invoice;
 }
 
 export async function checkQpayPaid(

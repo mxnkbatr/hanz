@@ -10,6 +10,9 @@ const About = lazy(() =>
 const Courses = lazy(() =>
   import("./pages/Courses").then((m) => ({ default: m.Courses })),
 );
+const CourseMatch = lazy(() =>
+  import("./pages/CourseMatch").then((m) => ({ default: m.CourseMatch })),
+);
 const CourseDetail = lazy(() =>
   import("./pages/CourseDetail").then((m) => ({ default: m.CourseDetail })),
 );
@@ -241,6 +244,7 @@ export default function App() {
             <Route index element={<Home />} />
             <Route path="about" element={<About />} />
             <Route path="courses" element={<Courses />} />
+            <Route path="courses/match" element={<CourseMatch />} />
             <Route path="courses/:id" element={<CourseDetail />} />
             <Route path="hsk" element={<Hsk />} />
             <Route path="pricing" element={<Pricing />} />

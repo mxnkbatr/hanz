@@ -61,9 +61,7 @@ export function Travel() {
     <PageShell className="page-travel is-app ios-app">
       <header className="page-head app-head">
         <Reveal>
-          <p className="eyebrow desk-only">{t("nav_travel")}</p>
           <h1 className="h1">{t("travel_page")}</h1>
-          <p className="lead desk-only">{t("travel_lead")}</p>
         </Reveal>
       </header>
 
