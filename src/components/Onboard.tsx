@@ -73,13 +73,24 @@ export function Onboard() {
   const slide = slides[step];
 
   useEffect(() => {
+    // Don't sit on top of deep tabs forever — if they already navigated away
+    // from the first home open, dismiss (Safari especially feels “white/stuck”).
     if (
       location.pathname.startsWith("/auth") ||
       location.pathname.startsWith("/admin")
     ) {
       setOpen(false);
+      return;
     }
-  }, [location.pathname]);
+    if (
+      open &&
+      location.pathname !== "/" &&
+      !location.pathname.startsWith("/home")
+    ) {
+      markOnboardSeen();
+      setOpen(false);
+    }
+  }, [location.pathname, open]);
 
   useEffect(() => {
     if (!open) return;
@@ -146,7 +157,7 @@ export function Onboard() {
           role="dialog"
           aria-modal="true"
           aria-label={t("onboard_aria")}
-          initial={{ opacity: 0 }}
+          initial={false}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, y: 24 }}
           transition={reduce ? { duration: 0.15 } : spring}

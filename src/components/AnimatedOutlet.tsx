@@ -55,18 +55,24 @@ const softSpring = { type: "spring" as const, stiffness: 520, damping: 46, mass:
  * (from the right going deeper, from the left going back, straight up between tabs).
  */
 const stackVariants = {
-  enter: ({ dir }: Custom) => ({
-    opacity: 0,
-    x: dir === "push" ? 28 : dir === "pop" ? -28 : 0,
-    y: dir === "fade" ? 8 : 0,
-    zIndex: 2,
-  }),
+  enter: ({ dir }: Custom) =>
+    // Tab fades (Нүүр ↔ Зуучлал…): never start at opacity 0 — Safari often
+    // leaves the new layer blank/white if the spring never paints the end state.
+    dir === "fade"
+      ? { opacity: 1, x: 0, y: 0, zIndex: 2 }
+      : {
+          opacity: 0.001,
+          x: dir === "push" ? 28 : -28,
+          y: 0,
+          zIndex: 2,
+        },
   center: {
     x: 0,
     y: 0,
     opacity: 1,
-    transition: { x: softSpring, y: softSpring, opacity: { duration: 0.22 }, zIndex: instant },
-    transitionEnd: { zIndex: 0 },
+    transition: { x: softSpring, y: softSpring, opacity: { duration: 0.18 }, zIndex: instant },
+    // Force visible end state — Safari + framer-motion can stick at opacity 0.
+    transitionEnd: { zIndex: 0, opacity: 1, x: 0, y: 0 },
   },
   exit: ({ dir, fromY }: Custom) => ({
     // Keep the old page where the reader was while the window jumps to its new offset.

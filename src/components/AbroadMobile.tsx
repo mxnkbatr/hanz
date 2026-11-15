@@ -47,8 +47,9 @@ export function AbroadMobile() {
   const country: Country = params.get("c") === "pl" ? "pl" : "cn";
   const [booking, setBooking] = useState<BookingMode | null>(null);
 
-  const track = getUniversityById(country === "pl" ? "poland" : "china")!;
-  const windows = mergeEnrollWindows(bundle, "university", track.id) ?? track.enrollWindows;
+  const track = getUniversityById(country === "pl" ? "poland" : "china");
+  const windows =
+    (track && mergeEnrollWindows(bundle, "university", track.id)) ?? track?.enrollWindows ?? [];
   const open = windows.find((w) => w.status === "open");
 
   function pick(c: Country) {
@@ -84,6 +85,17 @@ export function AbroadMobile() {
           { icon: "degree", label: t("ab_g_degree"), value: t("cmp_p4") },
         ];
   }, [country, bundle, lang, t]);
+
+  if (!track) {
+    return (
+      <PageShell className="page-uni is-app ios-app ab">
+        <header className="page-head app-head">
+          <h1 className="h1">{t("ab_title")}</h1>
+        </header>
+        <p className="ios-empty">{t("uni_list_empty")}</p>
+      </PageShell>
+    );
+  }
 
   return (
     <PageShell className="page-uni is-app ios-app ab">
