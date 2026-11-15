@@ -1,4 +1,4 @@
-import { useMemo, useState, type ReactNode } from "react";
+import { useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { PageShell } from "./PageShell";
 import { SafeImage } from "./SafeImage";
@@ -34,43 +34,6 @@ const majorsOf = (info?: UniInfoCms) =>
     .split(",")
     .map((m) => m.trim())
     .filter(Boolean);
-
-const ICONS: Record<string, ReactNode> = {
-  lang: <path d="M4 6h9M8.5 4v2M6 6c.4 3 2.4 5.4 5.5 6.6M11 6c-.5 3.2-2.6 5.6-6.5 6.8M13 20l3.5-9 3.5 9M14.2 17h4.6" />,
-  tuition: (
-    <>
-      <rect x="3" y="6" width="18" height="12" rx="3" />
-      <circle cx="12" cy="12" r="2.5" />
-    </>
-  ),
-  living: <path d="M4 11.5 12 5l8 6.5M6.5 10v9h11v-9M10 19v-5h4v5" />,
-  visa: (
-    <>
-      <rect x="5" y="3.5" width="14" height="17" rx="2.5" />
-      <circle cx="12" cy="10" r="3" />
-      <path d="M9 16h6" />
-    </>
-  ),
-  work: (
-    <>
-      <rect x="3.5" y="8" width="17" height="11" rx="2.5" />
-      <path d="M9 8V6.5A1.5 1.5 0 0 1 10.5 5h3A1.5 1.5 0 0 1 15 6.5V8M3.5 13h17" />
-    </>
-  ),
-  intake: (
-    <>
-      <rect x="3.5" y="5" width="17" height="15" rx="3" />
-      <path d="M3.5 10h17M8 3v4M16 3v4" />
-    </>
-  ),
-  degree: <path d="M2.5 9.5 12 5l9.5 4.5L12 14zM6.5 11.7V16c1.6 1.5 3.4 2.2 5.5 2.2s3.9-.7 5.5-2.2v-4.3" />,
-  info: (
-    <>
-      <circle cx="12" cy="12" r="8.5" />
-      <path d="M12 11v5M12 8h.01" />
-    </>
-  ),
-};
 
 /**
  * Phone "Зуучлал" tab: pick the country, read its guide (cost, visa, work rights),
