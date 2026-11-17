@@ -4,14 +4,14 @@
 //   POST { action: "check",  id, kind? }  → { paid }
 //   GET/POST ?action=callback&id=…&kind=… → QPay callback
 //
-// Amount never comes from the browser: enrollments use PRICES / plan_price;
+// Amount never comes from the browser: enrollments use PRICES;
 // shop orders use public.products.price (fallback FALLBACK_SHOP).
 // Deploy with --no-verify-jwt. See supabase/QPAY_SETUP.md.
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
 /** ₮ per programme and plan; keep in step with src/data/content.ts → hskFees. */
 const PRICES: Record<string, Record<string, number>> = {
-  intensive: { m1: 1_800_000, m6: 6_000_000 },
+  intensive: { m1: 1_800_000, m6: 4_800_000 },
   kids: { m9: 4_800_000 },
 };
 
@@ -182,17 +182,10 @@ async function createInvoice(target: Target) {
   let description = "";
   if (target.kind === "enroll") {
     const r = target.row;
-    const catalog = PRICES[r.interest]?.[r.plan ?? ""] ?? 0;
-    const stored = r.plan_price && r.plan_price > 0 ? Math.round(r.plan_price) : 0;
-    // Prefer the saved plan_price when it matches the catalogue or a fair discount
-    // (up to 50% off) so course sale prices from the site still charge correctly.
-    if (catalog > 0 && stored > 0 && stored <= catalog && stored >= Math.round(catalog * 0.5)) {
-      amount = stored;
-    } else if (catalog > 0) {
-      amount = catalog;
-    } else {
-      amount = stored;
-    }
+    // Always the list price: the academy runs no discounts (2026-11-17), and a price
+    // saved by the browser must never decide what is charged.
+    amount = PRICES[r.interest]?.[r.plan ?? ""] ?? 0;
+    if (!amount) return json({ error: "no_payment" }, 400);
     description = `Hanz Academy · ${r.interest} · ${r.plan} · ${r.name}`;
   } else {
     const r = target.row;
