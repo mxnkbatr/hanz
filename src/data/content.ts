@@ -2,10 +2,10 @@ import { universities } from "./universities";
 export const academy = {
   brand: "ХАНЗ",
   /** From the academy's page copy (khanz_mn_huudasnii_tekst.docx) */
-  graduates: "8000+",
+  graduates: "10100+",
   scholarshipStudents: "10000+",
   yearsExp: "12",
-  polandUnis: "35",
+  polandUnis: "35+",
   partnerUniversities: "300+",
   colleges: "70+",
   tianjinStudents: "250+",
@@ -104,7 +104,7 @@ function hskCourse(
   image: string,
   points: number,
   drop: number[] = [],
-  seats: { total: number; left: number; discount?: number } = { total: 20, left: 8 },
+  seats: { total: number; left: number } = { total: 20, left: 8 },
 ) {
   return {
     id: `hsk${level}`,
@@ -132,22 +132,21 @@ function hskCourse(
     sixMonth: level <= 5,
     seatsTotal: seats.total,
     seatsLeft: seats.left,
-    /** Percent off the listed fee; omit when there is no promo. */
-    discountPercent: seats.discount,
+    /** The academy never advertises a discount (2026-11-17); kept at 0 so no promo shows. */
+    discountPercent: 0,
   };
 }
 
 /** HSK1–6, one course page per level (khanz_mn_huudasnii_tekst.docx). */
 export const coursesMeta = [
-  hskCourse(1, "beginner", "/courses/image12.webp", 7, [], { total: 20, left: 5, discount: 10 }),
+  hskCourse(1, "beginner", "/courses/image12.webp", 7, [], { total: 20, left: 5 }),
   hskCourse(2, "beginner", "/courses/image14.webp", 6, [2], { total: 18, left: 8 }),
   hskCourse(3, "intermediate", "/courses/image8.webp", 10, [2, 3, 4, 5, 6, 7, 8], {
     total: 16,
     left: 3,
-    discount: 10,
   }),
   hskCourse(4, "intermediate", "/courses/image15.webp", 8, [5, 6, 7, 8], { total: 16, left: 12 }),
-  hskCourse(5, "advanced", "/courses/image4.webp", 8, [5, 6, 7], { total: 14, left: 2, discount: 15 }),
+  hskCourse(5, "advanced", "/courses/image4.webp", 8, [5, 6, 7], { total: 14, left: 2 }),
   hskCourse(6, "advanced", "/courses/image11.webp", 9, [7, 8, 9], { total: 12, left: 7 }),
 ];
 

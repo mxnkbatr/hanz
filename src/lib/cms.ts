@@ -370,18 +370,19 @@ export type UniversityLive = {
 };
 
 /** Stat values saved in the admin before the academy corrected them (2026-11-05). */
-const OUTDATED_SETTINGS: Partial<Record<keyof SiteSettings, string>> = {
-  graduates: "2000+",
-  scholarshipStudents: "1000+",
+const OUTDATED_SETTINGS: Partial<Record<keyof SiteSettings, string[]>> = {
+  graduates: ["2000+", "8000+"],
+  scholarshipStudents: ["1000+"],
+  polandUnis: ["35"],
 };
 
 export function mergeAcademy(bundle: SiteBundle) {
   const saved = { ...bundle.settings };
-  // The live database still holds the old "2000+"; the code's "8000+" wins over it
+  // The live database may still hold an old figure; the code's current one wins over it
   // until someone saves a new value in Admin → Settings.
   for (const [key, old] of Object.entries(OUTDATED_SETTINGS)) {
     const k = key as keyof SiteSettings;
-    if (saved[k] === old) delete saved[k];
+    if (old.includes(String(saved[k]))) delete saved[k];
   }
   return { ...academy, ...saved };
 }
@@ -630,8 +631,7 @@ function courseExtras(meta: Record<string, unknown> | undefined): Partial<Course
   if (seatsTotal != null) out.seatsTotal = seatsTotal;
   const seatsLeft = num(m.seatsLeft);
   if (seatsLeft != null) out.seatsLeft = seatsLeft;
-  const discountPercent = num(m.discountPercent);
-  if (discountPercent != null) out.discountPercent = discountPercent;
+  // No discounts are advertised: a percent saved earlier in admin is ignored.
   if (Array.isArray(m.syllabus)) {
     const syllabus = (m.syllabus as unknown[]).map((x) => String(x).trim()).filter(Boolean);
     if (syllabus.length) out.syllabus = syllabus;

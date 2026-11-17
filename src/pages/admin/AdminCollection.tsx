@@ -647,17 +647,6 @@ export function AdminCollection({
                   />
                 </label>
                 <label className="admin-field">
-                  <span>Хямдрал % / Discount %</span>
-                  <input
-                    type="number"
-                    min={0}
-                    max={100}
-                    value={draft.discountPercent}
-                    onChange={(e) => setDraft({ ...draft, discountPercent: e.target.value })}
-                    placeholder="10"
-                  />
-                </label>
-                <label className="admin-field">
                   <span>Хичээлийн хөтөлбөр (мөр бүр нэг сэдэв) / Syllabus</span>
                   <textarea
                     rows={5}
