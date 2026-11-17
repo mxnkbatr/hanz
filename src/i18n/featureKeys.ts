@@ -604,7 +604,7 @@ export const featureKeys = {
     branch_nl_t: "Налайх",
     branch_nl_a: "Налгар худалдааны төв, 2 давхар, 2 тоот",
     branch_bo_t: "Баян-Өлгий (баруун бүсийн төлөөлөгч)",
-    branch_bo_a: "Баян-Өлгий аймаг, Өлгий сум, Blue Sky No401",
+    branch_bo_a: "Алтай академи · Баян-Өлгий аймаг, Өлгий сум, Blue Sky No401",
     register_cta: "Бүртгүүлэх",
     prod1_d: "Гар урлалын аяга тавагны сет — өдөр тутмын хэрэглээнд.",
     prod1_b:
@@ -1306,7 +1306,7 @@ export const featureKeys = {
     branch_nl_t: "Nalaikh",
     branch_nl_a: "Nalgar trade center, floor 2, room 2",
     branch_bo_t: "Bayan-Ölgii (western representative)",
-    branch_bo_a: "Blue Sky No401, Ölgii soum, Bayan-Ölgii aimag",
+    branch_bo_a: "Altai Academy · Blue Sky No401, Ölgii soum, Bayan-Ölgii aimag",
     register_cta: "Register",
     prod1_d: "Handcrafted cup and plate set.",
     prod1_b:
@@ -1977,7 +1977,7 @@ export const featureKeys = {
     branch_nl_t: "纳莱赫",
     branch_nl_a: "纳尔加尔商贸中心 2 层 2 号",
     branch_bo_t: "巴彦乌列盖（西部代表）",
-    branch_bo_a: "巴彦乌列盖省乌列盖县 Blue Sky No401",
+    branch_bo_a: "阿尔泰学院 · 巴彦乌列盖省乌列盖县 Blue Sky No401",
     register_cta: "报名",
     prod1_d: "手工杯盘套装。",
     prod1_b: "俞梅仁杯盘套装，传统纹样，瓷器材质，日常与送礼皆宜。",
