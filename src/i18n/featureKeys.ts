@@ -366,7 +366,7 @@ export const featureKeys = {
     quiz_test_business: "Бизнес хятад хэл",
     quiz_test_count: "50 асуулт",
     quiz_test_label: "Тест",
-    quiz_lvl_hsk1: "Эхлэн суралцагч",
+    quiz_lvl_hsk1: "Анхан суралцагч",
     quiz_lvl_hsk1_d: "Мэндчилгээ & өдөр тутмын үгс",
     quiz_lvl_hsk2: "Дунд шат",
     quiz_lvl_hsk2_d: "Суралцах, аялал, энгийн өгүүлбэр",
