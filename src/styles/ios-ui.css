@@ -1458,3 +1458,22 @@ html.site .site-footer .site-footer-brand p {
   max-width: 34rem;
   color: var(--text, var(--ink));
 }
+
+/* Desktop header with eight menu items: never wrap a link or squeeze the logo. */
+@media (min-width: 900px) {
+  html.site .app-shell .topbar .topnav-link {
+    white-space: nowrap;
+  }
+  html.site .app-shell .topbar .topbar-brand {
+    min-width: max-content;
+  }
+}
+@media (min-width: 900px) and (max-width: 1279px) {
+  html.site .app-shell .topbar .topnav-link {
+    padding: 0.5rem 0.55rem !important;
+    font-size: 0.84rem !important;
+  }
+  html.site .app-shell .topbar .topbar-capsule {
+    gap: 0.5rem;
+  }
+}
