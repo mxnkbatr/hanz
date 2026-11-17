@@ -374,7 +374,7 @@ export const siteCopy = {
     course_hsk3_cta: "Өдөр тутмын хятад хэлээ дараагийн түвшинд гаргаарай.",
 
     course_hsk4_t: "HSK4 + HSKK",
-    course_hsk4_head: "Тэтгэлэг авах боломжтой болно",
+    course_hsk4_head: "БНХАУ-д тэтгэлэг авах боломж нээгдэнэ",
     course_hsk4_sum:
       "2000 ханз, 20 хичээл, Хятадад суралцаж амьдрахад хэрэгтэй үг хэллэг.",
     course_hsk4_b:
@@ -392,7 +392,7 @@ export const siteCopy = {
     course_hsk4_cta: "Хятадад суралцах зорилгодоо нэг алхам ойртоорой.",
 
     course_hsk5_t: "HSK5 + HSKK",
-    course_hsk5_head: "Шалгалтын бэлтгэл ба тэтгэлэгт хүрэх боломж",
+    course_hsk5_head: "БНХАУ-д бүрэн 100% тэтгэлэг авах боломжтой болно",
     course_hsk5_sum:
       "2500 ханз, 36 хичээл, шалгалтын бэлтгэл, тэтгэлэгт хүрэх боломж.",
     course_hsk5_b:
@@ -663,7 +663,7 @@ export const siteCopy = {
     course_hsk3_cta: "让你的日常汉语更上一层楼。",
 
     course_hsk4_t: "HSK4 + HSKK",
-    course_hsk4_head: "具备申请奖学金的条件",
+    course_hsk4_head: "开启在中国获得奖学金的机会",
     course_hsk4_sum: "2000 个汉字，20 课，在中国学习和生活所需的用语。",
     course_hsk4_b:
       "HSK4 课程使用新 HSK4 上下两册教材，共 20 课。在句子中掌握 2000 个汉字，巩固 HSK3 的知识。课程结束时，能够在学习、生活和工作场景中交流，并有理有据地阐述自己的观点。",
@@ -678,7 +678,7 @@ export const siteCopy = {
     course_hsk4_cta: "离赴华留学的目标更近一步。",
 
     course_hsk5_t: "HSK5 + HSKK",
-    course_hsk5_head: "备考与奖学金机会",
+    course_hsk5_head: "有机会获得中国全额 100% 奖学金",
     course_hsk5_sum: "2500 个汉字，36 课，备考，争取奖学金。",
     course_hsk5_b:
       "HSK5 课程使用上下两册教材，共 36 课。掌握 2500 个汉字，读懂篇幅长、信息量大的文章，学会就社会、教育、经济、文化等话题详细表达和写作。学完教材后进行模拟测试和考前准备。取得 HSK5 成绩，将为申请奖学金打开大门。",
