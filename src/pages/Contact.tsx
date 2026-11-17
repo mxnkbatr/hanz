@@ -101,8 +101,8 @@ export function Contact() {
           {branchesLive.map((b) => (
             <StaggerItem key={b.id}>
               <a href={`tel:${b.phones[0]}`} className="app-row">
-                <span className="app-row-icon" aria-hidden>
-                  址
+                <span className="app-row-icon is-wide" aria-hidden>
+                  地址
                 </span>
                 <span className="app-row-body">
                   <strong>{loc(lang, t, b.title, b.titleKey)}</strong>

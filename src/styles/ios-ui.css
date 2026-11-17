@@ -1449,3 +1449,12 @@ html.site[data-theme="dark"] .uni-notice {
   align-self: flex-start;
   max-width: max-content;
 }
+
+/* Footer tagline: larger and easier to read (client, 2026-11-17). */
+html.site .site-footer .site-footer-brand p {
+  font-size: 1.12rem;
+  font-weight: 600;
+  line-height: 1.5;
+  max-width: 34rem;
+  color: var(--text, var(--ink));
+}
