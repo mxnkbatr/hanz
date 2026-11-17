@@ -896,7 +896,7 @@ export const featureKeys = {
     partners_title: "Partners & success",
     success_title: "Our results",
     success_1: "10,080+ students have learned Chinese",
-    success_2: "1,080+ scholarship students in China",
+    success_2: "8,080+ students won scholarships",
     success_3: "250+ students at Tianjin Polytechnic University",
     cat_porcelain: "Porcelain",
     cat_books: "Books and workbooks",
