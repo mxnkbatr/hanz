@@ -78,8 +78,8 @@ export function Contact() {
               </span>
             </div>
             <Link to="/enroll" className="app-row">
-              <span className="app-row-icon" aria-hidden>
-                汉
+              <span className="app-row-icon is-wide" aria-hidden>
+                在线报名
               </span>
               <span className="app-row-body">
                 <strong>{t("register_cta")}</strong>
