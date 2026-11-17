@@ -428,12 +428,12 @@ export const chinaProgramsMeta = [
 
 /** Why Hanz — from client introduction deck */
 export const whyHanzMeta = [
-  { id: "why1", icon: "汉", titleKey: "why_1_t", descKey: "why_1_d" },
-  { id: "why2", icon: "书", titleKey: "why_2_t", descKey: "why_2_d" },
-  { id: "why3", icon: "听", titleKey: "why_3_t", descKey: "why_3_d" },
-  { id: "why4", icon: "时", titleKey: "why_4_t", descKey: "why_4_d" },
-  { id: "why5", icon: "试", titleKey: "why_5_t", descKey: "why_5_d" },
-  { id: "why6", icon: "校", titleKey: "why_6_t", descKey: "why_6_d" },
+  { id: "why1", icon: "一对一", titleKey: "why_1_t", descKey: "why_1_d" },
+  { id: "why2", icon: "教科书", titleKey: "why_2_t", descKey: "why_2_d" },
+  { id: "why3", icon: "听、说、读、写", titleKey: "why_3_t", descKey: "why_3_d" },
+  { id: "why4", icon: "时间", titleKey: "why_4_t", descKey: "why_4_d" },
+  { id: "why5", icon: "成绩", titleKey: "why_5_t", descKey: "why_5_d" },
+  { id: "why6", icon: "奖学金", titleKey: "why_6_t", descKey: "why_6_d" },
 ] as const;
 
 /** Services on the home page (page copy, "Үйлчилгээ"). */
