@@ -1399,3 +1399,62 @@ html.site[data-theme="dark"] .page-quiz .quiz-prompt.is-text small {
     scroll-behavior: auto !important;
   }
 }
+
+/* University list: announcement banner (e.g. the March 2027 language prep). */
+.uni-notice {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 1rem;
+  padding: 0.8rem 1rem;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--seal, #d62828) 9%, var(--paper, #fff));
+  border: 1px solid color-mix(in srgb, var(--seal, #d62828) 22%, transparent);
+  color: var(--ink, #12110f);
+  font-size: 0.98rem;
+  font-weight: 650;
+  line-height: 1.4;
+}
+.uni-notice-mark {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  background: var(--seal, #d62828);
+  color: #fff;
+  font-family: "Noto Serif SC", serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+html.site[data-theme="dark"] .uni-notice {
+  background: color-mix(in srgb, var(--seal, #d62828) 18%, #1c1a18);
+  color: #f5f1ea;
+}
+
+/* Advantage icons with several characters (一对一, 教科书, 听、说、读、写): a pill, not a square. */
+:is(.why-icon, .app-row-icon).is-wide {
+  width: auto !important;
+  min-width: 0 !important;
+  padding: 0 0.65em !important;
+  font-size: 0.8em !important;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+:is(.why-icon, .app-row-icon).is-wide {
+  display: inline-grid !important;
+  place-items: center;
+  justify-self: start;
+  align-self: flex-start;
+  max-width: max-content;
+}
+
+/* Footer tagline: larger and easier to read (client, 2026-11-17). */
+html.site .site-footer .site-footer-brand p {
+  font-size: 1.12rem;
+  font-weight: 600;
+  line-height: 1.5;
+  max-width: 34rem;
+  color: var(--text, var(--ink));
+}

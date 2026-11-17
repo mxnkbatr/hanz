@@ -172,7 +172,7 @@ export function DesktopHero({ ready }: { ready: boolean }) {
         <motion.div className="cine-meta" style={reduce ? { opacity: metaIntro } : { y: metaY, opacity: metaOpacity }}>
           <dl>
             <div>
-              <dt>{academy.graduates || "8000+"}</dt>
+              <dt>{academy.graduates || "10100+"}</dt>
               <dd>{t("stat_students")}</dd>
             </div>
             <div>

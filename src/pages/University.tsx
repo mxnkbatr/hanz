@@ -7,6 +7,7 @@ import { PageShell, Reveal, Stagger, StaggerItem } from "../components/PageShell
 import { UniversityCard } from "../components/UniversityCard";
 import { useI18n } from "../i18n/I18nContext";
 import { AbroadMobile } from "../components/AbroadMobile";
+import { UniNotice } from "../components/UniNotice";
 
 /** City chips: every city with at least three schools, biggest first. */
 const CITY_CHIPS = Object.entries(
@@ -116,6 +117,7 @@ function UniversityDesktop() {
         </Reveal>
 
         <Reveal>
+          <UniNotice />
           <div className="ios-section-head">
             <h2>{t("ab_unis")}</h2>
           </div>

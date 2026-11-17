@@ -60,8 +60,8 @@ export function Contact() {
               </span>
             </a>
             <div className="app-row app-row-static">
-              <span className="app-row-icon" aria-hidden>
-                地
+              <span className="app-row-icon is-wide" aria-hidden>
+                时间
               </span>
               <span className="app-row-body">
                 <strong>{t("hours_label")}</strong>
@@ -69,8 +69,8 @@ export function Contact() {
               </span>
             </div>
             <div className="app-row app-row-static">
-              <span className="app-row-icon" aria-hidden>
-                址
+              <span className="app-row-icon is-wide" aria-hidden>
+                地址
               </span>
               <span className="app-row-body">
                 <strong>{t("footer_address")}</strong>
@@ -78,8 +78,8 @@ export function Contact() {
               </span>
             </div>
             <Link to="/enroll" className="app-row">
-              <span className="app-row-icon" aria-hidden>
-                汉
+              <span className="app-row-icon is-wide" aria-hidden>
+                在线报名
               </span>
               <span className="app-row-body">
                 <strong>{t("register_cta")}</strong>
@@ -101,8 +101,8 @@ export function Contact() {
           {branchesLive.map((b) => (
             <StaggerItem key={b.id}>
               <a href={`tel:${b.phones[0]}`} className="app-row">
-                <span className="app-row-icon" aria-hidden>
-                  址
+                <span className="app-row-icon is-wide" aria-hidden>
+                  地址
                 </span>
                 <span className="app-row-body">
                   <strong>{loc(lang, t, b.title, b.titleKey)}</strong>

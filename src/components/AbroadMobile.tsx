@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+import { UniNotice } from "./UniNotice";
 import { Link, useSearchParams } from "react-router-dom";
 import { PageShell } from "./PageShell";
 import { SafeImage } from "./SafeImage";
@@ -266,6 +267,7 @@ function ChinaSchools() {
 
   return (
     <section className="m-section">
+      <UniNotice />
       <div className="m-section-head">
         <h2>{t("ab_unis")}</h2>
       </div>

@@ -66,7 +66,7 @@ export function About() {
           {whyHanzMeta.map((w) => (
             <StaggerItem key={w.id}>
               <div className="app-row app-row-static">
-                <span className="app-row-icon" aria-hidden>
+                <span className={`app-row-icon${w.icon.length > 1 ? " is-wide" : ""}`} aria-hidden>
                   {w.icon}
                 </span>
                 <span className="app-row-body">
@@ -203,7 +203,7 @@ export function About() {
           {whyHanzMeta.map((w) => (
             <StaggerItem key={w.id}>
               <article className="why-card">
-                <span className="why-icon" aria-hidden>
+                <span className={`why-icon${w.icon.length > 1 ? " is-wide" : ""}`} aria-hidden>
                   {w.icon}
                 </span>
                 <h3>{t(w.titleKey)}</h3>
