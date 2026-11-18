@@ -20,10 +20,10 @@ const config: CapacitorConfig = {
   ios: {
     contentInset: "automatic",
     preferredContentMode: "mobile",
-    backgroundColor: "#eef0f5",
+    backgroundColor: "#f6f4f4",
   },
   android: {
-    backgroundColor: "#eef0f5",
+    backgroundColor: "#f6f4f4",
     allowMixedContent: false,
   },
 };

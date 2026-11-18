@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import { Home } from "./pages/Home";
 import { PageSkeleton } from "./components/PageSkeleton";
+import { isNativeApp } from "./lib/native";
 
 /* Public pages and the whole admin load on demand; Home + Layout stay in the main bundle. */
 const About = lazy(() =>
@@ -175,7 +176,8 @@ export default function App() {
       if (cancelled || i >= PREFETCH.length) return;
       void PREFETCH[i++]().finally(() => idle(next));
     };
-    const start = window.setTimeout(() => idle(next), 1200);
+    // In the app the pages are local files: warm them almost at once.
+    const start = window.setTimeout(() => idle(next), isNativeApp() ? 250 : 1200);
     return () => {
       cancelled = true;
       window.clearTimeout(start);
