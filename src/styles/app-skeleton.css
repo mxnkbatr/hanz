@@ -248,3 +248,55 @@ html[data-theme="dark"] .share-menu {
 .share-ico.is-fb { background: #1877f2; }
 .share-ico.is-tg { background: #29a9eb; font-size: 12px; }
 .share-ico.is-link { background: #8e8e93; }
+
+/* Share: button + the short link as a one-tap copy pill */
+.share-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.share-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  max-width: 100%;
+  padding: 0 6px 0 14px;
+  border: 1px dashed color-mix(in srgb, var(--text) 22%, transparent);
+  border-radius: 999px;
+  font: inherit;
+  color: var(--text);
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.share-link:hover {
+  border-color: color-mix(in srgb, var(--seal) 60%, transparent);
+}
+.share-link-url {
+  overflow: hidden;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 13.5px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: color-mix(in srgb, var(--text) 75%, transparent);
+}
+.share-link-action {
+  flex: none;
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--seal);
+  transition: background-color 0.15s ease;
+}
+.share-link.is-copied {
+  border-style: solid;
+  border-color: #30b158;
+}
+.share-link.is-copied .share-link-action {
+  background: #30b158;
+}
+.share-ico.is-ms { background: linear-gradient(135deg, #0a7cff, #a033ff 60%, #ff5280); }

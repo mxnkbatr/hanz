@@ -8,6 +8,7 @@ export const siteCopy = {
   en: {
     share: "Share",
     share_copy: "Copy link",
+    share_copy_short: "Copy",
     share_copied: "Copied ✓",
     mm_learn: "Learn",
     pf_guest_t: "Welcome!",
@@ -127,6 +128,7 @@ export const siteCopy = {
   mn: {
     share: "Хуваалцах",
     share_copy: "Холбоос хуулах",
+    share_copy_short: "Хуулах",
     share_copied: "Хуулагдлаа ✓",
     mm_learn: "Суралцах",
     pf_guest_t: "Сайн байна уу!",
@@ -435,6 +437,7 @@ export const siteCopy = {
   zh: {
     share: "分享",
     share_copy: "复制链接",
+    share_copy_short: "复制",
     share_copied: "已复制 ✓",
     mm_learn: "学习",
     pf_guest_t: "您好！",

@@ -10,6 +10,7 @@ import { loc } from "../lib/i18nText";
 import { toDateTime } from "../lib/date";
 import { PhotoGlow } from "../components/PhotoGlow";
 import { ShareButton } from "../components/ShareButton";
+import { shortCode } from "../lib/shortCode";
 
 export function NewsDetail() {
   const { id = "" } = useParams();
@@ -62,7 +63,7 @@ export function NewsDetail() {
                 <time dateTime={toDateTime(item.date)}>{item.date}</time>
               </p>
               <h1 className="h1">{title}</h1>
-              <ShareButton path={`/medee/${item.id}`} title={title} text={excerpt} image={item.image} />
+              <ShareButton shortPath={`/m/${shortCode(item.id)}`} title={title} text={excerpt} />
               {excerpt ? <p className="app-sub desk-article-lead">{excerpt}</p> : null}
               <div className="desk-article-copy">
                 {paragraphs.map((p) => (
