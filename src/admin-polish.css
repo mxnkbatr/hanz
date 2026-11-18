@@ -1,0 +1,496 @@
+/* ─── Admin polish: red · white · black glass, matching the app ───
+   Loaded after admin.css. Calmer surfaces, clear hierarchy, one accent. */
+.admin-shell {
+  --a-bg: #0a090b;
+  --a-bg-card: rgba(255, 255, 255, 0.045);
+  --a-bg-soft: rgba(255, 255, 255, 0.07);
+  --a-line: rgba(255, 255, 255, 0.07);
+  --a-line-strong: rgba(255, 255, 255, 0.13);
+  --a-seal: #ff2d3d;
+  --a-seal-soft: rgba(255, 45, 61, 0.14);
+  --a-radius: 20px;
+  --a-radius-sm: 14px;
+  background:
+    radial-gradient(60% 40% at 100% -5%, rgba(255, 45, 61, 0.18), transparent 60%),
+    radial-gradient(50% 35% at -5% 100%, rgba(160, 10, 30, 0.16), transparent 60%),
+    var(--a-bg);
+  font-family: "Onest", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Sidebar: frosted, roomier rows, red active pill */
+.admin-side {
+  background: rgba(16, 15, 18, 0.72) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(1.5);
+  backdrop-filter: blur(24px) saturate(1.5);
+}
+.admin-nav-group {
+  margin-top: 1.1rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  color: var(--a-faint);
+}
+.admin-nav-link {
+  min-height: 42px;
+  border-radius: 12px;
+  font-weight: 560;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.admin-nav-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+.admin-nav-link.is-active {
+  color: #fff;
+  background: linear-gradient(180deg, rgba(255, 45, 61, 0.28), rgba(255, 45, 61, 0.16));
+  box-shadow: inset 0 0 0 1px rgba(255, 45, 61, 0.35);
+}
+.admin-nav-ico {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+}
+.admin-nav-link.is-active .admin-nav-ico {
+  background: var(--a-seal);
+  color: #fff;
+}
+
+/* Page header */
+.admin-head h1 {
+  font-size: clamp(1.7rem, 2.4vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+.admin-head p {
+  color: var(--a-muted);
+}
+
+/* Cards: glass with hairline edge */
+.admin-card,
+.admin-map-card,
+.admin-quick-card,
+.admin-rn-card,
+.admin-empty,
+.admin-table-wrap,
+.admin-order {
+  background: var(--a-bg-card) !important;
+  border: 1px solid var(--a-line) !important;
+  border-radius: var(--a-radius) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+.admin-quick-card,
+.admin-rn-card,
+.admin-map-card li a {
+  transition: transform 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+.admin-quick-card:hover,
+.admin-rn-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 45, 61, 0.35) !important;
+}
+
+/* Stats: big numbers, all the same card (incl. the order links) */
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+}
+.admin-stats > article,
+.admin-stats > .admin-stat-link {
+  display: grid;
+  gap: 6px;
+  padding: 18px 20px;
+  border-radius: var(--a-radius);
+  color: var(--a-ink);
+  text-decoration: none;
+  background: var(--a-bg-card);
+  border: 1px solid var(--a-line);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+.admin-stats > .admin-stat-link:hover {
+  border-color: rgba(255, 45, 61, 0.35);
+}
+.admin-stats em {
+  font-size: 0.78rem;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--a-muted);
+}
+.admin-stats strong {
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+.admin-stats > .is-accent {
+  background: linear-gradient(160deg, rgba(255, 45, 61, 0.32), rgba(255, 45, 61, 0.1));
+  border-color: rgba(255, 45, 61, 0.4);
+}
+
+/* Buttons */
+.admin-btn,
+.admin-ghost-btn {
+  min-height: 40px;
+  border-radius: 999px !important;
+  font-weight: 650;
+  transition: transform 0.12s ease, filter 0.15s ease, background-color 0.15s ease;
+}
+.admin-btn:active,
+.admin-ghost-btn:active {
+  transform: scale(0.97);
+}
+.admin-btn.is-seal {
+  background: linear-gradient(180deg, #ff4a57, #d9111f) !important;
+  border: 0 !important;
+  color: #fff !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 10px 24px -12px rgba(255, 45, 61, 0.8);
+}
+.admin-btn.is-seal:hover {
+  filter: brightness(1.08);
+}
+.admin-btn.is-danger {
+  color: #ff6b76 !important;
+  border-color: rgba(255, 45, 61, 0.35) !important;
+}
+
+/* Inputs */
+.admin-shell :is(input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), select, textarea) {
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid var(--a-line-strong) !important;
+  color: var(--a-ink);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.admin-shell :is(input, select, textarea):focus {
+  outline: none;
+  border-color: rgba(255, 45, 61, 0.6) !important;
+  box-shadow: 0 0 0 4px rgba(255, 45, 61, 0.16) !important;
+}
+
+/* Tables */
+.admin-table th {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--a-faint);
+}
+.admin-table tbody tr {
+  transition: background-color 0.12s ease;
+}
+.admin-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Status chips (orders page) */
+.admin-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.admin-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--a-line-strong);
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--a-ink);
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+}
+.admin-chip i {
+  font-style: normal;
+  font-size: 0.75rem;
+  color: var(--a-faint);
+}
+.admin-chip.is-on {
+  color: #0a090b;
+  background: #fff;
+  border-color: #fff;
+}
+.admin-chip.is-on i {
+  color: rgba(10, 9, 11, 0.55);
+}
+
+/* Orders */
+.admin-orders {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 14px;
+}
+.admin-order {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+}
+.admin-order.is-new {
+  border-color: rgba(255, 45, 61, 0.4) !important;
+}
+.admin-order header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.admin-order header strong {
+  display: block;
+  font-size: 1.02rem;
+  font-weight: 700;
+}
+.admin-order header em {
+  font-size: 0.78rem;
+  font-style: normal;
+  color: var(--a-faint);
+}
+.admin-order dl {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+.admin-order dl > div {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 10px;
+  font-size: 0.9rem;
+}
+.admin-order dt {
+  color: var(--a-muted);
+}
+.admin-order dd {
+  margin: 0;
+}
+.admin-order dd a {
+  color: var(--a-ink);
+}
+.admin-order-actions {
+  display: grid;
+  grid-template-columns: 130px 1fr auto;
+  gap: 8px;
+}
+.admin-order-actions :is(select, input) {
+  min-height: 40px;
+  padding: 0 12px;
+}
+.admin-badge.is-paid {
+  color: #3dd68c;
+  background: rgba(61, 214, 140, 0.14);
+}
+.admin-badge.is-spam {
+  color: var(--a-faint);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Phone tab bar: frosted capsule */
+.admin-tabbar {
+  background: rgba(16, 15, 18, 0.72) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  backdrop-filter: blur(24px) saturate(1.6);
+}
+.admin-tab.is-active {
+  color: #fff !important;
+}
+.admin-tab.is-active .admin-tab-ico {
+  color: var(--a-seal);
+}
+
+@media (max-width: 700px) {
+  .admin-orders {
+    grid-template-columns: 1fr;
+  }
+  .admin-order-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+  .admin-order-actions input {
+    grid-column: 1 / -1;
+    order: 3;
+  }
+}
+
+/* ═════ Phone: admin that is comfortable with one thumb ═════ */
+@media (max-width: 760px) {
+  /* Tab bar: one row of five, iOS-style, above the home bar */
+  .admin-tabbar {
+    display: grid !important;
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 0 !important;
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom)) !important;
+  }
+  .admin-tab {
+    display: grid !important;
+    justify-items: center;
+    gap: 3px;
+    min-width: 0;
+    min-height: 50px;
+    padding: 4px 2px !important;
+  }
+  .admin-tab-ico {
+    font-size: 1.15rem;
+    line-height: 1;
+  }
+  .admin-tab-label {
+    max-width: 100%;
+    overflow: hidden;
+    font-size: 0.62rem !important;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .admin-main {
+    padding-bottom: calc(86px + env(safe-area-inset-bottom)) !important;
+  }
+
+  /* Page rhythm */
+  .admin-page {
+    gap: 18px;
+  }
+  .admin-head h1 {
+    font-size: 1.6rem;
+  }
+  .admin-head p {
+    font-size: 0.92rem;
+  }
+
+  /* Numbers: two per row */
+  .admin-stats {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px;
+  }
+  .admin-stats > article,
+  .admin-stats > .admin-stat-link {
+    padding: 14px 16px;
+  }
+  .admin-stats strong {
+    font-size: 1.5rem;
+  }
+
+  /* Card headers: title and a compact add button on one line */
+  .admin-card-head {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .admin-card-head h2 {
+    font-size: 1.05rem;
+    line-height: 1.25;
+  }
+  .admin-card-head .admin-btn,
+  .admin-head .admin-btn {
+    flex: none;
+    min-height: 38px;
+    padding: 0 14px !important;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+  .admin-card {
+    padding: 16px !important;
+  }
+
+  /* Tables become stacked rows: no sideways scrolling */
+  .admin-table-wrap {
+    overflow: visible !important;
+  }
+  .admin-table,
+  .admin-table tbody,
+  .admin-table tr,
+  .admin-table td {
+    display: block;
+    width: 100% !important;
+  }
+  .admin-table thead {
+    display: none;
+  }
+  .admin-table tr {
+    display: grid;
+    gap: 8px;
+    padding: 14px 4px;
+    border-bottom: 1px solid var(--a-line);
+  }
+  .admin-table tr:last-child {
+    border-bottom: 0;
+  }
+  .admin-table td {
+    padding: 0 !important;
+    border: 0 !important;
+  }
+  .admin-table td input,
+  .admin-table td select {
+    width: 100%;
+    min-height: 42px;
+  }
+  .admin-row-actions {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .admin-row-actions .admin-btn {
+    flex: 1 1 auto;
+    min-height: 40px;
+  }
+
+  /* Forms: full-width fields, big enough for thumbs, no iOS zoom */
+  .admin-form-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .admin-shell :is(input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), select, textarea) {
+    min-height: 44px;
+    font-size: 16px !important;
+  }
+  .admin-cms-form > div:last-child {
+    position: sticky;
+    bottom: calc(76px + env(safe-area-inset-bottom));
+    z-index: 5;
+    padding: 10px 0;
+    background: linear-gradient(180deg, transparent, var(--a-bg) 40%);
+  }
+
+  /* Quick-add grid: three across */
+  .admin-quick-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+  }
+  .admin-quick-card {
+    padding: 12px 10px !important;
+  }
+  .admin-quick-card em {
+    display: none;
+  }
+  .admin-quick-card strong {
+    font-size: 0.82rem;
+  }
+
+  /* Toolbar: search full width, chips scroll as one row */
+  .admin-toolbar {
+    display: grid !important;
+    gap: 10px;
+  }
+  .admin-chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin: 0 -16px;
+    padding: 0 16px;
+  }
+  .admin-chips::-webkit-scrollbar {
+    display: none;
+  }
+  .admin-chip {
+    flex: none;
+  }
+}
+
+/* Phones: drop live blur in the admin too (smooth scrolling) */
+@media (max-width: 760px) {
+  .admin-main * {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+}

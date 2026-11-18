@@ -1,7 +1,22 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/medee/:slug",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(facebookexternalhit|Facebot|meta-externalagent|TelegramBot|Twitterbot|WhatsApp|Viber|Slackbot|Discordbot|LinkedInBot|SkypeUriPreview|vkShare|Pinterest|redditbot|Embedly|Applebot|Googlebot|bingbot).*"
+        }
+      ],
+      "destination": "/api/share?s=:slug"
+    },
+    {
+      "source": "/m/:code",
+      "destination": "/api/share?c=:code"
+    },
+    {
+      "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
   ]

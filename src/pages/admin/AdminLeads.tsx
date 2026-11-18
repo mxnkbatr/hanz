@@ -4,6 +4,7 @@ import { type EnrollmentRow, type LeadStatus } from "../../lib/cms";
 import { useI18n } from "../../i18n/I18nContext";
 import { hapticLight } from "../../lib/native";
 import { formatPrice } from "../../data/content";
+import { SkeletonList } from "../../components/PageSkeleton";
 import { hskLevelChoices, kidsLevelChoices, programs } from "../../data/enroll";
 
 const statuses: LeadStatus[] = [
@@ -44,6 +45,7 @@ export function AdminLeads() {
   const [page, setPage] = useState(0);
   const [err, setErr] = useState("");
   const [busyId, setBusyId] = useState("");
+  const [loaded, setLoaded] = useState(false);
 
   const load = async () => {
     const { data, error } = await supabase
@@ -53,9 +55,11 @@ export function AdminLeads() {
       .limit(1000);
     if (error) {
       setErr(error.message);
+      setLoaded(true);
       return;
     }
     setRows((data as EnrollmentRow[]) ?? []);
+    setLoaded(true);
     setErr("");
   };
 
@@ -406,9 +410,8 @@ export function AdminLeads() {
             </div>
           </article>
         ))}
-        {list.length === 0 && (
-          <p className="admin-empty">{t("admin_empty_leads")}</p>
-        )}
+        {list.length === 0 &&
+          (loaded ? <p className="admin-empty">{t("admin_empty_leads")}</p> : <SkeletonList n={5} />)}
       </div>
 
       {pageCount > 1 && (

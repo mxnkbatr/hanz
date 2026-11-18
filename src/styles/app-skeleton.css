@@ -1,0 +1,307 @@
+/* ─── Skeletons: something on screen the instant you tap ───
+   Grey shapes in the page's own layout with one soft shimmer sweeping across.
+   Light/dark/admin pick their own tone through --sk. */
+:root {
+  --sk: rgba(20, 16, 18, 0.07);
+  --sk-hi: rgba(255, 255, 255, 0.55);
+}
+html[data-theme="dark"],
+.admin-shell {
+  --sk: rgba(255, 255, 255, 0.07);
+  --sk-hi: rgba(255, 255, 255, 0.09);
+}
+
+@keyframes sk-sweep {
+  from {
+    background-position: 150% 0;
+  }
+  to {
+    background-position: -50% 0;
+  }
+}
+
+.sk :is(.sk-line, .sk-block, .sk-pill, .sk-tile, .sk-chip, .sk-thumb, .sk-dot),
+img.photo:not(.is-loaded) {
+  background-color: var(--sk);
+  background-image: linear-gradient(100deg, transparent 30%, var(--sk-hi) 50%, transparent 70%);
+  background-size: 250% 100%;
+  background-repeat: no-repeat;
+  animation: sk-sweep 1.3s ease-in-out infinite;
+}
+
+/* Photos fade in softly once they arrive (never hidden while waiting). */
+img.photo.is-loaded {
+  animation: sk-fade 0.28s ease-out;
+}
+@keyframes sk-fade {
+  from {
+    opacity: 0.35;
+  }
+}
+
+/* Page skeleton */
+.sk {
+  display: grid;
+  gap: 14px;
+  width: min(100%, 1180px);
+  margin: 0 auto;
+  padding: calc(var(--nav-h, 72px) + 8px) 16px 120px;
+  animation: sk-in 0.18s ease-out both;
+}
+.admin-shell .sk {
+  padding: 0;
+}
+@keyframes sk-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.sk-line {
+  height: 14px;
+  border-radius: 7px;
+}
+.sk-line.sk-sm {
+  height: 11px;
+}
+.sk-title {
+  height: 32px;
+  border-radius: 10px;
+}
+.sk-w25 { width: 25%; }
+.sk-w30 { width: 30%; }
+.sk-w40 { width: 40%; }
+.sk-w50 { width: 50%; }
+.sk-w60 { width: 60%; }
+.sk-w70 { width: 70%; }
+.sk-end { margin-left: auto; }
+
+.sk-pill {
+  height: 44px;
+  border-radius: 999px;
+}
+.sk-block {
+  border-radius: 22px;
+}
+.sk-hero {
+  aspect-ratio: 4 / 3;
+  max-height: 46vh;
+}
+.sk-banner {
+  aspect-ratio: 16 / 9;
+}
+
+.sk-chips {
+  display: flex;
+  gap: 8px;
+}
+.sk-chip {
+  width: 72px;
+  height: 34px;
+  border-radius: 999px;
+}
+
+.sk-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.sk-tile {
+  height: 72px;
+  border-radius: 20px;
+}
+.sk-stats .sk-tile {
+  height: 86px;
+}
+
+.sk-card {
+  display: grid;
+  border-radius: 20px;
+  background: var(--card-bg, transparent);
+  box-shadow: var(--card-shadow, none);
+}
+.admin-shell .sk-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+.sk-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+}
+.sk-row + .sk-row {
+  border-top: 1px solid var(--ios-hairline, rgba(127, 127, 127, 0.12));
+}
+.sk-thumb {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+}
+.sk-dot {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+}
+.sk-col {
+  display: grid;
+  flex: 1;
+  gap: 8px;
+}
+.sk-text {
+  gap: 10px;
+  padding: 16px;
+}
+
+@media (min-width: 900px) {
+  .sk-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .sk-hero {
+    max-height: 420px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sk *,
+  img.photo:not(.is-loaded),
+  img.photo.is-loaded {
+    animation: none !important;
+  }
+}
+
+/* ─── Share button (news) ─── */
+.share {
+  position: relative;
+  display: inline-block;
+  margin: 4px 0 8px;
+}
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  cursor: pointer;
+  transition: transform 0.12s ease, background-color 0.15s ease;
+}
+.share-btn:hover {
+  background: color-mix(in srgb, var(--text) 12%, transparent);
+}
+.share-btn:active {
+  transform: scale(0.96);
+}
+.share-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 40;
+  display: grid;
+  min-width: 220px;
+  padding: 6px;
+  border-radius: 16px;
+  background: var(--surface-1, #fff);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--text) 8%, transparent), 0 18px 40px -16px rgba(0, 0, 0, 0.35);
+  animation: sk-in 0.15s ease-out;
+}
+html[data-theme="dark"] .share-menu {
+  background: #1c1b1e;
+}
+.share-menu :is(a, button) {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 15px;
+  text-align: left;
+  text-decoration: none;
+  color: var(--text);
+  background: transparent;
+  cursor: pointer;
+}
+.share-menu :is(a, button):hover {
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+}
+.share-ico {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 800;
+  color: #fff;
+}
+.share-ico.is-fb { background: #1877f2; }
+.share-ico.is-tg { background: #29a9eb; font-size: 12px; }
+.share-ico.is-link { background: #8e8e93; }
+
+/* Share: button + the short link as a one-tap copy pill */
+.share-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.share-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  max-width: 100%;
+  padding: 0 6px 0 14px;
+  border: 1px dashed color-mix(in srgb, var(--text) 22%, transparent);
+  border-radius: 999px;
+  font: inherit;
+  color: var(--text);
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.share-link:hover {
+  border-color: color-mix(in srgb, var(--seal) 60%, transparent);
+}
+.share-link-url {
+  overflow: hidden;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 13.5px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: color-mix(in srgb, var(--text) 75%, transparent);
+}
+.share-link-action {
+  flex: none;
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--seal);
+  transition: background-color 0.15s ease;
+}
+.share-link.is-copied {
+  border-style: solid;
+  border-color: #30b158;
+}
+.share-link.is-copied .share-link-action {
+  background: #30b158;
+}
+.share-ico.is-ms { background: linear-gradient(135deg, #0a7cff, #a033ff 60%, #ff5280); }
+
+.share-btn.is-copied {
+  color: #fff;
+  background: #30b158;
+}

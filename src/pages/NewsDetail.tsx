@@ -9,6 +9,7 @@ import type { NewsLive } from "../lib/cms";
 import { loc } from "../lib/i18nText";
 import { toDateTime } from "../lib/date";
 import { PhotoGlow } from "../components/PhotoGlow";
+import { ShareButton } from "../components/ShareButton";
 
 export function NewsDetail() {
   const { id = "" } = useParams();
@@ -61,6 +62,7 @@ export function NewsDetail() {
                 <time dateTime={toDateTime(item.date)}>{item.date}</time>
               </p>
               <h1 className="h1">{title}</h1>
+              <ShareButton path={`/medee/${item.id}`} />
               {excerpt ? <p className="app-sub desk-article-lead">{excerpt}</p> : null}
               <div className="desk-article-copy">
                 {paragraphs.map((p) => (

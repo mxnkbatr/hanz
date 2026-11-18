@@ -1,0 +1,43 @@
+/* ─── Phone speed: live blur only where iOS uses it ───
+   backdrop-filter re-renders everything behind an element on every scroll frame;
+   on phones dozens of blurred cards made scrolling and tab switches stutter.
+   Floating bars and sheets keep their glass; scrolling content gets solid
+   surfaces in the same colours. Loaded last. */
+@media (max-width: 899px) {
+  html.site .app-shell .page *:not(.m-banner-copy),
+  html.site .ck :is(.ck-body, .ck-body *) {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Without blur, glass cards need a little more body to stay readable. */
+  html.site:not([data-theme="dark"]):is(html) {
+    --glass-bg: rgba(255, 255, 255, 0.86);
+    --card-bg: rgba(255, 255, 255, 0.86);
+  }
+  html.site[data-theme="dark"]:is(html) {
+    --glass-bg: rgba(255, 255, 255, 0.075);
+    --card-bg: rgba(255, 255, 255, 0.075);
+  }
+
+  /* Promote the fixed layers once, so scrolling never repaints them. */
+  html.site body::before,
+  html.site .ambient,
+  html.site .tabbar,
+  html.site .topbar,
+  .ck-bar,
+  html.site .cd-bar {
+    transform: translateZ(0);
+  }
+
+  /* Off-screen list rows skip layout and paint until they scroll near. */
+  html.site .app-shell :is(.m-group > li, .uni-az-group, .course-product-grid > *, .shop-grid > *, .ab-list > li) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 84px;
+  }
+
+  /* Taps answer immediately: no hover/transition lag on press states. */
+  html.site .app-shell :is(a, button):active {
+    transition-duration: 0s !important;
+  }
+}

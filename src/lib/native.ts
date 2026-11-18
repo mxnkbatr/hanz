@@ -13,7 +13,16 @@ export async function initNativeShell() {
   try {
     const { StatusBar, Style } = await import("@capacitor/status-bar");
     await StatusBar.setOverlaysWebView({ overlay: true });
-    await StatusBar.setStyle({ style: Style.Light });
+    // Status bar text follows the site theme: dark text on light, light on dark.
+    const apply = () =>
+      void StatusBar.setStyle({
+        style: document.documentElement.getAttribute("data-theme") === "dark" ? Style.Dark : Style.Light,
+      });
+    apply();
+    new MutationObserver(apply).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
   } catch {
     /* plugin unavailable */
   }

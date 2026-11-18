@@ -2,6 +2,8 @@ import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import { Home } from "./pages/Home";
+import { PageSkeleton } from "./components/PageSkeleton";
+import { isNativeApp } from "./lib/native";
 
 /* Public pages and the whole admin load on demand; Home + Layout stay in the main bundle. */
 const About = lazy(() =>
@@ -127,6 +129,9 @@ const AdminQuizCms = lazy(() =>
 const AdminStaff = lazy(() =>
   import("./pages/admin/AdminStaff").then((m) => ({ default: m.AdminStaff })),
 );
+const AdminOrders = lazy(() =>
+  import("./pages/admin/AdminOrders").then((m) => ({ default: m.AdminOrders })),
+);
 const AdminAbroad = lazy(() =>
   import("./pages/admin/AdminAbroad").then((m) => ({ default: m.AdminAbroad })),
 );
@@ -171,7 +176,8 @@ export default function App() {
       if (cancelled || i >= PREFETCH.length) return;
       void PREFETCH[i++]().finally(() => idle(next));
     };
-    const start = window.setTimeout(() => idle(next), 1200);
+    // In the app the pages are local files: warm them almost at once.
+    const start = window.setTimeout(() => idle(next), isNativeApp() ? 250 : 1200);
     return () => {
       cancelled = true;
       window.clearTimeout(start);
@@ -180,11 +186,12 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <Suspense fallback={null}>
+      <Suspense fallback={<PageSkeleton />}>
         <Routes>
           <Route path="admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
             <Route path="leads" element={<AdminLeads />} />
+            <Route path="orders" element={<AdminOrders />} />
             <Route
               path="news"
               element={<AdminCollection collection="news" />}

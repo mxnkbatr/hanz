@@ -1,8 +1,10 @@
 import { NavLink, Outlet, Navigate, Link, useLocation } from "react-router-dom";
 import { Suspense } from "react";
 import "../../admin.css";
+import "../../admin-polish.css";
 import { useAuth } from "../../lib/AuthContext";
 import { useI18n } from "../../i18n/I18nContext";
+import { PageSkeleton } from "../../components/PageSkeleton";
 import { Logo } from "../../components/Logo";
 import {
   ADMIN_CMS_SIDE,
@@ -107,7 +109,7 @@ export function AdminLayout() {
       </header>
 
       <div className="admin-main">
-        <Suspense fallback={null}>
+        <Suspense fallback={<PageSkeleton variant="admin" />}>
           <Outlet />
         </Suspense>
       </div>
