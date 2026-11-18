@@ -300,3 +300,8 @@ html[data-theme="dark"] .share-menu {
   background: #30b158;
 }
 .share-ico.is-ms { background: linear-gradient(135deg, #0a7cff, #a033ff 60%, #ff5280); }
+
+.share-btn.is-copied {
+  color: #fff;
+  background: #30b158;
+}

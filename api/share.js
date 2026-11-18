@@ -64,8 +64,9 @@ function safeImage(i, trusted = false) {
   return `${SITE}/images/og-cover.jpg`;
 }
 
-/** Find a news article by its short code: the news table first, then built-ins. */
-async function findNews(code) {
+/** Find a news article by short code or slug: the news table first, then built-ins. */
+async function findNews(code, slug) {
+  const match = (s) => (slug ? s === slug : shortCode(s) === code);
   if (SB_URL && SB_KEY) {
     try {
       const r = await fetch(
@@ -74,7 +75,7 @@ async function findNews(code) {
       );
       if (r.ok) {
         const rows = await r.json();
-        const hit = rows.find((x) => x.slug && shortCode(x.slug) === code);
+        const hit = rows.find((x) => x.slug && match(x.slug));
         if (hit) {
           return {
             path: `/medee/${encodeURIComponent(hit.slug)}`,
@@ -88,7 +89,7 @@ async function findNews(code) {
       /* fall back below */
     }
   }
-  const id = Object.keys(STATIC_NEWS).find((k) => shortCode(k) === code);
+  const id = Object.keys(STATIC_NEWS).find((k) => match(k));
   return id ? { path: `/medee/${id}`, title: "", desc: "", image: STATIC_NEWS[id] } : null;
 }
 
@@ -97,8 +98,14 @@ export default async function handler(req, res) {
   let page;
   let trusted = false;
   const code = String(q.c || "").toLowerCase();
-  if (/^[0-9a-z]{6}$/.test(code)) {
-    page = (await findNews(code)) || { path: "/medee", title: "", desc: "", image: "" };
+  let slug = "";
+  try {
+    slug = decodeURIComponent(String(q.s || "")).slice(0, 300);
+  } catch {
+    slug = "";
+  }
+  if (slug || /^[0-9a-z]{6}$/.test(code)) {
+    page = (await findNews(code, slug)) || { path: slug ? `/medee/${encodeURIComponent(slug)}` : "/medee", title: "", desc: "", image: "" };
     trusted = true;
   } else {
     page = { path: safePath(q.p), title: q.t, desc: q.d, image: q.i };
@@ -127,8 +134,8 @@ export default async function handler(req, res) {
 <meta name="twitter:title" content="${esc(title)}" />
 <meta name="twitter:description" content="${esc(desc)}" />
 <meta name="twitter:image" content="${esc(image)}" />
-<meta http-equiv="refresh" content="0; url=${esc(path)}" />
-</head>
+${slug ? "" : `<meta http-equiv="refresh" content="0; url=${esc(path)}" />
+`}</head>
 <body>
 <script>location.replace(${JSON.stringify(path)});</script>
 <a href="${esc(path)}">${esc(title)}</a>
