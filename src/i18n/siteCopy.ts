@@ -6,6 +6,9 @@
  */
 export const siteCopy = {
   en: {
+    share: "Share",
+    share_copy: "Copy link",
+    share_copied: "Copied ✓",
     mm_learn: "Learn",
     pf_guest_t: "Welcome!",
     pf_guest_d: "Sign in to see your enrolments and payments in one place.",
@@ -122,6 +125,9 @@ export const siteCopy = {
   },
 
   mn: {
+    share: "Хуваалцах",
+    share_copy: "Холбоос хуулах",
+    share_copied: "Хуулагдлаа ✓",
     mm_learn: "Суралцах",
     pf_guest_t: "Сайн байна уу!",
     pf_guest_d: "Нэвтэрч орвол бүртгэл, төлбөрөө нэг дороос харна.",
@@ -427,6 +433,9 @@ export const siteCopy = {
   },
 
   zh: {
+    share: "分享",
+    share_copy: "复制链接",
+    share_copied: "已复制 ✓",
     mm_learn: "学习",
     pf_guest_t: "您好！",
     pf_guest_d: "登录后可集中查看报名与付款。",

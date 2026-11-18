@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { PageShell } from "../components/PageShell";
 import { MobileHome } from "../components/MobileHome";
+import { PageSkeleton } from "../components/PageSkeleton";
 import { useDesktop } from "../hooks/useDesktop";
 
 /* The desktop home (cinematic hero, scroll scenes, marquee…) is a separate chunk,
@@ -19,7 +20,7 @@ export function Home() {
     );
   }
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<PageSkeleton variant="home" />}>
       <HomeDesktop />
     </Suspense>
   );

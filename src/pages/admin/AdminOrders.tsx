@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
-import { useI18n } from "../../i18n/I18nContext";
 import { formatPrice } from "../../data/content";
+import { SkeletonList } from "../../components/PageSkeleton";
 
 export type OrderStatus = "new" | "paid" | "shipped" | "cancelled" | "spam";
 
@@ -45,7 +45,6 @@ const fmtDate = (iso: string) => {
  * "shipped" (delivered) or cancel them, and keep a private note.
  */
 export function AdminOrders() {
-  const { t } = useI18n();
   const [rows, setRows] = useState<ShopOrderRow[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [filter, setFilter] = useState<"all" | OrderStatus>("all");
@@ -172,7 +171,7 @@ export function AdminOrders() {
       </div>
 
       {!loaded ? (
-        <p className="admin-empty">{t("auth_busy")}</p>
+        <SkeletonList n={4} />
       ) : list.length === 0 ? (
         <p className="admin-empty">Захиалга алга.</p>
       ) : (

@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import { Home } from "./pages/Home";
+import { PageSkeleton } from "./components/PageSkeleton";
 
 /* Public pages and the whole admin load on demand; Home + Layout stay in the main bundle. */
 const About = lazy(() =>
@@ -183,7 +184,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <Suspense fallback={null}>
+      <Suspense fallback={<PageSkeleton />}>
         <Routes>
           <Route path="admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />

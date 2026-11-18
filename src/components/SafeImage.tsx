@@ -11,6 +11,8 @@ type Props = {
 
 export function SafeImage({ src, alt, className, loading, priority = false }: Props) {
   const [failed, setFailed] = useState(false);
+  // Shimmer until the photo has arrived, then a short fade in (app-skeleton.css).
+  const [loaded, setLoaded] = useState(false);
 
   if (failed) {
     return (
@@ -30,7 +32,11 @@ export function SafeImage({ src, alt, className, loading, priority = false }: Pr
       loading={loading ?? (priority ? "eager" : "lazy")}
       decoding="async"
       fetchPriority={priority ? "high" : undefined}
-      className={`photo${className ? ` ${className}` : ""}`}
+      className={`photo${loaded ? " is-loaded" : ""}${className ? ` ${className}` : ""}`}
+      ref={(el) => {
+        if (el?.complete && el.naturalWidth > 0 && !loaded) setLoaded(true);
+      }}
+      onLoad={() => setLoaded(true)}
       onError={() => setFailed(true)}
     />
   );

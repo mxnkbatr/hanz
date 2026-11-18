@@ -4,6 +4,7 @@ import { supabase } from "../../lib/supabaseClient";
 import { type EnrollmentRow } from "../../lib/cms";
 import { useI18n } from "../../i18n/I18nContext";
 import { formatPrice } from "../../data/content";
+import { SkeletonList } from "../../components/PageSkeleton";
 import { ADMIN_HUB_GROUPS, ADMIN_QUICK_ADD } from "../../lib/adminNav";
 
 function inLastMs(iso: string, ms: number) {
@@ -16,6 +17,7 @@ export function AdminDashboard() {
   const { t } = useI18n();
   const [rows, setRows] = useState<EnrollmentRow[]>([]);
   const [err, setErr] = useState("");
+  const [loaded, setLoaded] = useState(false);
   const [orders, setOrders] = useState<{ status: string; amount: number; paid_amount: number | null }[]>([]);
 
   useEffect(() => {
@@ -35,9 +37,11 @@ export function AdminDashboard() {
       .then(({ data, error }) => {
         if (error) {
           setErr(error.message);
+          setLoaded(true);
           return;
         }
         setRows((data as EnrollmentRow[]) ?? []);
+        setLoaded(true);
       });
   }, []);
 
@@ -135,7 +139,7 @@ export function AdminDashboard() {
 
         <div className="admin-rn-list admin-dash-leads">
           {recent.length === 0 ? (
-            <p className="admin-empty">{t("admin_empty_leads")}</p>
+            loaded ? <p className="admin-empty">{t("admin_empty_leads")}</p> : <SkeletonList n={3} />
           ) : (
             recent.map((r) => (
               <Link

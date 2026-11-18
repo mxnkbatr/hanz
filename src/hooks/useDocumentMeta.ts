@@ -81,11 +81,18 @@ export function useDocumentMeta() {
     let description = t("meta_desc");
     let image: string | undefined;
     let course: { name: string; description: string } | undefined;
-    const newsMatch = matchPath("/medee/:id", pathname);
-    const shopMatch = matchPath("/shop/:id", pathname);
-    const uniMatch = matchPath("/university/:id", pathname);
-    const travelMatch = matchPath("/travel/:id", pathname);
-    const courseMatch = matchPath("/courses/:id", pathname);
+    // Cyrillic slugs arrive percent-encoded; look items up by the readable id.
+    let path = pathname;
+    try {
+      path = decodeURI(pathname);
+    } catch {
+      /* keep as is */
+    }
+    const newsMatch = matchPath("/medee/:id", path);
+    const shopMatch = matchPath("/shop/:id", path);
+    const uniMatch = matchPath("/university/:id", path);
+    const travelMatch = matchPath("/travel/:id", path);
+    const courseMatch = matchPath("/courses/:id", path);
 
     if (courseMatch?.params.id && courseMatch.params.id !== "match") {
       const id = courseMatch.params.id;

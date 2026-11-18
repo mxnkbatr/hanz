@@ -23,6 +23,7 @@ import { useLocation, useNavigationType, useOutlet } from "react-router-dom";
 import { useDesktop } from "../hooks/useDesktop";
 import { isTabRoot, useGoBack } from "../hooks/useGoBack";
 import { hapticLight, isNativeApp } from "../lib/native";
+import { PageSkeleton } from "./PageSkeleton";
 import { RouteStackContext } from "../lib/routeStack";
 import { recalledScroll, rememberScroll } from "../lib/scrollMemory";
 
@@ -245,7 +246,7 @@ export function AnimatedOutlet() {
 
   // Pages are lazy chunks; keep the layout (header, tab bar) mounted while one loads.
   const page = (
-    <Suspense fallback={<div className="page-loading" />}>
+    <Suspense fallback={<PageSkeleton />}>
       {cloneElement(outlet as ReactElement)}
     </Suspense>
   );
@@ -253,7 +254,7 @@ export function AnimatedOutlet() {
   if (desktop || reduce) {
     return (
       <AnimatePresence mode="wait" initial={false}>
-        <Suspense key={location.pathname} fallback={<div className="page-loading" />}>
+        <Suspense key={location.pathname} fallback={<PageSkeleton />}>
           {cloneElement(outlet as ReactElement)}
         </Suspense>
       </AnimatePresence>
