@@ -22,6 +22,7 @@ import "./styles/app-abroad.css";
 import "./styles/app-noir.css";
 import "./styles/app-light.css";
 import "./styles/app-native.css";
+import "./styles/app-perf.css";
 import App from "./App.tsx";
 import { AuthProvider } from "./lib/AuthContext.tsx";
 import { SiteContentProvider } from "./lib/SiteContentContext.tsx";

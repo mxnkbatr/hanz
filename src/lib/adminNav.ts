@@ -15,6 +15,7 @@ export type AdminNavItem = {
 export const ADMIN_MAIN: AdminNavItem[] = [
   { id: "dash", to: "/admin", key: "admin_dash", ico: "▣", end: true },
   { id: "leads", to: "/admin/leads", key: "admin_leads", ico: "☎" },
+  { id: "orders", to: "/admin/orders", key: "admin_orders", ico: "₮" },
   { id: "pages", to: "/admin/pages", key: "admin_cms", ico: "▦" },
   { id: "settings", to: "/admin/settings", key: "admin_settings", ico: "⚙" },
   { id: "staff", to: "/admin/staff", key: "admin_staff", ico: "人" },
@@ -23,6 +24,7 @@ export const ADMIN_MAIN: AdminNavItem[] = [
 export const ADMIN_TABBAR: AdminNavItem[] = [
   { id: "dash", to: "/admin", key: "admin_dash", ico: "▣", end: true },
   { id: "leads", to: "/admin/leads", key: "admin_leads", ico: "☎" },
+  { id: "orders", to: "/admin/orders", key: "admin_orders", ico: "₮" },
   { id: "pages", to: "/admin/pages", key: "admin_cms", ico: "▦" },
   { id: "settings", to: "/admin/settings", key: "admin_settings", ico: "⚙" },
 ];

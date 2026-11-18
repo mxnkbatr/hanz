@@ -1,6 +1,7 @@
 import { NavLink, Outlet, Navigate, Link, useLocation } from "react-router-dom";
 import { Suspense } from "react";
 import "../../admin.css";
+import "../../admin-polish.css";
 import { useAuth } from "../../lib/AuthContext";
 import { useI18n } from "../../i18n/I18nContext";
 import { Logo } from "../../components/Logo";

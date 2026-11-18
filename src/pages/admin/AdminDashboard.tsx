@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "../../lib/supabaseClient";
 import { type EnrollmentRow } from "../../lib/cms";
 import { useI18n } from "../../i18n/I18nContext";
+import { formatPrice } from "../../data/content";
 import { ADMIN_HUB_GROUPS, ADMIN_QUICK_ADD } from "../../lib/adminNav";
 
 function inLastMs(iso: string, ms: number) {
@@ -15,6 +16,15 @@ export function AdminDashboard() {
   const { t } = useI18n();
   const [rows, setRows] = useState<EnrollmentRow[]>([]);
   const [err, setErr] = useState("");
+  const [orders, setOrders] = useState<{ status: string; amount: number; paid_amount: number | null }[]>([]);
+
+  useEffect(() => {
+    void supabase
+      .from("shop_orders")
+      .select("status,amount,paid_amount")
+      .limit(1000)
+      .then(({ data }) => setOrders((data as typeof orders) ?? []));
+  }, []);
 
   useEffect(() => {
     void supabase
@@ -68,6 +78,20 @@ export function AdminDashboard() {
           <em>{t("admin_stat_new")}</em>
           <strong>{stats.neu}</strong>
         </article>
+        <Link to="/admin/orders" className="admin-stat-link">
+          <em>Шинэ захиалга</em>
+          <strong>{orders.filter((o) => o.status === "new").length}</strong>
+        </Link>
+        <Link to="/admin/orders" className="admin-stat-link">
+          <em>Дэлгүүрийн орлого</em>
+          <strong>
+            {formatPrice(
+              orders
+                .filter((o) => o.status === "paid" || o.status === "shipped")
+                .reduce((sum, o) => sum + (o.paid_amount ?? o.amount), 0),
+            )}
+          </strong>
+        </Link>
       </div>
 
       <section className="admin-section">

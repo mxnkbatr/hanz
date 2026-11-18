@@ -127,6 +127,9 @@ const AdminQuizCms = lazy(() =>
 const AdminStaff = lazy(() =>
   import("./pages/admin/AdminStaff").then((m) => ({ default: m.AdminStaff })),
 );
+const AdminOrders = lazy(() =>
+  import("./pages/admin/AdminOrders").then((m) => ({ default: m.AdminOrders })),
+);
 const AdminAbroad = lazy(() =>
   import("./pages/admin/AdminAbroad").then((m) => ({ default: m.AdminAbroad })),
 );
@@ -185,6 +188,7 @@ export default function App() {
           <Route path="admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
             <Route path="leads" element={<AdminLeads />} />
+            <Route path="orders" element={<AdminOrders />} />
             <Route
               path="news"
               element={<AdminCollection collection="news" />}
