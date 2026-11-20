@@ -6,10 +6,10 @@
  */
 export const siteCopy = {
   en: {
-    about_body: "Hanz Academy was founded in 2014 by B. Otgonjargal, a Chinese teacher and translator with a doctorate in education. We teach HSK/HSKK levels 1–6 with an updated programme and a promised score at every level. We have taught Chinese to more than 10,100 students in Mongolia and helped more than 10,000 study in China on scholarships, from language prep to bachelor's, master's and PhD programmes.",
+    about_body: "Hanz Academy has worked without a break since 2014, running Chinese courses, translation, and short winter and summer programmes. For the past 12 years we have taught every level of HSK1–6 + HSKK with an updated programme and a promised score at each level. We have taught Chinese to more than 10,100 students in Mongolia and helped more than 10,000 win scholarships to study at the Chinese school of their choice, from language prep to bachelor's, master's and PhD programmes. Since 2024, as the official Study in China Global (SCG) office in Mongolia, we can place students on scholarships at 300+ universities and 77 colleges. Since 2026, as Think Poland's official agent in Mongolia, we are ready to work with 35+ Polish universities.",
     partners_h: "Partners",
     partner_scg_role: "Official office in Ulaanbaatar",
-    partner_scg_d: "Authorised to promote study in China and enrol international students. Young Mongolians can study at 300+ Chinese universities and 70+ colleges, from language prep to PhD.",
+    partner_scg_d: "Authorised to promote study in China and enrol international students. Young Mongolians can study at 300+ Chinese universities and 77 colleges, from language prep to PhD.",
     partner_scg_meta: "Since 31 Oct 2024 · authorised until 31 Oct 2026",
     partner_tp_role: "Official sub-agent in Mongolia",
     partner_tp_d: "Enrolment and advice for the 35+ Polish universities that work with Think Poland.",
@@ -137,7 +137,7 @@ export const siteCopy = {
   mn: {
     partners_h: "Хамтрагч байгууллага",
     partner_scg_role: "Улаанбаатар дахь албан ёсны оффис",
-    partner_scg_d: "Хятадад суралцах хөтөлбөрийг сурталчлах, олон улсын оюутан элсүүлэх эрхтэй. Монголын залуус БНХАУ-ын 300 гаруй их, дээд сургууль, 70 гаруй коллежид хэлний бэлтгэлээс докторын зэрэг хүртэл суралцах боломжтой.",
+    partner_scg_d: "Хятадад суралцах хөтөлбөрийг сурталчлах, олон улсын оюутан элсүүлэх эрхтэй. Монголын залуус БНХАУ-ын 300 гаруй их, дээд сургууль, 77 коллежид хэлний бэлтгэлээс докторын зэрэг хүртэл суралцах боломжтой.",
     partner_scg_meta: "2024.10.31-ээс · эрх 2026.10.31 хүртэл",
     partner_tp_role: "Монгол дахь албан ёсны дэд агент",
     partner_tp_d: "Think Poland-тай хамтран ажилладаг Польш улсын 35 гаруй их дээд сургуульд элсүүлэх болон зөвлөх үйлчилгээ үзүүлдэг.",
@@ -272,7 +272,7 @@ export const siteCopy = {
 
     // About
     about_body:
-      "Ханз Академийг 2014 онд Боловсрол судлалын доктор, хятад хэлний багш, орчуулагч Б. Отгонжаргал үүсгэн байгуулсан. Бид HSK/HSKK 1–6 түвшний хятад хэлний сургалтыг шинэчилсэн хөтөлбөрөөр, түвшин бүрт оноо амласан байдлаар явуулдаг. Өнөөг хүртэл Монголд 10 100 гаруй сурагчид хятад хэл зааж, 10 000 гаруй сурагчийг Хятадад хэлний бэлтгэл, бакалавр, магистр, докторын хөтөлбөрт тэтгэлгээр суралцахад нь дэмжсэн.",
+      "«Ханз Академи» 2014 оноос хойш тасралтгүй үйл ажиллагаа явуулж, хятад хэлний сургалт, орчуулга, богино хугацааны өвөл ба зуны сургалтуудыг зохион байгуулж ирсэн. Сүүлийн 12 жилийн хугацаанд HSK1–6 + HSKK бүх түвшний хятад хэлний сургалтыг шинэчилсэн хөтөлбөрөөр, түвшин бүрт оноо амласан байдлаар явуулж байна. Бид Монголдоо 10100 гаруй сурагчдад хятад хэл зааж сургаж, 10000 гаруй сурагчдад Хятад улсад хүссэн сургуульдаа хэлний бэлтгэл, бакалавр, магистр, докторын хөтөлбөрт тэтгэлэгтэй суралцах боломж олгож ирсэн. 2024 оноос Study in China Global (SCG) агентлагийн Монгол дахь албан ёсны эрхийг авснаар 300 гаруй их, дээд сургууль, 77 коллежид тэтгэлэгтэй суралцуулах боломжтой болсон. 2026 оноос «Think Poland»-ын Монгол дахь албан ёсны агентын эрхийг авснаар Польш улсын 35 гаруй их, дээд сургуультай хамтран ажиллахад бэлэн боллоо.",
     about_body2:
       "Khanz.mn бол Хятадын SCG (Study in China Global)-ийн албан ёсны эрх бүхий байгууллага. Хэлний сургалтаас гадна Монгол–Хятад, Хятад–Монгол мэргэжлийн бичгийн болон амаар орчуулга хийдэг бөгөөд Хятад улсад өвлийн болон зуны хөтөлбөрүүдийг амжилттай зохион байгуулдаг. 2026 оны 7-р сарын 22-нд Польш улсын 35 их сургуультай хамтран ажиллах эрх авсан.",
 
@@ -284,7 +284,7 @@ export const siteCopy = {
     stat_scholarship: "Хятадад тэтгэлэгт хамрагдахад тусалсан суралцагч",
     stat_poland: "Польш улсын их дээд сургуультай хамтарч ажиллаж байна",
     success_1: "10100+ сурагчид Хятад хэл сурсан",
-    success_2: "8080+ сурагчид тэтгэлэгт хамрагдсан",
+    success_2: "10000+ сурагчид тэтгэлэгт хамрагдсан",
 
     // Services
     svc_title: "Үйлчилгээ",
@@ -454,7 +454,7 @@ export const siteCopy = {
   zh: {
     partners_h: "合作机构",
     partner_scg_role: "乌兰巴托官方办公室",
-    partner_scg_d: "获授权推广来华留学项目并招收国际学生。蒙古青年可在中国 300 多所大学和 70 多所学院就读，从语言预科到博士。",
+    partner_scg_d: "获授权推广来华留学项目并招收国际学生。蒙古青年可在中国 300 多所大学和 77 所学院就读，从语言预科到博士。",
     partner_scg_meta: "自 2024.10.31 起 · 授权至 2026.10.31",
     partner_tp_role: "蒙古官方子代理",
     partner_tp_d: "为与 Think Poland 合作的 35 多所波兰大学提供招生与咨询服务。",
@@ -583,7 +583,7 @@ export const siteCopy = {
     hero_kicker: "HSK1–6 级汉语课程：自 2014 年积累的教学经验，通往中国留学奖学金之路。",
 
     about_body:
-      "汉字学院由教育学博士、汉语教师兼翻译 B. 奥特贡扎尔格勒于 2014 年创立。我们以更新的课程开设 HSK/HSKK 1–6 级汉语课程，各级别均承诺成绩。至今已在蒙古为 10 100 多名学员教授汉语，并帮助 10 000 多名学员获得赴华语言预科、本科、硕士及博士项目奖学金。",
+      "汉字学院自 2014 年起持续运营，开设汉语课程、翻译服务以及冬夏季短期项目。近 12 年来，我们以更新的课程开设 HSK1–6 + HSKK 全级别汉语课程，各级别均承诺成绩。我们已在蒙古为 10100 多名学员教授汉语，并帮助 10000 多名学员获得奖学金，赴中国心仪院校攻读语言预科、本科、硕士及博士项目。自 2024 年获得 Study in China Global（SCG）蒙古官方授权以来，学员可申请 300 多所大学和 77 所学院的奖学金。自 2026 年成为 Think Poland 蒙古官方代理后，我们已准备好与 35 多所波兰大学开展合作。",
     about_body2:
       "Khanz.mn 是中国 SCG（Study in China Global）的官方授权机构。除语言培训外，我们还提供蒙汉、汉蒙专业笔译和口译服务，并成功在中国举办冬季和夏季项目。2026 年 7 月 22 日，我们获得与波兰 35 所大学合作的资格。",
 
@@ -594,7 +594,7 @@ export const siteCopy = {
     stat_scholarship: "名学员获得中国奖学金",
     stat_poland: "所波兰大学与我们合作",
     success_1: "10100 多名学员学习汉语",
-    success_2: "8080 多名学员获得奖学金",
+    success_2: "10000 多名学员获得奖学金",
 
     svc_title: "服务项目",
     svc_1_t: "汉语课程（HSK1–6）",
