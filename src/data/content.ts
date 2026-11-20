@@ -369,6 +369,47 @@ export const travelPackagesMeta = [
       },
     ],
   },
+  {
+    id: "health",
+    titleKey: "travel_health_t",
+    descKey: "travel_health_d",
+    bodyKey: "travel_health_b",
+    tagKey: "travel_tag_health",
+    highlights: [
+      "travel_health_h1",
+      "travel_health_h2",
+      "travel_health_h3",
+      "travel_health_h4",
+    ] as const,
+    image:
+      "https://images.unsplash.com/photo-1548919973-5cef591cdbc9?auto=format&fit=crop&w=1000&q=72",
+    enrollWindows: [
+      {
+        id: "now" as const,
+        labelKey: "travel_enroll_now",
+        dateKey: "travel_enroll_health_now_d",
+        status: "open" as UniEnrollStatus,
+      },
+      {
+        id: "spring" as const,
+        labelKey: "travel_enroll_spring",
+        dateKey: "travel_enroll_health_spring_d",
+        status: "soon" as UniEnrollStatus,
+      },
+      {
+        id: "autumn" as const,
+        labelKey: "travel_enroll_autumn",
+        dateKey: "travel_enroll_health_autumn_d",
+        status: "soon" as UniEnrollStatus,
+      },
+      {
+        id: "start" as const,
+        labelKey: "travel_enroll_start",
+        dateKey: "travel_enroll_health_start_d",
+        status: "soon" as UniEnrollStatus,
+      },
+    ],
+  },
 ] as const;
 
 export function getTravelById(id: string) {
@@ -380,6 +421,7 @@ export const enrollInterests = [
   { id: "university", kind: "consult" as const, labelKey: "program_university" },
   { id: "travel_china", kind: "travel" as const, labelKey: "travel_china_t" },
   { id: "travel_poland", kind: "travel" as const, labelKey: "travel_poland_t" },
+  { id: "travel_health", kind: "travel" as const, labelKey: "travel_health_t" },
   { id: "consult", kind: "consult" as const, labelKey: "enroll_interest_consult" },
 ] as const;
 

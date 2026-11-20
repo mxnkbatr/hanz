@@ -24,7 +24,12 @@ export function TravelDetail() {
   const meta = getTravelById(pack.id);
   const windows = pack.enrollWindows ?? meta?.enrollWindows ?? [];
   const other = travelLive.find((x) => x.id !== pack.id);
-  const interest = pack.id === "china" ? "travel_china" : "travel_poland";
+  const interestById: Record<string, string> = {
+    china: "travel_china",
+    poland: "travel_poland",
+    health: "travel_health",
+  };
+  const interest = interestById[pack.id] ?? `travel_${pack.id}`;
   const enrollTo = `/enroll?interest=${interest}`;
   const hasOpen = windows.some((w) => w.status === "open");
 
