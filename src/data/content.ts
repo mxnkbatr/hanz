@@ -636,6 +636,20 @@ export const shopProductsMeta = [
     specs: ["prod6_s1", "prod6_s2", "prod6_s3"] as const,
     inStock: true,
   },
+  {
+    id: "prod7",
+    titleKey: "prod7",
+    unitKey: "unit_set",
+    tagKey: "tag_brand",
+    cat: "porcelain" as const,
+    price: 100000,
+    image: "/images/shop-porcelain-cup.webp",
+    href: "https://www.facebook.com/HanzAcademy",
+    descKey: "prod7_d",
+    bodyKey: "prod7_b",
+    specs: ["prod7_s1", "prod7_s2", "prod7_s3", "prod7_s4"] as const,
+    inStock: true,
+  },
 ];
 
 export type ShopCat = "all" | "porcelain" | "books";
@@ -670,17 +684,3 @@ export const featuredUniversities = [
   "Beijing Language and Culture University",
   "Renmin University",
 ] as const;
-  {
-    id: "prod7",
-    titleKey: "prod7",
-    unitKey: "unit_set",
-    tagKey: "tag_brand",
-    cat: "porcelain" as const,
-    price: 100000,
-    image: "/images/shop-porcelain-cup.webp",
-    href: "https://www.facebook.com/HanzAcademy",
-    descKey: "prod7_d",
-    bodyKey: "prod7_b",
-    specs: ["prod7_s1", "prod7_s2", "prod7_s3", "prod7_s4"] as const,
-    inStock: true,
-  },
