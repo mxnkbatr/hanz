@@ -19,6 +19,7 @@ const PRICES: Record<string, Record<string, number>> = {
 const FALLBACK_SHOP: Record<string, number> = {
   prod5: 25_000,
   prod6: 15_000,
+  prod7: 100_000,
 };
 
 const env = (k: string) => Deno.env.get(k) ?? "";

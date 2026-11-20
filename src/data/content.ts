@@ -606,7 +606,7 @@ export function uniEnrollStatusKey(status: UniEnrollStatus) {
 }
 
 export const shopProductsMeta = [
-  // The shop sells the academy's two books only (the academy's call, 2026-11-06).
+  // The academy's two books, plus the Юм мээрэн porcelain cup set (2026-11-20).
   {
     id: "prod5",
     titleKey: "prod5",
@@ -670,3 +670,17 @@ export const featuredUniversities = [
   "Beijing Language and Culture University",
   "Renmin University",
 ] as const;
+  {
+    id: "prod7",
+    titleKey: "prod7",
+    unitKey: "unit_set",
+    tagKey: "tag_brand",
+    cat: "porcelain" as const,
+    price: 100000,
+    image: "/images/shop-porcelain-cup.webp",
+    href: "https://www.facebook.com/HanzAcademy",
+    descKey: "prod7_d",
+    bodyKey: "prod7_b",
+    specs: ["prod7_s1", "prod7_s2", "prod7_s3", "prod7_s4"] as const,
+    inStock: true,
+  },
