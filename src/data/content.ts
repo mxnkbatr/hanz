@@ -698,6 +698,20 @@ export const shopProductsMeta = [
     specs: ["prod7_s1", "prod7_s2", "prod7_s3", "prod7_s4"] as const,
     inStock: true,
   },
+  {
+    id: "prod8",
+    titleKey: "prod8",
+    unitKey: "unit_set",
+    tagKey: "tag_brand",
+    cat: "porcelain" as const,
+    price: 350000,
+    image: "/images/shop-porcelain-set4.webp",
+    href: "https://www.facebook.com/HanzAcademy",
+    descKey: "prod8_d",
+    bodyKey: "prod8_b",
+    specs: ["prod8_s1", "prod7_s1", "prod7_s2", "prod7_s3", "prod7_s4"] as const,
+    inStock: true,
+  },
 ];
 
 export type ShopCat = "all" | "porcelain" | "books";
