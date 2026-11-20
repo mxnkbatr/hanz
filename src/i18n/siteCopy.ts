@@ -6,6 +6,14 @@
  */
 export const siteCopy = {
   en: {
+    about_body: "Hanz Academy was founded in 2014 by B. Otgonjargal, a Chinese teacher and translator with a doctorate in education. We teach HSK/HSKK levels 1–6 with an updated programme and a promised score at every level. We have taught Chinese to more than 10,080 students in Mongolia and helped more than 10,000 study in China on scholarships, from language prep to bachelor's, master's and PhD programmes. Our 50 beginner lessons are free on YouTube, and our Facebook page has 149,000 followers.",
+    partners_h: "Partners",
+    partner_scg_role: "Official office in Ulaanbaatar",
+    partner_scg_d: "Authorised to promote study in China and enrol international students. Young Mongolians can study at 300+ Chinese universities and 70+ colleges, from language prep to PhD.",
+    partner_scg_meta: "Since 31 Oct 2024 · authorised until 31 Oct 2026",
+    partner_tp_role: "Official sub-agent in Mongolia",
+    partner_tp_d: "Enrolment and advice for the 35+ Polish universities that work with Think Poland.",
+    partner_tp_meta: "Study in Poland",
     share: "Share",
     share_copy: "Copy link",
     share_copy_short: "Copy",
@@ -127,6 +135,13 @@ export const siteCopy = {
   },
 
   mn: {
+    partners_h: "Хамтрагч байгууллага",
+    partner_scg_role: "Улаанбаатар дахь албан ёсны оффис",
+    partner_scg_d: "Хятадад суралцах хөтөлбөрийг сурталчлах, олон улсын оюутан элсүүлэх эрхтэй. Монголын залуус БНХАУ-ын 300 гаруй их, дээд сургууль, 70 гаруй коллежид хэлний бэлтгэлээс докторын зэрэг хүртэл суралцах боломжтой.",
+    partner_scg_meta: "2024.10.31-ээс · эрх 2026.10.31 хүртэл",
+    partner_tp_role: "Монгол дахь албан ёсны дэд агент",
+    partner_tp_d: "Think Poland-тай хамтран ажилладаг Польш улсын 35 гаруй их дээд сургуульд элсүүлэх болон зөвлөх үйлчилгээ үзүүлдэг.",
+    partner_tp_meta: "Польшид суралцах",
     share: "Хуваалцах",
     share_copy: "Холбоос хуулах",
     share_copy_short: "Хуулах",
@@ -257,7 +272,7 @@ export const siteCopy = {
 
     // About
     about_body:
-      "Ханз Академи 2014 оноос хойш үйл ажиллагаа явуулж байна. Сүүлийн 12 жилд HSK1–6 түвшний хятад хэлний сургалтыг шинэчилсэн хөтөлбөрөөр, түвшин бүрт оноо амласан сургалтаар явуулдаг. Бид Монголд 10080 гаруй сурагчдад хятад хэл зааж сургаж, 8080 гаруй сурагчдад Хятадад хэлний бэлтгэл, бакалавр, магистр, докторын хөтөлбөрт тэтгэлгээр суралцахад нь дэмжлэг үзүүлсэн.",
+      "Ханз Академийг 2014 онд Боловсрол судлалын доктор, хятад хэлний багш, орчуулагч Б. Отгонжаргал үүсгэн байгуулсан. Бид HSK/HSKK 1–6 түвшний хятад хэлний сургалтыг шинэчилсэн хөтөлбөрөөр, түвшин бүрт оноо амласан байдлаар явуулдаг. Өнөөг хүртэл Монголд 10 080 гаруй сурагчид хятад хэл зааж, 10 000 гаруй сурагчийг Хятадад хэлний бэлтгэл, бакалавр, магистр, докторын хөтөлбөрт тэтгэлгээр суралцахад нь дэмжсэн. Анхан шатны 50 хичээлээ YouTube-д үнэ төлбөргүй байршуулсан бөгөөд Facebook хуудас маань 149 мянган дагагчтай.",
     about_body2:
       "Khanz.mn бол Хятадын SCG (Study in China Global)-ийн албан ёсны эрх бүхий байгууллага. Хэлний сургалтаас гадна Монгол–Хятад, Хятад–Монгол мэргэжлийн бичгийн болон амаар орчуулга хийдэг бөгөөд Хятад улсад өвлийн болон зуны хөтөлбөрүүдийг амжилттай зохион байгуулдаг. 2026 оны 7-р сарын 22-нд Польш улсын 35 их сургуультай хамтран ажиллах эрх авсан.",
 
@@ -437,6 +452,13 @@ export const siteCopy = {
   },
 
   zh: {
+    partners_h: "合作机构",
+    partner_scg_role: "乌兰巴托官方办公室",
+    partner_scg_d: "获授权推广来华留学项目并招收国际学生。蒙古青年可在中国 300 多所大学和 70 多所学院就读，从语言预科到博士。",
+    partner_scg_meta: "自 2024.10.31 起 · 授权至 2026.10.31",
+    partner_tp_role: "蒙古官方子代理",
+    partner_tp_d: "为与 Think Poland 合作的 35 多所波兰大学提供招生与咨询服务。",
+    partner_tp_meta: "留学波兰",
     share: "分享",
     share_copy: "复制链接",
     share_copy_short: "复制",
@@ -561,7 +583,7 @@ export const siteCopy = {
     hero_kicker: "HSK1–6 级汉语课程：自 2014 年积累的教学经验，通往中国留学奖学金之路。",
 
     about_body:
-      "汉字学院自 2014 年起开展业务。12 年来，我们以更新的课程开设 HSK1–6 级汉语课程，各级别均承诺成绩。我们已为 10080 多名学员教授汉语，并帮助 8080 多名学员获得中国语言预科、本科、硕士和博士项目的奖学金。",
+      "汉字学院由教育学博士、汉语教师兼翻译 B. 奥特贡扎尔格勒于 2014 年创立。我们以更新的课程开设 HSK/HSKK 1–6 级汉语课程，各级别均承诺成绩。至今已在蒙古为 10 080 多名学员教授汉语，并帮助 10 000 多名学员获得赴华语言预科、本科、硕士及博士项目奖学金。我们将 50 节初级课程免费发布在 YouTube 上，Facebook 主页拥有 14.9 万关注者。",
     about_body2:
       "Khanz.mn 是中国 SCG（Study in China Global）的官方授权机构。除语言培训外，我们还提供蒙汉、汉蒙专业笔译和口译服务，并成功在中国举办冬季和夏季项目。2026 年 7 月 22 日，我们获得与波兰 35 所大学合作的资格。",
 

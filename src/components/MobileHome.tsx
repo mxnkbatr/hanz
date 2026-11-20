@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { PartnersSection } from "./PartnersSection";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { useI18n } from "../i18n/I18nContext";
@@ -320,6 +321,8 @@ export function MobileHome() {
                 </ul>
               )}
             </section>
+
+            <PartnersSection className="m-section" />
 
             <section className="m-cta">
               <span className="m-cta-mark" aria-hidden>
