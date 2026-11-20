@@ -94,7 +94,7 @@ export const teachersMeta: readonly TeacherMeta[] = [
     id: "enkhzul",
     nameKey: "teacher_enkhzul",
     roleKey: "teacher_role_sb_rep",
-    // Photo to come: until then the card shows her initial.
+    photo: "/images/teachers/enkhzul.webp",
   },
 ];
 
