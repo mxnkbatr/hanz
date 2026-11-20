@@ -19,8 +19,8 @@ export function PartnersSection({ className = "" }: { className?: string }) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <span className="partner-mark is-cn" aria-hidden>
-            中
+          <span className="partner-logo">
+            <img src="/images/partners/scg.webp" alt="Study in China Global (SCG)" loading="lazy" />
           </span>
           <span className="partner-body">
             <strong>Study in China Global (SCG)</strong>
@@ -30,8 +30,8 @@ export function PartnersSection({ className = "" }: { className?: string }) {
           </span>
         </a>
         <Link className="partner-card" to="/university/poland">
-          <span className="partner-mark is-pl" aria-hidden>
-            PL
+          <span className="partner-logo">
+            <img src="/images/partners/think-poland.webp" alt="Think Poland" loading="lazy" />
           </span>
           <span className="partner-body">
             <strong>Think Poland</strong>
