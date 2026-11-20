@@ -8,12 +8,17 @@ import { useSiteContent } from "../lib/SiteContentContext";
 import { loc } from "../lib/i18nText";
 import { hapticLight } from "../lib/native";
 
-type TravelFilter = "all" | "travel_tag_tour" | "travel_tag_europe";
+type TravelFilter =
+  | "all"
+  | "travel_tag_tour"
+  | "travel_tag_europe"
+  | "travel_tag_health";
 
 const FILTERS: TravelFilter[] = [
   "all",
-  "travel_tag_tour",
+  "travel_tag_asia",
   "travel_tag_europe",
+  "travel_tag_health",
 ];
 
 export function Travel() {
