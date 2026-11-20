@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { PartnersSection } from "../components/PartnersSection";
 import { Marquee } from "../components/Marquee";
 import { SafeImage } from "../components/SafeImage";
 import { DesktopHero } from "../components/DesktopHero";
@@ -64,6 +65,9 @@ export function HomeDesktop() {
 
         {/* 2 · Numbers */}
         <StatsStrip />
+
+        {/* Official partners: SCG and Think Poland */}
+        <PartnersSection className="section hx-section" />
 
         {/* 3 · Services: heading held on the left, four cards on the right */}
         <section className="section hx-section hx-why-wrap">

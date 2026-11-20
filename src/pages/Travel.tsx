@@ -16,7 +16,7 @@ type TravelFilter =
 
 const FILTERS: TravelFilter[] = [
   "all",
-  "travel_tag_asia",
+  "travel_tag_tour",
   "travel_tag_europe",
   "travel_tag_health",
 ];
