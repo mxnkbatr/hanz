@@ -141,12 +141,19 @@ export function Layout() {
     };
     let filmEl: Element | null = null;
     measure();
+    // The page (and its film) mounts after the shell and its route transition; measure
+    // again once it is on screen, or the header keeps the light style over the dark film
+    // until the first scroll.
+    const settle = [60, 250, 600, 1200].map((ms) => window.setTimeout(onScroll, ms));
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
     return () => {
       cancelAnimationFrame(queued);
+      settle.forEach((id) => window.clearTimeout(id));
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
     };
-  }, []);
+  }, [location.pathname]);
 
   return (
     <ThemeContext.Provider value={themeState}>

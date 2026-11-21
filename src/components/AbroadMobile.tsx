@@ -3,7 +3,6 @@ import { UniNotice } from "./UniNotice";
 import { Link, useSearchParams } from "react-router-dom";
 import { PageShell } from "./PageShell";
 import { SafeImage } from "./SafeImage";
-import { BookingSheet, type BookingMode } from "./BookingSheet";
 import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { mergeEnrollWindows, type SiteBundle, type UniInfoCms } from "../lib/cms";
@@ -44,7 +43,6 @@ export function AbroadMobile() {
   const { bundle } = useSiteContent();
   const [params, setParams] = useSearchParams();
   const country: Country = params.get("c") === "pl" ? "pl" : "cn";
-  const [booking, setBooking] = useState<BookingMode | null>(null);
 
   const track = getUniversityById(country === "pl" ? "poland" : "china");
   const windows =
@@ -101,33 +99,8 @@ export function AbroadMobile() {
         </span>
       </Link>
 
-      {/* Actions → sheet / country page (like Courses match CTA) */}
-      <div className="ab-actions">
-        <button
-          type="button"
-          className="course-match glass-panel course-match-compact is-intro ab-action"
-          onClick={() => {
-            setBooking("consult");
-            void hapticLight();
-          }}
-        >
-          <span className="course-match-compact-row">
-            <span className="course-match-mark" aria-hidden>
-              咨
-            </span>
-            <span className="course-match-compact-copy">
-              <strong>{t("ab_help")}</strong>
-            </span>
-            <span className="btn btn-seal course-match-start-mini">
-              <span>{t("ab_book_t")}</span>
-            </span>
-          </span>
-        </button>
-      </div>
-
       {country === "cn" ? <ChinaSchools /> : <PolandSchools />}
 
-      {booking && <BookingSheet mode={booking} country={country} onClose={() => setBooking(null)} />}
     </PageShell>
   );
 }
