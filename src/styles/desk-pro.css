@@ -1,0 +1,275 @@
+/*
+ * Desktop "pro" layer (client, 2026-11-21): News, Universities, Travel, Shop, Quiz, About.
+ * Calm and modern: a plain background, one card style, neutral chips and badges, red kept
+ * for the primary action and the active state only. Desktop only; phones are untouched.
+ * Loaded last, so it wins over the older theme layers without touching them.
+ */
+@media (min-width: 900px) {
+  html.site {
+    --pro-bg: #fafaf8;
+    --pro-surface: #ffffff;
+    --pro-line: rgba(20, 18, 16, 0.08);
+    --pro-line-strong: rgba(20, 18, 16, 0.14);
+    --pro-ink: #16130f;
+    --pro-muted: #6e6a64;
+    --pro-soft: #f3f1ed;
+    --pro-radius: 18px;
+    --pro-shadow: 0 1px 2px rgba(20, 18, 16, 0.04), 0 10px 28px -18px rgba(20, 18, 16, 0.22);
+    --pro-shadow-hover: 0 2px 4px rgba(20, 18, 16, 0.05), 0 18px 40px -20px rgba(20, 18, 16, 0.3);
+  }
+  html.site[data-theme="dark"] {
+    --pro-bg: #0f0e0d;
+    --pro-surface: #181715;
+    --pro-line: rgba(255, 255, 255, 0.08);
+    --pro-line-strong: rgba(255, 255, 255, 0.16);
+    --pro-ink: #f3f0ea;
+    --pro-muted: #a29d95;
+    --pro-soft: #201e1b;
+    --pro-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 28px -18px rgba(0, 0, 0, 0.7);
+    --pro-shadow-hover: 0 2px 4px rgba(0, 0, 0, 0.3), 0 18px 40px -20px rgba(0, 0, 0, 0.8);
+  }
+
+  /* ─── Calm background: no pink glow behind these pages ─── */
+  html.site .app-shell:has(:is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about)) .ambient {
+    display: none !important;
+  }
+  html.site body:has(:is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about)),
+  html.site .app-shell:has(:is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about)) {
+    background: var(--pro-bg) !important;
+  }
+
+  /* ─── Page heading ─── */
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about) .page-head {
+    padding-top: clamp(2.5rem, 5vw, 4rem);
+    padding-bottom: 1.25rem;
+  }
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about) .page-head .h1 {
+    font-size: clamp(2.3rem, 3.6vw, 3.2rem) !important;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+    color: var(--pro-ink);
+  }
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about) .page-head .lead {
+    max-width: 62ch;
+    color: var(--pro-muted) !important;
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about) .eyebrow {
+    padding: 0 !important;
+    background: none !important;
+    border: 0 !important;
+    color: var(--pro-muted) !important;
+    font-size: 0.72rem !important;
+    font-weight: 700;
+    letter-spacing: 0.14em !important;
+    text-transform: uppercase;
+  }
+
+  /* ─── Search field ─── */
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop) .ios-search {
+    height: 48px !important;
+    max-width: 520px;
+    border-radius: 14px !important;
+    background: var(--pro-surface) !important;
+    border: 1px solid var(--pro-line-strong) !important;
+    box-shadow: none !important;
+  }
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop) .ios-search:focus-within {
+    border-color: var(--pro-ink) !important;
+  }
+
+  /* ─── Filter chips: neutral; the active one is ink, not red ─── */
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop) .ios26-filter-chip {
+    background: var(--pro-surface) !important;
+    border: 1px solid var(--pro-line-strong) !important;
+    color: var(--pro-ink) !important;
+    box-shadow: none !important;
+  }
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop) .ios26-filter-pill {
+    background: var(--pro-ink) !important;
+    box-shadow: none !important;
+  }
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop) .ios26-filter-chip.is-active {
+    border-color: var(--pro-ink) !important;
+  }
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop) .ios26-filter-chip.is-active .ios26-filter-label,
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop) .ios26-filter-chip.is-active .ios26-filter-count {
+    color: var(--pro-bg) !important;
+  }
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop) .ios26-filter-count {
+    color: var(--pro-muted) !important;
+    background: none !important;
+  }
+
+  /* ─── One card style ─── */
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about)
+    :is(.ios-card, .uni-tile, .tilt-card-inner, .quiz-level-card, .quiz-pick-group, .why-card,
+        .home-branch-card, .partner-card, .about-result, .teacher-card, .home-service) {
+    background: var(--pro-surface) !important;
+    border: 1px solid var(--pro-line) !important;
+    border-radius: var(--pro-radius) !important;
+    box-shadow: var(--pro-shadow) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  }
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about)
+    :is(a.ios-card, .ios-card:has(a), .uni-tile, .tilt-card-inner, .quiz-level-card, a.partner-card):hover {
+    transform: translateY(-3px);
+    box-shadow: var(--pro-shadow-hover) !important;
+    border-color: var(--pro-line-strong) !important;
+  }
+  /* Images sit flush inside the card, with the card's own corners. */
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop)
+    :is(.ios-card-media, .uni-tile-media, .shop-media) {
+    border-radius: calc(var(--pro-radius) - 1px) calc(var(--pro-radius) - 1px) 0 0 !important;
+    background: var(--pro-soft) !important;
+  }
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop)
+    :is(.ios-card-media, .uni-tile-media, .shop-media) img {
+    transition: transform 0.5s ease;
+  }
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop)
+    :is(.ios-card, .uni-tile, .tilt-card-inner):hover :is(.ios-card-media, .uni-tile-media, .shop-media) img {
+    transform: scale(1.03);
+  }
+
+  /* ─── Badges on photos: small, white, quiet ─── */
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop)
+    :is(.ios-badge, .uni-tile-tag, .shop-media .tag, .badge-stock) {
+    background: rgba(255, 255, 255, 0.92) !important;
+    color: var(--pro-ink, #16130f) !important;
+    border: 0 !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08) !important;
+    font-size: 0.68rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  html.site[data-theme="dark"] :is(.page-news, .page-uni, .page-travel, .page-shop)
+    :is(.ios-badge, .uni-tile-tag, .shop-media .tag, .badge-stock) {
+    background: rgba(20, 18, 16, 0.85) !important;
+    color: #f3f0ea !important;
+  }
+
+  /* ─── Card text ─── */
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop) :is(.ios-card-body, .uni-tile-body, .shop-body) {
+    padding: 1rem 1.15rem 1.15rem !important;
+  }
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop)
+    :is(.ios-card-body h3, .ios-card-body strong, .uni-tile-body h3, .uni-tile-body strong, .shop-body h3) {
+    color: var(--pro-ink) !important;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop)
+    :is(.ios-card-desc, .ios-meta, .shop-cat, .uni-tile-body em, .uni-tile-body small) {
+    color: var(--pro-muted) !important;
+  }
+  html.site .page-shop .shop-foot .price {
+    color: var(--pro-ink) !important;
+    font-weight: 750;
+  }
+
+  /* ─── Wide, even grids ─── */
+  html.site .page-news .ios-feed-news,
+  html.site .page-travel .travel-desk-grid,
+  html.site .page-shop .shop-grid {
+    gap: 1.5rem !important;
+  }
+
+  /* ─── Universities: the top "help" bar and the notice, calmer ─── */
+  html.site .page-uni .uni-desk-cta {
+    background: var(--pro-surface) !important;
+    border: 1px solid var(--pro-line) !important;
+    box-shadow: var(--pro-shadow) !important;
+  }
+  html.site .page-uni .uni-notice {
+    background: var(--pro-surface) !important;
+    border: 1px solid var(--pro-line) !important;
+    border-left: 3px solid var(--seal, #d62828) !important;
+    border-radius: 14px;
+    box-shadow: var(--pro-shadow);
+  }
+
+  /* ─── Quiz: neutral level cards, red only on the play action ─── */
+  html.site .page-quiz .quiz-pick-group {
+    padding: 1.5rem !important;
+  }
+  html.site .page-quiz .quiz-level-badge {
+    background: var(--pro-soft) !important;
+    color: var(--pro-muted) !important;
+    border: 0 !important;
+  }
+  html.site .page-quiz .quiz-level-body em {
+    color: var(--pro-muted) !important;
+  }
+  html.site .page-quiz .quiz-level-glyph {
+    background: var(--pro-ink) !important;
+    color: var(--pro-bg) !important;
+    box-shadow: none !important;
+  }
+  html.site .page-quiz .quiz-level-play {
+    background: color-mix(in srgb, var(--seal, #d62828) 10%, transparent) !important;
+    color: var(--seal, #d62828) !important;
+  }
+  html.site .page-quiz :is(.quiz-pick-hero, .quiz-brand) {
+    box-shadow: none !important;
+  }
+
+  /* ─── About: section headings and rhythm ─── */
+  html.site .page-about .about-h,
+  html.site .page-about .partners-h,
+  html.site .page-about .teachers-section :is(h2, .h2) {
+    font-size: clamp(1.6rem, 2.4vw, 2.1rem) !important;
+    letter-spacing: -0.02em;
+    color: var(--pro-ink);
+  }
+  html.site .page-about .about-section,
+  html.site .page-about .teachers-section {
+    padding-top: clamp(2.5rem, 4.5vw, 4rem) !important;
+    border-top: 1px solid var(--pro-line);
+    margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  }
+  html.site .page-about .about-intro-copy .lead {
+    color: var(--pro-ink) !important;
+    font-size: 1.08rem;
+  }
+  html.site .page-about .why-icon {
+    background: var(--pro-soft) !important;
+    color: var(--pro-ink) !important;
+    box-shadow: none !important;
+  }
+  html.site .page-about .about-result span {
+    background: var(--pro-soft) !important;
+    color: var(--pro-ink) !important;
+  }
+
+  /* ─── Footer: same calm background, no pink tint ─── */
+  html.site .app-shell:has(:is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about)) .site-footer {
+    background: var(--pro-bg) !important;
+    border-top: 1px solid var(--pro-line);
+  }
+
+  /* ─── Quiz: small text in the normal sans font, not italic serif ─── */
+  html.site .page-quiz :is(.quiz-level-body em, .quiz-pick-group-head p, .quiz-pick-meta span) {
+    font-family: inherit !important;
+    font-style: normal !important;
+  }
+
+  /* ─── About: advantage icons sized for their Chinese words ─── */
+  html.site .page-about .why-icon {
+    height: 42px !important;
+    min-width: 42px;
+    font-size: 1rem !important;
+    border-radius: 12px !important;
+  }
+  html.site .page-about .why-icon.is-wide {
+    padding: 0 0.8rem !important;
+    font-size: 0.95rem !important;
+    letter-spacing: 0.04em;
+  }
+}
