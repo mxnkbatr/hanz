@@ -305,3 +305,88 @@ html[data-theme="dark"] .share-menu {
   color: #fff;
   background: #30b158;
 }
+
+/* ─── About page: one clear order, same rhythm for every section ─── */
+.about-page .about-intro {
+  display: grid;
+  gap: 1rem;
+}
+.about-page .about-intro-copy {
+  display: grid;
+  gap: 1.1rem;
+  max-width: 72ch;
+}
+.about-page .about-intro-copy .lead {
+  margin: 0;
+  line-height: 1.75;
+}
+.about-page .about-intro-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+@media (min-width: 900px) {
+  .about-page .about-intro {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.7fr);
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: start;
+  }
+}
+.about-page .about-stats {
+  margin: 0.5rem 0 1rem;
+}
+.about-page .about-section {
+  padding-top: clamp(2rem, 4vw, 3.5rem);
+}
+.about-page .about-h,
+.about-page .partners-h {
+  margin: 0 0 1.1rem;
+  font-size: clamp(1.4rem, 2.6vw, 2.1rem);
+}
+.about-page .about-results {
+  display: grid;
+  gap: 0.75rem;
+}
+@media (min-width: 900px) {
+  .about-page .about-results {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+}
+.about-page .about-result {
+  display: flex;
+  gap: 0.8rem;
+  align-items: flex-start;
+  height: 100%;
+  padding: 1.1rem 1.2rem;
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--paper, #fff) 82%, transparent);
+  border: 1px solid rgba(18, 17, 15, 0.08);
+  box-sizing: border-box;
+}
+.about-page .about-result span {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--seal, #d62828) 12%, transparent);
+  color: var(--seal, #d62828);
+  font-weight: 800;
+}
+.about-page .about-result p {
+  margin: 0;
+  font-weight: 650;
+  line-height: 1.45;
+}
+html.site[data-theme="dark"] .about-page .about-result {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.09);
+}
+/* The phone header style hides .lead; the About text is the point of this page. */
+html.site .about-page .about-intro-copy .lead {
+  display: block !important;
+  font-size: 1rem;
+  color: var(--text, #12110f);
+}

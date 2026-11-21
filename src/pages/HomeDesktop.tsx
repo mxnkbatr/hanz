@@ -122,8 +122,6 @@ export function HomeDesktop() {
             <Reveal>
               <SectionIndex n={3} label={t("hd_china_eyebrow")} />
               <h2 className="h2">{t("china_home_title")}</h2>
-              <p className="lead hx-lead">{t("china_home_lead")}</p>
-              <p className="lead hx-lead">{t("china_home_scholar")}</p>
             </Reveal>
             <ol className="hx-steps">
               {STEPS.map(([title, desc], i) => (
