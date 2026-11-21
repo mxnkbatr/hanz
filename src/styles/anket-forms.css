@@ -1,0 +1,284 @@
+/*
+ * Student form (anket) in a Google Forms layout (client, 2026-11-21):
+ * one centred column, a header card with a red top edge, every question in its
+ * own white card, underline inputs, radio circles and checkboxes in a list,
+ * a red * on required questions. Phone and desktop. Logic is unchanged.
+ */
+html.site .page-enroll {
+  --gf-bg: #f6f5f2;
+  --gf-card: #ffffff;
+  --gf-line: #dadce0;
+  --gf-ink: #202124;
+  --gf-muted: #5f6368;
+  --gf-accent: var(--seal, #d62828);
+}
+
+html.site .app-shell:has(.page-enroll .ak-form),
+html.site body:has(.page-enroll .ak-form) {
+  background: var(--gf-bg) !important;
+}
+html.site .page-enroll .wz.enroll-form:has(.ak-form) {
+  max-width: 680px;
+  margin-inline: auto;
+}
+
+/* The form becomes a stack of cards. */
+html.site .page-enroll .ak-form {
+  display: flex !important;
+  flex-direction: column;
+  gap: 12px !important;
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+/* Header card: the lead text, with the coloured top edge. */
+html.site .page-enroll .ak-form > .wz-lead {
+  margin: 0 !important;
+  padding: 22px 24px !important;
+  background: var(--gf-card) !important;
+  border: 1px solid var(--gf-line);
+  border-top: 10px solid var(--gf-accent);
+  border-radius: 10px;
+  color: var(--gf-ink) !important;
+  font-size: 0.95rem !important;
+  line-height: 1.6;
+}
+
+/* One question = one card. Pairs keep two cards side by side on wide screens. */
+html.site .page-enroll .ak-form > :is(label, fieldset, details, .ak-agree),
+html.site .page-enroll .ak-form > .ak-pair > :is(label, fieldset) {
+  display: block;
+  margin: 0 !important;
+  padding: 22px 24px !important;
+  background: var(--gf-card) !important;
+  border: 1px solid var(--gf-line) !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  min-width: 0;
+}
+html.site .page-enroll .ak-form > .ak-pair {
+  display: grid !important;
+  grid-template-columns: 1fr;
+  gap: 12px !important;
+}
+@media (min-width: 640px) {
+  html.site .page-enroll .ak-form > .ak-pair {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+/* Emergency contacts: one card, pairs inside it stay plain. */
+html.site .page-enroll .ak-form .ak-group .ak-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 12px;
+}
+html.site .page-enroll .ak-form .ak-group .ak-pair > label {
+  padding: 0 !important;
+  border: 0 !important;
+  background: none !important;
+}
+
+/* Question titles. */
+html.site .page-enroll .ak-form :is(label > span:first-child, legend) {
+  display: block;
+  margin: 0 0 14px !important;
+  padding: 0 !important;
+  color: var(--gf-ink) !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  line-height: 1.4;
+}
+html.site .page-enroll .ak-form legend {
+  float: left;
+  width: 100%;
+}
+html.site .page-enroll .ak-form legend + * {
+  clear: both;
+}
+html.site .page-enroll .ak-form .ak-req {
+  margin-left: 4px;
+  color: #d93025;
+  font-style: normal;
+  font-weight: 500;
+}
+html.site .page-enroll .ak-form small {
+  margin-left: 6px;
+  color: var(--gf-muted) !important;
+  font-size: 0.8rem !important;
+  font-weight: 400 !important;
+}
+html.site .page-enroll .ak-form .ak-hint {
+  margin: -6px 0 4px !important;
+  color: var(--gf-muted) !important;
+  font-size: 0.85rem !important;
+}
+
+/* Underline inputs, like Forms. */
+html.site .page-enroll .ak-form :is(input[type="text"], input:not([type]), input[type="tel"], input[type="email"], textarea) {
+  width: 100%;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 8px 0 6px !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--gf-line) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--gf-ink) !important;
+  font-size: 1rem !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+html.site .page-enroll .ak-form :is(input, textarea):focus {
+  outline: none !important;
+  border-bottom-color: var(--gf-accent) !important;
+  box-shadow: 0 1px 0 0 var(--gf-accent) !important;
+}
+html.site .page-enroll .ak-form textarea {
+  resize: vertical;
+}
+
+/* Choices: a list with radio circles / checkboxes instead of pills. */
+html.site .page-enroll .ak-form .enroll-choices {
+  display: block !important;
+}
+html.site .page-enroll .ak-form .enroll-chip {
+  position: relative;
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin: 0 !important;
+  padding: 10px 0 !important;
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: var(--gf-ink) !important;
+  font-size: 0.95rem !important;
+  font-weight: 400 !important;
+  cursor: pointer;
+}
+html.site .page-enroll .ak-form .enroll-chip input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+html.site .page-enroll .ak-form .enroll-chip::before {
+  content: "";
+  flex: none;
+  width: 20px;
+  height: 20px;
+  box-sizing: border-box;
+  border: 2px solid var(--gf-muted);
+  border-radius: 50%;
+  background: #fff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+html.site .page-enroll .ak-form .enroll-chip.is-on::before {
+  border-color: var(--gf-accent);
+  box-shadow: inset 0 0 0 4px #fff;
+  background: var(--gf-accent);
+}
+/* Checkboxes (where did you hear about us; the agreement) are square. */
+html.site .page-enroll .ak-form .enroll-chip:has(input[type="checkbox"])::before,
+html.site .page-enroll .ak-form .ak-agree::before {
+  border-radius: 3px;
+}
+html.site .page-enroll .ak-form .enroll-chip:has(input[type="checkbox"]).is-on::before,
+html.site .page-enroll .ak-form .ak-agree.is-on::before {
+  box-shadow: none;
+  background: var(--gf-accent)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    center / 14px no-repeat;
+}
+html.site .page-enroll .ak-form .enroll-chip:focus-within::before {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--gf-accent) 18%, transparent);
+}
+/* "Other" text box under a choice list. */
+html.site .page-enroll .ak-form .enroll-choices > input {
+  margin-top: 4px;
+}
+
+/* Agreement: a checkbox card. */
+html.site .page-enroll .ak-form .ak-agree {
+  display: flex !important;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  color: var(--gf-ink) !important;
+}
+html.site .page-enroll .ak-form .ak-agree::before {
+  content: "";
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  box-sizing: border-box;
+  border: 2px solid var(--gf-muted);
+  background: #fff;
+}
+html.site .page-enroll .ak-form .ak-agree input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+html.site .page-enroll .ak-form .ak-agree span {
+  margin: 0 !important;
+  font-weight: 400 !important;
+  font-size: 0.95rem !important;
+}
+
+/* Terms: a card that opens. */
+html.site .page-enroll .ak-form .ak-terms summary {
+  color: var(--gf-ink);
+  font-weight: 500;
+  cursor: pointer;
+}
+html.site .page-enroll .ak-form .ak-terms ol {
+  margin: 12px 0 0;
+  padding-left: 1.2rem;
+  color: var(--gf-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* Error message and the bottom buttons. */
+html.site .page-enroll .wz.enroll-form:has(.ak-form) .form-err {
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: #fce8e6;
+  color: #c5221f;
+  border: 1px solid #f5c2bd;
+}
+html.site .page-enroll .wz.enroll-form:has(.ak-form) .wz-actions .btn-seal {
+  border-radius: 8px !important;
+  background: var(--gf-accent) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* Grey page behind the form cards (beats the site-wide white background). */
+html.site:not([data-theme="dark"]) body:has(.page-enroll .ak-form),
+html.site:not([data-theme="dark"]) .app-shell:has(.page-enroll .ak-form),
+html.site:not([data-theme="dark"]) .app-shell:has(.page-enroll .ak-form) .site-footer {
+  background: var(--gf-bg, #f6f5f2) !important;
+}
+
+/* The whole enrol page (title, progress, cards) in one centred column. */
+html.site .page-enroll:has(.ak-form) {
+  max-width: 720px !important;
+  margin-inline: auto !important;
+}
+html.site .page-enroll:has(.ak-form) .page-head::after {
+  display: none !important;
+}
+html.site .page-enroll .ak-form > .ak-pair {
+  align-items: stretch;
+}
+html.site .page-enroll .wz-progress span {
+  background: var(--gf-accent, #d62828) !important;
+}

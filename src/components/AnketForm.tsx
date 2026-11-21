@@ -20,7 +20,7 @@ export function AnketPersonal({ value: a, onChange }: Props) {
       <p className="wz-lead">{t("ak_personal_lead")}</p>
       <div className="ak-pair">
         <label>
-          <span>{t("ak_surname")}</span>
+          <span>{t("ak_surname")} <i className="ak-req" aria-hidden>*</i></span>
           <input
             value={a.surname}
             onChange={(e) => set({ surname: e.target.value })}
@@ -29,7 +29,7 @@ export function AnketPersonal({ value: a, onChange }: Props) {
           />
         </label>
         <label>
-          <span>{t("ak_name")}</span>
+          <span>{t("ak_name")} <i className="ak-req" aria-hidden>*</i></span>
           <input
             value={a.name}
             onChange={(e) => set({ name: e.target.value })}
@@ -53,7 +53,7 @@ export function AnketPersonal({ value: a, onChange }: Props) {
       </label>
 
       <div className="ak-pair">
-        <Choices label={t("ak_gender")}>
+        <Choices label={t("ak_gender")} required>
           {(["male", "female"] as const).map((g) => (
             <Chip key={g} name="ak-gender" on={a.gender === g} onPick={() => set({ gender: g })}>
               {t(`ak_gender_${g}`)}
@@ -61,7 +61,7 @@ export function AnketPersonal({ value: a, onChange }: Props) {
           ))}
         </Choices>
         <label>
-          <span>{t("ak_age")}</span>
+          <span>{t("ak_age")} <i className="ak-req" aria-hidden>*</i></span>
           <input
             value={a.age}
             onChange={(e) => set({ age: e.target.value.replace(/\D/g, "") })}
@@ -72,7 +72,7 @@ export function AnketPersonal({ value: a, onChange }: Props) {
       </div>
 
       <label>
-        <span>{t("ak_phone")}</span>
+        <span>{t("ak_phone")} <i className="ak-req" aria-hidden>*</i></span>
         <input
           value={a.phone}
           onChange={(e) => set({ phone: e.target.value })}
@@ -122,7 +122,7 @@ export function AnketQuestions({ value: a, onChange, isCourse }: Props & { isCou
   return (
     <div className="wz-fields consult-form ak-form">
       {isCourse && (
-        <Choices label={t("ak_q_schedule")} stacked>
+        <Choices label={t("ak_q_schedule")} stacked required>
           {anketSchedules.map((s) => (
             <Chip key={s} name="ak-schedule" on={a.schedule === s} onPick={() => set({ schedule: s })}>
               {t(`ak_sch_${s}`)}
@@ -140,7 +140,7 @@ export function AnketQuestions({ value: a, onChange, isCourse }: Props & { isCou
         </Choices>
       )}
 
-      <Choices label={t("ak_q_occupation")}>
+      <Choices label={t("ak_q_occupation")} required>
         {anketOccupations.map((o) => (
           <Chip key={o} name="ak-occupation" on={a.occupation === o} onPick={() => set({ occupation: o })}>
             {t(`ak_occ_${o}`)}
@@ -158,13 +158,14 @@ export function AnketQuestions({ value: a, onChange, isCourse }: Props & { isCou
       </Choices>
 
       <fieldset className="ak-group">
-        <legend>{t("ak_q_emergency")}</legend>
+        <legend>{t("ak_q_emergency")} <i className="ak-req" aria-hidden>*</i></legend>
         <p className="ak-hint">{t("ak_q_emergency_hint")}</p>
         {a.emergency.map((c, i) => (
           <div key={i} className="ak-pair">
             <label>
               <span>
                 {t("ak_em_phone")} {i + 1}
+                {i === 0 && <i className="ak-req" aria-hidden>*</i>}
               </span>
               <input
                 value={c.phone}
@@ -175,7 +176,7 @@ export function AnketQuestions({ value: a, onChange, isCourse }: Props & { isCou
               />
             </label>
             <label>
-              <span>{t("ak_em_relation")}</span>
+              <span>{t("ak_em_relation")} <i className="ak-req" aria-hidden>*</i></span>
               <input
                 value={c.relation}
                 onChange={(e) => setContact(i, { relation: e.target.value })}
@@ -188,7 +189,7 @@ export function AnketQuestions({ value: a, onChange, isCourse }: Props & { isCou
       </fieldset>
 
       <label>
-        <span>{t("ak_q_address")}</span>
+        <span>{t("ak_q_address")} <i className="ak-req" aria-hidden>*</i></span>
         <textarea
           value={a.address}
           onChange={(e) => set({ address: e.target.value })}
@@ -249,10 +250,23 @@ export function AnketQuestions({ value: a, onChange, isCourse }: Props & { isCou
   );
 }
 
-function Choices({ label, stacked, children }: { label: string; stacked?: boolean; children: ReactNode }) {
+function Choices({
+  label,
+  stacked,
+  required,
+  children,
+}: {
+  label: string;
+  stacked?: boolean;
+  required?: boolean;
+  children: ReactNode;
+}) {
   return (
     <fieldset className={`enroll-choices${stacked ? " is-stacked" : ""}`}>
-      <legend>{label}</legend>
+      <legend>
+        {label}
+        {required && <i className="ak-req" aria-hidden>*</i>}
+      </legend>
       {children}
     </fieldset>
   );
@@ -290,7 +304,7 @@ function YesNoRow({
 }) {
   const { t } = useI18n();
   return (
-    <Choices label={label}>
+    <Choices label={label} required>
       {(["yes", "no"] as const).map((v) => (
         <Chip key={v} name={name} on={value === v} onPick={() => onPick(v)}>
           {t(`ak_${v}`)}

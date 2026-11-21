@@ -26,6 +26,7 @@ import "./styles/app-perf.css";
 import "./styles/app-skeleton.css";
 import "./styles/desk-pro.css";
 import "./styles/quiz-game.css";
+import "./styles/anket-forms.css";
 import App from "./App.tsx";
 import { AuthProvider } from "./lib/AuthContext.tsx";
 import { SiteContentProvider } from "./lib/SiteContentContext.tsx";
