@@ -181,7 +181,7 @@ export const featureKeys = {
     travel_poland_h2: "Варшав & Краковын аялал",
     travel_poland_h3: "Их сургууль, кампусын танилцуулга",
     travel_health_t: "Эрүүл мэндийн аялал · Чунцин",
-    travel_health_d: "7 өдөр 6 шөнө — нарийвчилсан үзлэг, ухаалаг үйлдвэр, их сургуулийн солилцоо.",
+    travel_health_d: "7 өдөр 6 шөнө — нарийвчилсан үзлэг + аялал хосолсон.",
     travel_health_b:
       "Хятадыг танин мэдэхүй · Торгоны замын эрүүл мэндийн гүүр.\n\nЭнэхүү 7 өдөр, 6 шөнийн аялал нь нарийвчилсан эрүүл мэндийн үзлэг, дэвшилтэт үйлдвэрлэлийн газруудтай танилцах, их сургуулийн боловсролын солилцоо, Чунциний соёл аялал жуулчлалыг нэгтгэсэн хөтөлбөр юм.\n\nМэргэжлийн эмнэлгийн орчуулагч, эмчийн ганцаарчилсан зөвлөгөө, эрүүл мэндийн тайлан хүргүүлэх үйлчилгээтэй. Ли Зыба-гийн барилга дундуур нэвтрэх монорельс, Хунъядүний шөнийн үзэмж, Шиба Ти зэрэг газраар аялна. Чанъань автомашин, OPPO ухаалаг үйлдвэр, Чунциний их сургуультай танилцана.\n\nБагцад зочид буудал, үндсэн хоол, хувийн унаа, үзлэгийн багц, эмнэлгийн орчуулга, аяллын даатгал багтана. Олон улсын нислэг, виз болон хувийн зардал тусад нь.",
     travel_health_h1: "Гуравдугаар зэрэглэлийн А ангиллын эмнэлгийн иж бүрэн үзлэг",
@@ -914,7 +914,7 @@ export const featureKeys = {
     travel_poland_h2: "Warsaw & Krakow tours",
     travel_poland_h3: "Campus / university intro",
     travel_health_t: "Health travel · Chongqing",
-    travel_health_d: "7 days 6 nights — premium check-up, smart manufacturing, university exchange.",
+    travel_health_d: "7 days 6 nights — a detailed check-up combined with a tour.",
     travel_health_b:
       "Discover China · A Silk Road health bridge.\n\nThis 7-day, 6-night medical study tour combines a premium health check-up, advanced-manufacturing visits, university exchanges, and Chongqing mountain-city culture.\n\nFull-course medical interpreters, one-on-one doctor consultation, and health report delivery. The route covers Liziba's monorail-through-building, Hongyadong night view, Shibati old streets, Changan Automobile, the OPPO smart factory, and a Chongqing university.\n\nPackage includes hotel, main meals, private transport, the check-up package, medical interpretation, and travel insurance. International flights, visas, and personal expenses are separate.",
     travel_health_h1: "Grade-A tertiary hospital premium check-up",
@@ -1635,7 +1635,7 @@ export const featureKeys = {
     travel_poland_h2: "华沙与克拉科夫游览",
     travel_poland_h3: "校园 / 大学介绍",
     travel_health_t: "健康旅行 · 重庆",
-    travel_health_d: "7天6晚 — 高端体检、智能制造参观、大学交流。",
+    travel_health_d: "7天6晚 — 精细体检与旅游相结合。",
     travel_health_b:
       "认知中国 · 丝绸之路健康之桥。\n\n本行程为7天6晚医疗研学之旅，融合高端体检、先进制造企业参观、大学交流与重庆山城文化体验。\n\n全程专业医疗翻译、医生一对一解读与健康报告送达。行程涵盖李子坝轻轨穿楼、洪崖洞夜景、十八梯、长安汽车、OPPO智能工厂及重庆高校。\n\n套餐含酒店、正餐、专车、体检套餐、医疗翻译与旅行保险。国际往返机票、签证与个人消费另计。",
     travel_health_h1: "三甲医院高端体检",

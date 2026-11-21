@@ -347,7 +347,7 @@ export const travelPackagesMeta = [
       "travel_poland_h3",
     ] as const,
     image:
-      "https://images.unsplash.com/photo-1467269204594-59904b4cbaba?auto=format&fit=crop&w=1000&q=72",
+      "/images/poland/krakow.webp",
     enrollWindows: [
       {
         id: "now" as const,
@@ -710,7 +710,7 @@ export const shopProductsMeta = [
     descKey: "prod8_d",
     bodyKey: "prod8_b",
     specs: ["prod8_s1", "prod7_s1", "prod7_s2", "prod7_s3", "prod7_s4"] as const,
-    inStock: true,
+    inStock: false,
   },
 ];
 
