@@ -30,32 +30,32 @@
   }
 
   /* ─── Calm background: no pink glow behind these pages ─── */
-  html.site .app-shell:has(:is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about)) .ambient {
+  html.site .app-shell:has(:is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about, .page-courses, .page-contact, .page-translation, .page-pricing, .page-hsk)) .ambient {
     display: none !important;
   }
-  html.site body:has(:is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about)),
-  html.site .app-shell:has(:is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about)) {
+  html.site body:has(:is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about, .page-courses, .page-contact, .page-translation, .page-pricing, .page-hsk)),
+  html.site .app-shell:has(:is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about, .page-courses, .page-contact, .page-translation, .page-pricing, .page-hsk)) {
     background: var(--pro-bg) !important;
   }
 
   /* ─── Page heading ─── */
-  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about) .page-head {
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about, .page-courses, .page-contact, .page-translation, .page-pricing, .page-hsk) .page-head {
     padding-top: clamp(2.5rem, 5vw, 4rem);
     padding-bottom: 1.25rem;
   }
-  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about) .page-head .h1 {
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about, .page-courses, .page-contact, .page-translation, .page-pricing, .page-hsk) .page-head .h1 {
     font-size: clamp(2.3rem, 3.6vw, 3.2rem) !important;
     letter-spacing: -0.025em;
     line-height: 1.08;
     color: var(--pro-ink);
   }
-  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about) .page-head .lead {
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about, .page-courses, .page-contact, .page-translation, .page-pricing, .page-hsk) .page-head .lead {
     max-width: 62ch;
     color: var(--pro-muted) !important;
     font-size: 1.05rem;
     line-height: 1.7;
   }
-  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about) .eyebrow {
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about, .page-courses, .page-contact, .page-translation, .page-pricing, .page-hsk) .eyebrow {
     padding: 0 !important;
     background: none !important;
     border: 0 !important;
@@ -67,7 +67,7 @@
   }
 
   /* ─── Search field ─── */
-  html.site :is(.page-news, .page-uni, .page-travel, .page-shop) .ios-search {
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-courses) .ios-search {
     height: 48px !important;
     max-width: 520px;
     border-radius: 14px !important;
@@ -75,35 +75,35 @@
     border: 1px solid var(--pro-line-strong) !important;
     box-shadow: none !important;
   }
-  html.site :is(.page-news, .page-uni, .page-travel, .page-shop) .ios-search:focus-within {
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-courses) .ios-search:focus-within {
     border-color: var(--pro-ink) !important;
   }
 
   /* ─── Filter chips: neutral; the active one is ink, not red ─── */
-  html.site :is(.page-news, .page-uni, .page-travel, .page-shop) .ios26-filter-chip {
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-courses) .ios26-filter-chip {
     background: var(--pro-surface) !important;
     border: 1px solid var(--pro-line-strong) !important;
     color: var(--pro-ink) !important;
     box-shadow: none !important;
   }
-  html.site :is(.page-news, .page-uni, .page-travel, .page-shop) .ios26-filter-pill {
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-courses) .ios26-filter-pill {
     background: var(--pro-ink) !important;
     box-shadow: none !important;
   }
-  html.site :is(.page-news, .page-uni, .page-travel, .page-shop) .ios26-filter-chip.is-active {
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-courses) .ios26-filter-chip.is-active {
     border-color: var(--pro-ink) !important;
   }
-  html.site :is(.page-news, .page-uni, .page-travel, .page-shop) .ios26-filter-chip.is-active .ios26-filter-label,
-  html.site :is(.page-news, .page-uni, .page-travel, .page-shop) .ios26-filter-chip.is-active .ios26-filter-count {
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-courses) .ios26-filter-chip.is-active .ios26-filter-label,
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-courses) .ios26-filter-chip.is-active .ios26-filter-count {
     color: var(--pro-bg) !important;
   }
-  html.site :is(.page-news, .page-uni, .page-travel, .page-shop) .ios26-filter-count {
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-courses) .ios26-filter-count {
     color: var(--pro-muted) !important;
     background: none !important;
   }
 
   /* ─── One card style ─── */
-  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about)
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about, .page-courses, .page-contact, .page-translation, .page-pricing, .page-hsk)
     :is(.ios-card, .uni-tile, .tilt-card-inner, .quiz-level-card, .quiz-pick-group, .why-card,
         .home-branch-card, .partner-card, .about-result, .teacher-card, .home-service) {
     background: var(--pro-surface) !important;
@@ -114,7 +114,7 @@
     backdrop-filter: none !important;
     transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
   }
-  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about)
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about, .page-courses, .page-contact, .page-translation, .page-pricing, .page-hsk)
     :is(a.ios-card, .ios-card:has(a), .uni-tile, .tilt-card-inner, .quiz-level-card, a.partner-card):hover {
     transform: translateY(-3px);
     box-shadow: var(--pro-shadow-hover) !important;
@@ -249,7 +249,7 @@
   }
 
   /* ─── Footer: same calm background, no pink tint ─── */
-  html.site .app-shell:has(:is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about)) .site-footer {
+  html.site .app-shell:has(:is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about, .page-courses, .page-contact, .page-translation, .page-pricing, .page-hsk)) .site-footer {
     background: var(--pro-bg) !important;
     border-top: 1px solid var(--pro-line);
   }
@@ -271,5 +271,260 @@
     padding: 0 0.8rem !important;
     font-size: 0.95rem !important;
     letter-spacing: 0.04em;
+  }
+}
+
+/*
+ * Scale, type, buttons, media, focus and motion: one system for every desktop page
+ * in this layer (client, 2026-11-21). Phones untouched.
+ */
+@media (min-width: 900px) {
+  html.site {
+    --pro-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+    --pro-text: 0.9375rem;
+    --pro-small: 0.8125rem;
+  }
+
+  /* ─── Type: one readable scale ─── */
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about, .page-courses, .page-contact, .page-translation, .page-pricing, .page-hsk) {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about, .page-courses, .page-contact, .page-translation, .page-pricing, .page-hsk) .page-head .h1 {
+    font-size: clamp(2.4rem, 3.4vw, 3.25rem) !important;
+    font-weight: 600;
+  }
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about, .page-courses, .page-contact, .page-translation, .page-pricing, .page-hsk) :is(h2.h2, .about-h, .partners-h, .quiz-pick-group-head h2, .ios-section-head h2) {
+    font-family: var(--serif, "Lora", serif) !important;
+    font-size: clamp(1.55rem, 2.1vw, 2rem) !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.02em !important;
+    line-height: 1.2 !important;
+    text-transform: none !important;
+    color: var(--pro-ink) !important;
+  }
+  /* Card titles: sans, firm. */
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about, .page-courses, .page-contact, .page-translation, .page-pricing, .page-hsk)
+    :is(.ios-card-body h3, .uni-tile-body h3, .shop-body h3, .why-card h3, .home-branch-card h3, .quiz-level-body strong, .partner-body strong, .course-product-body h3) {
+    font-family: var(--font-ui, inherit) !important;
+    font-size: 1.0625rem !important;
+    font-weight: 650 !important;
+    line-height: 1.35 !important;
+    letter-spacing: -0.01em !important;
+    text-transform: none !important;
+  }
+  /* Body and card text: never below 15px. */
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about, .page-courses, .page-contact, .page-translation, .page-pricing, .page-hsk)
+    :is(.ios-card-desc, .why-card p, .home-branch-card p, .partner-d, .about-result p, .course-product-body p, .home-service .lead) {
+    font-size: var(--pro-text) !important;
+    line-height: 1.6 !important;
+  }
+  /* Meta: 13px, muted, tabular numbers. */
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about, .page-courses, .page-contact, .page-translation, .page-pricing, .page-hsk)
+    :is(.ios-meta, .shop-cat, .uni-tile-body em, .uni-tile-body small, .partner-body small, .quiz-level-body em, .ios-result-meta) {
+    font-size: var(--pro-small) !important;
+    font-family: var(--font-ui, inherit) !important;
+    font-style: normal !important;
+    font-variant-numeric: tabular-nums;
+    color: var(--pro-muted) !important;
+  }
+  html.site :is(.page-shop, .page-courses) :is(.price, .shop-foot .price) {
+    font-variant-numeric: tabular-nums;
+    font-size: 1.05rem !important;
+  }
+
+  /* ─── Layout: one content width, aligned edges ─── */
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about, .page-courses, .page-contact, .page-translation, .page-pricing, .page-hsk) {
+    max-width: 1200px;
+    margin-inline: auto;
+  }
+  html.site .page-news .ios-feed-news,
+  html.site .page-travel .travel-desk-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 1.5rem !important;
+  }
+  html.site .page-shop .shop-grid,
+  html.site .page-uni .uni-tiles {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 1.25rem !important;
+  }
+  /* Cards fill their row so bottoms line up. */
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop) :is(.ios-card, .uni-tile, .tilt-card, .tilt-card-inner) {
+    height: 100%;
+  }
+
+  /* ─── Photos: one 4:3 frame everywhere ─── */
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop) :is(.ios-card-media, .uni-tile-media, .shop-media) {
+    aspect-ratio: 4 / 3 !important;
+    height: auto !important;
+    overflow: hidden;
+  }
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop) :is(.ios-card-media, .uni-tile-media, .shop-media) img {
+    width: 100%;
+    height: 100% !important;
+    object-fit: cover;
+  }
+
+  /* ─── Buttons: solid, 44px, 12px corners; no gradients or glow ─── */
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about, .page-courses, .page-contact, .page-translation, .page-pricing, .page-hsk) .btn {
+    min-height: 44px;
+    height: auto !important;
+    padding: 0 1.25rem !important;
+    border-radius: 12px !important;
+    font-weight: 650 !important;
+    letter-spacing: 0 !important;
+    box-shadow: none !important;
+    transition: background-color 0.2s var(--pro-ease), color 0.2s var(--pro-ease), border-color 0.2s var(--pro-ease) !important;
+  }
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about, .page-courses, .page-contact, .page-translation, .page-pricing, .page-hsk) .btn-seal {
+    background: var(--seal, #d62828) !important;
+    background-image: none !important;
+    color: #fff !important;
+    border: 0 !important;
+  }
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about, .page-courses, .page-contact, .page-translation, .page-pricing, .page-hsk) .btn-seal:hover {
+    background: color-mix(in srgb, var(--seal, #d62828) 86%, #000) !important;
+  }
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about, .page-courses, .page-contact, .page-translation, .page-pricing, .page-hsk) .btn-ink {
+    background: var(--pro-surface) !important;
+    background-image: none !important;
+    color: var(--pro-ink) !important;
+    border: 1px solid var(--pro-line-strong) !important;
+  }
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about, .page-courses, .page-contact, .page-translation, .page-pricing, .page-hsk) .btn-ink:hover {
+    border-color: var(--pro-ink) !important;
+  }
+
+  /* ─── Keyboard focus: one clear ring ─── */
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about, .page-courses, .page-contact, .page-translation, .page-pricing, .page-hsk) :is(a, button, input, [tabindex]):focus-visible {
+    outline: 2px solid var(--pro-ink) !important;
+    outline-offset: 3px !important;
+  }
+
+  /* ─── Motion: short, smooth, the same everywhere ─── */
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop, .page-quiz, .page-about, .page-courses, .page-contact, .page-translation, .page-pricing, .page-hsk)
+    :is(.ios-card, .uni-tile, .tilt-card-inner, .quiz-level-card, .why-card, .home-branch-card, .partner-card, .about-result, .teacher-card) {
+    transition: transform 0.24s var(--pro-ease), box-shadow 0.24s var(--pro-ease), border-color 0.24s var(--pro-ease) !important;
+  }
+  /* No 3D tilt on product cards; a quiet lift is enough. */
+  html.site .page-shop :is(.tilt-card, .tilt-card-inner) {
+    transform-style: flat !important;
+    perspective: none !important;
+  }
+  html.site .page-shop .tilt-card-inner:hover {
+    transform: translateY(-3px) !important;
+  }
+  html.site :is(.page-news, .page-uni, .page-travel, .page-shop) :is(.ios-card-media, .uni-tile-media, .shop-media) img {
+    transition: transform 0.6s var(--pro-ease) !important;
+  }
+}
+
+@media (min-width: 900px) and (max-width: 1180px) {
+  html.site .page-shop .shop-grid,
+  html.site .page-uni .uni-tiles {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (min-width: 900px) and (prefers-reduced-motion: reduce) {
+  html.site .page :is(.ios-card, .uni-tile, .tilt-card-inner, .quiz-level-card, .partner-card):hover {
+    transform: none !important;
+  }
+}
+
+/* ─── Courses page: same chips, badges, cards and top bar as the rest ─── */
+@media (min-width: 900px) {
+  html.site .page-courses .cf-chip {
+    background: var(--pro-surface) !important;
+    border: 1px solid var(--pro-line-strong) !important;
+    color: var(--pro-ink) !important;
+    box-shadow: none !important;
+  }
+  html.site .page-courses .cf-chip.is-on {
+    background: var(--pro-ink) !important;
+    border-color: var(--pro-ink) !important;
+    color: var(--pro-bg) !important;
+  }
+  html.site .page-courses .course-product-card {
+    background: var(--pro-surface) !important;
+    border: 1px solid var(--pro-line) !important;
+    border-radius: var(--pro-radius) !important;
+    box-shadow: var(--pro-shadow) !important;
+    overflow: hidden;
+    transition: transform 0.24s var(--pro-ease), box-shadow 0.24s var(--pro-ease), border-color 0.24s var(--pro-ease) !important;
+  }
+  html.site .page-courses .course-product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--pro-shadow-hover) !important;
+    border-color: var(--pro-line-strong) !important;
+  }
+  html.site .page-courses .course-product-media {
+    aspect-ratio: 4 / 3 !important;
+    height: auto !important;
+    background: var(--pro-soft) !important;
+    border-radius: 0 !important;
+  }
+  html.site .page-courses .course-product-media img {
+    width: 100%;
+    height: 100% !important;
+    object-fit: cover;
+    transition: transform 0.6s var(--pro-ease) !important;
+  }
+  html.site .page-courses .course-product-card:hover .course-product-media img {
+    transform: scale(1.03);
+  }
+  html.site .page-courses :is(.course-product-tag, .cp-seats) {
+    background: rgba(255, 255, 255, 0.92) !important;
+    color: var(--pro-ink, #16130f) !important;
+    border: 0 !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08) !important;
+    font-size: 0.68rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.04em !important;
+  }
+  html.site .page-courses .cp-seats.is-low {
+    color: var(--seal, #d62828) !important;
+  }
+  html.site .page-courses .course-product-body {
+    padding: 1rem 1.15rem 1.15rem !important;
+  }
+  html.site .page-courses .course-product-body h3 {
+    font-family: var(--font-ui, inherit) !important;
+    font-size: 1.0625rem !important;
+    font-weight: 650 !important;
+    color: var(--pro-ink) !important;
+  }
+  html.site .page-courses :is(.cp-meta, .cp-duration) {
+    font-family: var(--font-ui, inherit) !important;
+    font-style: normal !important;
+    font-size: var(--pro-small) !important;
+    color: var(--pro-muted) !important;
+  }
+  html.site .page-courses .cp-price {
+    color: var(--pro-ink) !important;
+    font-weight: 750 !important;
+    font-variant-numeric: tabular-nums;
+  }
+  html.site .page-courses .course-product-grid {
+    gap: 1.25rem !important;
+  }
+  /* The "help me choose" / "book a call" bars on Courses and Universities. */
+  html.site :is(.page-courses, .page-uni) .course-match {
+    background: var(--pro-surface) !important;
+    border: 1px solid var(--pro-line) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--pro-shadow) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  html.site :is(.page-courses, .page-uni) .course-match-mark {
+    background: var(--pro-soft) !important;
+    color: var(--pro-ink) !important;
+  }
+  html.site[data-theme="dark"] .page-courses :is(.course-product-tag, .cp-seats) {
+    background: rgba(20, 18, 16, 0.85) !important;
+    color: #f3f0ea !important;
   }
 }
