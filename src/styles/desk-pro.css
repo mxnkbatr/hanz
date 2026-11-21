@@ -695,3 +695,218 @@
     padding-top: clamp(2rem, 4vw, 3rem) !important;
   }
 }
+
+/*
+ * Desktop detail pages, same system as the lists and About (client, 2026-11-21):
+ * courses, products, travel, news, universities. Neutral pills and icons, quiet
+ * photo frames, one card style, no floating pill bar over the text. Phones untouched.
+ */
+@media (min-width: 900px) {
+  html.site :is(.page-detail, .page-course-detail) {
+    max-width: 1200px;
+    margin-inline: auto;
+  }
+
+  /* ─── Titles and lead text ─── */
+  html.site :is(.page-detail, .page-course-detail) :is(.h1, .cd-title) {
+    font-family: var(--serif, "Lora", serif) !important;
+    font-size: clamp(2.2rem, 3vw, 2.9rem) !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.025em !important;
+    line-height: 1.12 !important;
+    color: var(--pro-ink) !important;
+  }
+  html.site :is(.page-detail, .page-course-detail) :is(.app-sub, .cd-unit, .desk-article-lead) {
+    font-size: 1.05rem !important;
+    line-height: 1.6 !important;
+    color: var(--pro-muted) !important;
+  }
+  html.site :is(.page-detail, .page-course-detail) :is(.desk-article-copy, .uni-detail-copy, .cd-copy) p,
+  html.site :is(.page-detail, .page-course-detail) :is(.desk-article-copy, .uni-detail-copy, .cd-copy) {
+    font-size: 1rem !important;
+    line-height: 1.75 !important;
+    color: var(--pro-ink) !important;
+  }
+  /* Small section labels ("Онцлог", "Ангийн тухай", "Хичээл хэзээ орох вэ"). */
+  html.site :is(.page-detail, .page-course-detail) :is(.desk-detail-label, .cd-label, .uni-enroll-head h2, .uni-enroll-head strong) {
+    font-family: var(--font-ui, inherit) !important;
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+    color: var(--pro-muted) !important;
+  }
+
+  /* ─── Photos: a quiet frame, no glow or heavy shadow ─── */
+  html.site :is(.page-detail, .page-course-detail)
+    :is(.desk-detail-hero, .app-detail-hero, .app-detail-media, .desk-article-hero, .cd-media-wrap, .product-detail-media) {
+    border-radius: 20px !important;
+    border: 1px solid var(--pro-line) !important;
+    box-shadow: none !important;
+    background: var(--pro-soft) !important;
+    overflow: hidden;
+  }
+  html.site :is(.page-detail, .page-course-detail)
+    :is(.desk-detail-hero, .app-detail-hero, .app-detail-media, .desk-article-hero, .cd-media-wrap, .product-detail-media) img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ─── Pills and chips: neutral, not pink ─── */
+  html.site :is(.page-detail, .page-course-detail) :is(.app-pill, .cd-pill, .app-chips li, .product-spec-chips li, .news-meta span) {
+    background: var(--pro-soft) !important;
+    color: var(--pro-ink) !important;
+    border: 1px solid var(--pro-line) !important;
+    box-shadow: none !important;
+    font-family: var(--font-ui, inherit) !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+  }
+  html.site :is(.page-detail, .page-course-detail) .app-pill {
+    font-size: 0.72rem !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase;
+  }
+  html.site :is(.page-detail, .page-course-detail) .cd-pill.is-price {
+    background: var(--pro-surface) !important;
+    color: var(--pro-ink) !important;
+    font-weight: 750 !important;
+  }
+  html.site :is(.page-detail, .page-course-detail) .cd-pill.is-seats {
+    color: var(--seal, #d62828) !important;
+  }
+
+  /* ─── Course facts list: one neutral icon style instead of rainbow tiles ─── */
+  html.site .page-course-detail :is(.cd-sched, .cd-card, .cd-list, .cd-teachers, .cd-comments, .cd-syllabus) {
+    background: var(--pro-surface) !important;
+    border: 1px solid var(--pro-line) !important;
+    border-radius: 18px !important;
+    box-shadow: var(--pro-shadow) !important;
+  }
+  html.site .page-course-detail .cd-sched-icon {
+    background: var(--pro-soft) !important;
+    color: var(--pro-ink) !important;
+    box-shadow: none !important;
+  }
+  html.site .page-course-detail .cd-sched-icon svg {
+    color: var(--pro-ink) !important;
+    stroke: currentColor;
+  }
+  html.site .page-course-detail .cd-sched-label {
+    color: var(--pro-muted) !important;
+    font-weight: 500 !important;
+  }
+  html.site .page-course-detail .cd-sched-value {
+    color: var(--pro-ink) !important;
+    font-weight: 650 !important;
+    font-variant-numeric: tabular-nums;
+  }
+  html.site .page-course-detail .cd-seats-bar {
+    background: var(--pro-soft) !important;
+  }
+  html.site .page-course-detail .cd-check {
+    background: var(--pro-ink) !important;
+    color: var(--pro-bg) !important;
+    box-shadow: none !important;
+  }
+  html.site .page-course-detail .cd-teacher {
+    border: 1px solid var(--pro-line) !important;
+    box-shadow: none !important;
+    background: var(--pro-surface) !important;
+  }
+  html.site .page-course-detail .cd-cta {
+    background: var(--pro-soft) !important;
+    border: 1px solid var(--pro-line) !important;
+    box-shadow: none !important;
+    color: var(--pro-ink) !important;
+  }
+
+  /* The floating enrol pill sat over the text; on desktop it becomes a calm card
+     in the bottom-right corner. */
+  html.site .page-course-detail .cd-bar {
+    left: auto !important;
+    right: max(24px, calc((100vw - 1200px) / 2)) !important;
+    bottom: 24px !important;
+    transform: none !important;
+    width: auto !important;
+    max-width: 360px;
+    padding: 0.6rem 0.6rem 0.6rem 1.1rem !important;
+    border-radius: 16px !important;
+    background: var(--pro-surface) !important;
+    border: 1px solid var(--pro-line-strong) !important;
+    box-shadow: var(--pro-shadow-hover) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  html.site .page-course-detail .cd-bar-price {
+    color: var(--pro-ink) !important;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ─── Enrolment windows (travel, universities) ─── */
+  html.site :is(.page-detail, .page-course-detail) .uni-enroll-list > * {
+    background: var(--pro-surface) !important;
+    border: 1px solid var(--pro-line) !important;
+    box-shadow: none !important;
+  }
+  html.site :is(.page-detail, .page-course-detail) .uni-enroll-status {
+    background: var(--pro-soft) !important;
+    color: var(--pro-muted) !important;
+    border: 0 !important;
+  }
+  html.site :is(.page-detail, .page-course-detail) .is-open .uni-enroll-status,
+  html.site :is(.page-detail, .page-course-detail) .uni-enroll-status.is-open {
+    background: color-mix(in srgb, #2fa84f 14%, transparent) !important;
+    color: #1f7a37 !important;
+  }
+
+  /* ─── Back link and related items ─── */
+  html.site :is(.page-detail, .page-course-detail) :is(.detail-desk-back, .back-link, .cd-back) {
+    color: var(--pro-muted) !important;
+    font-weight: 600 !important;
+  }
+  html.site :is(.page-detail, .page-course-detail) :is(.detail-desk-back, .back-link, .cd-back):hover {
+    color: var(--pro-ink) !important;
+  }
+  html.site :is(.page-detail, .page-course-detail) .related-block {
+    border-top: 1px solid var(--pro-line);
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    padding-top: clamp(2rem, 4vw, 3rem);
+  }
+  html.site :is(.page-detail, .page-course-detail) :is(.news-card, .tilt-card-inner) {
+    background: var(--pro-surface) !important;
+    border: 1px solid var(--pro-line) !important;
+    border-radius: var(--pro-radius) !important;
+    box-shadow: var(--pro-shadow) !important;
+  }
+}
+@media (min-width: 900px) {
+  /* The course enrol bar lives outside the page box (portal), so target it directly. */
+  html.site body .cd-bar {
+    left: auto !important;
+    right: max(24px, calc((100vw - 1200px) / 2)) !important;
+    bottom: 24px !important;
+    transform: none !important;
+    width: auto !important;
+    max-width: 380px;
+    padding: 0.6rem 0.6rem 0.6rem 1.1rem !important;
+    border-radius: 16px !important;
+    background: var(--pro-surface) !important;
+    border: 1px solid var(--pro-line-strong) !important;
+    box-shadow: var(--pro-shadow-hover) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  html.site body .cd-bar .cd-bar-price {
+    color: var(--pro-ink) !important;
+    font-variant-numeric: tabular-nums;
+  }
+  html.site body .cd-bar .btn {
+    min-height: 44px;
+    border-radius: 12px !important;
+    background: var(--seal, #d62828) !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+}
