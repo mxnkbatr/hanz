@@ -979,3 +979,151 @@ html.site:not([data-theme="dark"]) .app-shell .page-courses .cf-chip.is-on:hover
   color: #ffffff !important;
   box-shadow: none !important;
 }
+
+/* ─── Desktop home: the same calm system as the inner pages (client, 2026-11-21) ─── */
+@media (min-width: 900px) {
+  html.site .page-home .home-below > * {
+    max-width: 1200px;
+    margin-inline: auto !important;
+  }
+  /* One rhythm: every section the same breathing room and heading scale. */
+  html.site .page-home .home-below > :is(.hx-section, .partners) {
+    padding-top: clamp(4rem, 7vw, 6rem) !important;
+    padding-bottom: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  html.site .page-home .home-below > .section-last {
+    padding-bottom: clamp(4rem, 7vw, 6rem) !important;
+  }
+  html.site .page-home :is(.hx-section h2.h2, .hx-display, .partners-h) {
+    font-family: var(--serif, "Lora", serif) !important;
+    font-size: clamp(1.9rem, 2.8vw, 2.6rem) !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.025em !important;
+    line-height: 1.12 !important;
+    color: var(--pro-ink) !important;
+  }
+  html.site .page-home .hx-lead {
+    max-width: 62ch;
+    color: var(--pro-muted) !important;
+    font-size: 1.02rem !important;
+    line-height: 1.7 !important;
+  }
+
+  /* Numbers strip: a quiet card, no coloured top line. */
+  html.site .page-home .stats-strip {
+    margin-top: clamp(3rem, 5vw, 4rem) !important;
+    background: var(--pro-surface) !important;
+    border: 1px solid var(--pro-line) !important;
+    border-radius: 20px !important;
+    box-shadow: var(--pro-shadow) !important;
+  }
+  html.site .page-home .stats-strip::before,
+  html.site .page-home .stats-strip::after,
+  html.site .page-home .stats-strip-inner::before,
+  html.site .page-home .stats-strip-inner::after {
+    display: none !important;
+  }
+
+  /* Services: four even cards. */
+  html.site .page-home .hx-why-card {
+    background: var(--pro-surface) !important;
+    border: 1px solid var(--pro-line) !important;
+    border-radius: var(--pro-radius) !important;
+    box-shadow: var(--pro-shadow) !important;
+    transition: transform 0.24s var(--pro-ease), box-shadow 0.24s var(--pro-ease) !important;
+  }
+  html.site .page-home .hx-why-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--pro-shadow-hover) !important;
+  }
+  html.site .page-home .hx-why-card h3 {
+    font-family: var(--font-ui, inherit) !important;
+    font-size: 1.0625rem !important;
+    font-weight: 650 !important;
+    color: var(--pro-ink) !important;
+  }
+
+  /* Levels: clean cards, no colour stripe or big watermark number. */
+  html.site .page-home .hx-levels {
+    gap: 1.25rem !important;
+  }
+  html.site .page-home .hx-level {
+    position: relative;
+    background: var(--pro-surface) !important;
+    background-image: none !important;
+    border: 1px solid var(--pro-line) !important;
+    border-radius: var(--pro-radius) !important;
+    box-shadow: var(--pro-shadow) !important;
+    color: var(--pro-ink) !important;
+    transition: transform 0.24s var(--pro-ease), box-shadow 0.24s var(--pro-ease), border-color 0.24s var(--pro-ease) !important;
+  }
+  html.site .page-home .hx-level::before,
+  html.site .page-home .hx-level::after {
+    display: none !important;
+  }
+  html.site .page-home .hx-level:hover {
+    transform: translateY(-3px);
+    border-color: var(--pro-line-strong) !important;
+    box-shadow: var(--pro-shadow-hover) !important;
+  }
+  html.site .page-home .hx-level-glyph {
+    position: static !important;
+    display: grid !important;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 0.9rem;
+    border-radius: 12px;
+    background: var(--pro-soft) !important;
+    color: var(--pro-ink) !important;
+    font-size: 1.15rem !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  html.site .page-home .hx-level strong {
+    font-family: var(--font-ui, inherit) !important;
+    font-size: 1.125rem !important;
+    font-weight: 700 !important;
+    color: var(--pro-ink) !important;
+  }
+  html.site .page-home .hx-level-sum {
+    color: var(--pro-muted) !important;
+    font-size: var(--pro-text) !important;
+    line-height: 1.55 !important;
+  }
+  html.site .page-home .hx-level-meta {
+    color: var(--pro-ink) !important;
+    font-weight: 650 !important;
+    font-size: var(--pro-small) !important;
+    font-variant-numeric: tabular-nums;
+  }
+  /* HSK1–5 · 6 months: one calm dark highlight instead of a red gradient banner. */
+  html.site .page-home .hx-level.is-long {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--pro-ink) !important;
+    border-color: var(--pro-ink) !important;
+    color: #fff !important;
+  }
+  html.site .page-home .hx-level.is-long :is(strong, .hx-level-meta) {
+    color: #fff !important;
+  }
+  html.site .page-home .hx-level.is-long .hx-level-meta {
+    font-size: 1.15rem !important;
+  }
+
+  /* News and FAQ cards in the same style. */
+  html.site .page-home :is(.news-card, .hx-news-card, .faq-item, .hx-faq details) {
+    background: var(--pro-surface) !important;
+    border: 1px solid var(--pro-line) !important;
+    border-radius: var(--pro-radius) !important;
+    box-shadow: var(--pro-shadow) !important;
+  }
+  /* Section index ("01 — Үйлчилгээ"): muted, red number. */
+  html.site .page-home .hx-index {
+    color: var(--pro-muted) !important;
+  }
+}

@@ -1,9 +1,7 @@
 import { Link } from "react-router-dom";
 import { PartnersSection } from "../components/PartnersSection";
-import { Marquee } from "../components/Marquee";
 import { SafeImage } from "../components/SafeImage";
 import { DesktopHero } from "../components/DesktopHero";
-import { LearnScroll } from "../components/LearnScroll";
 import { StatsStrip } from "../components/StatsStrip";
 import { MagneticButton } from "../components/MagneticButton";
 import { FloatingGlyphs } from "../components/FloatingGlyphs";
@@ -89,7 +87,7 @@ export function HomeDesktop() {
                   <strong>{loc(lang, t, c.title, c.titleKey)}</strong>
                   {c.sumKey && <span className="hx-level-sum">{t(c.sumKey)}</span>}
                   <span className="hx-level-meta">
-                    {t("course_unit")} · {formatPrice(hskFees.month)}
+                    {t("course_unit")}
                   </span>
                 </Link>
               </StaggerItem>
@@ -102,13 +100,6 @@ export function HomeDesktop() {
             </StaggerItem>
           </Stagger>
         </section>
-
-        {/* 5 · Try a character */}
-        <LearnScroll />
-
-        <Reveal>
-          <Marquee />
-        </Reveal>
 
         {/* 6 · News */}
         <section className="section hx-section">
