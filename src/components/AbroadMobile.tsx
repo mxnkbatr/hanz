@@ -12,8 +12,6 @@ import { hapticLight } from "../lib/native";
 import { getUniversityById } from "../data/content";
 import { CITY_LABELS, cityLabel, universities, type University } from "../data/universities";
 import {
-  polandIntake,
-  polandStudentLife,
   polandTopUniversities,
   thinkPolandUniversities,
   type Txt,
@@ -42,7 +40,7 @@ const majorsOf = (info?: UniInfoCms) =>
  * consultation or ask for an agency agreement.
  */
 export function AbroadMobile() {
-  const { t, lang } = useI18n();
+  const { t } = useI18n();
   const { bundle } = useSiteContent();
   const [params, setParams] = useSearchParams();
   const country: Country = params.get("c") === "pl" ? "pl" : "cn";
@@ -60,32 +58,6 @@ export function AbroadMobile() {
     setParams(next, { replace: true });
     void hapticLight();
   }
-
-  // Guide rows: the admin's own when set, else the academy's existing copy.
-  const guide = useMemo(() => {
-    const custom = ((country === "cn" ? bundle.guideCn : bundle.guidePl) ?? []).filter(
-      (r) => !r.hidden && loc(lang, t, r.label),
-    );
-    if (custom.length) {
-      return custom.map((r) => ({ icon: "info", label: loc(lang, t, r.label), value: loc(lang, t, r.value) }));
-    }
-    return country === "cn"
-      ? [
-          { icon: "lang", label: t("ab_g_lang"), value: t("cmp_c1") },
-          { icon: "tuition", label: t("ab_g_tuition"), value: t("cmp_c2") },
-          { icon: "visa", label: t("ab_g_visa"), value: t("cmp_c3") },
-          { icon: "degree", label: t("ab_g_degree"), value: t("cmp_c4") },
-        ]
-      : [
-          { icon: "lang", label: t("ab_g_lang"), value: t("cmp_p1") },
-          { icon: "tuition", label: t("ab_g_tuition"), value: t("ab_pl_tuition") },
-          { icon: "living", label: t("ab_g_living"), value: t("ab_pl_living") },
-          { icon: "visa", label: t("ab_g_visa"), value: t("cmp_p3") },
-          { icon: "work", label: t("ab_g_work"), value: txt(polandStudentLife[1].body, lang) },
-          { icon: "intake", label: t("ab_g_intake"), value: txt(polandIntake.lead, lang) },
-          { icon: "degree", label: t("ab_g_degree"), value: t("cmp_p4") },
-        ];
-  }, [country, bundle, lang, t]);
 
   if (!track) {
     return (
@@ -151,25 +123,7 @@ export function AbroadMobile() {
             </span>
           </span>
         </button>
-        <div className="ab-action-links">
-          <Link to={`/university/${track.id}`} className="text-link" onClick={() => void hapticLight()}>
-            {t("ab_guide_more")} <i aria-hidden>→</i>
-          </Link>
-          <button type="button" className="ab-help-link" onClick={() => setBooking("contract")}>
-            {t("ab_contract_t")}
-          </button>
-        </div>
       </div>
-
-      {/* Compact facts — full guide lives on the country page */}
-      <ul className="ab-facts" aria-label={t("ab_guide")}>
-        {guide.slice(0, 3).map((r) => (
-          <li key={r.label}>
-            <em>{r.label}</em>
-            <strong>{r.value}</strong>
-          </li>
-        ))}
-      </ul>
 
       {country === "cn" ? <ChinaSchools /> : <PolandSchools />}
 

@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { AppLink } from "../components/AppLink";
 import { CITY_LABELS, cityLabel, universities, type University } from "../data/universities";
 import { IosFilterBar } from "../components/IosFilterBar";
 import { useDesktop } from "../hooks/useDesktop";
@@ -44,38 +43,8 @@ function UniversityDesktop() {
 
   return (
     <PageShell className="page-uni is-app ios-app">
-      <header className="page-head app-head">
-        <Reveal>
-          <h1 className="h1">{t("ab_title")}</h1>
-          <div className="uni-head-actions">
-            <AppLink to="/university/china" className="text-link">
-              {t("country_cn")} <i aria-hidden>→</i>
-            </AppLink>
-            <AppLink to="/university/poland" className="text-link">
-              {t("country_pl")} <i aria-hidden>→</i>
-            </AppLink>
-          </div>
-        </Reveal>
-      </header>
-
-      <Reveal>
-        <AppLink
-          to="/enroll?interest=university"
-          className="course-match glass-panel course-match-compact is-intro uni-desk-cta"
-        >
-          <span className="course-match-compact-row">
-            <span className="course-match-mark" aria-hidden>
-              咨
-            </span>
-            <span className="course-match-compact-copy">
-              <strong>{t("ab_help")}</strong>
-            </span>
-            <span className="btn btn-seal course-match-start-mini">
-              <span>{t("ab_book_t")}</span>
-            </span>
-          </span>
-        </AppLink>
-      </Reveal>
+      {/* Straight to the schools: the title stays for screen readers only. */}
+      <h1 className="sr-only">{t("ab_title")}</h1>
 
       <section className="section tight uni-schools-section section-last">
         <Reveal>

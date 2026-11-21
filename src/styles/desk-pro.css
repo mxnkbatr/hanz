@@ -689,3 +689,9 @@
     display: none !important;
   }
 }
+@media (min-width: 900px) {
+  /* Universities: no page head now, so the search sits just under the header. */
+  html.site .page-uni:not(.page-detail) .uni-schools-section {
+    padding-top: clamp(2rem, 4vw, 3rem) !important;
+  }
+}
