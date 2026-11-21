@@ -12,22 +12,12 @@ import { useSiteContent } from "../lib/SiteContentContext";
 import { loc } from "../lib/i18nText";
 import { toDateTime } from "../lib/date";
 import {
-  featuredUniversities,
   formatPrice,
   hskFees,
-  partnerUniversities,
   servicesMeta,
 } from "../data/content";
-import { UniversityCard } from "../components/UniversityCard";
 
 import { PageShell, Reveal, Stagger, StaggerItem } from "../components/PageShell";
-
-const STEPS = [
-  ["step1", "step1_d"],
-  ["step2", "step2_d"],
-  ["step3", "step3_d"],
-  ["step4", "step4_d"],
-] as const;
 
 const FAQS = [
   ["faq1_q", "faq1_a"],
@@ -116,43 +106,6 @@ export function HomeDesktop() {
           </Stagger>
         </section>
 
-        {/* 5 · Study in China: the four steps + a few universities */}
-        <section className="section hx-section hx-china">
-          <div className="hx-china-copy">
-            <Reveal>
-              <SectionIndex n={3} label={t("hd_china_eyebrow")} />
-              <h2 className="h2">{t("china_home_title")}</h2>
-            </Reveal>
-            <ol className="hx-steps">
-              {STEPS.map(([title, desc], i) => (
-                <li key={title}>
-                  <span className="hx-step-num">{String(i + 1).padStart(2, "0")}</span>
-                  <div>
-                    <strong>{t(title)}</strong>
-                    <span>{t(desc)}</span>
-                  </div>
-                </li>
-              ))}
-            </ol>
-            <Link to="/university" className="btn btn-seal hx-china-cta">
-              <span>{t("uni_more")}</span>
-              <i aria-hidden>→</i>
-            </Link>
-          </div>
-          <div className="hx-unis-wrap">
-            <Stagger className="uni-tiles hx-uni-tiles">
-              {featuredUniversities.map((name) => (
-                <StaggerItem key={name}>
-                  <UniversityCard name={name} />
-                </StaggerItem>
-              ))}
-            </Stagger>
-            <Link to="/university" className="text-link">
-              {t("uni_all_link")} ({partnerUniversities.length}) <i aria-hidden>→</i>
-            </Link>
-          </div>
-        </section>
-
         {/* 5 · Try a character */}
         <LearnScroll />
 
@@ -165,7 +118,7 @@ export function HomeDesktop() {
           <Reveal>
             <div className="section-row">
               <div>
-                <SectionIndex n={4} label={t("nav_news")} />
+                <SectionIndex n={3} label={t("nav_news")} />
                 <h2 className="h2">{t("home_news")}</h2>
               </div>
               <Link to="/medee" className="text-link">
@@ -200,7 +153,7 @@ export function HomeDesktop() {
         <section className="section section-last hx-section hx-faq">
           <Reveal>
             <div className="hx-faq-head">
-              <SectionIndex n={5} label="FAQ" />
+              <SectionIndex n={4} label="FAQ" />
               <h2 className="h2">{t("faq_title")}</h2>
               <p className="lead hx-lead">{t("hd_faq_more")}</p>
               <a className="btn hero-film-ghost" href={`tel:${academy.phoneRaw[0]}`}>
