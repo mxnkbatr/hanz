@@ -77,9 +77,6 @@ export function HomeDesktop() {
                 <h2 className="h2">{t("levels_title")}</h2>
                 <p className="lead hx-lead">{t("levels_lead")}</p>
               </div>
-              <Link to="/pricing" className="text-link">
-                {t("nav_pricing")} <i aria-hidden>→</i>
-              </Link>
             </div>
           </Reveal>
           <Stagger className="hx-levels">

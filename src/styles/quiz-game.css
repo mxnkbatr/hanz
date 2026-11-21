@@ -1,0 +1,337 @@
+/*
+ * Quiz as a game (client, 2026-11-21): chunky, tactile and bright, in Hanz red.
+ * Thick progress bar, 3D option tiles that press down, a bold result bar,
+ * chunky buttons. Phone and desktop. Loaded after the other quiz styles.
+ */
+html.site .page-quiz {
+  --qg-red: #e5322d;
+  --qg-red-edge: #b3201c;
+  --qg-green: #2fa84f;
+  --qg-green-edge: #1f7a37;
+  --qg-green-soft: #e6f7ea;
+  --qg-red-soft: #fdecea;
+  --qg-line: #e3e0da;
+  --qg-line-edge: #d2cec6;
+  --qg-ink: #1d1a16;
+  --qg-muted: #7a756d;
+  --qg-tile: #ffffff;
+  --qg-gold: #f5a524;
+}
+html.site[data-theme="dark"] .page-quiz {
+  --qg-green-soft: rgba(47, 168, 79, 0.16);
+  --qg-red-soft: rgba(229, 50, 45, 0.16);
+  --qg-line: #34312c;
+  --qg-line-edge: #24221f;
+  --qg-ink: #f3f0ea;
+  --qg-muted: #a29d95;
+  --qg-tile: #1b1a18;
+}
+
+/* ─── HUD: close, thick progress, hearts, XP ─── */
+html.site .page-quiz .quiz-hud {
+  gap: 1rem !important;
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0.25rem 0 !important;
+}
+html.site .page-quiz .quiz-hud-close {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 12px !important;
+  background: none !important;
+  border: 0 !important;
+  color: var(--qg-muted) !important;
+  font-size: 1.6rem !important;
+  box-shadow: none !important;
+}
+html.site .page-quiz .quiz-hud-close:hover {
+  color: var(--qg-ink) !important;
+  background: var(--qg-line) !important;
+}
+html.site .page-quiz .quiz-progress {
+  height: 16px !important;
+  border-radius: 999px !important;
+  background: var(--qg-line) !important;
+  overflow: hidden;
+}
+html.site .page-quiz .quiz-progress span {
+  height: 100% !important;
+  border-radius: 999px !important;
+  background: var(--qg-red) !important;
+  position: relative;
+  box-shadow: none !important;
+}
+/* The glossy highlight that makes the bar feel like a toy. */
+html.site .page-quiz .quiz-progress span::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.35);
+}
+html.site .page-quiz .quiz-hearts span {
+  font-size: 1.25rem !important;
+  color: var(--qg-red) !important;
+}
+html.site .page-quiz .quiz-xp-pill {
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: var(--qg-gold) !important;
+  font-weight: 800 !important;
+}
+html.site .page-quiz .quiz-xp-pill :is(em, span) {
+  color: var(--qg-gold) !important;
+  font-style: normal !important;
+  font-weight: 800 !important;
+}
+
+/* ─── The question ─── */
+html.site .page-quiz .quiz-panel.quiz-play {
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+html.site .page-quiz .quiz-meta {
+  font-weight: 700 !important;
+  color: var(--qg-muted) !important;
+}
+html.site .page-quiz .quiz-meta em {
+  font-style: normal !important;
+  font-family: inherit !important;
+  font-size: 1.15rem !important;
+  font-weight: 800 !important;
+  color: var(--qg-ink) !important;
+}
+html.site .page-quiz .quiz-prompt:not(.is-text) {
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 1.25rem 0 1.5rem !important;
+}
+html.site .page-quiz .quiz-prompt:not(.is-text) strong {
+  font-size: clamp(3.4rem, 9vw, 4.8rem) !important;
+  color: var(--qg-ink) !important;
+}
+html.site .page-quiz .quiz-prompt.is-text {
+  background: var(--qg-tile) !important;
+  border: 2px solid var(--qg-line) !important;
+  border-radius: 18px !important;
+  box-shadow: none !important;
+}
+
+/* ─── Answer tiles: 3D edge, press down on click ─── */
+html.site .page-quiz .quiz-options {
+  gap: 0.75rem !important;
+}
+html.site .page-quiz .quiz-option {
+  min-height: 64px !important;
+  padding: 0.85rem 1rem !important;
+  border-radius: 16px !important;
+  background: var(--qg-tile) !important;
+  border: 2px solid var(--qg-line) !important;
+  border-bottom-width: 5px !important;
+  border-bottom-color: var(--qg-line-edge) !important;
+  box-shadow: none !important;
+  color: var(--qg-ink) !important;
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  transition: background-color 0.12s ease, border-color 0.12s ease, transform 0.08s ease !important;
+}
+html.site .page-quiz .quiz-option:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--qg-line) 35%, var(--qg-tile)) !important;
+}
+html.site .page-quiz .quiz-option:active:not(:disabled) {
+  transform: translateY(3px) !important;
+  border-bottom-width: 2px !important;
+  margin-bottom: 3px;
+}
+html.site .page-quiz .quiz-option i {
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 9px !important;
+  border: 2px solid var(--qg-line) !important;
+  background: none !important;
+  color: var(--qg-muted) !important;
+  font-size: 0.8rem !important;
+  font-weight: 800 !important;
+}
+html.site .page-quiz .quiz-option.is-correct {
+  background: var(--qg-green-soft) !important;
+  border-color: var(--qg-green) !important;
+  border-bottom-color: var(--qg-green-edge) !important;
+  color: var(--qg-green-edge) !important;
+}
+html.site .page-quiz .quiz-option.is-correct i {
+  border-color: var(--qg-green) !important;
+  background: var(--qg-green) !important;
+  color: #fff !important;
+}
+html.site .page-quiz .quiz-option.is-wrong {
+  background: var(--qg-red-soft) !important;
+  border-color: var(--qg-red) !important;
+  border-bottom-color: var(--qg-red-edge) !important;
+  color: var(--qg-red-edge) !important;
+}
+html.site .page-quiz .quiz-option.is-wrong i {
+  border-color: var(--qg-red) !important;
+  background: var(--qg-red) !important;
+  color: #fff !important;
+}
+html.site .page-quiz .quiz-option.is-dim {
+  opacity: 0.5 !important;
+}
+html.site[data-theme="dark"] .page-quiz .quiz-option.is-correct {
+  color: #7fe09a !important;
+}
+html.site[data-theme="dark"] .page-quiz .quiz-option.is-wrong {
+  color: #ff8a84 !important;
+}
+
+/* ─── Result bar: bold colour, big icon, chunky button ─── */
+html.site .page-quiz .quiz-dock {
+  border: 0 !important;
+  border-top: 2px solid transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+html.site .page-quiz .quiz-dock.is-ok {
+  background: var(--qg-green-soft) !important;
+  border-top-color: var(--qg-green) !important;
+  color: var(--qg-green-edge) !important;
+}
+html.site .page-quiz .quiz-dock.is-bad {
+  background: var(--qg-red-soft) !important;
+  border-top-color: var(--qg-red) !important;
+  color: var(--qg-red-edge) !important;
+}
+html.site .page-quiz .quiz-dock-copy strong {
+  display: flex !important;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.3rem !important;
+  font-weight: 800 !important;
+}
+html.site .page-quiz .quiz-dock-copy strong::before {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 900;
+}
+html.site .page-quiz .quiz-dock.is-ok .quiz-dock-copy strong::before {
+  content: "✓";
+  background: var(--qg-green);
+}
+html.site .page-quiz .quiz-dock.is-bad .quiz-dock-copy strong::before {
+  content: "✕";
+  background: var(--qg-red);
+}
+html.site .page-quiz .quiz-dock-copy p {
+  font-weight: 700 !important;
+}
+
+/* Chunky primary / secondary buttons (dock, results). */
+html.site .page-quiz :is(.quiz-primary, .quiz-secondary) {
+  min-height: 52px !important;
+  border-radius: 16px !important;
+  font-size: 1rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase;
+  box-shadow: none !important;
+  transition: transform 0.08s ease, filter 0.12s ease !important;
+}
+html.site .page-quiz .quiz-primary {
+  background: var(--qg-red) !important;
+  background-image: none !important;
+  color: #fff !important;
+  border: 0 !important;
+  border-bottom: 5px solid var(--qg-red-edge) !important;
+}
+html.site .page-quiz .quiz-dock.is-ok .quiz-primary {
+  background: var(--qg-green) !important;
+  border-bottom-color: var(--qg-green-edge) !important;
+}
+html.site .page-quiz .quiz-secondary {
+  background: var(--qg-tile) !important;
+  color: var(--qg-ink) !important;
+  border: 2px solid var(--qg-line) !important;
+  border-bottom-width: 5px !important;
+  border-bottom-color: var(--qg-line-edge) !important;
+}
+html.site .page-quiz :is(.quiz-primary, .quiz-secondary):hover {
+  filter: brightness(1.05);
+}
+html.site .page-quiz :is(.quiz-primary, .quiz-secondary):active {
+  transform: translateY(3px);
+  border-bottom-width: 2px !important;
+}
+
+/* ─── Level picker: chunky cards with a 3D edge ─── */
+html.site .page-quiz .quiz-level-card {
+  border: 2px solid var(--qg-line) !important;
+  border-bottom-width: 5px !important;
+  border-bottom-color: var(--qg-line-edge) !important;
+  border-radius: 18px !important;
+  box-shadow: none !important;
+  transition: transform 0.08s ease, background-color 0.12s ease !important;
+}
+html.site .page-quiz .quiz-level-card:hover {
+  transform: none !important;
+  background: color-mix(in srgb, var(--qg-line) 30%, var(--qg-tile)) !important;
+}
+html.site .page-quiz .quiz-level-card:active {
+  transform: translateY(3px) !important;
+  border-bottom-width: 2px !important;
+}
+html.site .page-quiz .quiz-level-glyph {
+  border-radius: 14px !important;
+  background: var(--qg-red) !important;
+  color: #fff !important;
+  box-shadow: inset 0 -4px 0 var(--qg-red-edge) !important;
+  font-weight: 700 !important;
+}
+html.site .page-quiz .quiz-test-card .quiz-level-glyph {
+  background: var(--qg-ink) !important;
+  color: var(--qg-tile) !important;
+  box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.35) !important;
+}
+html.site .page-quiz .quiz-level-play {
+  background: var(--qg-red) !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  box-shadow: inset 0 -3px 0 var(--qg-red-edge) !important;
+}
+
+/* ─── Desktop: the play area is a focused, centred column ─── */
+@media (min-width: 900px) {
+  html.site .page-quiz.is-playing .quiz-shell {
+    max-width: 760px;
+    margin-inline: auto;
+  }
+  html.site .page-quiz .quiz-options:not(.is-text) {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  html.site .page-quiz .quiz-dock {
+    border-radius: 18px !important;
+    padding: 1.1rem 1.25rem !important;
+    grid-template-columns: 1fr auto !important;
+    align-items: center;
+  }
+  html.site .page-quiz .quiz-dock .quiz-primary {
+    min-width: 200px;
+  }
+}

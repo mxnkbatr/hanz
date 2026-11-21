@@ -91,10 +91,8 @@
       (function () {
         if (location.pathname.indexOf("/admin") === 0) return;
         var root = document.documentElement;
+        // Light only (client, 2026-11-21): a dark choice saved earlier is ignored.
         var theme = "light";
-        try {
-          if (localStorage.getItem("hanz-theme") === "dark") theme = "dark";
-        } catch (e) {}
         root.classList.add("site");
         root.setAttribute("data-theme", theme);
       })();

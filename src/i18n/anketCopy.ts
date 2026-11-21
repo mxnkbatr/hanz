@@ -42,7 +42,7 @@ export const anketCopy = {
     ak_q_address: "Оршин суугаа хаяг",
     ak_address_ph: "Дүүрэг, хороо, байр, тоот",
 
-    ak_q_source: "Манай тухай хаанаас мэдсэн бэ?",
+    ak_q_source: "Биднийг хаанаас мэдсэн бэ?",
     ak_src_facebook: "Facebook",
     ak_src_instagram: "Instagram",
     ak_src_friend: "Найз, танил",

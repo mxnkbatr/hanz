@@ -48,7 +48,9 @@ function directionFor(prev: string, next: string, navType: string): Dir {
 const iosSpring = { type: "spring" as const, stiffness: 380, damping: 40, mass: 0.9 };
 const instant = { duration: 0 };
 
-const softSpring = { type: "spring" as const, stiffness: 520, damping: 46, mass: 0.8 };
+// One smooth curve for every page change: about a third of a second, soft ease-out,
+// neither snappy nor slow (client, 2026-11-21).
+const smooth = { type: "tween" as const, duration: 0.34, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] };
 
 /**
  * Pages have see-through backgrounds, so two layers must never sit on top of each
@@ -60,7 +62,7 @@ const stackVariants = {
     // Tab fades (Нүүр ↔ Зуучлал…): never start at opacity 0 — Safari often
     // leaves the new layer blank/white if the spring never paints the end state.
     dir === "fade"
-      ? { opacity: 1, x: 0, y: 0, zIndex: 2 }
+      ? { opacity: 1, x: 0, y: 8, zIndex: 2 }
       : {
           opacity: 0.001,
           x: dir === "push" ? 28 : -28,
@@ -71,7 +73,7 @@ const stackVariants = {
     x: 0,
     y: 0,
     opacity: 1,
-    transition: { x: softSpring, y: softSpring, opacity: { duration: 0.18 }, zIndex: instant },
+    transition: { x: smooth, y: smooth, opacity: { duration: 0.28, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }, zIndex: instant },
     // Force visible end state — Safari + framer-motion can stick at opacity 0.
     transitionEnd: { zIndex: 0, opacity: 1, x: 0, y: 0 },
   },
@@ -86,7 +88,7 @@ const stackVariants = {
       x: iosSpring,
       y: instant,
       zIndex: instant,
-      opacity: { duration: dir === "pop" && isNativeApp() ? 0.3 : 0.1 },
+      opacity: { duration: dir === "pop" && isNativeApp() ? 0.3 : 0.18, ease: [0.4, 0, 1, 1] as [number, number, number, number] },
     },
   }),
 };

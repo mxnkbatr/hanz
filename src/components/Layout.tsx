@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { NavLink, useLocation, useNavigationType } from "react-router-dom";
 import {
-  AnimatePresence,
   LayoutGroup,
   motion,
   useReducedMotion,
@@ -18,8 +17,6 @@ import {
   IconChevronBack,
   IconClose,
   IconMenu,
-  IconMoon,
-  IconSun,
   NavIcon,
 } from "./Icons";
 import { Logo } from "./Logo";
@@ -58,7 +55,6 @@ export function Layout() {
 
   // Light/dark site theme for the public site only; the admin keeps its own.
   const themeState = useSiteTheme();
-  const { theme, toggle: toggleTheme } = themeState;
 
   // Every route starts at the top (below); stop the browser restoring an old offset on Back.
   useEffect(() => {
@@ -68,13 +64,13 @@ export function Layout() {
   useEffect(() => {
     // Phones go Back to where the reader left off; everything else starts at the top.
     const y = navType === "POP" && !desktop ? recalledScroll(location.key) : 0;
-    window.scrollTo({ top: y, left: 0, behavior: "auto" });
+    window.scrollTo({ top: y, left: 0, behavior: "instant" });
     setRouteTick((n) => n + 1);
     setTabCompact(false);
     // Re-measure header state (film behind it?) once the new page has painted.
     const raf = requestAnimationFrame(() => {
       // A page still short on the first pass gets its offset once it has grown.
-      if (y && Math.abs(window.scrollY - y) > 2) window.scrollTo({ top: y, left: 0, behavior: "auto" });
+      if (y && Math.abs(window.scrollY - y) > 2) window.scrollTo({ top: y, left: 0, behavior: "instant" });
       window.dispatchEvent(new Event("scroll"));
     });
     return () => cancelAnimationFrame(raf);
@@ -235,29 +231,6 @@ export function Layout() {
                   ))}
                 </div>
               )}
-              <button
-                type="button"
-                className="topbar-icon-btn theme-toggle"
-                aria-label={t(theme === "dark" ? "theme_light" : "theme_dark")}
-                title={t(theme === "dark" ? "theme_light" : "theme_dark")}
-                onClick={() => {
-                  toggleTheme();
-                  void hapticLight();
-                }}
-              >
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.span
-                    key={theme}
-                    style={{ display: "grid" }}
-                    initial={{ rotate: -90, scale: 0.5, opacity: 0 }}
-                    animate={{ rotate: 0, scale: 1, opacity: 1 }}
-                    exit={{ rotate: 90, scale: 0.5, opacity: 0 }}
-                    transition={{ duration: 0.25, ease }}
-                  >
-                    {theme === "dark" ? <IconSun /> : <IconMoon />}
-                  </motion.span>
-                </AnimatePresence>
-              </button>
 
               {/* No sign-in on the public site: staff reach /auth by its address. */}
 

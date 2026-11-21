@@ -26,5 +26,5 @@ export function unlockBodyScroll() {
   body.style.right = "";
   body.style.width = "";
   body.style.overflow = "";
-  window.scrollTo(0, savedY);
+  window.scrollTo({ top: savedY, left: 0, behavior: "instant" });
 }

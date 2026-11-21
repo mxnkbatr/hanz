@@ -4,7 +4,6 @@ import { LayoutGroup, motion } from "framer-motion";
 import { useI18n } from "../i18n/I18nContext";
 import { hapticLight } from "../lib/native";
 import { navSpring } from "../lib/motion";
-import { useTheme } from "../lib/theme";
 
 /** iOS Settings-style grouped lists, shared by the phone menu sheet and Profile. */
 
@@ -98,21 +97,7 @@ export function LanguageRow({ id }: { id: string }) {
 }
 
 export function DarkModeRow() {
-  const { t } = useI18n();
-  const { theme, toggle } = useTheme();
-  return (
-    <label className="sl-row sl-row-static">
-      <span className="sl-label">{t("theme_dark")}</span>
-      <input
-        type="checkbox"
-        className="sl-switch"
-        role="switch"
-        checked={theme === "dark"}
-        onChange={() => {
-          toggle();
-          void hapticLight();
-        }}
-      />
-    </label>
-  );
+  // Light only (client, 2026-11-21).
+  return null;
 }
+
