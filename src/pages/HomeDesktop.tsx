@@ -52,17 +52,6 @@ export function HomeDesktop() {
       <DesktopHero ready />
 
       <div className="home-below">
-        {/* 1 · About */}
-        <section className="section hx-section hx-about">
-          <Reveal>
-            <SectionIndex n={1} label={t("about_title")} />
-            <h2 className="h2">{t("about_title")}</h2>
-          </Reveal>
-          <Reveal className="hx-about-copy">
-            <p className="lead">{t("about_body")}</p>
-          </Reveal>
-        </section>
-
         {/* 2 · Numbers */}
         <StatsStrip />
 
@@ -72,7 +61,7 @@ export function HomeDesktop() {
         {/* 3 · Services: heading held on the left, four cards on the right */}
         <section className="section hx-section hx-why-wrap">
           <Reveal className="hx-why-head">
-            <SectionIndex n={2} label={t("svc_title")} />
+            <SectionIndex n={1} label={t("svc_title")} />
             <h2 className="hx-display">{t("svc_title")}</h2>
           </Reveal>
           <Stagger className="hx-why">
@@ -83,7 +72,6 @@ export function HomeDesktop() {
                     {s.icon}
                   </span>
                   <h3>{t(s.titleKey)}</h3>
-                  <p>{t(s.descKey)}</p>
                 </Link>
               </StaggerItem>
             ))}
@@ -95,7 +83,7 @@ export function HomeDesktop() {
           <Reveal>
             <div className="section-row">
               <div>
-                <SectionIndex n={3} label={t("courses_title")} />
+                <SectionIndex n={2} label={t("courses_title")} />
                 <h2 className="h2">{t("levels_title")}</h2>
                 <p className="lead hx-lead">{t("levels_lead")}</p>
               </div>
@@ -132,7 +120,7 @@ export function HomeDesktop() {
         <section className="section hx-section hx-china">
           <div className="hx-china-copy">
             <Reveal>
-              <SectionIndex n={4} label={t("hd_china_eyebrow")} />
+              <SectionIndex n={3} label={t("hd_china_eyebrow")} />
               <h2 className="h2">{t("china_home_title")}</h2>
               <p className="lead hx-lead">{t("china_home_lead")}</p>
               <p className="lead hx-lead">{t("china_home_scholar")}</p>
@@ -179,7 +167,7 @@ export function HomeDesktop() {
           <Reveal>
             <div className="section-row">
               <div>
-                <SectionIndex n={5} label={t("nav_news")} />
+                <SectionIndex n={4} label={t("nav_news")} />
                 <h2 className="h2">{t("home_news")}</h2>
               </div>
               <Link to="/medee" className="text-link">
@@ -214,7 +202,7 @@ export function HomeDesktop() {
         <section className="section section-last hx-section hx-faq">
           <Reveal>
             <div className="hx-faq-head">
-              <SectionIndex n={6} label="FAQ" />
+              <SectionIndex n={5} label="FAQ" />
               <h2 className="h2">{t("faq_title")}</h2>
               <p className="lead hx-lead">{t("hd_faq_more")}</p>
               <a className="btn hero-film-ghost" href={`tel:${academy.phoneRaw[0]}`}>
