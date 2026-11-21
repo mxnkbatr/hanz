@@ -1,14 +1,8 @@
-import { useState, type FormEvent } from "react";
 import { createPortal } from "react-dom";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { formatPrice, getCourseById } from "../data/content";
 import { courseFacts, shortDate } from "../data/courseFacts";
 import { plansForLevel, programFromInterest, programs } from "../data/enroll";
-import {
-  addCourseComment,
-  getCourseComments,
-  type CourseComment,
-} from "../lib/courseComments";
 import { PageShell, Reveal } from "../components/PageShell";
 import { SafeImage } from "../components/SafeImage";
 import { MemberAvatar } from "../components/TeachersSection";
@@ -29,9 +23,6 @@ export function CourseDetail() {
   const { t, lang } = useI18n();
   const { coursesLive, kidsLevelsLive, teamLive } = useSiteContent();
   const course = (coursesLive.find((c) => c.id === id) ?? getCourseById(id)) as CourseLive | undefined;
-
-  const [comments, setComments] = useState<CourseComment[]>(() => (id ? getCourseComments(id) : []));
-  const [commentStatus, setCommentStatus] = useState<"idle" | "ok">("idle");
 
   if (!course) {
     // Retired course ids (classroom, online, kids…) land on the course list.
@@ -79,24 +70,6 @@ export function CourseDetail() {
   const isIntensive = program?.id === "intensive";
   const priceLabel = (amount: number) =>
     plans.length > 1 ? t("wz_from").replace("{p}", formatPrice(amount)) : formatPrice(amount);
-
-  function onComment(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const name = String(data.get("cname") || "").trim();
-    const text = String(data.get("ctext") || "").trim();
-    if (!name || !text || !course) return;
-    const next = addCourseComment(course.id, { name, text });
-    setComments((prev) => [next, ...prev]);
-    setCommentStatus("ok");
-    e.currentTarget.reset();
-    void hapticLight();
-  }
-
-  const dateFmt = new Intl.DateTimeFormat(lang === "zh" ? "zh-CN" : lang === "en" ? "en" : "mn", {
-    month: "short",
-    day: "numeric",
-  });
 
   return (
     <PageShell className="page-courses page-course-detail cd">
@@ -180,36 +153,6 @@ export function CourseDetail() {
                     <SchedRow icon="format" label={t("cd_format")} value={t(`fmt_${facts.format}`)} />
                   )}
                   {levelText && <SchedRow icon="level" label={t("cd_level")} value={levelText} />}
-                  {course.seatsLeft != null && (
-                    <li className="cd-sched-row is-seats">
-                      <span className="cd-sched-icon" aria-hidden>
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                          <circle cx="9" cy="8" r="3" />
-                          <path d="M3.5 19c.6-3 2.8-4.5 5.5-4.5s4.9 1.5 5.5 4.5M16 5.5a3 3 0 0 1 0 5.5M18 14.8c1.4.6 2.3 1.9 2.6 4.2" />
-                        </svg>
-                      </span>
-                      <span className="cd-sched-label">{t("cd_seats")}</span>
-                      <span className="cd-sched-value">
-                        {course.seatsLeft <= 0
-                          ? t("mh_full")
-                          : course.seatsTotal
-                            ? t("cd_seats_val")
-                                .replace("{l}", String(course.seatsLeft))
-                                .replace("{t}", String(course.seatsTotal))
-                            : t("mh_seats_left").replace("{n}", String(course.seatsLeft))}
-                      </span>
-                      {course.seatsTotal ? (
-                        <span className="cd-seats-bar" aria-hidden>
-                          <i
-                            className={course.seatsLeft <= 3 ? "is-low" : ""}
-                            style={{
-                              width: `${Math.min(100, Math.max(4, ((course.seatsTotal - Math.max(0, course.seatsLeft)) / course.seatsTotal) * 100))}%`,
-                            }}
-                          />
-                        </span>
-                      ) : null}
-                    </li>
-                  )}
                   {fromPrice > 0 && (
                     <li className="cd-sched-row is-price">
                       <span className="cd-sched-icon" aria-hidden>
@@ -295,84 +238,6 @@ export function CourseDetail() {
             </Reveal>
           )}
 
-          {plans.length > 0 && (
-            <Reveal>
-              <section className="cd-group">
-                <h2 className="cd-label">{course.level ? t("course_fees_title") : t("enroll_plan")}</h2>
-                <ul className="cd-card cd-list">
-                  {plans.map((p) => {
-                    const cut =
-                      discount > 0 ? Math.round(p.amount * (1 - discount / 100)) : 0;
-                    return (
-                      <li key={p.id} className="cd-row">
-                        <span>{t(p.labelKey)}</span>
-                        <strong className={cut > 0 ? "cd-price-sale" : undefined}>
-                          {cut > 0 ? (
-                            <>
-                              <s>{formatPrice(p.amount)}</s>
-                              {formatPrice(cut)}
-                            </>
-                          ) : (
-                            formatPrice(p.amount)
-                          )}
-                        </strong>
-                      </li>
-                    );
-                  })}
-                  {program && program.schedules.length > 1 &&
-                    program.schedules.map((s) => (
-                      <li key={s.id} className="cd-row is-muted">
-                        <span>{t(s.labelKey)}</span>
-                      </li>
-                    ))}
-                </ul>
-              </section>
-            </Reveal>
-          )}
-
-          {course.ctaKey && (
-            <Reveal>
-              <section className="cd-group cd-cta">
-                <p>{t(course.ctaKey)}</p>
-                <Link to={enrollTo} className="btn btn-seal" onClick={() => void hapticLight()}>
-                  <span>{t("register_cta")}</span>
-                </Link>
-              </section>
-            </Reveal>
-          )}
-
-          <Reveal>
-            <section className="cd-group">
-              <h2 className="cd-label">{t("course_reviews")}</h2>
-              {comments.length > 0 && (
-                <ul className="cd-card cd-comments">
-                  {comments.map((c) => (
-                    <li key={c.id}>
-                      <div>
-                        <strong>{c.name}</strong>
-                        <em>{dateFmt.format(new Date(c.createdAt))}</em>
-                      </div>
-                      <p>{c.text}</p>
-                    </li>
-                  ))}
-                </ul>
-              )}
-              <form className="cd-card course-comment-form" onSubmit={onComment}>
-                <label>
-                  <span>{t("kids_comments_name")}</span>
-                  <input name="cname" required autoComplete="name" maxLength={80} />
-                </label>
-                <label>
-                  <span>{t("kids_comments_text")}</span>
-                  <textarea name="ctext" rows={3} required placeholder={t("kids_comments_ph")} maxLength={1000} />
-                </label>
-                {commentStatus === "ok" && <p className="course-comment-ok">{t("kids_comments_ok")}</p>}
-                <button type="submit" className="btn btn-ink">
-                  <span>{t("kids_comments_send")}</span>
-                </button>
-              </form>
-            </section>
-          </Reveal>
         </div>
       </div>
 
