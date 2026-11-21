@@ -1,5 +1,5 @@
 import { Link, Navigate, useParams } from "react-router-dom";
-import { getTravelById, uniEnrollStatusKey } from "../data/content";
+import { getTravelById } from "../data/content";
 import { EnrollDock } from "../components/EnrollDock";
 import { PageShell, Reveal } from "../components/PageShell";
 import { SafeImage } from "../components/SafeImage";
@@ -9,7 +9,6 @@ import { useSiteContent } from "../lib/SiteContentContext";
 import type { TravelLive } from "../lib/cms";
 import { loc } from "../lib/i18nText";
 import { PhotoGlow } from "../components/PhotoGlow";
-import { hapticLight } from "../lib/native";
 
 export function TravelDetail() {
   const { id = "" } = useParams();
@@ -97,48 +96,6 @@ export function TravelDetail() {
               </section>
             )}
 
-            {windows.length > 0 && (
-              <section
-                className="travel-desk-block"
-                aria-labelledby="travel-enroll-title"
-              >
-                <div className="uni-enroll-head">
-                  <h2 id="travel-enroll-title" className="desk-detail-label">
-                    {t("travel_enroll_title")}
-                  </h2>
-                  <p>{t("travel_enroll_lead")}</p>
-                </div>
-                <ul className="uni-enroll-list">
-                  {windows.map((w) => (
-                    <li
-                      key={w.id}
-                      className={`uni-enroll-row is-${w.status}`}
-                    >
-                      <div className="uni-enroll-row-main">
-                        <strong>{t(w.labelKey)}</strong>
-                        <em>{t(w.dateKey)}</em>
-                      </div>
-                      <span className={`uni-enroll-status is-${w.status}`}>
-                        {t(uniEnrollStatusKey(w.status))}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            )}
-
-            <div className="desk-detail-actions travel-desk-cta">
-              <Link
-                to={enrollTo}
-                className="btn btn-seal"
-                onClick={() => void hapticLight()}
-              >
-                <span>{t("uni_enroll_cta")}</span>
-              </Link>
-              <span className="travel-desk-cta-status">
-                {hasOpen ? t("uni_status_open") : t("uni_status_soon")}
-              </span>
-            </div>
           </div>
         </Reveal>
       </article>

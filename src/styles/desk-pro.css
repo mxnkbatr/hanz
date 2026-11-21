@@ -910,3 +910,72 @@
     box-shadow: none !important;
   }
 }
+
+/* Smooth scrolling for in-page jumps and "back to top", on every screen
+   (client, 2026-11-21). Page changes still jump to the top instantly. */
+html.site {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.site {
+    scroll-behavior: auto;
+  }
+}
+
+/* ─── Phones: the same calm look as the desktop (client, 2026-11-21) ─── */
+@media (max-width: 899px) {
+  html.site .ambient {
+    display: none !important;
+  }
+  html.site body,
+  html.site .app-shell {
+    background: #ffffff !important;
+  }
+  /* Filter chips: neutral, the active one ink. */
+  html.site .app-shell :is(.ios26-filter-chip, .cf-chip) {
+    background: #ffffff !important;
+    border: 1px solid rgba(20, 18, 16, 0.14) !important;
+    color: #16130f !important;
+    box-shadow: none !important;
+  }
+  html.site .app-shell .ios26-filter-pill {
+    background: #16130f !important;
+    box-shadow: none !important;
+  }
+  html.site .app-shell .ios26-filter-chip.is-active :is(.ios26-filter-label, .ios26-filter-count),
+  html.site .app-shell .cf-chip.is-on {
+    color: #ffffff !important;
+  }
+  html.site .app-shell .cf-chip.is-on {
+    background: #16130f !important;
+    border-color: #16130f !important;
+  }
+  /* Search field: white with a thin edge. */
+  html.site .app-shell .ios-search {
+    background: #ffffff !important;
+    border: 1px solid rgba(20, 18, 16, 0.14) !important;
+    box-shadow: none !important;
+  }
+  /* Photo badges: small, white, quiet. */
+  html.site .app-shell :is(.ios-badge, .uni-tile-tag, .shop-media .tag, .badge-stock, .course-product-tag, .cp-seats, .ab-product-tag) {
+    background: rgba(255, 255, 255, 0.94) !important;
+    color: #16130f !important;
+    border: 0 !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  /* Cards: one soft edge. */
+  html.site .app-shell :is(.ios-card, .uni-tile, .tilt-card-inner, .course-product-card, .ab-product-card, .partner-card, .why-card, .about-result, .home-branch-card) {
+    border: 1px solid rgba(20, 18, 16, 0.08) !important;
+    box-shadow: 0 1px 2px rgba(20, 18, 16, 0.04), 0 8px 22px -16px rgba(20, 18, 16, 0.22) !important;
+  }
+}
+/* Courses chips: beat the older page-specific red rule (same specificity, loaded later). */
+html.site:not([data-theme="dark"]) .app-shell .page-courses .cf-chip.is-on,
+html.site:not([data-theme="dark"]) .app-shell .page-courses .cf-chip.is-on:hover {
+  background: #16130f !important;
+  border-color: #16130f !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}

@@ -14,15 +14,17 @@ export const navSpring = {
  * Exit is short so wait-mode feels snappy; enter is slightly longer.
  */
 // Desktop route change: short fade only — a rising slide felt odd between pages.
+// Smooth, not snappy and not slow: a short rise and fade in, a quick fade out.
 export const pageTransition = {
-  initial: { opacity: 0 },
+  initial: { opacity: 0, y: 8 },
   animate: {
     opacity: 1,
-    transition: { duration: 0.16, ease: easeOut },
+    y: 0,
+    transition: { duration: 0.34, ease: easeOut },
   },
   exit: {
     opacity: 0,
-    transition: { duration: 0.1, ease },
+    transition: { duration: 0.18, ease },
   },
 };
 

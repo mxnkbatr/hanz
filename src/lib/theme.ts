@@ -12,12 +12,9 @@ export const useTheme = () => useContext(ThemeContext);
 const KEY = "hanz-theme";
 const BAR = { light: "#f5f5f7", dark: "#0a0a0c" } as const;
 
+/** The site is light only (client, 2026-11-21); an old saved "dark" is ignored. */
 function stored(): Theme {
-  try {
-    return localStorage.getItem(KEY) === "dark" ? "dark" : "light";
-  } catch {
-    return "light";
-  }
+  return "light";
 }
 
 /**
@@ -48,10 +45,8 @@ export function useSiteTheme() {
     }
   }, [theme]);
 
-  const toggle = useCallback(
-    () => setTheme((t) => (t === "dark" ? "light" : "dark")),
-    [],
-  );
+  // Kept so callers still compile; there is no dark mode to switch to.
+  const toggle = useCallback(() => setTheme("light"), []);
 
   return useMemo(() => ({ theme, toggle }), [theme, toggle]);
 }
