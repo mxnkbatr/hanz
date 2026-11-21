@@ -658,3 +658,34 @@
     display: none !important;
   }
 }
+
+/* ─── Desktop: one white background everywhere, like the header (client, 2026-11-21) ─── */
+@media (min-width: 900px) {
+  html.site:not([data-theme="dark"]) {
+    --pro-bg: #ffffff;
+    --pro-soft: #f4f3f0;
+  }
+  html.site .ambient {
+    display: none !important;
+  }
+  html.site:not([data-theme="dark"]) body,
+  html.site:not([data-theme="dark"]) .app-shell,
+  html.site:not([data-theme="dark"]) .app-shell .site-footer,
+  html.site:not([data-theme="dark"]) .app-shell .home-below {
+    background: #ffffff !important;
+  }
+  html.site[data-theme="dark"] body,
+  html.site[data-theme="dark"] .app-shell {
+    background: var(--pro-bg) !important;
+  }
+  /* On white, cards keep a clear edge. */
+  html.site:not([data-theme="dark"]) {
+    --pro-line: rgba(20, 18, 16, 0.09);
+  }
+}
+@media (min-width: 900px) {
+  /* Detail pages: no blurred photo glow behind the content, just white. */
+  html.site:not([data-theme="dark"]) :is(.photo-glow, .cd-glow, .cd-ambient) {
+    display: none !important;
+  }
+}
