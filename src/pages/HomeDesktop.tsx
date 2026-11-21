@@ -72,7 +72,6 @@ export function HomeDesktop() {
                     {s.icon}
                   </span>
                   <h3>{t(s.titleKey)}</h3>
-                  <p>{t(s.descKey)}</p>
                 </Link>
               </StaggerItem>
             ))}
