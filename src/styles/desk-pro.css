@@ -528,3 +528,133 @@
     color: #f3f0ea !important;
   }
 }
+
+/* ─── Desktop header: a steady, solid bar (client, 2026-11-21) ─── */
+@media (min-width: 900px) {
+  /* Never slide away while reading. */
+  html.site .app-shell .topbar.is-tucked {
+    transform: none !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+  html.site .app-shell .topbar {
+    padding: 0 !important;
+  }
+  html.site .app-shell .topbar .topbar-stack {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 0 !important;
+  }
+  /* Full-width bar; the contents keep the 1200px page width. */
+  html.site .app-shell .topbar .topbar-capsule {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 68px !important;
+    margin: 0 !important;
+    padding: 0 max(24px, calc((100vw - 1200px) / 2)) !important;
+    border-radius: 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid var(--pro-line, rgba(20, 18, 16, 0.08)) !important;
+    background: color-mix(in srgb, var(--pro-bg, #fafaf8) 88%, transparent) !important;
+    -webkit-backdrop-filter: saturate(1.4) blur(16px) !important;
+    backdrop-filter: saturate(1.4) blur(16px) !important;
+    box-shadow: none !important;
+  }
+  html.site .app-shell .topbar.is-scrolled .topbar-capsule {
+    box-shadow: 0 6px 24px -18px rgba(20, 18, 16, 0.35) !important;
+  }
+  /* Over the dark home film: clear bar, white text, no line. */
+  html.site .app-shell .topbar.is-on-film .topbar-capsule {
+    background: transparent !important;
+    border-bottom-color: transparent !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+  }
+  html.site .app-shell .topbar .topbar-route-line {
+    display: none !important;
+  }
+
+  /* Links: grey, ink on hover; the active page gets a red underline. */
+  html.site .app-shell .topbar .topnav {
+    gap: 0.25rem !important;
+  }
+  html.site .app-shell .topbar .topnav-link {
+    position: relative;
+    padding: 0.55rem 0.8rem !important;
+    font-size: 0.9375rem !important;
+    font-weight: 500 !important;
+    color: var(--pro-muted, #6e6a64) !important;
+    background: none !important;
+    transition: color 0.18s ease !important;
+  }
+  html.site .app-shell .topbar .topnav-link:hover,
+  html.site .app-shell .topbar .topnav-link.is-open {
+    color: var(--pro-ink, #16130f) !important;
+  }
+  html.site .app-shell .topbar .topnav-link.is-active {
+    color: var(--pro-ink, #16130f) !important;
+    font-weight: 650 !important;
+  }
+  html.site .app-shell .topbar .topnav-hover {
+    display: none !important;
+  }
+  html.site body .app-shell .topbar .topnav-dot {
+    inset: auto 0.8rem 0.15rem !important;
+    left: 0.8rem !important;
+    right: 0.8rem !important;
+    bottom: 0.15rem !important;
+    width: auto !important;
+    height: 2px !important;
+    margin: 0 !important;
+    border-radius: 2px !important;
+    background: var(--seal, #d62828) !important;
+    box-shadow: none !important;
+    z-index: 0 !important;
+  }
+  html.site .app-shell .topbar.is-on-film .topnav-link {
+    color: rgba(255, 255, 255, 0.78) !important;
+  }
+  html.site .app-shell .topbar.is-on-film :is(.topnav-link:hover, .topnav-link.is-active) {
+    color: #fff !important;
+  }
+
+  /* Right side: compact tools, one solid call to action. */
+  html.site .app-shell .topbar .topbar-tools {
+    background: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    gap: 0.25rem !important;
+  }
+  html.site .app-shell .topbar :is(.topbar-icon-btn, .topbar-lang button) {
+    background: none !important;
+    border: 1px solid transparent !important;
+    box-shadow: none !important;
+    color: var(--pro-muted, #6e6a64) !important;
+  }
+  html.site .app-shell .topbar :is(.topbar-icon-btn:hover, .topbar-lang button:hover) {
+    color: var(--pro-ink, #16130f) !important;
+    border-color: var(--pro-line, rgba(20, 18, 16, 0.08)) !important;
+  }
+  html.site .app-shell .topbar .topbar-lang button.is-active {
+    color: var(--pro-ink, #16130f) !important;
+    border-color: var(--pro-line-strong, rgba(20, 18, 16, 0.14)) !important;
+    background: var(--pro-surface, #fff) !important;
+  }
+  html.site .app-shell .topbar .topbar-cta {
+    min-height: 40px !important;
+    padding: 0 1.1rem !important;
+    border-radius: 10px !important;
+    background: var(--seal, #d62828) !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    font-weight: 650 !important;
+  }
+  html.site .app-shell .topbar .topbar-cta:hover {
+    background: color-mix(in srgb, var(--seal, #d62828) 86%, #000) !important;
+  }
+  html.site .app-shell .topbar .topbar-cta::before,
+  html.site .app-shell .topbar .topbar-cta::after {
+    display: none !important;
+  }
+}
