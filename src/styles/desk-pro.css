@@ -612,10 +612,11 @@
     box-shadow: none !important;
     z-index: 0 !important;
   }
-  html.site .app-shell .topbar.is-on-film .topnav-link {
+  html.site .app-shell .topbar.is-on-film .topnav-link,
+  html.site .app-shell .topbar.is-on-film .topbar-icon-btn {
     color: rgba(255, 255, 255, 0.78) !important;
   }
-  html.site .app-shell .topbar.is-on-film :is(.topnav-link:hover, .topnav-link.is-active) {
+  html.site .app-shell .topbar.is-on-film :is(.topnav-link:hover, .topnav-link.is-active, .topnav-link.is-open, .topbar-icon-btn:hover) {
     color: #fff !important;
   }
 
