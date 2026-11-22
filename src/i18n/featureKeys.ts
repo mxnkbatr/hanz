@@ -239,7 +239,7 @@ export const featureKeys = {
     contact_lead: "Зөвлөгөө, сургалт, дэлгүүрийн асуултаа илгээнэ үү.",
     footer_address: "Хаяг",
     footer_hours: "Цагийн хуваарь",
-    nav_contact: "Холбоо",
+    nav_contact: "Холбоо барих",
     meta_contact: "Холбоо",
     nav_profile: "Профайл",
     nav_menu: "Цэс",
