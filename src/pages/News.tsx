@@ -8,6 +8,7 @@ import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { loc } from "../lib/i18nText";
 import { hapticLight } from "../lib/native";
+import { PageBanner } from "../components/PageBanner";
 
 const filters: NewsTag[] = ["all", "tag_study", "tag_course", "tag_academy"];
 
@@ -56,7 +57,8 @@ export function News() {
 
   return (
     <PageShell className="page-news is-app ios-app">
-      <header className="page-head app-head">
+      <PageBanner eyebrow={t("pb_brand")} title={t("news_title")} lead={t("news_lead")} image="/images/news-scholarship.webp" />
+      <header className="page-head app-head has-banner">
         <Reveal>
           <p className="eyebrow desk-only">{t("nav_news")}</p>
           <h1 className="h1">{t("news_title")}</h1>

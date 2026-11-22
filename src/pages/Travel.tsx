@@ -7,6 +7,7 @@ import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { loc } from "../lib/i18nText";
 import { hapticLight } from "../lib/native";
+import { PageBanner } from "../components/PageBanner";
 
 type TravelFilter =
   | "all"
@@ -64,7 +65,8 @@ export function Travel() {
 
   return (
     <PageShell className="page-travel is-app ios-app">
-      <header className="page-head app-head">
+      <PageBanner eyebrow={t("pb_brand")} title={t("travel_page")} lead={t("travel_lead")} image="/images/hero-palace.webp" />
+      <header className="page-head app-head has-banner">
         <Reveal>
           <h1 className="h1">{t("travel_page")}</h1>
         </Reveal>

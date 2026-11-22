@@ -8,6 +8,7 @@ import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { loc } from "../lib/i18nText";
 import { ease } from "../lib/motion";
+import { PageBanner } from "../components/PageBanner";
 
 const cats: ShopCat[] = ["all", "porcelain", "books"];
 
@@ -62,7 +63,8 @@ export function Shop() {
 
   return (
     <PageShell className="page-shop is-app ios-app">
-      <header className="page-head app-head">
+      <PageBanner eyebrow={t("pb_brand")} title={t("shop_page")} lead={t("pb_shop_lead")} image="/images/shop-hero.webp" />
+      <header className="page-head app-head has-banner">
         <Reveal>
           <h1 className="h1">{t("shop_page")}</h1>
         </Reveal>

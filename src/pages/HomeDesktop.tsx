@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { PartnersSection } from "../components/PartnersSection";
 import { SafeImage } from "../components/SafeImage";
-import { DesktopHero } from "../components/DesktopHero";
+import { HomeBanner } from "../components/HomeBanner";
 import { StatsStrip } from "../components/StatsStrip";
 import { MagneticButton } from "../components/MagneticButton";
 import { FloatingGlyphs } from "../components/FloatingGlyphs";
@@ -36,8 +36,7 @@ export function HomeDesktop() {
 
   return (
     <PageShell className="page-home">
-      {/* No separate intro screen: the hero's letterbox opening is the intro. */}
-      <DesktopHero ready />
+      <HomeBanner />
 
       <div className="home-below">
         {/* 2 · Numbers */}
