@@ -37,7 +37,6 @@ const routeMetaKey: Record<string, string> = {
   "/translation": "nav_translation",
 };
 
-const BRAND = "Ханз Академи";
 
 function setMeta(attr: "name" | "property", key: string, content: string) {
   let el = document.head.querySelector(`meta[${attr}="${key}"]`);
@@ -68,6 +67,8 @@ function setPageJsonLd(data: Record<string, unknown> | undefined) {
 export function useDocumentMeta() {
   const { pathname } = useLocation();
   const { t, lang } = useI18n();
+  // Page-title brand in the visitor's language (Ханз Академи / Hanz Academy / 汉兹学院).
+  const BRAND = t("pb_brand");
   const {
     coursesLive,
     newsLive,
