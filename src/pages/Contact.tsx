@@ -67,7 +67,7 @@ export function Contact() {
               </span>
               <span className="app-row-body">
                 <strong>{t("hours_label")}</strong>
-                <em>{academy.hours}</em>
+                <em>{lang === "mn" ? academy.hours : t("contact_hours")}</em>
               </span>
             </div>
             <div className="app-row app-row-static">
@@ -76,7 +76,7 @@ export function Contact() {
               </span>
               <span className="app-row-body">
                 <strong>{t("footer_address")}</strong>
-                <em>{academy.address}</em>
+                <em>{lang === "mn" ? academy.address : t("branch_ub_a")}</em>
               </span>
             </div>
             <Link to="/enroll" className="app-row">
