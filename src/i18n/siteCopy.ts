@@ -6,6 +6,11 @@
  */
 export const siteCopy = {
   en: {
+    hb_eyebrow: "Hanz Academy · since 2014",
+    hb_p1: "HSK1–6 + HSKK courses",
+    hb_p2: "Official SCG office in Ulaanbaatar",
+    hb_p3: "Official Think Poland sub-agent",
+    hb_photo_tag: "Study in China",
     about_body: "Hanz Academy has worked without a break since 2014, running Chinese courses, translation, and short winter and summer programmes. For the past 12 years we have taught every level of HSK1–6 + HSKK with an updated programme and a promised score at each level. We have taught Chinese to more than 10,100 students in Mongolia and helped more than 10,000 win scholarships to study at the Chinese school of their choice, from language prep to bachelor's, master's and PhD programmes. Since 2024, as the official Study in China Global (SCG) office in Mongolia, we can place students on scholarships at 300+ universities and 77 colleges. Since 2026, as Think Poland's official agent in Mongolia, we are ready to work with 35+ Polish universities.",
     partners_h: "Partners",
     partner_scg_role: "Official office in Ulaanbaatar",
@@ -135,6 +140,11 @@ export const siteCopy = {
   },
 
   mn: {
+    hb_eyebrow: "Ханз Академи · 2014 оноос",
+    hb_p1: "HSK1–6 + HSKK сургалт",
+    hb_p2: "SCG-ийн Улаанбаатар дахь албан ёсны оффис",
+    hb_p3: "Think Poland-ийн албан ёсны дэд агент",
+    hb_photo_tag: "Хятадад суралцах",
     partners_h: "Хамтрагч байгууллага",
     partner_scg_role: "Улаанбаатар дахь албан ёсны оффис",
     partner_scg_d: "Хятадад суралцах хөтөлбөрийг сурталчлах, олон улсын оюутан элсүүлэх эрхтэй. Монголын залуус БНХАУ-ын 300 гаруй их, дээд сургууль, 77 коллежид хэлний бэлтгэлээс докторын зэрэг хүртэл суралцах боломжтой.",
@@ -452,6 +462,11 @@ export const siteCopy = {
   },
 
   zh: {
+    hb_eyebrow: "汉兹学院 · 始于 2014",
+    hb_p1: "HSK1–6 + HSKK 课程",
+    hb_p2: "SCG 乌兰巴托官方办公室",
+    hb_p3: "Think Poland 官方代理",
+    hb_photo_tag: "来华留学",
     partners_h: "合作机构",
     partner_scg_role: "乌兰巴托官方办公室",
     partner_scg_d: "获授权推广来华留学项目并招收国际学生。蒙古青年可在中国 300 多所大学和 77 所学院就读，从语言预科到博士。",
