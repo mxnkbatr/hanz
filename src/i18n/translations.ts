@@ -104,7 +104,7 @@ const mn: Dict = {
   lang: "Хэл",
   skip_content: "Үндсэн агуулга руу очих",
   footer_tag: "Хятад хэл · HSK · HSKK · CSCA · Тэтгэлэг · Орчуулга · Аялал",
-  footer_contact: "Холбоо барих",
+  footer_contact: "Холбоо барих:",
   footer_links: "Холбоос",
   footer_since: "Үүсгэн байгуулагдсан",
   not_found_title: "Хуудас олдсонгүй",
