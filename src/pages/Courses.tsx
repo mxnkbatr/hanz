@@ -8,6 +8,7 @@ import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { loc } from "../lib/i18nText";
 import { hapticLight } from "../lib/native";
+import { PageBanner } from "../components/PageBanner";
 
 export function Courses() {
   const { t, lang } = useI18n();
@@ -82,7 +83,8 @@ export function Courses() {
 
   return (
     <PageShell className="page-courses is-app ios-app">
-      <header className="page-head app-head">
+      <PageBanner eyebrow={t("nav_courses")} title={t("courses_title")} lead={t("courses_lead")} image="/courses/image12.webp" />
+      <header className="page-head app-head has-banner">
         <Reveal>
           <h1 className="h1">{t("courses_title")}</h1>
           <Link to="/pricing" className="text-link">

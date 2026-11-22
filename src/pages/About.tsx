@@ -7,6 +7,7 @@ import { TeachersSection } from "../components/TeachersSection";
 import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { loc } from "../lib/i18nText";
+import { PageBanner } from "../components/PageBanner";
 
 /**
  * About, in one order on every screen (client, 2026-11-21):
@@ -20,7 +21,8 @@ export function About() {
   return (
     <PageShell className="page-about is-app about-page">
       {/* 1 · Who we are */}
-      <header className="page-head app-head about-intro">
+      <PageBanner eyebrow={t("hb_eyebrow")} title={t("about_title")} image="/images/hero-hanz.webp" />
+      <header className="page-head app-head about-intro has-banner">
         <Reveal>
           <p className="eyebrow">{t("about_title")}</p>
           <h1 className="h1">{t("about_title")}</h1>

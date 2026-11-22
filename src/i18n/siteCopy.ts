@@ -6,6 +6,9 @@
  */
 export const siteCopy = {
   en: {
+    pb_shop_lead: "Textbooks, workbooks and gifts from Hanz Academy.",
+    pb_quiz_lead: "Short HSK quizzes: keep your hearts, collect XP and level up your Chinese.",
+    pb_brand: "Hanz Academy",
     hb_eyebrow: "Hanz Academy · since 2014",
     hb_p1: "HSK1–6 + HSKK courses",
     hb_p2: "Official SCG office in Ulaanbaatar",
@@ -140,6 +143,9 @@ export const siteCopy = {
   },
 
   mn: {
+    pb_shop_lead: "Ханз Академийн сурах бичиг, дасгалын ном, бэлэг дурсгалын бараа.",
+    pb_quiz_lead: "HSK-ийн богино тестүүд: зүрхээ хадгалж, XP цуглуулж, хятад хэлээ ахиулаарай.",
+    pb_brand: "Ханз Академи",
     hb_eyebrow: "Ханз Академи · 2014 оноос",
     hb_p1: "HSK1–6 + HSKK сургалт",
     hb_p2: "SCG-ийн Улаанбаатар дахь албан ёсны оффис",
@@ -462,6 +468,9 @@ export const siteCopy = {
   },
 
   zh: {
+    pb_shop_lead: "汉兹学院的教材、练习册和纪念品。",
+    pb_quiz_lead: "HSK 小测验：保住爱心，收集 XP，提升中文。",
+    pb_brand: "汉兹学院",
     hb_eyebrow: "汉兹学院 · 始于 2014",
     hb_p1: "HSK1–6 + HSKK 课程",
     hb_p2: "SCG 乌兰巴托官方办公室",

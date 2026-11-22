@@ -4,6 +4,7 @@ import { PageShell, Reveal, Stagger, StaggerItem } from "../components/PageShell
 import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { loc } from "../lib/i18nText";
+import { PageBanner } from "../components/PageBanner";
 
 const MAP_SRC =
   "https://maps.google.com/maps?q=Union%20Building%20Ulaanbaatar&t=&z=15&ie=UTF8&iwloc=&output=embed";
@@ -14,7 +15,8 @@ export function Contact() {
 
   return (
     <PageShell className="page-contact is-app">
-      <header className="page-head app-head">
+      <PageBanner eyebrow={t("pb_brand")} title={t("contact_page")} lead={t("contact_lead")} />
+      <header className="page-head app-head has-banner">
         <Reveal>
           <h1 className="h1">{t("contact_page")}</h1>
         </Reveal>

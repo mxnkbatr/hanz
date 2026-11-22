@@ -14,6 +14,7 @@ import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { hapticLight, hapticMedium, hapticSuccess } from "../lib/native";
 import { ease } from "../lib/motion";
+import { PageBanner } from "../components/PageBanner";
 
 type Phase = "pick" | "play" | "done";
 
@@ -217,11 +218,14 @@ export function Quiz() {
       className={`page-quiz is-app ios-app quiz-game${phase !== "pick" ? " is-playing" : ""}`}
     >
       {phase === "pick" && (
-        <header className="page-head app-head quiz-game-head">
-          <Reveal>
-            <h1 className="h1">{t("quiz_title")}</h1>
-          </Reveal>
-        </header>
+        <>
+          <PageBanner eyebrow={t("pb_brand")} title={t("quiz_title")} lead={t("pb_quiz_lead")} />
+          <header className="page-head app-head quiz-game-head has-banner">
+            <Reveal>
+              <h1 className="h1">{t("quiz_title")}</h1>
+            </Reveal>
+          </header>
+        </>
       )}
 
       <div className="quiz-shell">

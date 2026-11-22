@@ -96,6 +96,12 @@ export const teachersMeta: readonly TeacherMeta[] = [
     roleKey: "teacher_role_sb_rep",
     photo: "/images/teachers/enkhzul.webp",
   },
+  {
+    id: "khovd-rep",
+    nameKey: "teacher_khovd_rep",
+    roleKey: "teacher_role_khovd_rep",
+    photo: "/images/teachers/khovd-rep.webp",
+  },
 ];
 
 /** Fee per level and for the 6-month HSK1–5 class (page copy, "Үнэ / Төлбөр"). */

@@ -4,6 +4,7 @@ import { formatPrice, hskFees } from "../data/content";
 import { useI18n } from "../i18n/I18nContext";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { loc } from "../lib/i18nText";
+import { PageBanner } from "../components/PageBanner";
 
 /** Fees and class hours ("Үнэ / Төлбөр" in the academy's page copy). */
 export function Pricing() {
@@ -13,7 +14,8 @@ export function Pricing() {
 
   return (
     <PageShell className="page-pricing">
-      <header className="page-head">
+      <PageBanner eyebrow={t("nav_pricing")} title={t("pricing_title")} lead={t("pricing_lead")} />
+      <header className="page-head has-banner">
         <Reveal>
           <p className="eyebrow">{t("nav_pricing")}</p>
           <h1 className="h1">{t("pricing_title")}</h1>

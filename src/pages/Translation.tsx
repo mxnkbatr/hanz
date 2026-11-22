@@ -5,6 +5,7 @@ import { useI18n } from "../i18n/I18nContext";
 import { DEFAULT_TRANS_FEATURE_KEYS } from "../lib/cms";
 import { useSiteContent } from "../lib/SiteContentContext";
 import { loc } from "../lib/i18nText";
+import { PageBanner } from "../components/PageBanner";
 
 export function Translation() {
   const { t, lang } = useI18n();
@@ -12,7 +13,8 @@ export function Translation() {
 
   return (
     <PageShell className="page-translation is-app ios-app">
-      <header className="page-head app-head">
+      <PageBanner eyebrow={t("nav_translation")} title={t("service_title")} lead={t("service_body")} />
+      <header className="page-head app-head has-banner">
         <Reveal>
           <p className="eyebrow desk-only">{t("nav_translation")}</p>
           <h1 className="h1">{t("service_title")}</h1>
