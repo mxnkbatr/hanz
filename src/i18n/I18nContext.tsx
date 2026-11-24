@@ -20,6 +20,13 @@ type I18nCtx = {
 const Ctx = createContext<I18nCtx | null>(null);
 const STORAGE = "hanz-lang";
 
+/**
+ * Languages switched off for now (client, 2026-11-24: Chinese is hidden until it is
+ * ready). The texts stay in place; remove a code here to offer it again.
+ */
+const OFF: Lang[] = ["zh"];
+const offered = langs.filter((l) => !OFF.includes(l.code));
+
 const copy = siteCopy as Partial<Record<Lang, Record<string, string>>>;
 const anket = anketCopy as Partial<Record<Lang, Record<string, string>>>;
 
@@ -42,10 +49,11 @@ function lookup(lang: Lang, key: string) {
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>(() => {
     const saved = localStorage.getItem(STORAGE) as Lang | null;
-    return saved && dictionaries[saved] ? saved : "mn";
+    return saved && dictionaries[saved] && !OFF.includes(saved) ? saved : "mn";
   });
 
   const setLang = (l: Lang) => {
+    if (OFF.includes(l)) return;
     setLangState(l);
     localStorage.setItem(STORAGE, l);
   };
@@ -54,7 +62,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     () => ({
       lang,
       setLang,
-      langs,
+      langs: offered,
       t: (key: string) => lookup(lang, key),
     }),
     [lang],
