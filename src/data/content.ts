@@ -62,6 +62,12 @@ export const teachersMeta: readonly TeacherMeta[] = [
     },
   },
   {
+    id: "misheel",
+    nameKey: "teacher_misheel",
+    roleKey: "teacher_role_exec",
+    photo: "/images/teachers/misheel.webp",
+  },
+  {
     id: "dagula",
     nameKey: "teacher_dagula",
     levelKey: "teacher_lvl_beg_mid",
