@@ -210,3 +210,20 @@ html.site .pla .pla-card.is-program,
 html.site .pla .pla-card.is-program :is(h3, li) {
   color: #fff !important;
 }
+
+/* 3+1 highlight: badge and title only, on one line (client, 2026-11-25). */
+html.site .pla .pla-hero {
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.85rem 1rem;
+}
+html.site .pla .pla-hero-badge {
+  min-width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  font-size: 1.25rem;
+}
+html.site .pla .pla-hero strong {
+  font-size: 1.05rem;
+  line-height: 1.35;
+}

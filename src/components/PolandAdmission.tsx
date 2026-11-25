@@ -28,10 +28,7 @@ export function PolandAdmission() {
 
       <div className="pla-hero">
         <span className="pla-hero-badge">3+1</span>
-        <div>
-          <strong>{t("pla_hero_t")}</strong>
-          <p>{t("pla_hero_d")}</p>
-        </div>
+        <strong>{t("pla_hero_t")}</strong>
       </div>
 
       <div className="pla-grid">
