@@ -15,6 +15,7 @@ import { useSiteContent } from "../lib/SiteContentContext";
 import { loc } from "../lib/i18nText";
 import { PhotoGlow } from "../components/PhotoGlow";
 import { PolandGuide } from "../components/PolandGuide";
+import { PolandAdmission } from "../components/PolandAdmission";
 
 export function UniversityDetail() {
   const { id = "" } = useParams();
@@ -117,6 +118,7 @@ export function UniversityDetail() {
           </Reveal>
         </article>
 
+        {track.id === "poland" && <PolandAdmission />}
         {track.id === "poland" && <PolandGuide />}
 
         {other && (

@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { UniNotice } from "./UniNotice";
+import { PolandAdmission } from "./PolandAdmission";
 import { Link, useSearchParams } from "react-router-dom";
 import { PageShell } from "./PageShell";
 import { SafeImage } from "./SafeImage";
@@ -273,6 +274,7 @@ function PolandSchools() {
 
   return (
     <>
+      <PolandAdmission />
       <section className="m-section">
         <div className="m-section-head">
           <h2>{t("ab_unis")}</h2>
